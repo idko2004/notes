@@ -1,0 +1,65 @@
+<html>
+    <head>
+        <meta charset='UTF-8'>
+        <title>Notas</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet"> 
+        
+        <link rel='stylesheet' type='text/css' href='style.css'>
+    </head>
+    <body>
+        <div id='allContainer'>
+            <nav>
+                <b>Notas</b>
+            </nav>
+            <aside>
+                <div>
+                    <b>Todas tus notas</b>
+                    <button id='newNote'>+</button>
+                </div>
+                <div id='notesList'>
+                    <div class='noteInTheList'>
+                        <button class='noteListButton'>
+                            <span class=noteListText>
+                                Nota 1
+                            </span>
+                            <img src='img/delete.png' class='deleteIcon'>
+                        </button>
+                    </div>
+                    <div class='noteInTheList'>
+                        <button class='noteListButton'>
+                            <span class=noteListText>
+                                Nota 2
+                            </span>
+                            <img src='img/delete.png' class='deleteIcon'>
+                        </button>
+                    </div>
+                    <div class='noteInTheList'>
+                        <button class='noteListButton'>
+                            <span class=noteListText>
+                                Nota con un nombre quizás demasiado largo.
+                            </span>
+                            <img src='img/delete.png' class='deleteIcon'>
+                        </button>
+                    </div>
+                    <div class='noteInTheList'>
+                        <button class='noteListButton'>
+                            <span class=noteListText>
+                                Nota
+                            </span>
+                            <img src='img/delete.png' class='deleteIcon'>
+                        </button>
+                    </div>
+                </div>
+            </aside>
+            <article id='noteSection'>
+                <section id='topBar'>
+                    <b>Nombre de la nota</b>
+                </section>
+                <textarea id='noteField'></textarea>
+            </article>        
+        </div>
+    </body>
+</html>

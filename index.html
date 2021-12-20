@@ -8,12 +8,18 @@
         <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet"> 
         
         <link rel='stylesheet' type='text/css' href='style.css'>
-        <script defer src='resize.js'></script>
+
+        <script defer src='js/const.js'></script>
+        <script defer src='js/resize.js'></script>
+        <script defer src='js/newNote.js'></script>
+        <script defer src='js/cookies.js'></script>
+        <script defer src='js/loadNotesList.js'></script>
+        <script defer src='js/note.js'></script>
     </head>
     <body>
         <nav>
             <b>Notas</b>
-            <button id='userData'>Usuario</>
+            <button id='userData'>Usuario</button>
         </nav>
         <div id='allContainer'>
             <aside id='leftBar'>
@@ -21,43 +27,31 @@
                     <b>Todas tus notas</b>
                     <button id='newNote'><b>+</b></button>
                 </div>
-                <div id='notesList'>
-                    <div class='noteInTheList'>
-                        <button class='noteListButton'>
-                            <span class=noteListText>
-                                Nota 1
-                            </span>
-                        </button>
+                <div id='newNoteField' hidden>
+                    <div id='newNoteFieldDiv'>
+                        <span>Nombre de la nota</span>
+                        <input type='text' id='newNoteName'>
                     </div>
-                    <div class='noteInTheList'>
-                        <button class='noteListButton'>
-                            <span class=noteListText>
-                                Nota 2
-                            </span>
-                        </button>
-                    </div>
-                    <div class='noteInTheList'>
-                        <button class='noteListButton'>
-                            <span class=noteListText>
-                                Nota con un nombre quizás demasiado largo.
-                            </span>
-                        </button>
-                    </div>
-                    <div class='noteInTheList'>
-                        <button class='noteListButton'>
-                            <span class=noteListText>
-                                Nota
-                            </span>
-                        </button>
-                    </div>
+                    <!--span id='newNoteAdvertise'>Por el momento, las notas se guardarán en las cookies.<br></span-->
+                    <button id='newNoteButton'>Crear Nota</button>
                 </div>
+                <div id='youDontHaveNotes'>No tienes notas.</div>
+                <div id='notesList'></div>
             </aside>
             <article id='noteSection'>
                 <section id='topBar'>
-                    <b>Nombre de la nota</b>
+                    <span id='leftToTheNoteNameButtons'>
+                        <button class='bg-green' id='showNotesListButton'><img src='img/menu.png'></button>
+                    </span>
+                    <b id='noteName'>Haz click sobre una nota.</b>
+                    <span id='sayThings'></span>
+                    <span id='topBarButtons' hidden>
+                        <button class='bg-green' id='saveButton'><img src='img/save.png'></button>
+                        <button class='bg-red' id='deleteButton'><img src='img/delete.png'></button>
+                    </span>
                 </section>
-                <textarea id='noteField'></textarea>
-            </article>        
+                <textarea id='noteField' disabled></textarea>
+            </article>
         </div>
     </body>
 </html>

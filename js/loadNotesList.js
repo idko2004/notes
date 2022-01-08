@@ -3,12 +3,11 @@ loadNotesList();
 function loadNotesList()
 {
     console.log('Cargando lista de notas');
-    let notesNames = getCookiesNames();
+    let notesNames = getKeyNames();
     
     for(let i = 0; i < notesNames.length; i++)
     {
         if(notesNames[i] === '') continue;
-        if(notesNames[i] === '_test') continue;
         createListButton(notesNames[i]);
     }
     
@@ -24,17 +23,17 @@ function createListButton(noteName)
 
     let noteListButton = document.createElement('button');
     noteListButton.className = 'noteListButton';
+
+    noteListButton.innerText = noteName;
+
     noteListButton.addEventListener('click',(e) =>
     {
+        if(!canInteract) return;
+        
         loadNote(e.target.textContent);
         selectedNote(e);
     });
     noteInTheList.appendChild(noteListButton);
-
-    let noteListText = document.createElement('span');
-    noteListText.className = 'noteListText';
-    noteListText.innerText = noteName;
-    noteListButton.appendChild(noteListText);
 
     notesList.appendChild(noteInTheList);
 }
@@ -45,9 +44,7 @@ function deleteListButton(noteName)
     for(let i = 0; i < noteInTheListArray.length; i++)
     {
         let a = noteInTheListArray[i];
-        let b = a.children;
-        let c = b[0].children;
-        let note = c[0].innerText;
+        let note = a.innerText;
 
         if(note === noteName)
         {
@@ -65,15 +62,18 @@ function youDontHaveNotes()
     else dontNotes.hidden = true;
 }
 
-async function selectedNote(e)
+async function selectedNote(e, altNoteName)
 {
     let noteInTheListArray = document.getElementsByClassName('noteInTheList');
 
-    for(let i = 0; i < noteInTheListArray.length; i++)
+    for(let i = 0; i < noteInTheListArray.length; i++) noteInTheListArray[i].children[0].className = noteInTheListArray[i].children[0].className.replace(' noteSelected', '');
+
+    if(e !== undefined) e.target.className += ' noteSelected';
+    else
     {
-        noteInTheListArray[i].className = noteInTheListArray[i].className.replace(' noteSelected','');
-        noteInTheListArray[i].children[0].className = noteInTheListArray[i].children[0].className.replace(' noteSelected', '');
-        noteInTheListArray[i].children[0].children[0].className = noteInTheListArray[i].children[0].children[0].className.replace(' noteSelected', '');
+        for(let i = 0; i < noteInTheListArray.length; i++)
+        {
+            if(noteInTheListArray[i].children[0].innerText === altNoteName) noteInTheListArray[i].children[0].className += ' noteSelected';
+        }
     }
-    e.target.className += ' noteSelected';
 }

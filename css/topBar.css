@@ -1,0 +1,33 @@
+/*=====================================================
+====================BARRA DE ARRIBA====================
+=======================================================*/
+nav
+{
+    /*border: 1px solid red;*/
+
+    background-color: var(--green);
+    font-size: 1.5rem;
+    color: white;
+    padding: 0.5rem;
+    margin: 0.5rem;
+    border-radius: 10px;
+    vertical-align: middle;
+    line-height: 1.5rem;
+}
+
+#userData
+{
+    float: right;
+    font-size: 1.2rem;
+    vertical-align: middle;
+    line-height: 1.4rem;
+    color: white;
+    background-color: transparent;
+    border: 0;
+    border-radius: 10px;
+}
+
+#userData:hover
+{
+    background-color: var(--green-hover);
+}

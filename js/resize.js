@@ -63,12 +63,14 @@ function resizeElements()
 
 showNotesListButton.addEventListener('click', () =>
 {
-    showTheNoteInSmallScreen(false);
+    if(!canInteract) return;
+
     saveNote();
+    showTheNoteInSmallScreen(false);
 });
 
 function showTheNoteInSmallScreen(show)
 {
     showTheNote = show;
-    resizeTwice();
+    resizeTwice(); //Hide left bar se encarga de esto.
 }

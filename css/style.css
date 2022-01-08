@@ -1,0 +1,43 @@
+/*=====================================================
+====================GENERAL============================
+=======================================================*/
+html
+{
+    --green: #53b56a;
+    --green-hover: #479b5b;
+    --gray: #eeeeee;
+    --rubik: 'Rubik', sans-serif;
+}
+
+body
+{
+    font-family: var(--rubik);
+    margin: 0;
+}
+
+#allContainer
+{
+    /*border: 1px solid red;*/
+    /*min-width: 700px;*/
+    max-width: 1500px;
+    height: max-content;
+    margin: auto;
+    display: flex;
+}
+
+
+
+
+/*=====================================================
+====================ALGUNAS CLASES=====================
+=======================================================*/
+.red
+{
+    color: red;
+}
+
+.hidden
+{
+    /*Elementos con el display cambiado por algún motivo no se ocultan.*/
+    display: none;
+}

@@ -1,5 +1,7 @@
 newNote.addEventListener('click',function()
 {
+    if(!canInteract) return;
+
     newNoteField.hidden = !newNoteField.hidden;
 
     if(!newNoteField.hidden) newNote.innerText = 'x';
@@ -9,25 +11,89 @@ newNote.addEventListener('click',function()
     }
 });
 
-newNoteButton.addEventListener('click',function()
+newNoteButton.addEventListener('click', () =>
+{
+    if(!canInteract) return;
+    createNewNote();
+});
+
+newNoteName.addEventListener('keydown', function(e)
+{
+    if(!canInteract) return;
+
+    if(e.key === 'Enter') createNewNote();
+    if(e.key === 'Escape')
+    {
+        newNoteField.hidden = true;
+        newNote.innerText = '+';
+    }
+});
+
+function createNewNote()
 {
     let noteName = newNoteName.value.trim();
-    if(noteName === '')
-    {
-        //TODO: implemenetar bien esta cosa
-        alert('La nota no puede tener un nombre vacío.');
-        return;
-    }
-    if(getSpecificCookie(noteName) !== null)
-    {
-        alert('Ya existe una nota con ese nombre.');
-        return;
-    }
+    newNoteName.value = '';
+    if(!newNoteNameIsValid(noteName)) return;
 
     newNoteField.hidden = true;
     newNote.innerText = '+';
+
     createListButton(noteName);
-    saveCookie(noteName,'');
+
+    saveKey(noteName,'');
     loadNote(noteName);
+
     youDontHaveNotes();
-});
+
+    selectedNote(undefined, noteName);
+}
+
+function newNoteNameIsValid(noteName)
+{
+    closeWindow(); //Por si haya una ventana abierta
+
+    if(noteName === '')
+    {
+        floatingWindow
+        ({
+            title: 'Escribe un nombre',
+            text: 'La nota no puede tener un nombre vacío.',
+            button:
+            {
+                text: 'Aceptar',
+                callback: () => {closeWindow()}
+            }
+        });
+        return false;
+    }
+    if(noteName.length > 30)
+    {
+        floatingWindow
+        ({
+            title: 'Acorta el nombre',
+            text: 'El nombre de la nota es demasiado largo.',
+            button:
+            {
+                text: 'Aceptar',
+                callback: () => {closeWindow()}
+            }
+        });
+        return false;
+    }
+    if(getKey(noteName) !== null)
+    {
+        floatingWindow
+        ({
+            title: 'Nota duplicada',
+            text: `Ya existe una nota con el nombre '${noteName}'`,
+            button:
+            {
+                text: 'Aceptar',
+                callback: () => {closeWindow()}
+            }
+        });
+        return false;
+    }
+
+    return true;
+}

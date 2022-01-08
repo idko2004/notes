@@ -20,4 +20,14 @@ const newNoteButton = document.getElementById('newNoteButton');
 const notesList = document.getElementById('notesList');
 const dontNotes = document.getElementById('youDontHaveNotes');
 
+const noteField = document.getElementById('noteField');
+
+const floatWindow = document.getElementById('floatingWindow');
+const windowTitle = document.getElementById('windowTitle');
+const windowText = document.getElementById('windowText');
+const windowInput = document.getElementById('windowInput');
+const windowButtons = document.getElementById('windowButtons');
+
+
 let showTheNote = true;
+let canInteract = true;

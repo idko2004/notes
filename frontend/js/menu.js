@@ -1,0 +1,75 @@
+document.getElementById('menuButton').addEventListener('click', function()
+{
+    floatingMenu.hidden = false;
+    canInteract = false;
+});
+
+document.getElementById('closeMenuButton').addEventListener('click', function()
+{
+    floatingMenu.hidden = true;
+    canInteract = true;
+});
+
+document.getElementById('menuExitLocalMode').addEventListener('click', function()
+{
+    saveNote();
+    document.getElementById('noteScreen').hidden = true;
+    notesList.innerHTML = '';
+    noteName.innerText = 'Haz click sobre una nota.'
+    textArea.value = '';
+    textArea.disabled = true;
+
+    document.getElementById('loginScreen').hidden = false;
+    floatingMenu.hidden = true;
+    canInteract = true;
+});
+
+document.getElementById('menuEraseAll').addEventListener('click', function()
+{
+    floatingMenu.hidden = true;
+    if(getKey('_login') === 'local') floatingWindow(
+    {
+        title: '¿Borrar todos los datos locales?',
+        text: 'Se borrarán todos los datos que se hayan guardado en este navegador en el modo local',
+        buttons:
+        [
+            {
+                text: 'No borrar nada',
+                primary: false,
+                callback: () => {closeWindow()}
+            },
+            {
+                text: 'Borrar',
+                primary: true,
+                callback: () =>
+                {
+                    closeWindow();
+                    floatingWindow(
+                    {
+                        title: '¿De verdad va a borrarlo todo?',
+                        buttons:
+                        [
+                            {
+                                text: '¡De verdad voy a borrarlo todo!',
+                                primary: true,
+                                callback: () =>
+                                {
+                                    document.getElementById('noteScreen').hidden = true;
+                                    loadingScreen.hidden = false;
+                                    localStorage.clear();
+                                    document.location.reload();
+                                }
+                            },
+                            {
+                                text: 'No voy a borrar nada',
+                                primary: false,
+                                callback: () => {closeWindow()}
+                            }
+                        ]
+                    });
+                }
+            }
+        ]
+    });
+
+});

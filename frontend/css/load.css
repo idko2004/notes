@@ -1,0 +1,39 @@
+#loadingScreen
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: var(--green-hover);
+    width: 100vw;
+    height: 100vh;
+    padding-top: 25vh;
+}
+
+#loadingScreen section
+{
+    margin: 0 auto;
+    padding: 1rem;
+    /*background-color: white;*/
+    background-color: var(--green);
+    color: white;
+    display: block;
+    height: auto;
+    width: 40%;
+    min-width: 25rem;
+    max-width: 720px;
+    height: auto;
+    border: solid 3px var(--green);
+    border-radius: 10px;
+
+    text-align: center;
+}
+
+#loadingScreen b
+{
+    font-size: 8rem;
+}
+
+#loadingScreen p
+{
+    font-size: 2rem;
+}

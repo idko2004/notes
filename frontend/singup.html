@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <title>Crear cuenta | Notas</title>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    </head>
+    <body>
+        <h1>Crear cuenta</h1>
+        <h2>Correo electrónico*</h2><br>
+        <input type='text' id='email'><br>
+        <h2>Nombre de usuario</h2><br>
+        <input type='text' id='username'><br>
+        <h2>Contraseña*</h2><br>
+        <input type='password' id='password'><br>
+        <button id='create'>Crear cuenta</button>
+
+        <script>
+            document.getElementById('create').addEventListener('click', async function()
+            {
+                const email = document.getElementById('email').value;
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+
+                const call = await axios.post('http://localhost:3000/createNewAccount', {email, username, password});
+
+                console.log(call.status);
+            });
+        </script>
+    </body>
+</html>

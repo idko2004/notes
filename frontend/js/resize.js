@@ -6,6 +6,7 @@ function resizeTwice()
 {
     resizeElements();
     setTimeout(resizeElements, 50);
+    setTimeout(resizeElements, 200);
 }
 
 function resizeElements()

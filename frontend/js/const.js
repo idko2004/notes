@@ -1,3 +1,5 @@
+const path = 'http://localhost:3000';
+
 const noteSection = document.getElementById('noteSection');
 
 const topBar = document.getElementById('topBar');
@@ -34,3 +36,5 @@ const floatingMenu = document.getElementById('floatingMenu');
 
 let showTheNote = true;
 let canInteract = true;
+
+let theSecretThingThatNobodyHasToKnow = undefined;

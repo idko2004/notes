@@ -1,16 +1,63 @@
-document.getElementById('menuButton').addEventListener('click', function()
+const menuButton = document.getElementById('menuButton');
+const menuTitleText = document.getElementById('menuTitleText');
+const closeMenuButton = document.getElementById('closeMenuButton');
+const menuExitLocalMode = document.getElementById('menuExitLocalMode');
+const menuEraseAll = document.getElementById('menuEraseAll');
+const menuOnlineManageAccount = document.getElementById('menuOnlineManageAccount');
+const menuOnlineLogOut = document.getElementById('menuOnlineLogOut');
+
+async function menuButtonText()
+{
+    const key = theSecretThingThatNobodyHasToKnow;
+    if(key === 'local')
+    {
+        menuButton.innerText = 'Modo local';
+
+        menuExitLocalMode.hidden = false;
+        menuEraseAll.hidden = false;
+
+        menuOnlineLogOut.hidden = true;
+        menuOnlineManageAccount.hidden = true;
+    }
+    else
+    {
+        menuButton.innerText = 'Cuenta de alguien';
+
+        menuExitLocalMode.hidden = true;
+        menuEraseAll.hidden = true;
+
+        menuOnlineLogOut.hidden = false;
+        menuOnlineManageAccount.hidden = false;
+
+        //Obtener nombre de usuario
+        const response = await axios.get(`${path}/getUsername`, {headers: {key}});
+        menuButton.innerText = response.data.username;
+        menuTitleText.innerText = response.data.username;
+    }
+}
+
+//Botón de cerrar sesión
+menuOnlineLogOut.addEventListener('click', function()
+{
+    deleteKey('_login');
+    location.reload();
+});
+
+//Botón de gestionar cuenta
+
+menuButton.addEventListener('click', function()
 {
     floatingMenu.hidden = false;
     canInteract = false;
 });
 
-document.getElementById('closeMenuButton').addEventListener('click', function()
+closeMenuButton.addEventListener('click', function()
 {
     floatingMenu.hidden = true;
     canInteract = true;
 });
 
-document.getElementById('menuExitLocalMode').addEventListener('click', function()
+menuExitLocalMode.addEventListener('click', function()
 {
     saveNote();
     document.getElementById('noteScreen').hidden = true;
@@ -24,7 +71,7 @@ document.getElementById('menuExitLocalMode').addEventListener('click', function(
     canInteract = true;
 });
 
-document.getElementById('menuEraseAll').addEventListener('click', function()
+menuEraseAll.addEventListener('click', function()
 {
     floatingMenu.hidden = true;
     if(getKey('_login') === 'local') floatingWindow(

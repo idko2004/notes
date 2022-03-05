@@ -1,21 +1,42 @@
-function loadNotesList()
+async function loadNotesList()
 {
     console.log('Cargando lista de notas');
-    let notesNames = getKeyNames();
-    
-    for(let i = 0; i < notesNames.length; i++)
+    loadingScreen.hidden = false;
+
+    let loginKey = theSecretThingThatNobodyHasToKnow;
+    if(loginKey === 'local')
     {
-        if(notesNames[i] === '') continue;
-        if(notesNames[i].startsWith('_')) continue;
-        createListButton(notesNames[i]);
+        let notesNames = getKeyNames();
+    
+        for(let i = 0; i < notesNames.length; i++)
+        {
+            if(notesNames[i] === '') continue;
+            if(notesNames[i].startsWith('_')) continue;
+            createListButton(notesNames[i]);
+        }
+    }
+    else
+    {
+        console.log(loginKey);
+        const response = await axios.get(`${path}/getNotesID`, {headers: {key: loginKey}});
+        console.log(response);
+        const notesArray = response.data.notesID;
+        for(let i = 0; i < notesArray.length; i++)
+        {
+            let name = notesArray[i].name;
+            let id = notesArray[i].id;
+            createListButton(name,id);
+        }
     }
     
     youDontHaveNotes();
+    loadingScreen.hidden = true;
+    document.getElementById('noteScreen').hidden = false;
 
     console.log('Lista de notas cargada');
 }
 
-function createListButton(noteName)
+function createListButton(noteName, id)
 {
     let noteInTheList = document.createElement('div');
     noteInTheList.className = 'noteInTheList';
@@ -25,11 +46,15 @@ function createListButton(noteName)
 
     noteListButton.innerText = noteName;
 
+    if(id !== undefined) noteListButton.setAttribute('noteID', id);
+
     noteListButton.addEventListener('click',(e) =>
     {
         if(!canInteract) return;
-        
-        loadNote(e.target.textContent);
+        let id = undefined;
+        if(e.target.attributes.noteID) id = e.target.attributes.noteID.value;
+
+        loadNote(e.target.textContent, id);
         selectedNote(e);
     });
     noteInTheList.appendChild(noteListButton);

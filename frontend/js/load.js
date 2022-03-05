@@ -2,9 +2,11 @@ start();
 
 function start()
 {
-    let login = getKey('_login');
+    theSecretThingThatNobodyHasToKnow = getKey('_login');
+    let login = theSecretThingThatNobodyHasToKnow;
+    console.log(login);
 
-    if(login === null)
+    if(login === null || login === undefined || login === 'undefined')
     {
         loadingScreen.hidden = true;
         document.getElementById('noteScreen').hidden = true;
@@ -19,5 +21,12 @@ function start()
 
         loadNotesList();
         document.getElementById('noteScreen').hidden = false;
+    }
+    else
+    {
+        //TODO: comprobar si la clave que tenemos es válida de antemano.
+        loadNotesList();
+        menuButtonText();
+        resizeTwice();
     }
 }

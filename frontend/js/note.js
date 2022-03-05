@@ -1,10 +1,37 @@
 textArea.value = '';
 textArea.disabled = true;
 
-function loadNote(name)
+async function loadNote(name, id)
 {
     console.log('Cargar nota',name);
-    let noteContent = getKey(name);
+    let noteContent = null;
+    if(id === undefined)
+    {
+        noteContent = getKey(name);
+    }
+    else
+    {
+        noteName.innerText = 'Cargando...';
+
+        //Cargar la nota
+        const response = await axios.get(`${path}/note`, {headers: {key: theSecretThingThatNobodyHasToKnow, noteid: id}});
+        console.log(response);
+        if(response.data.error !== undefined) //Ocurre un error
+        {
+            floatingWindow(
+            {
+                title: 'Ha ocurrido un error',
+                text: 'Por favor, recarga la página.'
+            });
+            return;
+        }
+        if(response.data.note !== undefined) noteContent = response.data.note;
+        else
+        {
+            console.error('error cargando la nota');
+            return;
+        }
+    }
 
     noteName.innerText = name;
     textArea.value = noteContent;

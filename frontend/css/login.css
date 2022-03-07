@@ -5,7 +5,7 @@
 
 #loginScreenBigName
 {
-    font-size: clamp(2.5rem, calc(20vw - 20vh), 20vh);
+    font-size: clamp(5rem, calc(30vw - 30vh), 17vh);
     color: white;
     height: 25vh;
     background-color: var(--green);

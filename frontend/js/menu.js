@@ -68,13 +68,17 @@ menuExitLocalMode.addEventListener('click', function()
 
     document.getElementById('loginScreen').hidden = false;
     floatingMenu.hidden = true;
+
+    theSecretThingThatNobodyHasToKnow = undefined;
+    deleteKey('_login');
+
     canInteract = true;
 });
 
 menuEraseAll.addEventListener('click', function()
 {
     floatingMenu.hidden = true;
-    if(getKey('_login') === 'local') floatingWindow(
+    if(theSecretThingThatNobodyHasToKnow === 'local') floatingWindow(
     {
         title: '¿Borrar todos los datos locales?',
         text: 'Se borrarán todos los datos que se hayan guardado en este navegador en el modo local',

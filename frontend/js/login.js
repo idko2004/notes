@@ -90,6 +90,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
     {
         console.log('Clave obtenida');
         saveKey('_login', response.data.key);
+        theSecretThingThatNobodyHasToKnow = response.data.key;
 
         document.getElementById('loginScreen').hidden = true;
         loadingScreen.hidden = false;
@@ -179,5 +180,6 @@ document.getElementById('localModeButton').addEventListener('click',function()
     document.getElementById('loginScreen').hidden = true;
 
     document.getElementById('noteScreen').hidden = false;
+    menuButtonText();
     resizeTwice();
 });

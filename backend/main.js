@@ -11,6 +11,7 @@ require('./getNotesID')(app);
 require('./getUsername')(app);
 require('./getSessionID')(app);
 require('./createNewAccount')(app);
+require('./iHaveAValidKey')(app);
 
 app.listen(port, function()
 {

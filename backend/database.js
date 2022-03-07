@@ -22,6 +22,16 @@ async function createElement(collection, element)
     theCollection.insertOne(element);
 }
 
+async function updateElement(collection, objQuery, newElement)
+{
+    console.log('**Actualizando elementos**', collection);
+    await mdbClient.connect();
+    const database = mdbClient.db('Notes');
+    const theCollection = database.collection(collection);
+    const result = await theCollection.findOneAndUpdate(objQuery, {$set: newElement});
+    console.log('**Base de datos actualizada**', collection, result.ok);
+}
+
 async function getKeyData(key)
 {
     console.log('getKeyData', key);
@@ -30,17 +40,69 @@ async function getKeyData(key)
     {
         console.log('Buscando usuario en la base de datos');
         await mdbClient.connect();
+
         console.log('Base de datos conectada');
         const database = mdbClient.db('Notes');
+
         const collection = database.collection('sessionID');
         console.log('Buscando elemento');
+
         const element = await collection.findOne({key});
         sessionIDList[key] = element;
         console.log('Cargado desde la base de datos', element);
-        return element;
+
+        cache = element;
     }
-    console.log('Cargado desde caché', cache);
+    else console.log('Cargado desde caché', cache);
+
+    upDate(cache);
+
     return cache;
+}
+
+//Actualiza la fecha en la que se usó por última vez la clave
+//El nombre es un juego de palabras, ríanse.
+async function upDate(element)
+{
+    console.log('//upDate//');
+    console.log('//Fecha guardada//',element.date.d, element.date.m, element.date.y);
+
+    const today = new Date();
+    const day = today.getUTCDate();
+    const month = today.getUTCMonth() + 1;
+    const year = today.getUTCFullYear();
+    console.log('//Fecha de hoy//', day, month, year);
+
+    if(year > element.date.y)
+    {
+        console.log('//El año ha cambiado//');
+
+        element.date.y = year;
+        element.date.m = month;
+        element.date.d = day;
+
+        sessionIDList[element.key] = element;
+        updateElement('sessionID', {key: element.key}, element);
+    }
+    else if(month > element.date.m)
+    {
+        console.log('//El mes ha cambiado//');
+
+        element.date.m = month;
+        element.date.d = day;
+
+        sessionIDList[element.key] = element;
+        updateElement('sessionID', {key: element.key}, element);
+    }
+    else if(day > element.date.d)
+    {
+        console.log('//El día ha cambiado//');
+
+        element.date.d = day;
+
+        sessionIDList[element.key] = element;
+        updateElement('sessionID', {key: element.key}, element);
+    }
 }
 
 module.exports = {getElement, createElement, getKeyData};

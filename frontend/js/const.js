@@ -38,3 +38,5 @@ let showTheNote = true;
 let canInteract = true;
 
 let theSecretThingThatNobodyHasToKnow = undefined;
+let actualNoteID = undefined;
+let actualNoteName = undefined;

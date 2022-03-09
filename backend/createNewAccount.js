@@ -8,12 +8,14 @@ module.exports = function(app)
     {
         console.log('------------------------------------------------');
         console.log('/createNewAccount');
-        console.log(req.body);
+        console.log('body', req.body);
     
         const email = req.body.email;
         const username = req.body.username;
         const password = req.body.password;
         
+        //TODO: Verificar si los parámetros son correctos
+
         if(username === undefined) username = email.split('@')[0];
     
         const element = await database.getElement('users', {email});

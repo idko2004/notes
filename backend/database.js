@@ -30,6 +30,7 @@ async function updateElement(collection, objQuery, newElement)
     const theCollection = database.collection(collection);
     const result = await theCollection.findOneAndUpdate(objQuery, {$set: newElement});
     console.log('**Base de datos actualizada**', collection, result.ok);
+    return result.ok;
 }
 
 async function getKeyData(key)
@@ -105,4 +106,4 @@ async function upDate(element)
     }
 }
 
-module.exports = {getElement, createElement, getKeyData};
+module.exports = {getElement, createElement, updateElement, getKeyData};

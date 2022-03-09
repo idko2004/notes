@@ -4,6 +4,13 @@ textArea.disabled = true;
 async function loadNote(name, id)
 {
     console.log('Cargar nota',name);
+
+    if(actualNoteName !== undefined)
+    {
+        noteName.innerText = '(Guardando nota...)';
+        await saveNote();
+    }
+
     let noteContent = null;
     if(id === undefined)
     {
@@ -11,32 +18,67 @@ async function loadNote(name, id)
     }
     else
     {
+        noteField.disabled = true;
         noteName.innerText = 'Cargando...';
 
-        //Cargar la nota
-        const response = await axios.get(`${path}/note`, {headers: {key: theSecretThingThatNobodyHasToKnow, noteid: id}});
-        console.log(response);
-        if(response.data.error !== undefined) //Ocurre un error
+        try
         {
+            //Cargar la nota
+            const response = await axios.get(`${path}/note`, {headers: {key: theSecretThingThatNobodyHasToKnow, noteid: id}});
+            console.log(response);
+            if(response.data.error !== undefined) //Ocurre un error
+            {
+                floatingWindow(
+                {
+                    title: 'Ha ocurrido un error',
+                    text: `Por favor, la página se recargará.\n${response.data.error}`
+                });
+                setInterval(function()
+                {
+                    location.reload();
+                },18000);
+                return;
+            }
+            if(response.data.note !== undefined) noteContent = response.data.note;
+            else
+            {
+                console.error('error cargando la nota');
+                return;
+            }
+        }
+        catch
+        {
+            noteName.innerText = 'No se pudo cargar la nota.';
+            actualNoteID = undefined;
+            actualNoteName = undefined;
+            textArea.value = '';
+            topBarButtons.hidden = true;
+            theLastTextSave = '';
             floatingWindow(
             {
-                title: 'Ha ocurrido un error',
-                text: 'Por favor, recarga la página.'
+                title: 'Error al cargar la nota',
+                text: 'Parece que el servidor se ha caído, prueba a intentar de nuevo dentro de un rato.',
+                button:
+                {
+                    text: 'Aceptar',
+                    callback: function()
+                    {
+                        closeWindow();
+                    }
+                }
             });
-            return;
-        }
-        if(response.data.note !== undefined) noteContent = response.data.note;
-        else
-        {
-            console.error('error cargando la nota');
             return;
         }
     }
 
     noteName.innerText = name;
+    actualNoteName = name;
+
     textArea.value = noteContent;
     textArea.disabled = false;
     topBarButtons.hidden = false;
+
+    theLastTextSave = noteContent;
 
     showTheNoteInSmallScreen(true);
 
@@ -47,27 +89,86 @@ async function loadNote(name, id)
 }
 
 //Botón de guardar nota
-document.getElementById('saveButton').addEventListener('click',(e) =>
+document.getElementById('saveButton').addEventListener('click', async function(e)
 {
     if(!canInteract) return;
 
-    saveNote();
-    sayThings.innerText = '(Guardado).';
+    if(theSecretThingThatNobodyHasToKnow !== 'local') sayThings.innerText = '(Guardando...)';
+
+    const saved = await saveNote();
+    if(saved) sayThings.innerText = '(Guardado).';
+    else sayThings.innerText = '(Error al guardar).';
+
     setTimeout(() =>
     {
         sayThings.innerText = '';
     },1500);
 });
 
-function saveNote()
+let theLastTextSave = '';
+let serverDownAdvertisement = false; //Para que no salga el mensaje cada vez cuando el server está caído.
+async function saveNote()
 {
-    if(!canInteract) return;
+    if(!canInteract) return null;
 
-    let name = noteName.innerText;
-    if(name === 'Haz click sobre una nota.') return;
+    let name = actualNoteName;
+    if(name === undefined) return null;
 
     let value = textArea.value;
-    saveKey(name, value);
+    if(theLastTextSave === value) return true;
+
+    if(theSecretThingThatNobodyHasToKnow === 'local')
+    {
+        saveKey(name, value);
+        return true;
+    }
+    else
+    {
+        if(actualNoteID === undefined) return console.error('No se pudo guardar la nota, noteID undefined');
+        saveKey(name, value);
+
+        try
+        {
+            const response = await axios.post(`${path}/saveNote`,
+            {
+                key: theSecretThingThatNobodyHasToKnow,
+                noteID: actualNoteID,
+                noteContent: value
+            });
+
+            if(response.data.result === 1)
+            {
+                console.log('Nota guardada');
+                serverDownAdvertisement = false; //Si se vuelve a caer el server, para poder volver a avisar.
+                return true;
+            }
+            else
+            {
+                console.log('Hubo un error guardando la nota', response.data.result);
+                return false;
+            }    
+        }
+        catch
+        {
+            console.log('El servidor se ha caido así que no se puede guardar la nota.');
+            if(serverDownAdvertisement) return false;
+            if(!thereIsAWindows) floatingWindow(
+            {
+                title: '¡Servidor caído!',
+                text: 'El servidor no responde, por lo que no se podrá guardar tu nota en la nube. Por si acaso, guardamos esta nota en tu navegador.',
+                button:
+                {
+                    text: 'Aceptar',
+                    callback: function()
+                    {
+                        closeWindow();
+                    }
+                }
+            });
+            serverDownAdvertisement = true;
+            return false;
+        }
+    }
 }
 
 //Botón de borrar nota
@@ -77,7 +178,7 @@ document.getElementById('deleteButton').addEventListener('click',(e) =>
 
     let name = noteName.innerText;
 
-    floatingWindow
+    if(!thereIsAWindows) floatingWindow
     ({
         title: '¿Borrar nota?',
         text: `¿Estás seguro que quieres borrar la nota '${name}'?\nSi la borras se irá para siempre.`,
@@ -111,16 +212,26 @@ document.getElementById('deleteButton').addEventListener('click',(e) =>
     });
 });
 
-setInterval(function()
+setInterval(async function()
 {
     console.log('Intentando guardar automáticamente.');
     if(!canInteract) return;
     if(textArea.disabled === true) return;
+    if(theLastTextSave === textArea.value) return;
+    if(theSecretThingThatNobodyHasToKnow === 'local') sayThings.innerText = '(Guardando automáticamente...)';
     
-    saveNote();
-    console.log('Guardado automáticamente.');
+    const saved = await saveNote();
+    if(saved)
+    {
+        sayThings.innerText = '(Guardado).';
+        console.log('Guardado automáticamente');
+    }
+    else
+    {
+        sayThings.innerText = '(Error al guardar).';
+        console.log('Error al guardar automáticamente');
+    }
 
-    sayThings.innerText = '(Guardado automáticamente).';
     setTimeout(function()
     {
         sayThings.innerText = '';

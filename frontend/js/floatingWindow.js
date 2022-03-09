@@ -25,11 +25,20 @@ const windowExample =
     ]
 }
 
+let thereIsAWindows = false;
+
 //Lo definimos aquí para poder borrarlo luego.
 let textInputCallback;
 
 function floatingWindow(elements)
 {
+    if(thereIsAWindows)
+    {
+        console.error('Ya hay una ventana abierta y se intenta abrir otra.');
+        return;
+    }
+    thereIsAWindows = true;
+
     title();
     text();
     input();
@@ -137,4 +146,5 @@ function closeWindow()
     textInputCallback = null;
 
     canInteract = true;
+    thereIsAWindows = false;
 }

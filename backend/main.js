@@ -12,6 +12,7 @@ require('./getUsername')(app);
 require('./getSessionID')(app);
 require('./createNewAccount')(app);
 require('./iHaveAValidKey')(app);
+require('./saveNote')(app);
 
 app.listen(port, function()
 {

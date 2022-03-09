@@ -53,6 +53,7 @@ function createListButton(noteName, id)
         if(!canInteract) return;
         let id = undefined;
         if(e.target.attributes.noteID) id = e.target.attributes.noteID.value;
+        actualNoteID = id;
 
         loadNote(e.target.textContent, id);
         selectedNote(e);

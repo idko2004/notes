@@ -4,10 +4,10 @@ newNote.addEventListener('click',function()
 
     newNoteField.hidden = !newNoteField.hidden;
 
-    if(!newNoteField.hidden) newNote.innerText = 'x';
+    if(!newNoteField.hidden) newNote.innerText = 'Cancelar';
     else
     {
-        newNote.innerText = '+';
+        newNote.innerText = 'Crear';
     }
 });
 
@@ -25,7 +25,7 @@ newNoteName.addEventListener('keydown', function(e)
     if(e.key === 'Escape')
     {
         newNoteField.hidden = true;
-        newNote.innerText = '+';
+        newNote.innerText = 'Crear';
     }
 });
 
@@ -36,7 +36,7 @@ function createNewNote()
     if(!newNoteNameIsValid(noteName)) return;
 
     newNoteField.hidden = true;
-    newNote.innerText = '+';
+    newNote.innerText = 'Crear';
 
     createListButton(noteName);
 

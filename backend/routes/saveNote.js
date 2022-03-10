@@ -1,7 +1,7 @@
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
-const database = require('./database');
+const database = require('../database');
 
 module.exports = function(app)
 {

@@ -30,18 +30,63 @@ newNote.addEventListener('click',function()
     });
 });
 
-function createNewNote(noteName)
+async function createNewNote(noteName)
 {
     if(!newNoteNameIsValid(noteName)) return;
+    if(theSecretThingThatNobodyHasToKnow === 'local')
+    {
+        createListButton(noteName);
 
-    createListButton(noteName);
+        saveKey(noteName,'');
+        loadNote(noteName);
+    
+        youDontHaveNotes();
+    
+        selectedNote(undefined, noteName);
+    }
+    else
+    {
+        const response = await axios.post(`${path}/createNewNote`, {key: theSecretThingThatNobodyHasToKnow, notename: noteName});
+        if(response.data.ok || response.data.noteid !== undefined)
+        {
+            createListButton(noteName, response.data.noteid);
 
-    saveKey(noteName,'');
-    loadNote(noteName);
+            saveKey(noteName, '');
+            loadNote(noteName, response.data.id);
 
-    youDontHaveNotes();
+            youDontHaveNotes();
 
-    selectedNote(undefined, noteName);
+            selectedNote(undefined, noteName);
+        }
+        else if(response.data.error === 'invalidName')
+        {
+            floatingWindow(
+            {
+                title: 'Nombre inválido',
+                text: 'El nombre que le has puesto a esta nota no es válido, intenta con otro.',
+                button:
+                {
+                    text: 'Aceptar',
+                    callback: function(){closeWindow()}
+                }
+            });
+        }
+        else
+        {
+            console.error(response);
+            floatingWindow(
+            {
+                title: 'Ocurrió un error',
+                text: `Ocurrió un error desconocido: ${response.data.error}`,
+                button:
+                {
+                    text: 'Aceptar',
+                    callback: function(){closeWindow()}
+                }
+            });
+        }
+    }
+
 }
 
 function newNoteNameIsValid(noteName)

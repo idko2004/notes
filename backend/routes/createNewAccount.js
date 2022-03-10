@@ -1,4 +1,4 @@
-const database = require('./database');
+const database = require('../database');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 

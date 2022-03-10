@@ -1,4 +1,4 @@
-const database = require('./database');
+const database = require('../database');
 const rand = require('generate-key');
 
 module.exports = function(app)

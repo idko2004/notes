@@ -6,13 +6,14 @@ const port = 3000;
 
 app.use(cors());
 
-require('./note')(app);
-require('./getNotesID')(app);
-require('./getUsername')(app);
-require('./getSessionID')(app);
-require('./createNewAccount')(app);
-require('./iHaveAValidKey')(app);
-require('./saveNote')(app);
+require('./routes/note')(app);
+require('./routes/getNotesID')(app);
+require('./routes/getUsername')(app);
+require('./routes/getSessionID')(app);
+require('./routes/createNewAccount')(app);
+require('./routes/iHaveAValidKey')(app);
+require('./routes/saveNote')(app);
+require('./routes/createNewNote')(app);
 
 app.listen(port, function()
 {

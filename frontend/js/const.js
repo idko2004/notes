@@ -15,9 +15,6 @@ const leftBar = document.getElementById('leftBar');
 const leftBarTitle = document.getElementById('leftBarTitle');
 
 const newNote = document.getElementById('newNote');
-const newNoteField = document.getElementById('newNoteField');
-const newNoteName = document.getElementById('newNoteName');
-const newNoteButton = document.getElementById('newNoteButton');
 
 const notesList = document.getElementById('notesList');
 const dontNotes = document.getElementById('youDontHaveNotes');

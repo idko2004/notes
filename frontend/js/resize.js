@@ -12,7 +12,6 @@ function resizeTwice()
 function resizeElements()
 {
     hideLeftBar();
-    resizeCreateNewNoteField();
     resizeTextArea();
 
     function resizeTextArea()
@@ -53,11 +52,6 @@ function resizeElements()
             }
             leftToTheNoteNameButtons.hidden = false;
         }
-    }
-
-    function resizeCreateNewNoteField()
-    {
-        if(!leftBar.hidden) newNoteField.style.width = leftBarTitle.offsetWidth;
     }
 }
 

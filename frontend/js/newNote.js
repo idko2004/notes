@@ -2,41 +2,37 @@ newNote.addEventListener('click',function()
 {
     if(!canInteract) return;
 
-    newNoteField.hidden = !newNoteField.hidden;
-
-    if(!newNoteField.hidden) newNote.innerText = 'Cancelar';
-    else
+    floatingWindow(
     {
-        newNote.innerText = 'Crear';
-    }
+        title: 'Nueva nota',
+        text: '¿Qué nombre le pondrás a tu nueva nota?',
+        input: true,
+        buttons:
+        [
+            {
+                text: 'Cancelar',
+                primary: false,
+                callback: function()
+                {
+                    closeWindow();
+                }
+            },
+            {
+                text: 'Crear nota',
+                primary: true,
+                callback()
+                {
+                    const noteName = document.getElementById('inputInTheWindow').value;
+                    createNewNote(noteName);
+                }
+            }
+        ]
+    });
 });
 
-newNoteButton.addEventListener('click', () =>
+function createNewNote(noteName)
 {
-    if(!canInteract) return;
-    createNewNote();
-});
-
-newNoteName.addEventListener('keydown', function(e)
-{
-    if(!canInteract) return;
-
-    if(e.key === 'Enter') createNewNote();
-    if(e.key === 'Escape')
-    {
-        newNoteField.hidden = true;
-        newNote.innerText = 'Crear';
-    }
-});
-
-function createNewNote()
-{
-    let noteName = newNoteName.value.trim();
-    newNoteName.value = '';
     if(!newNoteNameIsValid(noteName)) return;
-
-    newNoteField.hidden = true;
-    newNote.innerText = 'Crear';
 
     createListButton(noteName);
 
@@ -61,7 +57,11 @@ function newNoteNameIsValid(noteName)
             button:
             {
                 text: 'Aceptar',
-                callback: () => {closeWindow()}
+                callback: () =>
+                {
+                    closeWindow();
+                    newNote.click();
+                }
             }
         });
         return false;
@@ -75,7 +75,11 @@ function newNoteNameIsValid(noteName)
             button:
             {
                 text: 'Aceptar',
-                callback: () => {closeWindow()}
+                callback: () =>
+                {
+                    closeWindow();
+                    newNote.click();
+                }
             }
         });
         return false;
@@ -89,7 +93,11 @@ function newNoteNameIsValid(noteName)
             button:
             {
                 text: 'Aceptar',
-                callback: () => {closeWindow()}
+                callback: () =>
+                {
+                    closeWindow();
+                    newNote.click();
+                }
             }
         });
         return false;
@@ -103,7 +111,11 @@ function newNoteNameIsValid(noteName)
             button:
             {
                 text: 'Aceptar',
-                callback: () => {closeWindow()}
+                callback: () =>
+                {
+                    closeWindow();
+                    newNote.click();
+                }
             }
         });
         return false;

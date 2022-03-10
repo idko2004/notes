@@ -139,9 +139,9 @@ function closeWindow()
     floatWindow.hidden = true;
     windowTitle.innerText = '';
     windowText.innerText = '';
-    windowInput.value = '';
     windowInput.hidden = true;
     windowButtons.innerHTML = '';
+    windowInput.children[0].value = '';
     windowInput.children[0].removeEventListener('keypress', textInputCallback);
     textInputCallback = null;
 

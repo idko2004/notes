@@ -19,8 +19,6 @@ const newNote = document.getElementById('newNote');
 const notesList = document.getElementById('notesList');
 const dontNotes = document.getElementById('youDontHaveNotes');
 
-const noteField = document.getElementById('noteField');
-
 const floatWindow = document.getElementById('floatingWindow');
 const windowTitle = document.getElementById('windowTitle');
 const windowText = document.getElementById('windowText');
@@ -34,6 +32,7 @@ const floatingMenu = document.getElementById('floatingMenu');
 let showTheNote = true;
 let canInteract = true;
 
+let isLocalMode = true;
 let theSecretThingThatNobodyHasToKnow = undefined;
 let actualNoteID = undefined;
 let actualNoteName = undefined;

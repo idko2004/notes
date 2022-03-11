@@ -89,6 +89,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
     if(response.data.error === undefined && response.data.key !== undefined) //Clave obtenida con éxito
     {
         console.log('Clave obtenida');
+        isLocalMode = false;
         saveKey('_login', response.data.key);
         theSecretThingThatNobodyHasToKnow = response.data.key;
 
@@ -173,6 +174,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
 
 document.getElementById('localModeButton').addEventListener('click',function()
 {
+    isLocalMode = true;
     theSecretThingThatNobodyHasToKnow = 'local';
     saveKey('_login','local');
 

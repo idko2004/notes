@@ -22,41 +22,49 @@ newNote.addEventListener('click',function()
                 primary: true,
                 callback()
                 {
-                    const noteName = document.getElementById('inputInTheWindow').value;
-                    createNewNote(noteName);
+                    const name = document.getElementById('inputInTheWindow').value;
+                    createNewNote(name);
                 }
             }
         ]
     });
 });
 
-async function createNewNote(noteName)
+async function createNewNote(name)
 {
-    if(!newNoteNameIsValid(noteName)) return;
-    if(theSecretThingThatNobodyHasToKnow === 'local')
+    if(!newNoteNameIsValid(name)) return;
+    if(isLocalMode)
     {
-        createListButton(noteName);
+        createListButton(name);
 
-        saveKey(noteName,'');
-        loadNote(noteName);
+        saveKey(name,'');
+        loadNote(name);
     
         youDontHaveNotes();
     
-        selectedNote(undefined, noteName);
+        selectedNote(undefined, name);
     }
     else
     {
-        const response = await axios.post(`${path}/createNewNote`, {key: theSecretThingThatNobodyHasToKnow, notename: noteName});
+        const response = await axios.post(`${path}/createNewNote`, {key: theSecretThingThatNobodyHasToKnow, notename: name});
         if(response.data.ok || response.data.noteid !== undefined)
         {
-            createListButton(noteName, response.data.noteid);
+            actualNoteID = response.data.noteid;
+            actualNoteName = name;
 
-            saveKey(noteName, '');
-            loadNote(noteName, response.data.id);
-
+            createListButton(name, response.data.noteid);
             youDontHaveNotes();
 
-            selectedNote(undefined, noteName);
+            selectedNote(undefined, name);
+
+            noteName.innerText = name;
+            topBarButtons.hidden = false;
+
+            textArea.value = '';
+            textArea.disabled = false;
+            textArea.focus();
+
+            saveKey(name,'');
         }
         else if(response.data.error === 'invalidName')
         {
@@ -89,11 +97,11 @@ async function createNewNote(noteName)
 
 }
 
-function newNoteNameIsValid(noteName)
+function newNoteNameIsValid(name)
 {
     closeWindow(); //Por si haya una ventana abierta
 
-    if(noteName === '')
+    if(name === '')
     {
         floatingWindow
         ({
@@ -111,7 +119,7 @@ function newNoteNameIsValid(noteName)
         });
         return false;
     }
-    if(noteName.startsWith('_'))
+    if(name.startsWith('_'))
     {
         floatingWindow
         ({
@@ -129,7 +137,7 @@ function newNoteNameIsValid(noteName)
         });
         return false;
     }
-    if(noteName.length > 30)
+    if(name.length > 30)
     {
         floatingWindow
         ({
@@ -147,12 +155,12 @@ function newNoteNameIsValid(noteName)
         });
         return false;
     }
-    if(getKey(noteName) !== null)
+    if(isLocalMode && getKey(name) !== null)
     {
         floatingWindow
         ({
             title: 'Nota duplicada',
-            text: `Ya existe una nota con el nombre '${noteName}'`,
+            text: `Ya existe una nota con el nombre '${name}'`,
             button:
             {
                 text: 'Aceptar',

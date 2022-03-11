@@ -15,6 +15,7 @@ async function start()
     else if(login === 'local')
     {
         console.log('Modo local');
+        isLocalMode = true;
 
         document.getElementById('loginScreen').hidden = true;
         loadingScreen.hidden = true;
@@ -25,6 +26,7 @@ async function start()
     else
     {
         //TODO: comprobar si la clave que tenemos es válida de antemano.
+        isLocalMode = false;
         try
         {
             const response = await axios.get(`${path}/iHaveAValidKey`, {headers:{key: login}});
@@ -59,6 +61,7 @@ async function start()
                         {
                             console.log('Modo local');
                             theSecretThingThatNobodyHasToKnow = 'local';
+                            isLocalMode = true;
 
                             document.getElementById('loginScreen').hidden = true;
                             loadingScreen.hidden = true;

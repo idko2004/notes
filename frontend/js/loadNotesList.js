@@ -3,8 +3,7 @@ async function loadNotesList()
     console.log('Cargando lista de notas');
     loadingScreen.hidden = false;
 
-    let loginKey = theSecretThingThatNobodyHasToKnow;
-    if(loginKey === 'local')
+    if(isLocalMode)
     {
         let notesNames = getKeyNames();
     
@@ -17,6 +16,7 @@ async function loadNotesList()
     }
     else
     {
+        let loginKey = theSecretThingThatNobodyHasToKnow;
         console.log(loginKey);
         const response = await axios.get(`${path}/getNotesID`, {headers: {key: loginKey}});
         console.log(response);
@@ -53,7 +53,6 @@ function createListButton(noteName, id)
         if(!canInteract) return;
         let id = undefined;
         if(e.target.attributes.noteID) id = e.target.attributes.noteID.value;
-        actualNoteID = id;
 
         loadNote(e.target.textContent, id);
         selectedNote(e);

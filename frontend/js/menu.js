@@ -8,8 +8,7 @@ const menuOnlineLogOut = document.getElementById('menuOnlineLogOut');
 
 async function menuButtonText()
 {
-    const key = theSecretThingThatNobodyHasToKnow;
-    if(key === 'local')
+    if(isLocalMode)
     {
         menuButton.innerText = 'Modo local';
 
@@ -30,7 +29,7 @@ async function menuButtonText()
         menuOnlineManageAccount.hidden = false;
 
         //Obtener nombre de usuario
-        const response = await axios.get(`${path}/getUsername`, {headers: {key}});
+        const response = await axios.get(`${path}/getUsername`, {headers: {key: theSecretThingThatNobodyHasToKnow}});
         menuButton.innerText = response.data.username;
         menuTitleText.innerText = response.data.username;
     }
@@ -108,7 +107,7 @@ menuEraseAll.addEventListener('click', function()
                                     document.getElementById('noteScreen').hidden = true;
                                     loadingScreen.hidden = false;
                                     localStorage.clear();
-                                    document.location.reload();
+                                    location.reload();
                                 }
                             },
                             {

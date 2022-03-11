@@ -1,4 +1,4 @@
-noteField.addEventListener('keydown', (e) => 
+textArea.addEventListener('keydown', (e) => 
 {
     console.log(e.key);
     if(!canInteract)
@@ -11,7 +11,7 @@ noteField.addEventListener('keydown', (e) =>
     {
         //List
 
-        let textSplit = noteField.value.split('\n');
+        let textSplit = textArea.value.split('\n');
         let lastLine = textSplit[textSplit.length - 1];
 
         if(lastLine.startsWith('- ')) addToField('\n- ');
@@ -52,8 +52,8 @@ noteField.addEventListener('keydown', (e) =>
         function addToField(toAdd)
         {
             e.preventDefault();
-            noteField.value += toAdd;
-            noteField.scrollTop = noteField.scrollHeight;
+            textArea.value += toAdd;
+            textArea.scrollTop = noteField.scrollHeight;
         }
     }
 });

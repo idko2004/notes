@@ -3,13 +3,16 @@ textArea.disabled = true;
 
 async function loadNote(name, id)
 {
-    console.log('Cargar nota',name);
+    console.log('Cargar nota',name, id);
 
     if(actualNoteName !== undefined)
     {
         noteName.innerText = '(Guardando nota...)';
         await saveNote();
     }
+
+    textArea.value = '';
+    textArea.disabled = true;
 
     let noteContent = null;
     if(id === undefined)
@@ -18,7 +21,6 @@ async function loadNote(name, id)
     }
     else
     {
-        noteField.disabled = true;
         noteName.innerText = 'Cargando...';
 
         try
@@ -74,6 +76,8 @@ async function loadNote(name, id)
     noteName.innerText = name;
     actualNoteName = name;
 
+    actualNoteID = id;
+
     textArea.value = noteContent;
     textArea.disabled = false;
     topBarButtons.hidden = false;
@@ -93,7 +97,7 @@ document.getElementById('saveButton').addEventListener('click', async function(e
 {
     if(!canInteract) return;
 
-    if(theSecretThingThatNobodyHasToKnow !== 'local') sayThings.innerText = '(Guardando...)';
+    if(isLocalMode) sayThings.innerText = '(Guardando...)';
 
     const saved = await saveNote();
     if(saved) sayThings.innerText = '(Guardado).';
@@ -117,22 +121,25 @@ async function saveNote()
     let value = textArea.value;
     if(theLastTextSave === value) return true;
 
-    if(theSecretThingThatNobodyHasToKnow === 'local')
+    let noteID = actualNoteID;
+
+    if(isLocalMode)
     {
         saveKey(name, value);
         return true;
     }
     else
     {
-        if(actualNoteID === undefined) return console.error('No se pudo guardar la nota, noteID undefined');
+        if(noteID === undefined) return console.error('No se pudo guardar la nota, noteID undefined');
         saveKey(name, value);
 
         try
         {
+            console.log('Guardando nota', actualNoteID);
             const response = await axios.post(`${path}/saveNote`,
             {
                 key: theSecretThingThatNobodyHasToKnow,
-                noteID: actualNoteID,
+                noteID: noteID,
                 noteContent: value
             });
 

@@ -14,20 +14,29 @@
     padding-top: 30vh;
 }
 
+#window
+{
+    width: 40%;
+    min-width: 20rem;
+    max-width: 40rem;
+}
+
+#menu
+{
+    width: 30%;
+    min-width: 20rem;
+    max-width: 30rem;
+}
+
 #window,
 #menu
 {
     margin: 0 auto;
     padding: 1rem;
-    /*background-color: white;*/
     background-color: var(--green);
     display: block;
     height: auto;
-    width: 40%;
-    min-width: 260px;
-    max-width: 720px;
     height: auto;
-    /*border: solid 3px var(--green);*/
     border: solid 3px var(--green);
     border-radius: 10px;
 }

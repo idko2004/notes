@@ -112,7 +112,7 @@ menuEraseAll.addEventListener('click', function()
                     closeWindow();
                     floatingWindow(
                     {
-                        title: '¿De verdad va a borrarlo todo?',
+                        title: '¿De verdad vas a borrarlo todo?',
                         buttons:
                         [
                             {

@@ -122,7 +122,9 @@ menuEraseAll.addEventListener('click', function()
                                 {
                                     document.getElementById('noteScreen').hidden = true;
                                     loadingScreen.hidden = false;
+                                    const key = getKey('_login');
                                     localStorage.clear();
+                                    if(key !== undefined) saveKey('_login', key);
                                     location.reload();
                                 }
                             },
@@ -137,5 +139,4 @@ menuEraseAll.addEventListener('click', function()
             }
         ]
     });
-
 });

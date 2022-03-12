@@ -11,6 +11,12 @@ module.exports = function(app)
         
         const username = req.headers.username;
         const password = req.headers.password;
+
+        if(username === undefined || password === undefined)
+        {
+            res.status(400).send({error: 'badRequest'});
+            return;
+        }
     
         const element = await database.getElement('users', {username});
         if(element !== null)

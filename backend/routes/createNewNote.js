@@ -15,6 +15,12 @@ module.exports = function(app)
 
         //Verificamos si se tienen todos los requerimientos
         //key   noteName
+        if(req.body === undefined)
+        {
+            res.status(400).send({error: 'badRequest'});
+            return;
+        }
+
         const key = req.body.key;
         let noteName = req.body.notename;
         if(key === undefined || noteName === undefined)
@@ -39,11 +45,36 @@ module.exports = function(app)
         
         //Obtenemos key del usuario
         const KeyData = await database.getKeyData(key);
-        console.log(KeyData)
+        console.log(KeyData);
+        if(KeyData === null)
+        {
+            res.status(200).send({error: 'invalidKey'});
+            console.log('invalidKey');
+            return;
+        }
         const email = KeyData.email;
+        if(email === undefined)
+        {
+            res.status(200).send({error: 'emailNull'});
+            console.log('emailNull');
+            return;
+        }
 
         //Verificamos si la nota no tiene un nombre repetido para el usuario.
         const userInfo = await database.getElement('users', {email});
+        if(userInfo === null)
+        {
+            res.status(200).send({error: 'userNull'});
+            console.log('userNull');
+            return;
+        }
+        if(userInfo.notesID === undefined)
+        {
+            res.status(200).send({error: 'idUndefined'});
+            console.log('idUndefined');
+            return;
+        }
+
         for(let i = 0; i < userInfo.notesID.length; i++)
         {
             if(userInfo.notesID[i].name === noteName) return invalidName();
@@ -73,11 +104,11 @@ module.exports = function(app)
             owner: email,
             text: ''
         }
-        database.createElement('notes', newNote);
+        await database.createElement('notes', newNote);
 
         //Actualizar el elemento de la base de datos de usuarios para incluir el noteID y el nombre de la nueva nota
         userInfo.notesID.push({id: noteID, name: noteName});
-        database.updateElement('users', {email}, userInfo);
+        await database.updateElement('users', {email}, userInfo);
 
         //Responder al cliente
         //ok    noteID

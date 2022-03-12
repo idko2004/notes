@@ -10,9 +10,13 @@ module.exports = function(app)
     
         //Comprobar el userID para identificar al usuario y obtener sus notesID.
         const key = req.headers.key;
-        console.log('getNotesID - llamando a la getKeyData');
+        if(key === undefined)
+        {
+            res.status(400).send({error: 'badRequest'});
+            return;
+        }
+
         const keyData = await database.getKeyData(key);
-        console.log('getNotesID - getKeyData llamado');
         if(keyData === null)
         {
             res.status(200).send({error: 'invalidKey'});
@@ -21,14 +25,23 @@ module.exports = function(app)
     
         //Obtener usuario
         const email = keyData.email;
-        console.log('getNotesID - llamando a getElement users');
+        if(email === undefined)
+        {
+            res.status(200).send({error: 'emailUndefined'});
+            console.log('emailUndefined');
+            return;
+        }
+
         const userElement = await database.getElement('users', {email});
-        console.log('getNotesID - getElement llamado');
+        if(userElement === null)
+        {
+            res.status(200).send({error: 'userNull'});
+            console.log('userNull');
+            return;
+        }
     
         //Obtener notesID
         const notesID = userElement.notesID;
-        console.log('getNotesID - a punto de devolver la llamada');
         res.status(200).send({notesID});
-        console.log('llamada devolvida');
     });
 }

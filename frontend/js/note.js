@@ -30,21 +30,46 @@ async function loadNote(name, id)
             console.log(response);
             if(response.data.error !== undefined) //Ocurre un error
             {
+                noteName.innerText = 'No se pudo cargar la nota.';
+                actualNoteID = undefined;
+                actualNoteName = undefined;
+                textArea.value = '';
+                topBarButtons.hidden = true;
+                theLastTextSave = '';
+    
                 floatingWindow(
                 {
                     title: 'Ha ocurrido un error',
-                    text: `Por favor, la página se recargará.\n${response.data.error}`
+                    text: `No se pudo cargar la nota.\nCódigo de error: ${response.data.error}`,
+                    button:
+                    {
+                        text: 'Aceptar',
+                        callback: function(){closeWindow()}
+                    }
                 });
-                setInterval(function()
-                {
-                    location.reload();
-                },18000);
                 return;
             }
             if(response.data.note !== undefined) noteContent = response.data.note;
             else
             {
                 console.error('error cargando la nota');
+                noteName.innerText = 'No se pudo cargar la nota.';
+                actualNoteID = undefined;
+                actualNoteName = undefined;
+                textArea.value = '';
+                topBarButtons.hidden = true;
+                theLastTextSave = '';
+                
+                floatingWindow(
+                {
+                    title: 'Error al cargar la nota',
+                    text: 'Ha ocurrido un error desconocido. Ni siquiera existe un código de error para esto.',
+                    button:
+                    {
+                        text: 'Aceptar',
+                        callback: function(){closeWindow()}
+                    }
+                });
                 return;
             }
         }

@@ -74,6 +74,7 @@ async function getKeyData(key)
 //El nombre es un juego de palabras, ríanse.
 async function upDate(element)
 {
+    if(element === null) return;
     console.log('//upDate//');
     console.log('//Fecha guardada//',element.date.d, element.date.m, element.date.y);
 

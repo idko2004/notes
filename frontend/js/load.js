@@ -6,7 +6,21 @@ async function start()
     let login = theSecretThingThatNobodyHasToKnow;
     console.log(login);
 
-    if(login === null || login === undefined || login === 'undefined')
+    if(location.hash === '#local')
+    {
+        theSecretThingThatNobodyHasToKnow = 'local';
+        console.log('Forzar modo local');
+        isLocalMode = true;
+
+        document.getElementById('loginScreen').hidden = true;
+        loadingScreen.hidden = true;
+
+        loadNotesList();
+        document.getElementById('noteScreen').hidden = false;
+
+        menuButtonText();
+    }
+    else if(login === null || login === undefined || login === 'undefined')
     {
         loadingScreen.hidden = true;
         document.getElementById('noteScreen').hidden = true;
@@ -22,10 +36,11 @@ async function start()
 
         loadNotesList();
         document.getElementById('noteScreen').hidden = false;
+        
+        menuButtonText();
     }
     else
     {
-        //TODO: comprobar si la clave que tenemos es válida de antemano.
         isLocalMode = false;
         try
         {

@@ -5,6 +5,7 @@ const menuExitLocalMode = document.getElementById('menuExitLocalMode');
 const menuEraseAll = document.getElementById('menuEraseAll');
 const menuOnlineManageAccount = document.getElementById('menuOnlineManageAccount');
 const menuOnlineLogOut = document.getElementById('menuOnlineLogOut');
+const menuOnlineChangeToLocal = document.getElementById('menuOnlineChangeToLocal');
 
 async function menuButtonText()
 {
@@ -17,6 +18,7 @@ async function menuButtonText()
 
         menuOnlineLogOut.hidden = true;
         menuOnlineManageAccount.hidden = true;
+        menuOnlineChangeToLocal.hidden = true;
     }
     else
     {
@@ -27,6 +29,7 @@ async function menuButtonText()
 
         menuOnlineLogOut.hidden = false;
         menuOnlineManageAccount.hidden = false;
+        menuOnlineChangeToLocal.hidden = false;
 
         //Obtener nombre de usuario
         const response = await axios.get(`${path}/getUsername`, {headers: {key: theSecretThingThatNobodyHasToKnow}});
@@ -41,6 +44,12 @@ menuOnlineLogOut.addEventListener('click', function()
     deleteKey('_login');
     location.reload();
 });
+
+menuOnlineChangeToLocal.addEventListener('click', function()
+{
+    location.hash = '#local'
+    location.reload();
+})
 
 //Botón de gestionar cuenta
 
@@ -58,6 +67,13 @@ closeMenuButton.addEventListener('click', function()
 
 menuExitLocalMode.addEventListener('click', function()
 {
+    if(location.hash === '#local')
+    {
+        location.hash = '';
+        location.reload();
+        return;
+    }
+
     saveNote();
     document.getElementById('noteScreen').hidden = true;
     notesList.innerHTML = '';

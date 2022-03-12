@@ -24,12 +24,23 @@ module.exports = function(app)
             return;
         }
         const email = keyData.email;
+        if(email === undefined)
+        {
+            res.status(200).send({error: 'emailUndefined'});
+            console.log('emailUndefined');
+            return;
+        }
 
         //Obtener la nota
         const targetNoteID = req.headers.noteid;
         const theNote = await database.getElement('notes',{id: targetNoteID});
-
         console.log(theNote);
+        if(theNote === null)
+        {
+            res.status(200).send({error: 'noteDontExist'});
+            console.log('noteDontExist');
+            return;
+        }
 
         //Comprobar si es el dueño de la nota
         if(theNote.owner !== email)

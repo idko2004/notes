@@ -12,6 +12,12 @@ module.exports = function(app)
         console.log('body', req.body);
 
         //Comprobamos que tenemos todos los datos necesarios
+        if(req.body === undefined)
+        {
+            res.status(400).send({error: 'badRequest'});
+            return;
+        }
+
         const key = req.body.key;
         const noteID = req.body.noteID;
         const noteContent = req.body.noteContent;
@@ -29,10 +35,23 @@ module.exports = function(app)
             res.status(200).send({error: 'invalidKey'});
             return;
         }
+
         const email = keyData.email;
+        if(email === undefined)
+        {
+            res.status(200).send({error: 'emailUndefined'});
+            console.log('emailUndefined');
+            return;
+        }
 
         //Obtenemos la nota en la base de datos
         const note = await database.getElement('notes',{id: noteID});
+        if(note === null)
+        {
+            res.status(200).send({error: 'noteDontExist'});
+            console.log('noteDontExist');
+            return;
+        }
 
         //Comprobamos si el usuario es dueño de esa nota
         if(note.owner !== email)

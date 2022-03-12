@@ -33,6 +33,15 @@ async function updateElement(collection, objQuery, newElement)
     return result.ok;
 }
 
+async function deleteElement(collection, objQuery)
+{
+    await mdbClient.connect();
+    const database = mdbClient.db('Notes');
+    const theCollection = database.collection(collection);
+    const result = await theCollection.deleteOne(objQuery);
+    return result;
+}
+
 async function getKeyData(key)
 {
     console.log('getKeyData', key);
@@ -106,4 +115,4 @@ async function upDate(element)
     }
 }
 
-module.exports = {getElement, createElement, updateElement, getKeyData};
+module.exports = {getElement, createElement, updateElement, deleteElement, getKeyData};

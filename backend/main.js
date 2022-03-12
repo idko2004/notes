@@ -14,6 +14,7 @@ require('./routes/createNewAccount')(app);
 require('./routes/iHaveAValidKey')(app);
 require('./routes/saveNote')(app);
 require('./routes/createNewNote')(app);
+require('./routes/deleteNote')(app);
 
 app.listen(port, function()
 {

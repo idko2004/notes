@@ -199,20 +199,67 @@ document.getElementById('deleteButton').addEventListener('click',(e) =>
             {
                 text: 'Sí, borra la nota',
                 primary: true,
-                callback: () =>
+                callback: async function()
                 {
-                    deleteKey(name);
+                    if(isLocalMode)
+                    {
+                        actualNoteName = undefined;
+                        deleteKey(name);
 
-                    textArea.value = '';
-                    textArea.disabled = true;
-                
-                    noteName.innerText = 'Haz click sobre una nota.'
-                    topBarButtons.hidden = true;
-                
-                    deleteListButton(name);
-                    youDontHaveNotes();
+                        textArea.value = '';
+                        textArea.disabled = true;
                     
-                    closeWindow();
+                        noteName.innerText = 'Haz click sobre una nota.';
+                        topBarButtons.hidden = true;
+                    
+                        deleteListButton(name);
+                        youDontHaveNotes();
+                        
+                        closeWindow();
+                    }
+                    else
+                    {
+                        closeWindow();
+                        floatingWindow(
+                        {
+                            title: 'Borrando nota...',
+                            text: 'Espera un momento.'
+                        });
+
+                        const response = await axios.post(`${path}/deleteNote`, {key: theSecretThingThatNobodyHasToKnow, noteid: actualNoteID});
+
+                        if(response.data.error === undefined)
+                        {
+                            actualNoteID = undefined;
+                            actualNoteName = undefined;
+                            deleteKey(name);
+
+                            textArea.value = '';
+                            textArea.disabled = true;
+
+                            noteName.innerText = 'Haz click sobre una nota';
+                            topBarButtons.hidden = true;
+
+                            deleteListButton(name);
+                            youDontHaveNotes();
+
+                            closeWindow();
+                        }
+                        else
+                        {
+                            closeWindow();
+                            floatingWindow(
+                            {
+                                title: '¡Oh, no!',
+                                text: `Ha ocurrido un error al borrar la nota con el siguiente código de error: ${response.data.error}`,
+                                button:
+                                {
+                                    text: 'Aceptar',
+                                    callback: function(){closeWindow();}
+                                }
+                            });
+                        }
+                    }
                 }
             }
         ]

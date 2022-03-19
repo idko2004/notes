@@ -15,6 +15,7 @@ require('./routes/iHaveAValidKey')(app);
 require('./routes/saveNote')(app);
 require('./routes/createNewNote')(app);
 require('./routes/deleteNote')(app);
+require('./routes/renameNote')(app);
 
 app.listen(port, function()
 {

@@ -142,7 +142,7 @@ function closeWindow()
     windowInput.hidden = true;
     windowButtons.innerHTML = '';
     windowInput.children[0].value = '';
-    windowInput.children[0].removeEventListener('keypress', textInputCallback);
+    if(textInputCallback !== null) windowInput.children[0].removeEventListener('keypress', textInputCallback);
     textInputCallback = null;
 
     canInteract = true;

@@ -58,7 +58,7 @@ module.exports = function(app)
             while(true)
             {
                 key = rand.generateKey(7);
-                if(sessionIDList[key] === undefined)
+                if(database.sessionIDList[key] === undefined)
                 {
                     let element = await database.getElement('sessionID', {key});
                     console.log(element);
@@ -79,8 +79,8 @@ module.exports = function(app)
                 }
             }
     
-            sessionIDList[key] = keyData;
-            database.createElement(keyData);
+            database.sessionIDList[key] = keyData;
+            database.createElement('sessionID', keyData);
     
             res.status(200).send({key});
         }

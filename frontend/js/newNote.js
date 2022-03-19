@@ -32,7 +32,7 @@ newNote.addEventListener('click',function()
 
 async function createNewNote(name)
 {
-    if(!newNoteNameIsValid(name)) return;
+    if(!newNoteNameIsValid(name, 'newNote')) return;
     if(isLocalMode)
     {
         createListButton(name);
@@ -97,7 +97,7 @@ async function createNewNote(name)
 
 }
 
-function newNoteNameIsValid(name)
+function newNoteNameIsValid(name, openAWindow)
 {
     closeWindow(); //Por si haya una ventana abierta
 
@@ -110,11 +110,7 @@ function newNoteNameIsValid(name)
             button:
             {
                 text: 'Aceptar',
-                callback: () =>
-                {
-                    closeWindow();
-                    newNote.click();
-                }
+                callback: closeInvalidNameWindow
             }
         });
         return false;
@@ -128,11 +124,7 @@ function newNoteNameIsValid(name)
             button:
             {
                 text: 'Aceptar',
-                callback: () =>
-                {
-                    closeWindow();
-                    newNote.click();
-                }
+                callback: closeInvalidNameWindow
             }
         });
         return false;
@@ -146,11 +138,7 @@ function newNoteNameIsValid(name)
             button:
             {
                 text: 'Aceptar',
-                callback: () =>
-                {
-                    closeWindow();
-                    newNote.click();
-                }
+                callback: closeInvalidNameWindow
             }
         });
         return false;
@@ -164,15 +152,20 @@ function newNoteNameIsValid(name)
             button:
             {
                 text: 'Aceptar',
-                callback: () =>
-                {
-                    closeWindow();
-                    newNote.click();
-                }
+                callback: closeInvalidNameWindow
             }
         });
         return false;
     }
+    //TODO: Comprobar si hay una nota en la lista con el mismo nombre
 
     return true;
+
+    function closeInvalidNameWindow()
+    {
+        closeWindow();
+
+        if(openAWindow === 'newNote') newNote.click();
+        else if(openAWindow === 'renameNote') document.getElementById('renameButton').click();
+    }
 }

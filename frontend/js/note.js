@@ -88,10 +88,7 @@ async function loadNote(name, id)
                 button:
                 {
                     text: 'Aceptar',
-                    callback: function()
-                    {
-                        closeWindow();
-                    }
+                    callback: function(){closeWindow()}
                 }
             });
             return;
@@ -114,6 +111,7 @@ async function loadNote(name, id)
     setTimeout(function()
     {
         noteField.focus();
+        resizeTwice();
     }, 15);
 }
 
@@ -361,29 +359,77 @@ document.getElementById('renameButton').addEventListener('click', function()
             {
                 text: 'Renombrar',
                 primary: true,
-                callback: function()
+                callback: async function()
                 {
-                    const input = document.getElementById('inputInTheWindow');
+                    const value = document.getElementById('inputInTheWindow').value;
 
-                    if(!newNoteNameIsValid(input.value))
+                    if(!newNoteNameIsValid(value, 'renameNote')) return;
+
+                    if(!isLocalMode)
                     {
-                        input.value = '';
-                        return;
+                        try
+                        {
+                            const response = await axios.post(`${path}/renameNote`,{key: theSecretThingThatNobodyHasToKnow, noteid: actualNoteID, newname: value});
+                            if(response.error === 'invalidName')
+                            {
+                                closeWindow();
+                                floatingWindow(
+                                {
+                                    title: 'Elige otro nombre',
+                                    text: 'El nombre que elegiste para esta nota no es válido. Asegúrate de que no sea un nombre repetido, que no empiece con "_" o que no exceda de los 30 caracteres.',
+                                    button:
+                                    {
+                                        text: 'Aceptar',
+                                        callback: function(){closeWindow()}
+                                    }
+                                });
+                                return;
+                            }
+                            if(response.error !== undefined)
+                            {
+                                closeWindow();
+                                floatingWindow(
+                                {
+                                    title: 'Error al renombrar',
+                                    text: `No se pudo renombrar la nota.\nCódigo de error: ${response.error}`,
+                                    button:
+                                    {
+                                        text: 'Aceptar',
+                                        callback: function(){closeWindow()}
+                                    }
+                                });
+                                return;
+                            }    
+                        }
+                        catch
+                        {
+                            closeWindow();
+                            floatingWindow(
+                            {
+                                title: 'Error al renombrar la nota',
+                                text: 'Parece que el servidor se ha caído, prueba a intentar de nuevo dentro de un rato.',
+                                button:
+                                {
+                                    text: 'Aceptar',
+                                    callback: function(){closeWindow()}
+                                }
+                            });
+                            return;
+                        }
                     }
 
                     deleteKey(noteName.innerText);
-                    saveKey(input.value,textArea.value);
+                    saveKey(value,textArea.value);
 
                     deleteListButton(noteName.innerText);
-                    createListButton(input.value);
+                    createListButton(value);
                     youDontHaveNotes();
 
-                    noteName.innerText = input.value;
-                    selectedNote(undefined, input.value);
+                    noteName.innerText = value;
+                    selectedNote(undefined, value);
 
                     closeWindow();
                     textArea.focus();
-                    input.value = '';
                 }
             }
         ]

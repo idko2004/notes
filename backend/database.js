@@ -116,4 +116,4 @@ async function upDate(element)
     }
 }
 
-module.exports = {getElement, createElement, updateElement, deleteElement, getKeyData};
+module.exports = {getElement, createElement, updateElement, deleteElement, getKeyData, sessionIDList};

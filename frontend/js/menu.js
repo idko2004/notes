@@ -39,9 +39,25 @@ async function menuButtonText()
 }
 
 //Botón de cerrar sesión
-menuOnlineLogOut.addEventListener('click', function()
+menuOnlineLogOut.addEventListener('click', async function()
 {
     deleteKey('_login');
+
+    floatingMenu.hidden = true;
+    floatingWindow(
+    {
+        title: 'Cerrando sesión...'
+    });
+
+    try
+    {
+        const response = await axios.post(`${path}/logout`, {key: theSecretThingThatNobodyHasToKnow});
+        if(response.data.ok) console.log('Sesión cerrada');    
+    }
+    catch
+    {
+        location.reload();
+    }
     location.reload();
 });
 

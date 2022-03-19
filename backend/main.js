@@ -16,6 +16,7 @@ require('./routes/saveNote')(app);
 require('./routes/createNewNote')(app);
 require('./routes/deleteNote')(app);
 require('./routes/renameNote')(app);
+require('./routes/logout')(app);
 
 app.listen(port, function()
 {

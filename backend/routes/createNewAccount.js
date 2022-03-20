@@ -4,7 +4,20 @@ const things = require('../things.json');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
+//Email things
 const mailer = require('nodemailer');
+
+const transporter = mailer.createTransport(
+    {
+        host: 'smtp.zoho.com',
+        //secure: true,
+        //port: 456,
+        auth:
+        {
+            user: things.emailUser,
+            pass: things.emailPassword
+        }
+    });
 
 module.exports = function(app)
 {
@@ -21,22 +34,13 @@ module.exports = function(app)
             return;
         }
 
-        const transporter = mailer.createTransport(
-        {
-            service: things.service,
-            auth:
-            {
-                user: things.emailUser,
-                pass: things.emailPassword
-            }
-        });
 
         const mailOptions =
         {
             from: things.emailUser,
             to: accountEmail,
             subject: '¡Correo desde express! :D',
-            text: '<style>div{background-color:green;}</style><div>Holaaaaaa!!!</div>'
+            html: '<style>div{background-color:green;}</style><div>Holaaaaaa!!!</div>'
         }
 
         transporter.sendMail(mailOptions, function(error)

@@ -1,0 +1,82 @@
+body
+{
+    background-color: var(--green-hover);
+}
+
+article
+{
+    margin: 0 auto;
+    padding: 1rem;
+    background-color: var(--green);
+    display: block;
+    height: auto;
+    border: solid 3px var(--green);
+    border-radius: 10px;
+    width: 40%;
+    min-width: 20rem;
+    max-width: 40rem;
+    margin-top: 30vh;
+    text-align: center;
+}
+
+h1, #text
+{
+    margin: 0;
+    padding: 0 0 0.7rem 0;
+    /*color: var(--green);*/
+    color: white;
+    word-wrap: break-word;
+}
+
+h1
+{
+    font-size: 3rem;
+}
+
+#text
+{
+    font-size: 1.5rem;
+}
+
+input
+{
+    margin: 0 0 0.7rem 0;
+    text-align: center;
+    color: white;
+    background-color: var(--green-hover);
+    border: 2px solid var(--green-hover);
+    border-radius: 10px;
+    padding: 0.5rem;
+    font-size: 1rem;
+    font-family: var(--rubik);
+    width: 15rem;
+    transition: all ease 150ms;
+}
+
+input:hover,
+input:focus
+{
+    color: black;
+    background-color: white;
+    outline: none;
+    transition: all ease 150ms;
+}
+
+button
+{
+    width: 15rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 2px solid var(--green);
+    border-radius: 10px;
+    background-color: var(--green-hover);
+    color: white;
+    font-family: var(--rubik);
+    transition: all ease 150ms;
+}
+
+button:hover,
+button:focus
+{
+    border-color: white;
+}

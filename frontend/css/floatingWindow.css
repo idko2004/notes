@@ -36,7 +36,6 @@
     background-color: var(--green);
     display: block;
     height: auto;
-    height: auto;
     border: solid 3px var(--green);
     border-radius: 10px;
 }

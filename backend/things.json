@@ -1,0 +1,6 @@
+{
+    "dbURL": "mongodb+srv://notesbackend:ZdiWJiK8MiFcQOoK@notes.d8kgx.mongodb.net/Notes?retryWrites=true&w=majority",
+    "emailService": "gmail",
+    "emailUser": "idkoapps@zohomail.com",
+    "emailPassword": "vsjAzOno2EP!0hRQJ*x&"
+}

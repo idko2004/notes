@@ -19,7 +19,8 @@ async function createElement(collection, element)
     await mdbClient.connect();
     const database = mdbClient.db('Notes');
     const theCollection = database.collection(collection);
-    theCollection.insertOne(element);
+    const result = await theCollection.insertOne(element);
+    return result;
 }
 
 async function updateElement(collection, objQuery, newElement)

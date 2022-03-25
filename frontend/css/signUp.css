@@ -66,6 +66,7 @@ button
 {
     width: 15rem;
     padding: 0.5rem;
+    margin: 0.3rem;
     font-size: 1rem;
     border: 2px solid var(--green);
     border-radius: 10px;
@@ -79,4 +80,11 @@ button:hover,
 button:focus
 {
     border-color: white;
+}
+
+#tinyText
+{
+    font-size: 1rem;
+    color: white;
+    padding: 0 0 0.7rem 0;
 }

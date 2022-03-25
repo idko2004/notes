@@ -10,13 +10,18 @@
         <link rel='stylesheet' type='text/css' href='css/signUp.css'>
 
         <script defer src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script defer src="js/signUp.js"></script>
     </head>
     <body>
         <article>
             <h1>Crear cuenta</h1>
-            <div id="text">Correo electrónico</div>
-            <input type="text" placeholder="alguien@email.com"><br>
-            <button>Siguiente</button>
+            <div id="text">Cargando...</div>
+            <div id="tinyText" hidden></div>
+            <div><input id="inputField" type="text" placeholder="..." hidden></div>
+            <div><button id="nextButton" hidden>Siguiente</button></div>
+            <div><button id="changeEmailButton" hidden>Cambiar correo electrónico</button></div>
+            <div><button id="backButton" hidden>Volver</button></div>
+            <div><button id="reloadButton" hidden>Reintentar</button></div>
         </article>
     </body>
 </html>

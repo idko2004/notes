@@ -83,7 +83,7 @@ async function loadNote(name, id)
             theLastTextSave = '';
             floatingWindow(
             {
-                title: 'Error al cargar la nota',
+                title: 'Vaya...',
                 text: 'Parece que el servidor se ha caído, prueba a intentar de nuevo dentro de un rato.',
                 button:
                 {

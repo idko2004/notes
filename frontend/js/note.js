@@ -136,8 +136,6 @@ let theLastTextSave = '';
 let serverDownAdvertisement = false; //Para que no salga el mensaje cada vez cuando el server está caído.
 async function saveNote()
 {
-    if(!canInteract) return null;
-
     let name = actualNoteName;
     if(name === undefined) return null;
 

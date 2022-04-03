@@ -37,7 +37,7 @@ module.exports = function(app)
             const element2 = await database.getElement('users', {email: username});
             if(element2 !== null)
             {
-                if(element.password === password)
+                if(element2.password === password)
                 {
                     linkKey(username);
                     return;

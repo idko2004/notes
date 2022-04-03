@@ -43,6 +43,8 @@ module.exports = function(app)
     
         //Obtener el nombre de usuario
         const username = element.username;
-        res.status(200).send({username});
+        const passwordLength = element.password.length;
+
+        res.status(200).send({username, email, passwordLength});
     });
 }

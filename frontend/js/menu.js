@@ -65,9 +65,19 @@ menuOnlineChangeToLocal.addEventListener('click', function()
 {
     location.hash = '#local'
     location.reload();
-})
+});
 
 //Botón de gestionar cuenta
+menuOnlineManageAccount.addEventListener('click', async function()
+{
+    document.getElementById('noteScreen').hidden = true;
+    floatingMenu.hidden = true;
+    loadingScreen.hidden = false;
+
+    await saveNote();
+    saveCookie('_login', theSecretThingThatNobodyHasToKnow);
+    location.href = 'manageAccount.html';
+});
 
 menuButton.addEventListener('click', function()
 {

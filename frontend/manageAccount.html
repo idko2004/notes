@@ -1,0 +1,105 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Gestionar Cuenta | Notas</title>
+
+        <link rel='stylesheet' type='text/css' href='css/style.css'>
+        <link rel='stylesheet' type='text/css' href='css/load.css'>
+        <link rel='stylesheet' type='text/css' href='css/floatingWindow.css'>
+        <link rel='stylesheet' type='text/css' href='css/manageAccount.css'>
+
+        <script defer src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script defer src="js/cookies.js"></script>
+        <script defer src="js/floatingWindow.js"></script>
+        <script defer src="js/manageAccount/manageAccount.js"></script>
+        <script defer src="js/manageAccount/changeDataMenu.js"></script>
+
+    </head>
+    <body>
+        <div id=loadingScreen>
+            <section>
+                <b>Notas</b>
+                <p id='loadingText'>Cargando...</p>
+            </section>
+        </div>
+
+        <div id='mainScreen' hidden>
+            <div id='mainScreenNotesBigName'>
+                <b>Notas</b>
+            </div>
+            <div class="container">
+                <div id="mainMenu" hidden>
+                    <h1>Gestionar cuenta</h1>
+                    <p>
+                        <section>
+                            <p>Nombre de usuario:<br><b><span id='usernameSpace'></span></b></p>
+                            <p>Correo electrónico:<br><b><span id="emailSpace"></span></b></p>
+                            <p>Contraseña:<br><b><span id="passwordSpace"></span></b></p>
+                            <button class='greenButton' id="toChangeDataMenuButton">Modificar estos datos</button>
+                        </section>
+                        <section>
+                            <button class="greenButton">Ver quién tiene acceso a esta cuenta</button>
+                            <button class='greenButton'>Cerrar sesión en todos los dispositivos</button>
+                        </section>
+                        <section>
+                            <button class='greenButton'>Borrar todas las notas</button>
+                            <button class='greenButton'>Eliminar cuenta</button>
+                        </section>
+                        <section>
+                            <button class='greenButton' id="goBackToNotes">Volver</button>
+                        </section>
+                    </p>
+                </div>
+
+                <div id="changeDataMenu" hidden>
+                    <h1>Modificar datos</h1>
+                    <p>
+                        <section>
+                            <h2>Nombre de usuario</h2>
+                            <p><input type="text" id="changeUsernameField" placeholder=""></p>
+                        </section>
+                        <section>
+                            <h2>Correo electrónico</h2>
+                            <p><input type="text" id="changeEmailField" placeholder=""></p>
+                        </section>
+                        <section>
+                            <h2>Contraseña</h2>
+                            <p><input type="password" id="changePasswordField" placeholder=""></p>
+                            <p><input type="password" id="comprobePasswordField" placeholder="Comprueba la contraseña"></p>
+                        </section>
+                        <section>
+                            <button class="greenButton" id="saveChangeDataMenu">Guardar cambios</button>
+                            <button class="greenButton" id="goBackChangeDataMenu">Cancelar</button>
+                        </section>
+                    </p>
+                </div>
+
+                <div id="changeDataEmailCodeMenu" hidden>
+                    <h1>Revisa tu correo</h1>
+                    <p>
+                        <section>
+                            Hemos enviado un código al correo <b><span id="changeDataEmailSent">alguien@email.com</span></b> para confirmar los cambios.
+                        </section>
+                        <section>
+                            <h2>Ingresa el código</h2>
+                            <p><input type="text" id="changeDataConfirmCode" placeholder="A1B2C"></p>
+                            <button class="greenButton" id="changeDataConfirmCodeButton">Comprobar</button>
+                        </section>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <div id='floatingWindow' hidden>
+            <div id='window'>
+                <h1 id='windowTitle'></h1>
+                <div id='windowText'></div>
+                <div id='windowInput'>
+                    <input type='text' id='inputInTheWindow'>
+                </div>
+                <div id='windowButtons'></div>
+            </div>
+        </div>
+    </body>
+</html>

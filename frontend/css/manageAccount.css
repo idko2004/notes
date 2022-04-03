@@ -1,0 +1,105 @@
+#mainScreen
+{
+    text-align: center;
+}
+
+#mainScreenNotesBigName
+{
+    font-size: clamp(5rem, calc(30vw - 30vh), 17vh);
+    color: white;
+    height: 25vh;
+    background-color: var(--green);
+    vertical-align: middle;
+    line-height: 25vh;
+    border-radius: 10px;
+    margin: 0.5rem;
+}
+
+#mainScreen h1
+{
+    color: var(--green)
+}
+
+#mainScreen p
+{
+    margin: 0.7rem;
+    font-size: 1rem;
+}
+
+#mainScreen section
+{
+    margin: 0.7rem;
+    background-color: var(--green);
+    border-radius: 10px;
+    padding: 0.7rem;
+    color: white;
+}
+
+#mainScreen button
+{
+    font-size: 1rem;
+    padding: 0.7rem;
+    margin: 0.3rem;
+    width: 20rem;
+    border-radius: 10px;
+    font: var(--rubik);
+}
+
+.greenButton
+{
+    background-color: var(--green-hover);
+    border: 2px solid var(--green-hover);
+    color: white;
+    transition: all ease 100ms;
+}
+
+.greenButton:hover
+{
+    border-color: white;
+    transition: all ease 100ms;
+}
+
+.container
+{
+    /*border: 1px solid red;*/
+    /*min-width: 700px;*/
+    /*max-width: 1500px;*/
+    width: 50ch;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    padding-bottom: 5vh;
+}
+
+input[type='text'],
+input[type='password']
+{
+    font-size: 1rem;
+    padding: 0.3rem;
+    margin: 0.3rem;
+    width: 20rem;
+    color: white;
+    background-color: var(--green-hover);
+    border: 2px solid var(--green-hover);
+    border-radius: 10px;
+    font: var(--rubik);
+    text-align: center;
+    transition: all ease 100ms;
+}
+
+input[type='text']:hover,
+input[type='password']:hover
+{
+    border-color: white;
+    transition: all ease 100ms;
+}
+
+input[type='text']:focus,
+input[type='password']:focus
+{
+    border-color: white;
+    background-color: white;
+    color: var(--green-hover);
+    outline: none;
+    transition: all ease 100ms;
+}

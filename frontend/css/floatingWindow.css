@@ -8,10 +8,10 @@
     position: fixed;
     top: 0;
     left: 0;
-    background-color: rgba(71, 155, 91, 0.25);
+    background-color: rgba(71, 155, 91, 0.35);
     width: 100vw;
     height: 100vh;
-    padding-top: 30vh;
+    padding-top: 20vh;
 }
 
 #window
@@ -151,7 +151,7 @@
 {
     width: 90%;
     margin: 0.3rem 0;
-    padding: 0.3rem;
+    padding: 0.5rem;
     font-size: 1rem;
     font-family: var(--rubik);
     color: white;

@@ -38,7 +38,7 @@ module.exports = function(app)
         const accountEmail = req.body.email;
         const accountPassword = req.body.password;
         const accountUsername = req.body.username;
-        if(accountEmail === undefined || accountPassword === undefined || accountUsername === undefined)
+        if(accountEmail === undefined || accountPassword === undefined || accountUsername === undefined || accountUpdate === undefined)
         {
             res.status(400).send({error: 'badRequest'});
             return;

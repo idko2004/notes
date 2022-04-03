@@ -1,3 +1,5 @@
+console.log('Iniciando servidor');
+
 const express = require('express');
 const cors = require('cors');
 
@@ -18,6 +20,7 @@ require('./routes/deleteNote')(app);
 require('./routes/renameNote')(app);
 require('./routes/logout')(app);
 require('./routes/pingpong')(app);
+require('./routes/updateUserData')(app);
 
 
 app.listen(port, function()

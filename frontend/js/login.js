@@ -99,6 +99,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
 
         loadNotesList();
         menuButtonText();
+        resizeTwice();
     }
     else if(response.data.error === 'wrongPassword') //Contraseña incorrecta
     {

@@ -44,7 +44,7 @@ async function createNewNote(name)
     
         selectedNote(undefined, name);
     }
-    else
+    else try
     {
         const response = await axios.post(`${path}/createNewNote`, {key: theSecretThingThatNobodyHasToKnow, notename: name});
         if(response.data.ok || response.data.noteid !== undefined)
@@ -94,7 +94,19 @@ async function createNewNote(name)
             });
         }
     }
-
+    catch
+    {
+        floatingWindow(
+        {
+            title: 'Vaya...',
+            text: 'Parece que el servidor no responde, por lo que no se podrá crear la nota. Intenta de nuevo dentro de un rato.',
+            button:
+            {
+                text: 'Aceptar',
+                callback: closeWindow
+            }
+        });
+    }
 }
 
 function newNoteNameIsValid(name, openAWindow)

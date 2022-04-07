@@ -84,92 +84,113 @@ document.getElementById('loginButton').addEventListener('click', async function(
     }
 
     //Realizar la llamada para iniciar sesión
-    const response = await axios.get(`${path}/getSessionID`, {headers: {username, password}});
-    console.log(response);
-    if(response.data.error === undefined && response.data.key !== undefined) //Clave obtenida con éxito
+    try
     {
-        console.log('Clave obtenida');
-        isLocalMode = false;
-        saveKey('_login', response.data.key);
-        theSecretThingThatNobodyHasToKnow = response.data.key;
-
-        document.getElementById('loginScreen').hidden = true;
-        loadingScreen.hidden = false;
-        canClick_login = true;
-
-        loadNotesList();
-        menuButtonText();
-        resizeTwice();
-    }
-    else if(response.data.error === 'wrongPassword') //Contraseña incorrecta
-    {
-        console.log('Contraseña inválida');
-        e.target.innerText = 'Iniciar sesión';
-        floatingWindow(
+        const response = await axios.get(`${path}/getSessionID`, {headers: {username, password}});
+        console.log(response);
+        if(response.data.error === undefined && response.data.key !== undefined) //Clave obtenida con éxito
         {
-            title: 'Contraseña incorrecta',
-            text: 'Intenta con otra contraseña. Si no te acuerdas siempre puedes restablecerla.',
-            button:
+            console.log('Clave obtenida');
+            isLocalMode = false;
+            saveKey('_login', response.data.key);
+            theSecretThingThatNobodyHasToKnow = response.data.key;
+    
+            document.getElementById('loginScreen').hidden = true;
+            loadingScreen.hidden = false;
+            canClick_login = true;
+    
+            loadNotesList();
+            menuButtonText();
+            resizeTwice();
+        }
+        else if(response.data.error === 'wrongPassword') //Contraseña incorrecta
+        {
+            console.log('Contraseña inválida');
+            e.target.innerText = 'Iniciar sesión';
+            floatingWindow(
             {
-                text: 'Aceptar',
-                callback: function()
-                {
-                    canClick_login = true;
-                    closeWindow();
-                }
-            }
-        });
-    }
-    else if(response.data.error === 'userDontExist') //Usuario incorrecto
-    {
-        console.log('usuario no existe');
-        e.target.innerText = 'Iniciar sesión';
-        floatingWindow(
-        {
-            title: 'Este usuario no existe',
-            text: 'Si aún no tienes una cuenta, puedes crear una. Si ya tienes una cuenta revisa que el nombre esté bien escrito.',
-            buttons:
-            [
-                {
-                    text: 'Crear cuenta',
-                    callback: function()
-                    {
-                        let a =document.createElement('a');
-                        a.style.display = 'none';
-                        a.href = 'singup.html';
-                        document.body.appendChild(a);
-                        a.click();
-                    }
-                },
+                title: 'Contraseña incorrecta',
+                text: 'Intenta con otra contraseña. Si no te acuerdas siempre puedes restablecerla.',
+                button:
                 {
                     text: 'Aceptar',
-                    primary: true,
                     callback: function()
                     {
                         canClick_login = true;
                         closeWindow();
                     }
                 }
-            ]
-        });
+            });
+        }
+        else if(response.data.error === 'userDontExist') //Usuario incorrecto
+        {
+            console.log('usuario no existe');
+            e.target.innerText = 'Iniciar sesión';
+            floatingWindow(
+            {
+                title: 'Este usuario no existe',
+                text: 'Si aún no tienes una cuenta, puedes crear una. Si ya tienes una cuenta revisa que el nombre esté bien escrito.',
+                buttons:
+                [
+                    {
+                        text: 'Crear cuenta',
+                        callback: function()
+                        {
+                            let a =document.createElement('a');
+                            a.style.display = 'none';
+                            a.href = 'signup.html';
+                            document.body.appendChild(a);
+                            a.click();
+                        }
+                    },
+                    {
+                        text: 'Aceptar',
+                        primary: true,
+                        callback: function()
+                        {
+                            canClick_login = true;
+                            closeWindow();
+                        }
+                    }
+                ]
+            });
+        }
+        else
+        {
+            console.log('error desconocido iniciando sesión');
+            floatingWindow(
+            {
+                title: 'Algo salió mal',
+                text: 'Hubo un error al iniciar sesión',
+                button:
+                {
+                    text: ':(',
+                    callback: function()
+                    {
+                        canClick_login = true;
+                        closeWindow();
+                    }
+                }
+            });
+        } 
     }
-    else
+    catch
     {
-        console.log('error desconocido iniciando sesión');
         floatingWindow(
         {
-            title: 'Algo salió mal',
-            text: 'Hubo un error al iniciar sesión',
+            title: 'Vaya...',
+            text: 'Parece que el servidor se ha caído, prueba intentarlo de nuevo más tarde.',
             button:
             {
-                text: ':(',
+                text: 'Aceptar',
                 callback: function()
                 {
                     canClick_login = true;
+                    e.target.innerText = 'Iniciar sesión';
                     closeWindow();
                 }
             }
-        });
+        })
     }
 });
 

@@ -183,7 +183,7 @@ module.exports = function(app)
 
         database.createElement('emailCodes', newElement);
 
-        //Cargamos el html y lo modificamos para poner el código en el
+        //Cargamos el html y lo modificamos para poner el código en él
         let mailContent;
         let subject; //Nombre del correo
         if(accountOperation === 'newAccount')
@@ -213,7 +213,7 @@ module.exports = function(app)
         const mailOptions =
         {
             from: things.emailUser,
-            to: accountEmail,
+            to: oldEmail,
             subject,
             html: mailContent
         }

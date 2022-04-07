@@ -366,7 +366,7 @@ async function displayEmailCode()
 
     try
     {
-        const response = await axios.post(`${path}/createAccountEmailCode`, {email, password, username});
+        const response = await axios.post(`${path}/createAccountEmailCode`, {email, password, username, operation: 'newAccount'});
         console.log(response);
     
         if(response.data.error === undefined && response.data.emailSent)

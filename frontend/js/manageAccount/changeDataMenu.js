@@ -207,8 +207,225 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', function
                     actualMenu = 'changeDataEmailCode';
 
                     //Hacer la llamada al servidor para actualizar a los nuevos datos, generar un código y enviar el email
+                    try
+                    {
+                        const response = await axios.post(`${path}/createAccountEmailCode`,{email: newEmail, password: newPassword, username: newUsername, operation: 'updateAccount', oldemail: email});
+                        console.log(response);
+
+                        if(!response.data.emailSent && response.data.error !== undefined)
+                        {
+                          console.log(response.data.error);
+                            if(response.data.error === 'invalidFields')
+                            {
+                                //Ventana que te haga volver atrás y que diga que los datos no son válidos
+                                actualMenu = 'ventana';
+                                floatingWindow(
+                                {
+                                    title: 'Datos no válidos',
+                                    text: 'Uno de los datos que introdujiste no es válido.',
+                                    button:
+                                    {
+                                        text: 'Volver',
+                                        callback: function()
+                                        {
+                                            changeDataEmailCodeMenu.hidden = true;
+                                            changeDataMenu.hidden = false;
+                                            actualMenu = 'changeData';
+                                            closeWindow();
+                                        }
+                                    }
+                                });
+                            }
+                            else if(response.data.error === 'duplicatedEmail')
+                            {
+                                //Ventana que te haga volver atrás y que diga que ese email ya existe
+                                actualMenu = 'ventana';
+                                floatingWindow(
+                                {
+                                    title: 'Email duplicado',
+                                    text: 'Ya existe una cuenta con este email.',
+                                    button:
+                                    {
+                                        text: 'Volver',
+                                        callback: function()
+                                        {
+                                            changeDataEmailCodeMenu.hidden = true;
+                                            changeDataMenu.hidden = false;
+                                            actualMenu = 'changeData';
+                                            closeWindow();
+                                        }
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                //Ventana que te haga volver atrás y que muestre response.data.error
+                                actualMenu = 'ventana';
+                                floatingWindow(
+                                {
+                                    title: 'Ha ocurrido un error',
+                                    text: `Ha ocurrido un error inesperado\nCódigo de error: ${response.data.error}`,
+                                    button:
+                                    {
+                                        text: 'Aceptar',
+                                        callback: function()
+                                        {
+                                            changeDataEmailCodeMenu.hidden = true;
+                                            changeDataMenu.hidden = false;
+                                            actualMenu = 'changeData';
+                                            closeWindow();
+                                        }
+                                    }
+                                });
+                            }
+    
+                        }
+                    }
+                    catch
+                    {
+                        //Ventana que diga que se cayó el servidor
+                        actualMenu = 'ventana';
+                        floatingWindow(
+                        {
+                            title: '¡Oh, no!',
+                            text: 'Parece que se ha caído el servidor, por lo que tus datos no podrán ser guardados.',
+                            button:
+                            {
+                                text: 'Aceptar',
+                                callback: function()
+                                {
+                                    changeDataEmailCodeMenu.hidden = true;
+                                    changeDataMenu.hidden = false;
+                                    actualMenu = 'changeData';
+                                    closeWindow();
+                                }
+                            }
+                        });
+                    }
                 }
             }
         ]
     });
 });
+
+//TODO: Botón de comprobar código
+const changeDataConfirmCodeField = document.getElementById('changeDataConfirmCode');
+document.getElementById('changeDataConfirmCodeButton').addEventListener('click', changeDataComprobeCode);
+changeDataConfirmCodeField.addEventListener('keyup', function(e)
+{
+    if(e.key === 'Enter') changeDataComprobeCode();
+    e.target.value = e.target.value.toUpperCase();
+});
+
+async function changeDataComprobeCode()
+{
+    if(actualMenu !== 'changeDataEmailCode') return;
+
+    closeWindow();
+    const code = changeDataConfirmCodeField.value;
+
+    if(code.length !== 5)
+    {
+        floatingWindow(
+        {
+            title: 'Código no válido',
+            text: 'El código que introdujiste no es válido.',
+            button:
+            {
+                text: 'Aceptar',
+                callback: closeWindow
+            }
+        });
+        return;
+    }
+
+    actualMenu = 'changeDataComprobingCode';
+    floatingWindow({title: 'Comprobando...'});
+
+    try
+    {
+        const response = await axios.post(`${path}/updateAccountData`,{code});
+        console.log(response);
+
+        if(response.data.updated)
+        {
+            //Que todo salió bien
+            closeWindow();
+            floatingWindow(
+            {
+                title: '¡Los datos de tu cuenta han sido actualizados!',
+                button:
+                {
+                    text: 'Volver al inicio',
+                    callback: function()
+                    {
+                        closeWindow();
+                        mainScreen.hidden = true;
+                        loadingScreen.hidden = false;
+                        saveCookie('_login', theSecretThingThatNobodyHaveToKnow);
+                        location.reload();
+                    }
+                }
+            });
+        }
+        else if(response.data.error === 'invalidCode')
+        {
+            closeWindow();
+            floatingWindow(
+            {
+                title: 'Código no válido',
+                text: 'El código que introdujiste no es válido.',
+                button:
+                {
+                    text: 'Aceptar',
+                    callback: function()
+                    {
+                        actualMenu = 'changeDataEmailCode';
+                        closeWindow();
+                    }
+                }
+            });
+        }
+        else
+        {
+            closeWindow();
+            floatingWindow(
+            {
+                title: 'Ha ocurrido un error',
+                text: `Ha ocurrido un error inesperado.\nCódigo de error: ${response.data.error}`,
+                button:
+                {
+                    text: 'Aceptar',
+                    callback: function()
+                    {
+                        changeDataEmailCodeMenu.hidden = true;
+                        changeDataMenu.hidden = false;
+                        actualMenu = 'changeData';
+                        closeWindow();
+                    }
+                }
+            });
+        }
+    }
+    catch
+    {
+        //Ventana que diga que se cayó el servidor
+        actualMenu = 'ventana';
+        floatingWindow(
+        {
+            title: '¡Oh, no!',
+            text: 'Parece que se ha caído el servidor, por lo que tus datos no podrán ser guardados.',
+            button:
+            {
+                text: 'Aceptar',
+                callback: function()
+                {
+                    changeDataEmailCodeMenu.hidden = true;
+                    changeDataMenu.hidden = false;
+                    actualMenu = 'changeDataEmailCode';
+                    closeWindow();
+                }
+            }
+        });
+    }
+}

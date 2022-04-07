@@ -9,6 +9,8 @@ let actualMenu;
 //  main
 //  changeData
 //  changeDataEmailCode
+//  changeDataComprobingCode
+//  ventana
 
 const loadingScreen = document.getElementById('loadingScreen');
 const mainScreen = document.getElementById('mainScreen');

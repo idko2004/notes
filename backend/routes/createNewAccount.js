@@ -34,11 +34,33 @@ module.exports = function(app)
         }
 
         //Verificamos que tenemos los datos necesarios
-        //email   password   username
+        //email   password   username   operation   oldemail(en caso de updateAccount)
         const accountEmail = req.body.email;
+        const oldEmail = req.body.oldemail;
         const accountPassword = req.body.password;
         const accountUsername = req.body.username;
-        if(accountEmail === undefined || accountPassword === undefined || accountUsername === undefined || accountUpdate === undefined)
+        const accountOperation = req.body.operation;
+
+        if(accountEmail === undefined ||
+        accountPassword === undefined ||
+        accountUsername === undefined ||
+        accountOperation === undefined)
+        {
+            res.status(400).send({error: 'badRequest'});
+            return;
+        }
+
+        if(!['newAccount', 'updateAccount'].includes(accountOperation))
+        {
+            res.status(400).send({error: 'badRequest'});
+            return;
+        }
+
+        if(accountOperation === 'newAccount')
+        {
+            oldEmail = accountEmail;
+        }
+        else if(oldEmail === undefined)
         {
             res.status(400).send({error: 'badRequest'});
             return;
@@ -50,23 +72,68 @@ module.exports = function(app)
         const notCapitalsRegex = new RegExp('[a-z]+');
         const numbersRegex = new RegExp('[0-9]+');
 
-        const validEmail = emailRegex.test(accountEmail);
-        const passwordHasCapitals = capitalsRegex.test(accountPassword);
-        const passwordHasLowercase = notCapitalsRegex.test(accountPassword);
-        const passwordHasNumbers = numbersRegex.test(accountPassword);
+        let validEmail = emailRegex.test(accountEmail);
+        let passwordHasCapitals;
+        let passwordHasLowercase;
+        let passwordHasNumbers;
+        let passwordLength;
+        if(accountOperation === 'updateAccount' && accountPassword === '')
+        {
+            //Si se va a actualizar la cuenta pero la contraseña va a seguir igual
+            passwordHasCapitals = true;
+            passwordHasLowercase = true;
+            passwordHasNumbers = true;
+            passwordLength = 10;
+        }
+        else
+        {
+            passwordHasCapitals = capitalsRegex.test(accountPassword);
+            passwordHasLowercase = notCapitalsRegex.test(accountPassword);
+            passwordHasNumbers = numbersRegex.test(accountPassword);
+            passwordLength = accountPassword.length;
+        }
     
-        if(!validEmail || !passwordHasCapitals || !passwordHasLowercase || !passwordHasNumbers || accountEmail.lenght > 320 || accountPassword.lenght < 8 || accountPassword.lenght > 20 || accountUsername > 30)
+        if(!validEmail ||
+        !passwordHasCapitals ||
+        !passwordHasLowercase ||
+        !passwordHasNumbers ||
+        accountEmail.lenght > 320 ||
+        passwordLength < 8 ||
+        passwordLength > 20 ||
+        accountUsername > 30)
         {
             res.status(200).send({error: 'invalidFields'});
             return;
         }
 
         //Buscamos si no existe un mismo usuario con este correo electrónico
-        const emailAlredyExist = await database.getElement('users', {email: accountEmail});
-        if(emailAlredyExist !== null)
+        const emailAlredyExist = await database.getElement('users', {email: oldEmail});
+        if(accountOperation === 'newAccount' && emailAlredyExist !== null)
         {
+            //Si estamos creando una nueva cuenta, no debe existir una cuenta con este email
             res.status(200).send({error: 'duplicatedEmail'});
             return;
+        }
+        
+        if(accountOperation === 'updateAccount')
+        {
+            if(emailAlredyExist === null)
+            {
+                //si estamos actualizando una cuenta, debe existir una cuenta con este email
+                res.status(200).send({error: 'accountDontExist'});
+                return;
+            }
+
+            //Comprobar que el nuevo email no exista
+            if(accountEmail !== oldEmail) //Si tiene el mismo email que antes no hay problema
+            {
+                const newEmailAlredyExist = await database.getElement('users', {email: accountEmail})
+                if(newEmailAlredyExist !== null)
+                {
+                    res.status(200).send({error: 'duplicatedEmail'});
+                    return;
+                }
+            }
         }
 
         //Buscamos si este mismo usuario no ha hecho una request antes con los mismos datos
@@ -74,11 +141,12 @@ module.exports = function(app)
         console.log('emailCodeAlredyExist', emailCodeAlredyExist !== null)
         if(emailCodeAlredyExist !== null)
         {
-            if(emailCodeAlredyExist.email === accountEmail && emailCodeAlredyExist.password === accountPassword && emailCodeAlredyExist.username === accountUsername && emailCodeAlredyExist.operation === 'newAccount')
+            if(emailCodeAlredyExist.email === accountEmail && emailCodeAlredyExist.password === accountPassword && emailCodeAlredyExist.username === accountUsername && emailCodeAlredyExist.operation === accountOperation)
             {
                 //Si los datos son exactamente iguales y están guardados en la base de datos, significa que la misma petición ya se realizó y por ende, se supone que el correo electrónico ya debería haber sido enviado.
                 res.status(200).send({emailSent: true});
                 console.log('No se envió un correo nuevo porque ya debería tener uno');
+                console.log('Expected code', emailCodeAlredyExist.code);
                 return;
             }
         }
@@ -90,17 +158,19 @@ module.exports = function(app)
         {
             code = rand.generateKey(5).toUpperCase();
             let element = await database.getElement('emailCodes', {code});
-            console.log(element);
+            console.log('tiene que dar null eventualmente:', element);
             if(element === null) break;
         }
+        console.log('Expected code', code);
 
         //Guardamos el código en la base de datos
         const dateCreated = new Date();
         const newElement =
         {
             code,
-            operation: 'newAccount',
+            operation: accountOperation,
             email: accountEmail,
+            oldEmail,
             password: accountPassword,
             username: accountUsername,
             date:
@@ -111,18 +181,40 @@ module.exports = function(app)
             }
         }
 
-        await database.createElement('emailCodes', newElement);
+        database.createElement('emailCodes', newElement);
 
         //Cargamos el html y lo modificamos para poner el código en el
-        let mailContent = fs.readFileSync('emailPresets/signUpMail.html', 'utf-8');
-        mailContent = mailContent.replace('{CODE_HERE}', code);
+        let mailContent;
+        let subject; //Nombre del correo
+        if(accountOperation === 'newAccount')
+        {
+            mailContent = fs.readFileSync('emailPresets/signUpMail.html', 'utf-8');
+            mailContent = mailContent.replace('{CODE_HERE}', code);
+        
+            subject = `Notas - Código para tu nueva cuenta: ${code}` //Definimos ya el nombre del correo
+        }
+        else //updateAccount
+        {
+            mailContent = fs.readFileSync('emailPresets/updateDataMail.html', 'utf-8');
+            mailContent = mailContent.replace('{CODE_HERE}', code);
+            mailContent = mailContent.replace('{EMAIL_HERE}', accountEmail);
+            mailContent = mailContent.replace('{USERNAME_HERE}', accountUsername);
+
+            let pswrd = '';
+            if(accountPassword === '') pswrd = '(Sin modificar)'
+            else for(let i = 0; i < accountPassword.length; i++) pswrd += '*';
+            
+            mailContent = mailContent.replace('{PASSWORD_HERE}', pswrd);
+
+            subject = 'Notas - Modificar datos de tu cuenta' //Definimos ya el nombre del correo
+        }
 
         //Enviamos el correo electrónico
         const mailOptions =
         {
             from: things.emailUser,
             to: accountEmail,
-            subject: `Notas - Código para tu nueva cuenta: ${code}`,
+            subject,
             html: mailContent
         }
 
@@ -196,5 +288,73 @@ module.exports = function(app)
 
         //Respondemos al cliente
         res.status(200).send({result: saved});
+    });
+
+    app.post('/updateAccountData', jsonParser, async function(req, res)
+    {
+        console.log('------------------------------------------------');
+        console.log('/updateAccountData');
+        console.log('body', req.body);
+
+        if(req.body === undefined)
+        {
+            res.status(400).send({error: 'badRequest'});
+            return;
+        }
+
+        //Comprobamos si tenemos todos los datos
+        //code
+        let code = req.body.code;
+        if(code === undefined)
+        {
+            res.status(400).send({error: 'badRequest'});
+            return;
+        }
+        code = code.toUpperCase();
+
+        //Buscamos si el código existe en la base de datos de códigos
+        const codeDB = await database.getElement('emailCodes',{code});
+        if(codeDB === null || codeDB.operation !== 'updateAccount')
+        {
+            res.status(200).send({error: 'invalidCode'});
+            return;
+        }
+
+        const newUsername = codeDB.username;
+        const newPassword = codeDB.password;
+        const newEmail = codeDB.email;
+        const oldEmail = codeDB.oldEmail;
+
+        if(newUsername === undefined ||
+        newPassword === undefined ||
+        newEmail === undefined ||
+        oldEmail === undefined)
+        {
+            res.status(500).send({error: 'invalidData'});
+            return;
+        }
+
+        //Buscamos al usuario en la base de datos de usuarios con oldEmail como parámetro de búsqueda
+        const user = await database.getElement('users', {email: oldEmail});
+        if(user === null)
+        {
+            res.status(500).send({error: 'invalidData'});
+            return;
+        }
+
+        //Reemplazamos el email, el nombre de usuario y la contraseña
+        let newUser = user;
+        newUser.email = newEmail;
+        newUser.username = newUsername;
+        if(newPassword !== '') newUser.password = newPassword;
+
+        //Guardamos en la base de datos de usuarios
+        await database.updateElement('users', {email: oldEmail}, newUser);
+
+        //Borramos el elemento de la base de datos de códigos
+        await database.deleteElement('emailCodes', {code});
+
+        //Respondemos al cliente
+        res.status(200).send({updated: true});
     });
 }

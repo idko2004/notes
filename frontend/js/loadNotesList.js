@@ -20,6 +20,37 @@ async function loadNotesList()
         console.log(loginKey);
         const response = await axios.get(`${path}/getNotesID`, {headers: {key: loginKey}});
         console.log(response);
+        if(response.data.error !== undefined)
+        {
+            //Ha ocurrido un error
+            loadingScreen.hidden = true;
+            floatingWindow(
+            {
+                title: 'Ha ocurrido un error',
+                text: `Código de error: ${response.data.error}`,
+                buttons:
+                [
+                    {
+                        text: 'Borrar datos de inicio de sesión y recargar',
+                        primary: false,
+                        callback: function()
+                        {
+                            deleteKey('_login');
+                            location.reload();
+                        }
+                    },
+                    {
+                        text: 'Recargar',
+                        primary: true,
+                        callback: function()
+                        {
+                            location.reload();
+                        }
+                    }
+                ]
+            });
+            return;
+        }
         const notesArray = response.data.notesID;
         for(let i = 0; i < notesArray.length; i++)
         {

@@ -53,6 +53,7 @@ async function start()
             }
             else
             {
+                //No tenemos una clave válida
                 deleteKey('_login');
                 theSecretThingThatNobodyHasToKnow = undefined;
                 loadingScreen.hidden = true;

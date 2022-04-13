@@ -114,7 +114,7 @@ module.exports = function(app)
             res.status(200).send({error: 'duplicatedEmail'});
             return;
         }
-        
+
         if(accountOperation === 'updateAccount')
         {
             if(emailAlredyExist === null)
@@ -150,7 +150,7 @@ module.exports = function(app)
                 return;
             }
         }
-        console.log('Se enivará un nuevo correo');
+        console.log('Se enviará un nuevo correo');
 
         //Generamos el código y comprobamos que no esté repetido en la base de datos
         let code;
@@ -287,7 +287,7 @@ module.exports = function(app)
         database.deleteElement('emailCodes',{code});
 
         //Respondemos al cliente
-        res.status(200).send({result: saved});
+        res.status(200).send({hadToInsertOtherCode: false});
     });
 
     app.post('/updateAccountData', jsonParser, async function(req, res)
@@ -298,6 +298,7 @@ module.exports = function(app)
 
         if(req.body === undefined)
         {
+            console.log('badRequest, body = undefined');
             res.status(400).send({error: 'badRequest'});
             return;
         }
@@ -307,6 +308,7 @@ module.exports = function(app)
         let code = req.body.code;
         if(code === undefined)
         {
+            console.log('badRequest, faltan datos: code');
             res.status(400).send({error: 'badRequest'});
             return;
         }
@@ -314,8 +316,9 @@ module.exports = function(app)
 
         //Buscamos si el código existe en la base de datos de códigos
         const codeDB = await database.getElement('emailCodes',{code});
-        if(codeDB === null || codeDB.operation !== 'updateAccount')
+        if(codeDB === null || !['updateAccount', 'updateAccount2'].includes(codeDB.operation))
         {
+            console.log('invalidCode, el código introducido no es válido.');
             res.status(200).send({error: 'invalidCode'});
             return;
         }
@@ -330,6 +333,12 @@ module.exports = function(app)
         newEmail === undefined ||
         oldEmail === undefined)
         {
+            console.log('invalidData, algunos de los datos han dado undefined');
+            console.log('newUsername', newUsername);
+            console.log('newPassword', newPassword);
+            console.log('newEmail', newEmail);
+            console.log('oldEmail', oldEmail);
+
             res.status(500).send({error: 'invalidData'});
             return;
         }
@@ -338,7 +347,53 @@ module.exports = function(app)
         const user = await database.getElement('users', {email: oldEmail});
         if(user === null)
         {
+            console.log('invalidData, el usuario no se encuentra en la base de datos');
             res.status(500).send({error: 'invalidData'});
+            return;
+        }
+
+        if(oldEmail !== newEmail && codeDB.operation === 'updateAccount')
+        {
+            console.log('El nuevo correo electrónico necesita confirmarse');
+            const updateCode = codeDB;
+
+            //Generamos el código y comprobamos que no esté repetido en la base de datos
+            let newCode;
+            while(true)
+            {
+                newCode = rand.generateKey(5).toUpperCase();
+                let element = await database.getElement('emailCodes', {newCode});
+                console.log('tiene que dar null eventualmente:', element);
+                if(element === null) break;
+            }
+            console.log('Expected code:', newCode);
+
+            //Actualizamos el elemento de la base de datos de códigos poniendo el nuevo código para el otro correo.
+            updateCode.code = newCode;
+            updateCode.operation = 'updateAccount2';
+            database.updateElement('emailCodes', {code}, updateCode);
+
+            //Enviamos el correo al nuevo correo electrónico.
+            let mailContent = fs.readFileSync('emailPresets/changeEmail.html', 'utf-8');
+            mailContent = mailContent.replace('{OLD_EMAIL_HERE}', oldEmail);
+            mailContent = mailContent.replace('{CODE_HERE}', newCode);
+
+            const mailOptions =
+            {
+                from: things.emailUser,
+                to: newEmail,
+                subject: `El código para actualizar el correo electrónico de notas: ${newCode}`,
+                html: mailContent
+            }
+
+            transporter.sendMail(mailOptions, function(error)
+            {
+                if(error) console.log('//Error mandando el mail en /createAccountEmailCode', error);
+                else console.log('//Email mandado /createAccountEmailCode');
+            });
+
+
+            res.status(200).send({hadToInsertOtherCode: true, email: newEmail});
             return;
         }
 
@@ -349,10 +404,26 @@ module.exports = function(app)
         if(newPassword !== '') newUser.password = newPassword;
 
         //Guardamos en la base de datos de usuarios
+        console.log('Guardando usuario');
         await database.updateElement('users', {email: oldEmail}, newUser);
 
         //Borramos el elemento de la base de datos de códigos
+        console.log('Borrando código de email');
         await database.deleteElement('emailCodes', {code});
+
+        //Cambiar la propiedad de todas las notas
+        console.log('Actualizando notas');
+        await database.updateMultipleElements('notes', {owner: oldEmail}, {owner: newEmail});
+
+        //Cambiar el correo electrónico de todas las llaves
+        console.log('Actualizando llaves');
+        await database.updateMultipleElements('sessionID', {email: oldEmail}, {email: newEmail});
+
+        console.log(database.sessionIDList);
+        database.resetSessionIDList();
+        console.log(database.sessionIDList);
+
+        console.log('Usuario supuestamente actualizado');
 
         //Respondemos al cliente
         res.status(200).send({updated: true});

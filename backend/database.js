@@ -20,6 +20,7 @@ async function createElement(collection, element)
     const database = mdbClient.db('Notes');
     const theCollection = database.collection(collection);
     const result = await theCollection.insertOne(element);
+    console.log('**Elemento creado en la base de datos**', result);
     return result;
 }
 
@@ -34,12 +35,24 @@ async function updateElement(collection, objQuery, newElement)
     return result.ok;
 }
 
+async function updateMultipleElements(collection, objQuery, toReplace)
+{
+    console.log('**Actualizando múltiples elementos en la base de datos**');
+    await mdbClient.connect();
+    const database = mdbClient.db('Notes');
+    const theCollection = database.collection(collection);
+    const result = await theCollection.updateMany(objQuery, {$set: toReplace});
+    console.log('**Múltiples elementos actualizados en la base de datos**', result.modifiedCount);
+    return result.modifiedCount;
+}
+
 async function deleteElement(collection, objQuery)
 {
     await mdbClient.connect();
     const database = mdbClient.db('Notes');
     const theCollection = database.collection(collection);
     const result = await theCollection.deleteOne(objQuery);
+    console.log('**Elemento borrado en la base de datos**', result);
     return result;
 }
 
@@ -47,7 +60,7 @@ async function getKeyData(key)
 {
     console.log('getKeyData', key);
     let cache = sessionIDList[key];
-    if(cache === undefined)
+    if(cache === undefined || cache === null)
     {
         console.log('Buscando usuario en la base de datos');
         await mdbClient.connect();
@@ -69,6 +82,11 @@ async function getKeyData(key)
     upDate(cache);
 
     return cache;
+}
+
+function resetSessionIDList()
+{
+    sessionIDList = {};
 }
 
 //Actualiza la fecha en la que se usó por última vez la clave
@@ -117,4 +135,4 @@ async function upDate(element)
     }
 }
 
-module.exports = {getElement, createElement, updateElement, deleteElement, getKeyData, sessionIDList};
+module.exports = {getElement, createElement, updateElement, updateMultipleElements, deleteElement, getKeyData, sessionIDList, resetSessionIDList};

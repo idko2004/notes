@@ -308,7 +308,7 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', function
     });
 });
 
-//TODO: Botón de comprobar código
+//Botón de comprobar código
 const changeDataConfirmCodeField = document.getElementById('changeDataConfirmCode');
 document.getElementById('changeDataConfirmCodeButton').addEventListener('click', changeDataComprobeCode);
 changeDataConfirmCodeField.addEventListener('keyup', function(e)
@@ -368,6 +368,27 @@ async function changeDataComprobeCode()
                 }
             });
         }
+        else if(response.data.hadToInsertOtherCode)
+        {
+            //Que se ha cambiado el email y hay que comprobar el nuevo.
+            closeWindow();
+            floatingWindow(
+            {
+                title: 'Un último paso',
+                text: 'Debido a que has cambiado tu correo electrónico, debemos comprobar que también tengas acceso a este, por lo que te enviaremos otro código al nuevo correo.',
+                button:
+                {
+                    text: 'Aceptar',
+                    callback: function()
+                    {
+                        actualMenu = 'changeDataEmailCode';
+                        closeWindow();
+                    }
+                }
+            });
+            document.getElementById('changeDataEmailSent').innerText = response.data.email;
+            changeDataConfirmCodeField.value = '';
+        }
         else if(response.data.error === 'invalidCode')
         {
             closeWindow();
@@ -410,6 +431,7 @@ async function changeDataComprobeCode()
     catch
     {
         //Ventana que diga que se cayó el servidor
+        closeWindow();
         actualMenu = 'ventana';
         floatingWindow(
         {

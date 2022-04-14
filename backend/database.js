@@ -56,6 +56,16 @@ async function deleteElement(collection, objQuery)
     return result;
 }
 
+async function deleteMultipleElements(collection, objQuery)
+{
+    await mdbClient.connect();
+    const database = mdbClient.db('Notes');
+    const theCollection = database.collection(collection);
+    const result = await theCollection.deleteMany(objQuery);
+    console.log('**Multiples elementos borrados de la base de datos**', result);
+    return result;
+}
+
 async function getKeyData(key)
 {
     console.log('getKeyData', key);
@@ -135,4 +145,15 @@ async function upDate(element)
     }
 }
 
-module.exports = {getElement, createElement, updateElement, updateMultipleElements, deleteElement, getKeyData, sessionIDList, resetSessionIDList};
+module.exports =
+{
+    getElement,
+    createElement,
+    updateElement,
+    updateMultipleElements,
+    deleteElement,
+    deleteMultipleElements,
+    getKeyData,
+    sessionIDList,
+    resetSessionIDList
+};

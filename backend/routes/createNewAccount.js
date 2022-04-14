@@ -65,6 +65,13 @@ module.exports = function(app)
             res.status(400).send({error: 'badRequest'});
             return;
         }
+        else //Se supone que es updateAccount
+        {
+            //Buscar si el usuario ha realizado una petición anteriormente, en caso de hacerlo borrar las peticiones que haya hecho para que no hayan conflictos. Usando oldEmail como filtro de búsqueda.
+            console.log('Se van a borrar peticiones realizadas anteriormente');
+            await database.deleteMultipleElements('emailCodes', {oldEmail});
+            console.log('Peticiones anteriores borradas');
+        }
 
         //Comprobar si los datos son válidos
         const emailRegex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');

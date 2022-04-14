@@ -136,11 +136,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
                         text: 'Crear cuenta',
                         callback: function()
                         {
-                            let a =document.createElement('a');
-                            a.style.display = 'none';
-                            a.href = 'signup.html';
-                            document.body.appendChild(a);
-                            a.click();
+                            location.href = 'signup.html'
                         }
                     },
                     {
@@ -164,7 +160,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
                 text: 'Hubo un error al iniciar sesión',
                 button:
                 {
-                    text: ':(',
+                    text: 'Aceptar',
                     callback: function()
                     {
                         canClick_login = true;
@@ -206,4 +202,15 @@ document.getElementById('localModeButton').addEventListener('click',function()
     document.getElementById('noteScreen').hidden = false;
     menuButtonText();
     resizeTwice();
+});
+
+//Que cuando le das a enter pase al siguiente campo
+document.getElementById('usernameField').addEventListener('keydown', function(e)
+{
+    if(e.key === 'Enter') document.getElementById('passwordField').focus();
+})
+
+document.getElementById('passwordField').addEventListener('keydown', function(e)
+{
+    if(e.key === 'Enter') document.getElementById('loginButton').click();
 });

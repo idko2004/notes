@@ -25,6 +25,7 @@ document.getElementById('goBackChangeDataMenu').addEventListener('click', functi
 
     mainMenu.hidden = false;
     actualMenu = 'main';
+    window.scrollTo(0,0);
 });
 
 document.getElementById('saveChangeDataMenu').addEventListener('click', function()
@@ -309,8 +310,9 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', function
 });
 
 //Botón de comprobar código
-const changeDataConfirmCodeField = document.getElementById('changeDataConfirmCode');
 document.getElementById('changeDataConfirmCodeButton').addEventListener('click', changeDataComprobeCode);
+
+const changeDataConfirmCodeField = document.getElementById('changeDataConfirmCode');
 changeDataConfirmCodeField.addEventListener('keyup', function(e)
 {
     if(e.key === 'Enter') changeDataComprobeCode();
@@ -367,6 +369,7 @@ async function changeDataComprobeCode()
                     }
                 }
             });
+            changeDataConfirmCodeField.value = '';
         }
         else if(response.data.hadToInsertOtherCode)
         {
@@ -426,6 +429,7 @@ async function changeDataComprobeCode()
                     }
                 }
             });
+            changeDataConfirmCodeField.value = '';
         }
     }
     catch
@@ -449,5 +453,27 @@ async function changeDataComprobeCode()
                 }
             }
         });
+        changeDataConfirmCodeField.value = '';
     }
 }
+
+//Que cuando le des a enter cambie al siguiente campo
+changeUsernameField.addEventListener('keydown', function(e)
+{
+    if(e.key === 'Enter') changeEmailField.focus();
+});
+
+changeEmailField.addEventListener('keydown', function(e)
+{
+    if(e.key === 'Enter') changePasswordField.focus();
+});
+
+changePasswordField.addEventListener('keydown', function(e)
+{
+    if(e.key === 'Enter') comprobePasswordField.focus();
+});
+
+comprobePasswordField.addEventListener('keydown', function(e)
+{
+    if(e.key === 'Enter') document.getElementById('saveChangeDataMenu').click();
+});

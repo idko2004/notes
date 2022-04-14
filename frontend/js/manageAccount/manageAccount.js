@@ -149,6 +149,7 @@ document.getElementById('toChangeDataMenuButton').addEventListener('click', func
 
     changeDataMenu.hidden = false;
     actualMenu = 'changeData';
+    window.scrollTo(0,0);
 });
 
 document.getElementById('goBackToNotes').addEventListener('click', function()

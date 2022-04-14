@@ -4,6 +4,7 @@ module.exports = function(app)
     {
         console.log('------------------------------------------------');
         console.log('/ping');
+        console.log(req.headers);
         res.status(200).send('pong!');
     });
 
@@ -11,6 +12,7 @@ module.exports = function(app)
     {
         console.log('------------------------------------------------');
         console.log('/ping');
+        console.log(req.headers);
         res.status(200).send('pong!');
     });
 }

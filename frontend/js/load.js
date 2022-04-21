@@ -66,12 +66,12 @@ async function start()
             loadingScreen.hidden = true;
             floatingWindow(
             {
-                title: 'Vaya...',
-                text: 'Parece que nuestro servidor se ha caído.\nPuedes recargar la página para ver si ha vuelto, o usar el modo local, solo ten en cuenta que tus notas no se subirán a la nube.',
+                title: getText('ups'),
+                text: getText('load_fail'),
                 buttons:
                 [
                     {
-                        text: 'Modo local',
+                        text: getText('localMode'),
                         primary: false,
                         callback: function()
                         {
@@ -92,7 +92,7 @@ async function start()
                         }
                     },
                     {
-                        text: 'Reintentar',
+                        text: getText('tryAgain'),
                         primary: true,
                         callback: function()
                         {

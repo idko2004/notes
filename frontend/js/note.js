@@ -7,7 +7,7 @@ async function loadNote(name, id)
 
     if(actualNoteName !== undefined)
     {
-        noteName.innerText = '(Guardando nota...)';
+        noteName.innerText = getText('savingNote');
         await saveNote();
     }
 
@@ -21,7 +21,7 @@ async function loadNote(name, id)
     }
     else
     {
-        noteName.innerText = 'Cargando...';
+        noteName.innerText = getText('loading');
 
         try
         {
@@ -30,7 +30,7 @@ async function loadNote(name, id)
             console.log(response);
             if(response.data.error !== undefined) //Ocurre un error
             {
-                noteName.innerText = 'No se pudo cargar la nota.';
+                noteName.innerText = getText('loadNoteFailed');
                 actualNoteID = undefined;
                 actualNoteName = undefined;
                 textArea.value = '';
@@ -39,11 +39,11 @@ async function loadNote(name, id)
     
                 floatingWindow(
                 {
-                    title: 'Ha ocurrido un error',
-                    text: `No se pudo cargar la nota.\nCódigo de error: ${response.data.error}`,
+                    title: getText('somethingWentWrong'),
+                    text: `${getText('errorCode')}: ${response.data.error}`,
                     button:
                     {
-                        text: 'Aceptar',
+                        text: getText('ok'),
                         callback: function(){closeWindow()}
                     }
                 });
@@ -53,7 +53,7 @@ async function loadNote(name, id)
             else
             {
                 console.error('error cargando la nota');
-                noteName.innerText = 'No se pudo cargar la nota.';
+                noteName.innerText = getText('loadNoteFailed');
                 actualNoteID = undefined;
                 actualNoteName = undefined;
                 textArea.value = '';
@@ -62,11 +62,11 @@ async function loadNote(name, id)
                 
                 floatingWindow(
                 {
-                    title: 'Error al cargar la nota',
-                    text: 'Ha ocurrido un error desconocido. Ni siquiera existe un código de error para esto.',
+                    title: getText('loadNoteFailed'),
+                    text: getText('noErrorCode'),
                     button:
                     {
-                        text: 'Aceptar',
+                        text: getText('ok'),
                         callback: function(){closeWindow()}
                     }
                 });
@@ -75,7 +75,7 @@ async function loadNote(name, id)
         }
         catch
         {
-            noteName.innerText = 'No se pudo cargar la nota.';
+            noteName.innerText = getText('loadNoteFailed');
             actualNoteID = undefined;
             actualNoteName = undefined;
             textArea.value = '';
@@ -83,11 +83,11 @@ async function loadNote(name, id)
             theLastTextSave = '';
             floatingWindow(
             {
-                title: 'Vaya...',
-                text: 'Parece que el servidor se ha caído, prueba a intentar de nuevo dentro de un rato.',
+                title: getText('ups'),
+                text: getText('serverDown'),
                 button:
                 {
-                    text: 'Aceptar',
+                    text: getText('ok'),
                     callback: function(){closeWindow()}
                 }
             });
@@ -120,16 +120,16 @@ document.getElementById('saveButton').addEventListener('click', async function(e
 {
     if(!canInteract) return;
 
-    if(isLocalMode) sayThings.innerText = '(Guardando...)';
+    if(!isLocalMode) sayThings.innerText = getText('savingNote');
 
     const saved = await saveNote();
-    if(saved) sayThings.innerText = '(Guardado).';
-    else sayThings.innerText = '(Error al guardar).';
+    if(saved) sayThings.innerText = getText('saved');
+    else sayThings.innerText = getText('saveFailed');
 
     setTimeout(() =>
     {
         sayThings.innerText = '';
-    },1500);
+    },2000);
 });
 
 let theLastTextSave = '';
@@ -182,11 +182,11 @@ async function saveNote()
             if(serverDownAdvertisement) return false;
             if(!thereIsAWindows) floatingWindow(
             {
-                title: '¡Servidor caído!',
-                text: 'El servidor no responde, por lo que no se podrá guardar tu nota en la nube. Por si acaso, guardamos esta nota en tu navegador.',
+                title: getText('ups'),
+                text: getText('serverDown'),
                 button:
                 {
-                    text: 'Aceptar',
+                    text: getText('ok'),
                     callback: function()
                     {
                         closeWindow();
@@ -208,17 +208,17 @@ document.getElementById('deleteButton').addEventListener('click',(e) =>
 
     if(!thereIsAWindows) floatingWindow
     ({
-        title: '¿Borrar nota?',
-        text: `¿Estás seguro que quieres borrar la nota '${name}'?\nSi la borras se irá para siempre.`,
+        title: getText('deleteNote_title'),
+        text: getText('deleteNote_text',[name]),
         buttons:
         [
             {
-                text: 'No, quiero conservarla',
+                text: getText('deleteNote_btn1'),
                 primary: false,
                 callback: () => {closeWindow()}
             },
             {
-                text: 'Sí, borra la nota',
+                text: getText('deleteNote_btn2'),
                 primary: true,
                 callback: async function()
                 {
@@ -230,7 +230,7 @@ document.getElementById('deleteButton').addEventListener('click',(e) =>
                         textArea.value = '';
                         textArea.disabled = true;
                     
-                        noteName.innerText = 'Haz click sobre una nota.';
+                        noteName.innerText = getText('clickANote');
                         topBarButtons.hidden = true;
                     
                         deleteListButton(name);
@@ -243,8 +243,8 @@ document.getElementById('deleteButton').addEventListener('click',(e) =>
                         closeWindow();
                         floatingWindow(
                         {
-                            title: 'Borrando nota...',
-                            text: 'Espera un momento.'
+                            title: getText('deletingNote'),
+                            text: getText('waitAMoment')
                         });
 
                         const response = await axios.post(`${path}/deleteNote`, {key: theSecretThingThatNobodyHasToKnow, noteid: actualNoteID});
@@ -258,7 +258,7 @@ document.getElementById('deleteButton').addEventListener('click',(e) =>
                             textArea.value = '';
                             textArea.disabled = true;
 
-                            noteName.innerText = 'Haz click sobre una nota';
+                            noteName.innerText = getText('clickANote');
                             topBarButtons.hidden = true;
 
                             deleteListButton(name);
@@ -271,11 +271,11 @@ document.getElementById('deleteButton').addEventListener('click',(e) =>
                             closeWindow();
                             floatingWindow(
                             {
-                                title: '¡Oh, no!',
-                                text: `Ha ocurrido un error al borrar la nota con el siguiente código de error: ${response.data.error}`,
+                                title: 'Oh, no!',
+                                text: `${getText('somethingWentWrong')}\n${getText('errorCode')}: ${response.data.error}`,
                                 button:
                                 {
-                                    text: 'Aceptar',
+                                    text: getText('ok'),
                                     callback: function(){closeWindow();}
                                 }
                             });
@@ -293,24 +293,24 @@ setInterval(async function()
     if(!canInteract) return;
     if(textArea.disabled === true) return;
     if(theLastTextSave === textArea.value) return;
-    if(theSecretThingThatNobodyHasToKnow === 'local') sayThings.innerText = '(Guardando automáticamente...)';
+    sayThings.innerText = getText('autosave');
     
     const saved = await saveNote();
     if(saved)
     {
-        sayThings.innerText = '(Guardado).';
+        sayThings.innerText = getText('saved');
         console.log('Guardado automáticamente');
     }
     else
     {
-        sayThings.innerText = '(Error al guardar).';
+        sayThings.innerText = getText('saveFailed');
         console.log('Error al guardar automáticamente');
     }
 
     setTimeout(function()
     {
         sayThings.innerText = '';
-    },1500);
+    },2000);
 },60000/*Un minuto*/);
 
 document.getElementById('downloadButton').addEventListener('click', function()
@@ -337,13 +337,13 @@ document.getElementById('renameButton').addEventListener('click', function()
 
     floatingWindow
     ({
-        title: 'Renombrar la nota',
-        text: `Elige un nuevo nombre para la nota '${noteName.innerText}'`,
+        title: getText('rename_title'),
+        text: `${getText('rename_text')} '${noteName.innerText}'`,
         input: true,
         buttons:
         [
             {
-                text: 'Dejarlo como estaba',
+                text: getText('rename_btn1'),
                 primary: false,
                 callback: function()
                 {
@@ -355,7 +355,7 @@ document.getElementById('renameButton').addEventListener('click', function()
                 }
             },
             {
-                text: 'Renombrar',
+                text: getText('rename_btn2'),
                 primary: true,
                 callback: async function()
                 {
@@ -368,31 +368,31 @@ document.getElementById('renameButton').addEventListener('click', function()
                         try
                         {
                             const response = await axios.post(`${path}/renameNote`,{key: theSecretThingThatNobodyHasToKnow, noteid: actualNoteID, newname: value});
-                            if(response.error === 'invalidName')
+                            if(response.data.error === 'invalidName')
                             {
                                 closeWindow();
                                 floatingWindow(
                                 {
-                                    title: 'Elige otro nombre',
-                                    text: 'El nombre que elegiste para esta nota no es válido. Asegúrate de que no sea un nombre repetido, que no empiece con "_" o que no exceda de los 30 caracteres.',
+                                    title: getText('newNote_invalidName_title'),
+                                    text: getText('newNote_invalidName_text'),
                                     button:
                                     {
-                                        text: 'Aceptar',
+                                        text: getText('ok'),
                                         callback: function(){closeWindow()}
                                     }
                                 });
                                 return;
                             }
-                            if(response.error !== undefined)
+                            if(response.data.error !== undefined)
                             {
                                 closeWindow();
                                 floatingWindow(
                                 {
-                                    title: 'Error al renombrar',
-                                    text: `No se pudo renombrar la nota.\nCódigo de error: ${response.error}`,
+                                    title: getText('somethingWentWrong'),
+                                    text: `${getText('errorCode')}: ${response.error}`,
                                     button:
                                     {
-                                        text: 'Aceptar',
+                                        text: getText('ok'),
                                         callback: function(){closeWindow()}
                                     }
                                 });
@@ -404,11 +404,11 @@ document.getElementById('renameButton').addEventListener('click', function()
                             closeWindow();
                             floatingWindow(
                             {
-                                title: 'Error al renombrar la nota',
-                                text: 'Parece que el servidor se ha caído, prueba a intentar de nuevo dentro de un rato.',
+                                title: getText('ups'),
+                                text: getText('serverDown'),
                                 button:
                                 {
-                                    text: 'Aceptar',
+                                    text: getText('ok'),
                                     callback: function(){closeWindow()}
                                 }
                             });

@@ -4,13 +4,13 @@ newNote.addEventListener('click',function()
 
     floatingWindow(
     {
-        title: 'Nueva nota',
-        text: '¿Qué nombre le pondrás a tu nueva nota?',
+        title: getText('newNote'),
+        text: getText('newNote_text'),
         input: true,
         buttons:
         [
             {
-                text: 'Cancelar',
+                text: getText('cancel'),
                 primary: false,
                 callback: function()
                 {
@@ -18,7 +18,7 @@ newNote.addEventListener('click',function()
                 }
             },
             {
-                text: 'Crear nota',
+                text: getText('createNote'),
                 primary: true,
                 callback()
                 {
@@ -70,11 +70,11 @@ async function createNewNote(name)
         {
             floatingWindow(
             {
-                title: 'Nombre inválido',
-                text: 'El nombre que le has puesto a esta nota no es válido, intenta con otro.',
+                title: getText('newNote_invalidName_title'),
+                text: getText('newNote_invalidName_text'),
                 button:
                 {
-                    text: 'Aceptar',
+                    text: getText('ok'),
                     callback: function(){closeWindow()}
                 }
             });
@@ -84,11 +84,11 @@ async function createNewNote(name)
             console.error(response);
             floatingWindow(
             {
-                title: 'Ocurrió un error',
-                text: `Ocurrió un error desconocido: ${response.data.error}`,
+                title: getText('somethingWentWrong'),
+                text: `${getText('errorCode')}: ${response.data.error}`,
                 button:
                 {
-                    text: 'Aceptar',
+                    text: getText('ok'),
                     callback: function(){closeWindow()}
                 }
             });
@@ -98,11 +98,11 @@ async function createNewNote(name)
     {
         floatingWindow(
         {
-            title: 'Vaya...',
-            text: 'Parece que el servidor no responde, por lo que no se podrá crear la nota. Intenta de nuevo dentro de un rato.',
+            title: getText('ups'),
+            text: getText('serverDown'),
             button:
             {
-                text: 'Aceptar',
+                text: getText('ok'),
                 callback: closeWindow
             }
         });
@@ -117,11 +117,11 @@ function newNoteNameIsValid(name, openAWindow)
     {
         floatingWindow
         ({
-            title: 'Escribe un nombre',
-            text: 'La nota no puede tener un nombre vacío.',
+            title: getText('newNote_emptyName_title'),
+            text: getText('newNote_emptyName_text'),
             button:
             {
-                text: 'Aceptar',
+                text: getText('ok'),
                 callback: closeInvalidNameWindow
             }
         });
@@ -132,10 +132,10 @@ function newNoteNameIsValid(name, openAWindow)
         floatingWindow
         ({
             title: '_Error',
-            text: 'El nombre de una nota no puede empezar con "_"',
+            text: getText('newNote___'),
             button:
             {
-                text: 'Aceptar',
+                text: getText('ok'),
                 callback: closeInvalidNameWindow
             }
         });
@@ -145,11 +145,11 @@ function newNoteNameIsValid(name, openAWindow)
     {
         floatingWindow
         ({
-            title: 'Acorta el nombre',
-            text: 'El nombre de la nota es demasiado largo.',
+            title: getText('newNote_tooLongName_title'),
+            text: getText('newNote_tooLongName_text'),
             button:
             {
-                text: 'Aceptar',
+                text: getText('ok'),
                 callback: closeInvalidNameWindow
             }
         });
@@ -159,11 +159,11 @@ function newNoteNameIsValid(name, openAWindow)
     {
         floatingWindow
         ({
-            title: 'Nota duplicada',
-            text: `Ya existe una nota con el nombre '${name}'`,
+            title: getText('newNote_duplicated_title'),
+            text: `${getText('newNote_duplicated_text')} '${name}'`,
             button:
             {
-                text: 'Aceptar',
+                text: getText('ok'),
                 callback: closeInvalidNameWindow
             }
         });

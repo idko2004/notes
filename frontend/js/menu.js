@@ -11,7 +11,8 @@ async function menuButtonText()
 {
     if(isLocalMode)
     {
-        menuButton.innerText = 'Modo local';
+        menuButton.innerText = getText('localMode');
+        menuTitleText.innerText = getText('localMode');
 
         menuExitLocalMode.hidden = false;
         menuEraseAll.hidden = false;
@@ -22,7 +23,7 @@ async function menuButtonText()
     }
     else
     {
-        menuButton.innerText = 'Cuenta de alguien';
+        menuButton.innerText = getText('someoneAccount');
 
         menuExitLocalMode.hidden = true;
         menuEraseAll.hidden = true;
@@ -46,7 +47,7 @@ menuOnlineLogOut.addEventListener('click', async function()
     floatingMenu.hidden = true;
     floatingWindow(
     {
-        title: 'Cerrando sesión...'
+        title: getText('logginOut')
     });
 
     try
@@ -103,7 +104,7 @@ menuExitLocalMode.addEventListener('click', function()
     saveNote();
     document.getElementById('noteScreen').hidden = true;
     notesList.innerHTML = '';
-    noteName.innerText = 'Haz click sobre una nota.'
+    noteName.innerText = getText('clickANote');
     textArea.value = '';
     textArea.disabled = true;
 
@@ -121,28 +122,28 @@ menuEraseAll.addEventListener('click', function()
     floatingMenu.hidden = true;
     if(theSecretThingThatNobodyHasToKnow === 'local') floatingWindow(
     {
-        title: '¿Borrar todos los datos locales?',
-        text: 'Se borrarán todos los datos que se hayan guardado en este navegador en el modo local',
+        title: getText('menu_eraseAllLocal_title'),
+        text: getText('menu_eraseAllLocal_text'),
         buttons:
         [
             {
-                text: 'No borrar nada',
+                text: getText('menu_eraseAllLocal_btn1'),
                 primary: false,
                 callback: () => {closeWindow()}
             },
             {
-                text: 'Borrar',
+                text: getText('menu_eraseAllLocal_btn2'),
                 primary: true,
                 callback: () =>
                 {
                     closeWindow();
                     floatingWindow(
                     {
-                        title: '¿De verdad vas a borrarlo todo?',
+                        title: getText('menu_reallyEraseAll_title'),
                         buttons:
                         [
                             {
-                                text: '¡De verdad voy a borrarlo todo!',
+                                text: getText('menu_reallyEraseAll_btn1'),
                                 primary: true,
                                 callback: () =>
                                 {
@@ -155,7 +156,7 @@ menuEraseAll.addEventListener('click', function()
                                 }
                             },
                             {
-                                text: 'No voy a borrar nada',
+                                text: getText('menu_reallyEraseAll_btn2'),
                                 primary: false,
                                 callback: () => {closeWindow()}
                             }

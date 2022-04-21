@@ -26,12 +26,12 @@ async function loadNotesList()
             loadingScreen.hidden = true;
             floatingWindow(
             {
-                title: 'Ha ocurrido un error',
-                text: `Código de error: ${response.data.error}`,
+                title: getText('somethingWentWrong'),
+                text: `${getText('errorCode')}: ${response.data.error}`,
                 buttons:
                 [
                     {
-                        text: 'Borrar datos de inicio de sesión y recargar',
+                        text: getText('lnl_eraseData'),
                         primary: false,
                         callback: function()
                         {
@@ -40,7 +40,7 @@ async function loadNotesList()
                         }
                     },
                     {
-                        text: 'Recargar',
+                        text: getText('reload'),
                         primary: true,
                         callback: function()
                         {

@@ -33,6 +33,6 @@ let showTheNote = true;
 let canInteract = true;
 
 let isLocalMode = true;
-let theSecretThingThatNobodyHasToKnow = undefined;
-let actualNoteID = undefined;
-let actualNoteName = undefined;
+let theSecretThingThatNobodyHasToKnow;
+let actualNoteID;
+let actualNoteName;

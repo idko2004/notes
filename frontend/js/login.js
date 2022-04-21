@@ -4,7 +4,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
     if(!canClick_login) return;
     canClick_login = false;
 
-    e.target.innerText = 'Iniciando sesión...';
+    e.target.innerText = getText('logginIn');
 
     const username = document.getElementById('usernameField').value.trim();
     const password = document.getElementById('passwordField').value;
@@ -14,14 +14,14 @@ document.getElementById('loginButton').addEventListener('click', async function(
     {
         floatingWindow(
         {
-            title: 'Introduce tus datos',
-            text: 'No puedes iniciar sesión si no nos dices cuál es tu usuario y contraseña.\nSi no quieres crear una cuenta puedes probar el modo local.',
+            title: getText('login_none_title'),
+            text: getText('login_none_text'),
             button:
             {
-                text: 'Aceptar',
+                text: getText('ok'),
                 callback: function()
                 {
-                    e.target.innerText = 'Iniciar sesión';
+                    e.target.innerText = getText('login');
                     canClick_login = true;
                     closeWindow();
                 }
@@ -33,14 +33,14 @@ document.getElementById('loginButton').addEventListener('click', async function(
     {
         floatingWindow(
         {
-            title: '¿Cómo te llamas?',
-            text: 'Escribe tu nombre de usuario para poder iniciar sesión.',
+            title: getText('login_username_title'),
+            text: getText('login_username_text'),
             button:
             {
-                text: 'Aceptar',
+                text: getText('ok'),
                 callback: function()
                 {
-                    e.target.innerText = 'Iniciar sesión';
+                    e.target.innerText = getText('login');
                     canClick_login = true;
                     closeWindow();
                 }
@@ -52,28 +52,24 @@ document.getElementById('loginButton').addEventListener('click', async function(
     {
         floatingWindow(
         {
-            title: '¿Cuál es tu contraseña?',
-            text: 'Sin tu contraseña no puedes iniciar sesión, si no la recuerdas podemos hacer algo para recuperarla.',
+            title: getText('login_password_title'),
+            text: getText('login_password_text'),
             buttons:
             [
                 {
-                    text: 'Olvidé mi contraseña',
+                    text: getText('forgotPassword'),
                     primary: false,
                     callback: function()
                     {
-                        let a =document.createElement('a');
-                        a.style.display = 'none';
-                        a.href = 'forgotMyPassword.html';
-                        document.body.appendChild(a);
-                        a.click();
+                        location.href = 'forgotMyPassword.html';
                     }
                 },
                 {
-                    text: 'Aceptar',
+                    text: getText('ok'),
                     primary: true,
                     callback: function()
                     {
-                        e.target.innerText = 'Iniciar sesión';
+                        e.target.innerText = getText('login');
                         canClick_login = true;
                         closeWindow();
                     }
@@ -106,14 +102,14 @@ document.getElementById('loginButton').addEventListener('click', async function(
         else if(response.data.error === 'wrongPassword') //Contraseña incorrecta
         {
             console.log('Contraseña inválida');
-            e.target.innerText = 'Iniciar sesión';
+            e.target.innerText = getText('login');
             floatingWindow(
             {
-                title: 'Contraseña incorrecta',
-                text: 'Intenta con otra contraseña. Si no te acuerdas siempre puedes restablecerla.',
+                title: getText('login_wrongPassword_title'),
+                text: getText('login_wrongPassword_text'),
                 button:
                 {
-                    text: 'Aceptar',
+                    text: getText('ok'),
                     callback: function()
                     {
                         canClick_login = true;
@@ -125,22 +121,22 @@ document.getElementById('loginButton').addEventListener('click', async function(
         else if(response.data.error === 'userDontExist') //Usuario incorrecto
         {
             console.log('usuario no existe');
-            e.target.innerText = 'Iniciar sesión';
+            e.target.innerText = getText('login');
             floatingWindow(
             {
-                title: 'Este usuario no existe',
-                text: 'Si aún no tienes una cuenta, puedes crear una. Si ya tienes una cuenta revisa que el nombre esté bien escrito.',
+                title: getText('login_wrongUser_title'),
+                text: getText('login_wrongUser_text'),
                 buttons:
                 [
                     {
-                        text: 'Crear cuenta',
+                        text: getText('createAccount'),
                         callback: function()
                         {
                             location.href = 'signup.html'
                         }
                     },
                     {
-                        text: 'Aceptar',
+                        text: getText('ok'),
                         primary: true,
                         callback: function()
                         {
@@ -156,11 +152,11 @@ document.getElementById('loginButton').addEventListener('click', async function(
             console.log('error desconocido iniciando sesión');
             floatingWindow(
             {
-                title: 'Algo salió mal',
-                text: 'Hubo un error al iniciar sesión',
+                title: getText('somethingWentWrong'),
+                text: getText('login_error_text'),
                 button:
                 {
-                    text: 'Aceptar',
+                    text: getText('ok'),
                     callback: function()
                     {
                         canClick_login = true;
@@ -174,15 +170,15 @@ document.getElementById('loginButton').addEventListener('click', async function(
     {
         floatingWindow(
         {
-            title: 'Vaya...',
-            text: 'Parece que el servidor se ha caído, prueba intentarlo de nuevo más tarde.',
+            title: getText('ups'),
+            text: getText('serverDown'),
             button:
             {
-                text: 'Aceptar',
+                text: getText('ok'),
                 callback: function()
                 {
                     canClick_login = true;
-                    e.target.innerText = 'Iniciar sesión';
+                    e.target.innerText = getText('login');
                     closeWindow();
                 }
             }

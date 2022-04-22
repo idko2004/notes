@@ -11,17 +11,20 @@
 
         <script defer src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script defer src="js/signUp/signUp.js"></script>
+        <script defer src="js/localStorage.js"></script>
+        <script defer src="js/hash.js"></script>
+        <script defer src="js/language.js"></script>
     </head>
     <body>
         <article>
-            <h1>Crear cuenta</h1>
-            <div id="text">Cargando...</div>
+            <h1 class="text" txt="createAccount">Crear cuenta</h1>
+            <div id="text" class="text" txt="loading">Cargando...</div>
             <div id="tinyText" hidden></div>
             <div><input id="inputField" type="text" placeholder="..." hidden></div>
-            <div><button id="nextButton" hidden>Siguiente</button></div>
-            <div><button id="changeEmailButton" hidden>Cambiar correo electrónico</button></div>
-            <div><button id="backButton" hidden>Volver</button></div>
-            <div><button id="reloadButton" hidden>Reintentar</button></div>
+            <div><button id="nextButton" class="text" txt="next" hidden>Siguiente</button></div>
+            <div><button id="changeEmailButton" class="text" txt="changeEmail" hidden>Cambiar correo electrónico</button></div>
+            <div><button id="backButton" class='text' txt="back" hidden>Volver</button></div>
+            <div><button id="reloadButton" class="text" txt="tryAgain" hidden>Reintentar</button></div>
         </article>
     </body>
 </html>

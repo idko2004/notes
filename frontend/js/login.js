@@ -186,6 +186,11 @@ document.getElementById('loginButton').addEventListener('click', async function(
     }
 });
 
+document.getElementById('signUpButton').addEventListener('click', function()
+{
+    location.href=`signup.html#lang=${actualLanguage}`
+});
+
 document.getElementById('localModeButton').addEventListener('click',function()
 {
     isLocalMode = true;

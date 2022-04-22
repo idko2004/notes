@@ -53,7 +53,7 @@ menuOnlineLogOut.addEventListener('click', async function()
     try
     {
         const response = await axios.post(`${path}/logout`, {key: theSecretThingThatNobodyHasToKnow});
-        if(response.data.ok) console.log('Sesión cerrada');    
+        if(response.data.ok) console.log('Sesión cerrada');
     }
     catch
     {
@@ -64,7 +64,7 @@ menuOnlineLogOut.addEventListener('click', async function()
 
 menuOnlineChangeToLocal.addEventListener('click', function()
 {
-    location.hash = '#local'
+    hashAdd('local') //TODO: hashAdd
     location.reload();
 });
 
@@ -77,7 +77,7 @@ menuOnlineManageAccount.addEventListener('click', async function()
 
     await saveNote();
     saveCookie('_login', theSecretThingThatNobodyHasToKnow);
-    location.href = 'manageAccount.html';
+    location.href = `manageAccount.html#lang=${actualLanguage}`;
 });
 
 menuButton.addEventListener('click', function()
@@ -94,9 +94,9 @@ closeMenuButton.addEventListener('click', function()
 
 menuExitLocalMode.addEventListener('click', function()
 {
-    if(location.hash === '#local')
+    if(hashContains('local'))
     {
-        location.hash = '';
+        hashDelete('local');
         location.reload();
         return;
     }

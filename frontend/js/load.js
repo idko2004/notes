@@ -1,3 +1,4 @@
+languageInHash();
 start();
 
 async function start()
@@ -6,7 +7,7 @@ async function start()
     let login = theSecretThingThatNobodyHasToKnow;
     console.log(login);
 
-    if(location.hash === '#local')
+    if(hashContains('local'))
     {
         theSecretThingThatNobodyHasToKnow = 'local';
         console.log('Forzar modo local');
@@ -102,5 +103,15 @@ async function start()
                 ]
             });
         }
+    }
+}
+
+function languageInHash()
+{
+    const hashLang = hashEquals('lang');
+    if(hashLang !== undefined)
+    {
+        saveKey('_lang', hashLang);
+        hashDelete('lang');
     }
 }

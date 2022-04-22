@@ -1,4 +1,5 @@
 const path = 'http://localhost:3000';
+const titleTextIDLang = 'createAccountNotes';
 
 let step = 0;
 
@@ -7,6 +8,7 @@ let email;
 let password;
 let comprobedPassword;
 
+//Hay datos guardados
 const savedEmail = localStorage.getItem('_email');
 if(savedEmail !== null)
 {
@@ -26,12 +28,6 @@ const nextButton = document.getElementById('nextButton');
 const backButton = document.getElementById('backButton');
 const changeEmailButton = document.getElementById('changeEmailButton');
 const reloadButton = document.getElementById('reloadButton');
-
-//Step 0 = email
-//Step 1 = username
-//Step 2 = password
-//Step 3 = comprobe password
-//Step 4 = code
 
 nextButton.addEventListener('click', comprobeThisStep);
 inputField.addEventListener('keydown', function(e)
@@ -57,11 +53,17 @@ async function comprobeServerWorks()
     }
     catch
     {
-        text.innerText = 'Vaya...';
-        setTinyText('Parece que el servidor se ha caído.\nPrueba a intentarlo de nuevo en un rato.');
+        text.innerText = getText('ups');
+        setTinyText(getText('serverDown'));
         reloadButton.hidden = false;
     }
 }
+
+//Step 0 = email
+//Step 1 = username
+//Step 2 = password
+//Step 3 = comprobe password
+//Step 4 = code
 
 function displayNextStep()
 {
@@ -73,8 +75,8 @@ function displayNextStep()
         case 3: displayConfirmPassword(); break;
         case 4: displayEmailCode(); break;
         default:
-            text.innerText = 'Ha ocurrido un error';
-            setTinyText('La página se recargará');
+            text.innerText = getText('somethingWentWrong');
+            setTinyText(getText('pageToReload'));
             setTimeout(function()
             {
                 location.reload();
@@ -160,9 +162,9 @@ function displayEmail()
         return;
     }
 
-    text.innerText = 'Correo electrónico';
+    text.innerText = getText('email');
     setTinyText();
-    clearInputField('text', 'alguien@email.com');
+    clearInputField('text', getText('emailExample'));
     backButton.hidden = false;
     changeEmailButton.hidden = true;
     inputField.hidden = false;
@@ -177,7 +179,7 @@ function comprobeEmail()
 
     if(value === undefined || value === null || value.trim() === '')
     {
-        setTinyText('El campo no puede estar vacío.');
+        setTinyText(getText('fieldCannotBeEmpty'));
         return;
     }
 
@@ -194,7 +196,7 @@ function comprobeEmail()
     }
     else
     {
-        setTinyText('El correo electrónico no es válido.');
+        setTinyText(getText('invalidEmail'));
     }
 }
 
@@ -206,7 +208,7 @@ function displayUsername()
         return;
     }
 
-    text.innerText = 'Nombre de usuario';
+    text.innerText = getText('username');
     setTinyText();
     clearInputField('text', email.split('@')[0]);
     backButton.hidden = false;
@@ -227,7 +229,7 @@ function comprobeUserName()
     }
     else if(value.length > 30)
     {
-        setTinyText('El nombre es demasiado largo.');
+        setTinyText(getText('newNote_tooLongName_title'));
         return;
     }
     else username = value.trim();
@@ -244,9 +246,9 @@ function displayPassword()
         return;
     }
 
-    text.innerText = 'Contraseña';
+    text.innerText = getText('password');
     setTinyText();
-    clearInputField('password', 'Una contraseña híper segura');
+    clearInputField('password', getText('hyperSecurePassword'));
     backButton.hidden = false;
     changeEmailButton.hidden = true;
     inputField.hidden = false;
@@ -264,17 +266,17 @@ function comprobePassword()
 
     if(value.trim() === '' || value === null)
     {
-        setTinyText('La contraseña no puede estar vacía.');
+        setTinyText(getText('fieldCannotBeEmpty'));
         return;
     }
     else if(value.length < 8)
     {
-        setTinyText('La contraseña debe contener mayúsculas, minúsculas, números y debe tener 8 o más caracteres');
+        setTinyText(getText('passwordMustContains'));
         return;
     }
     else if(value.length > 20)
     {
-        setTinyText('La contraseña es demasiado larga. (Máximo 20 caracteres)');
+        setTinyText(getText('tooLongPassword'));
         return;
     }
 
@@ -293,7 +295,7 @@ function comprobePassword()
 
     if(!containsCapitals || !containsNotCapitals || !containsNumbers)
     {
-        setTinyText('La contraseña debe contener mayúsculas, minúsculas y números');
+        setTinyText(getText('passwordMustContains'));
         return;
     }
 
@@ -310,9 +312,9 @@ function displayConfirmPassword()
         return;
     }
 
-    text.innerText = 'Confirmar contraseña';
+    text.innerText = getText('confirmPassword');
     setTinyText();
-    clearInputField('password', 'Vuelve a escribirlo');
+    clearInputField('password', getText('typeItAgain'));
     backButton.hidden = false;
     changeEmailButton.hidden = true;
     inputField.hidden = false;
@@ -327,7 +329,7 @@ function comprobeConfirmPassword()
 
     if(value.trim() === '' || value === null)
     {
-        setTinyText('Debe escribir la misma contraseña que escribió antes.');
+        setTinyText(getText('typeTheSamePasswordAsBefore'));
     }
     else if(value === password)
     {
@@ -337,16 +339,16 @@ function comprobeConfirmPassword()
     }
     else
     {
-        setTinyText('Las contraseñas no coinciden.\nAsegúrate de poner la misma contraseña que en el campo anterior.');
+        setTinyText(getText('passwordsDontMatch'));
     }
 }
 
 async function displayEmailCode()
 {
-    if(email === undefined || username === undefined || password === undefined || email === null || username === null || password === null)
+    if([email, username, password].includes(undefined) || [email, username, password].includes(undefined))
     {
-        text.innerText = 'Uno de los campos no es válido.';
-        setTinyText('Tendremos que volver a empezar el proceso.');
+        text.innerText = getText('oneFieldInvalid');
+        setTinyText(getText('startOverAgain'));
         email = undefined;
         password = undefined;
         username = undefined;
@@ -361,7 +363,7 @@ async function displayEmailCode()
     changeEmailButton.hidden = true;
     nextButton.hidden = true;
     backButton.hidden = true;
-    text.innerText = 'Por favor, espere';
+    text.innerText = getText('waitAMoment');
     setTinyText();
 
     try
@@ -371,8 +373,8 @@ async function displayEmailCode()
     
         if(response.data.error === undefined && response.data.emailSent)
         {
-            text.innerText = 'Revisa tu correo';
-            setTinyText(`Introduce el código que enviamos a ${email}`);
+            text.innerText = getText('checkYourEmail');
+            setTinyText(`${getText('codeWeSent')} ${email}`);
             clearInputField('text', 'A1B2C');
             inputField.hidden = false;
             changeEmailButton.hidden = false;
@@ -381,7 +383,7 @@ async function displayEmailCode()
         }
         else if(response.data.error === 'duplicatedEmail')
         {
-            text.innerText = 'Este correo ya tiene una cuenta';
+            text.innerText = getText('emailDuplicated');
             email = undefined;
             password = undefined;
             username = undefined;
@@ -390,8 +392,8 @@ async function displayEmailCode()
         }
         else if(response.data.error === 'invalidFields')
         {
-            text.innerText = 'Uno de los campos no es válido.';
-            setTinyText('Tendremos que volver a empezar el proceso.');
+            text.innerText = getText('oneFieldInvalid');
+            setTinyText(getText('startOverAgain'));
             email = undefined;
             password = undefined;
             username = undefined;
@@ -403,7 +405,7 @@ async function displayEmailCode()
         }
         else
         {
-            text.innerText = 'Error inesperado';
+            text.innerText = getText('somethingWentWrong');
             setTinyText(response.data.error);
             setTimeout(function()
             {
@@ -414,8 +416,8 @@ async function displayEmailCode()
     }
     catch
     {
-        text.innerText = 'El servidor no responde';
-        setTinyText('Su información será guardada en caso de que quiera cerrar la página para volver a intentarlo luego, solo tiene que recargar la página');
+        text.innerText = getText('ups');
+        setTinyText(getText('serverDown'));
         localStorage.setItem('_email', email);
         localStorage.setItem('_password', password);
         localStorage.setItem('_username', username);
@@ -436,7 +438,7 @@ async function comprobeEmailCode()
 
     if(code.trim() === '' || code.length !== 5)
     {
-        setTinyText('Introduce un código válido.');
+        setTinyText(getText('introduceAValidCode'));
         return;
     }
 
@@ -444,7 +446,7 @@ async function comprobeEmailCode()
     changeEmailButton.hidden = true;
     nextButton.hidden = true;
     backButton.hidden = true;
-    text.innerText = 'Por favor, espere';
+    text.innerText = getText('waitAMoment');
     setTinyText();
 
     try
@@ -455,8 +457,8 @@ async function comprobeEmailCode()
             //Cuenta creada
             step++;
             nextButton.hidden = false;
-            text.innerText = '¡Cuenta creada!';
-            setTinyText('Vuelve a la página principal para inciar sesión en tu nueva cuenta.');
+            text.innerText = getText('accountCreated');
+            setTinyText(getText('accountCreated2'));
         }
         else if(response.data.error === 'invalidCode')
         {
@@ -464,13 +466,13 @@ async function comprobeEmailCode()
             inputField.hidden = false;
             changeEmailButton.hidden = false;
             nextButton.hidden = false;
-            text.innerText = 'Este código no es válido';
-            setTinyText(`Introduce el código que enviamos al correo ${email}`);
+            text.innerText = getText('introduceAValidCode');
+            setTinyText(`${getText('codeWeSent')} ${email}`);
         }
         else
         {
             //Mostrar error desconocido
-            text.innerText = 'Ha ocurrido un error';
+            text.innerText = getText('somethingWentWrong');
             setTinyText(response.data.error);
         }
 
@@ -481,7 +483,7 @@ async function comprobeEmailCode()
     catch
     {
         //Se cayó el server
-        setTinyText('El servidor no responde.');
+        setTinyText(getText('serverDown'));
         inputField.hidden = false;
         nextButton.hidden = false;
         changeEmailButton.hidden = false;

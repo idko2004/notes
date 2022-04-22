@@ -152,6 +152,11 @@ document.getElementById('toChangeDataMenuButton').addEventListener('click', func
     window.scrollTo(0,0);
 });
 
+document.getElementById('changeLanguage').addEventListener('click', function()
+{
+
+});
+
 document.getElementById('goBackToNotes').addEventListener('click', function()
 {
     mainScreen.hidden = true;

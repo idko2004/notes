@@ -1,4 +1,4 @@
-let actualLanguage;
+var actualLanguage;
 
 const allTexts =
 {
@@ -294,7 +294,7 @@ const allTexts =
     },
     newNote_tooLongName_title:
     {
-        es: 'Acorta el nombre',
+        es: 'Demasiado largo',
         en: 'Too long'
     },
     newNote_tooLongName_text:
@@ -391,6 +391,126 @@ const allTexts =
     {
         es: 'Renombrar',
         en: 'Rename'
+    },
+    createAccountNotes:
+    {
+        es: 'Crear Cuenta | Notas',
+        en: 'Create account | Notes'
+    },
+    next:
+    {
+        es: 'Siguiente',
+        en: 'Next'
+    },
+    changeEmail:
+    {
+        es: 'Cambiar correo electrónico',
+        en: 'Change Email'
+    },
+    back:
+    {
+        es: 'Volver',
+        en: 'Back'
+    },
+    pageToReload:
+    {
+        es: 'La página se recargará.',
+        en: 'The page will reload.'
+    },
+    email:
+    {
+        es: 'Correo electrónico',
+        en: 'Email'
+    },
+    emailExample:
+    {
+        es: 'alguien@email.com',
+        en: 'someone@email.com'
+    },
+    fieldCannotBeEmpty:
+    {
+        es: 'El campo no puede estar vacío.',
+        en: 'The field cannot be empty.'
+    },
+    invalidEmail:
+    {
+        es: 'El correo electrónico no es válido.',
+        en: 'The email is not valid.'
+    },
+    hyperSecurePassword:
+    {
+        es: 'Una contraseña híper segura',
+        en: 'A hyper secure password'
+    },
+    passwordMustContains:
+    {
+        es: 'La contraseña debe contener mayúsculas, minúsculas, números y debe tener 8 o más caracteres.',
+        en: 'The password must contain uppercase, lowercase, numbers and must be 8 or more characters long.'
+    },
+    tooLongPassword:
+    {
+        es: 'La contraseña es demasiado larga. (Máximo 20 caracteres)',
+        en: 'The password is too long. (Maximum 20 characters)'
+    },
+    confirmPassword:
+    {
+        es: 'Confirmar contraseña',
+        en: 'Confirm password'
+    },
+    typeItAgain:
+    {
+        es: 'Vuelve a escribirlo',
+        en: 'Type it again'
+    },
+    typeTheSamePasswordAsBefore:
+    {
+        es: 'Escriba la misma contraseña que escribió antes.',
+        en: 'Type the same password you typed before.'
+    },
+    passwordsDontMatch:
+    {
+        es: 'Las contraseñas no coinciden. Asegúrate de poner la misma contraseña que en el campo anterior.',
+        en: "The passwords don't match. Be sure to put the same password as in the previous field."
+    },
+    oneFieldInvalid:
+    {
+        es: 'Uno de los campos no es válido',
+        en: 'One of the fields is not valid'
+    },
+    startOverAgain:
+    {
+        es: 'Tendremos que volver a empezar el proceso.',
+        en: 'We will have to start the process all over again.'
+    },
+    checkYourEmail:
+    {
+        es: 'Revisa tu correo',
+        en: 'Check your email'
+    },
+    codeWeSent:
+    {
+        es: 'Introduce el código que enviamos a',
+        en: 'Introduce the code we sent to'
+    },
+    emailDuplicated:
+    {
+        es: 'Ya existe una cuenta con este correo.',
+        en: 'An account with this email already exists.'
+    },
+    introduceAValidCode:
+    {
+        es: 'Introduce un código válido.',
+        en: 'Introduce a valid code.'
+    },
+    accountCreated:
+    {
+        es: '¡Ya tienes una cuenta!',
+        en: 'Now you have an account!'
+    },
+    accountCreated2:
+    {
+        es: 'Vuelve a la página principal para inciar sesión en tu nueva cuenta.',
+        en: "Return to the home page to log in to your new account."
     }
 }
 
@@ -411,15 +531,22 @@ function getText(textID, replaceArray)
         text = text.replace('%', replaceArray[i]);
     }
 
+    if(text === undefined) console.error('Error al obtener textos:', textID, actualLanguage);
     return text;
 }
 
 function languageAtStart()
 {
-    let lang = getKey('_lang');
-    if(lang === '') lang = navigator.language.split('-')[0];
+    let lang = hashEquals('lang');
+    if(lang === undefined) lang = getKey('_lang');
 
+    if(['', undefined, null].includes(lang)) lang = navigator.language.split('-')[0];
+
+    if(!['es', 'en'].includes(lang)) lang = 'en';
+    
     actualLanguage = lang;
+
+    document.title = getText(titleTextIDLang);
 
     console.time('Reemplazando los textos');
     const elementsWithText = document.getElementsByClassName('text');

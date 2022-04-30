@@ -73,7 +73,7 @@ function floatingWindow(elements)
             //Añadir el callback del botón principal al input para que, al presionar enter, realice la misma acción.
             if(elements.button !== undefined)
             {
-                mainCallback(elements.buttons[i].callback);
+                mainCallback(elements.button.callback);
             }
             else
             {

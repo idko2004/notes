@@ -10,6 +10,7 @@ function updateDataMenuPlaceholders()
     let pswrd = '';
     for(let i = 0; i < passwordLength; i++) pswrd += '*';
     changePasswordField.placeholder = pswrd;
+    comprobePasswordField.placeholder = getText('confirmPassword');
 }
 
 document.getElementById('goBackChangeDataMenu').addEventListener('click', function()
@@ -51,11 +52,11 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', function
         {
             floatingWindow(
             {
-                title: 'Nombre de usuario',
-                text: 'El nombre de usuario es demasiado largo.',
+                title: getText('username'),
+                text: getText('usernameTooLong'),
                 button:
                 {
-                    text: 'Aceptar',
+                    text: getText('ok'),
                     callback: closeWindow
                 }
             });
@@ -73,11 +74,11 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', function
         {
             floatingWindow(
             {
-                title: 'Correo electrónico',
-                text: 'Introduce un correo electrónico válido.',
+                title: getText('email'),
+                text: getText('invalidEmail'),
                 button:
                 {
-                    text: 'Aceptar',
+                    text: getText('ok'),
                     callback: closeWindow
                 }
             });
@@ -97,11 +98,11 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', function
         {
             floatingWindow(
             {
-                title: 'Contraseña',
-                text: 'La contraseña es demasiado corta. (Mínimo 8 caracteres)',
+                title: getText('password'),
+                text: getText('tooShortPassword'),
                 button:
                 {
-                    text: 'Aceptar',
+                    text: getText('ok'),
                     callback: closeWindow
                 }
             });
@@ -112,11 +113,11 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', function
         {
             floatingWindow(
             {
-                title: 'Contraseña',
-                text: 'La contraseña es demasiado larga. (Máximo 20 caracteres)',
+                title: getText('password'),
+                text: getText('tooLongPassword'),
                 button:
                 {
-                    text: 'Aceptar',
+                    text: getText('ok'),
                     callback: closeWindow
                 }
             });
@@ -136,11 +137,11 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', function
         {
             floatingWindow(
             {
-                title: 'Contraseña',
-                text: 'La contraseña debe tener mayúsculas, minúsculas y números.',
+                title: getText('password'),
+                text: getText('passwordMustContains'),
                 button:
                 {
-                    text: 'Aceptar',
+                    text: getText('ok'),
                     callback: closeWindow
                 }
             });
@@ -152,11 +153,11 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', function
         {
             floatingWindow(
             {
-                title: 'Contraseña',
-                text: 'Las contraseñas no coinciden.',
+                title: getText('password'),
+                text: getText('passwordsDontMatch'),
                 button:
                 {
-                    text: 'Aceptar',
+                    text: getText('ok'),
                     callback: closeWindow
                 }
             });
@@ -170,11 +171,11 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', function
     {
         floatingWindow(
         {
-            title: 'Nada ha cambiado',
-            text: 'Modifica algún dato para poder actualizar tu perfil, si no quieres modificar nada haz click en el botón "Cancelar"',
+            title: getText('nothingChange'),
+            text: getText('nothingChange2'),
             button:
             {
-                text: 'Aceptar',
+                text: getText('ok'),
                 callback: closeWindow
             }
         });
@@ -187,17 +188,17 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', function
 
     floatingWindow(
     {
-        title: 'Entonces quedará así:',
-        text: `Nombre de usuario:\n${newUsername}\n\nCorreo electrónico:\n${newEmail}\n\nContraseña:\n${pswrd}\n\n¿Está bien así?`,
+        title: getText('itIsOk'),
+        text: `${getText('username')}:\n${newUsername}\n\n${getText('email')}:\n${newEmail}\n\n${getText('password')}:\n${pswrd}`,
         buttons:
         [
             {
-                text: 'No, cancelar',
+                text: getText('cancelButWithNo'),
                 primary: false,
                 callback: closeWindow
             },
             {
-                text: 'Sí, guarda estos datos',
+                text: getText('yesSaveTheseChanges'),
                 primary: true,
                 callback: async function()
                 {
@@ -222,11 +223,11 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', function
                                 actualMenu = 'ventana';
                                 floatingWindow(
                                 {
-                                    title: 'Datos no válidos',
-                                    text: 'Uno de los datos que introdujiste no es válido.',
+                                    title: getText('somethingWentWrong'),
+                                    text: getText('oneFieldInvalid'),
                                     button:
                                     {
-                                        text: 'Volver',
+                                        text: getText('back'),
                                         callback: function()
                                         {
                                             changeDataEmailCodeMenu.hidden = true;
@@ -243,11 +244,11 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', function
                                 actualMenu = 'ventana';
                                 floatingWindow(
                                 {
-                                    title: 'Email duplicado',
-                                    text: 'Ya existe una cuenta con este email.',
+                                    title: getText('somethingWentWrong'),
+                                    text: getText('emailDuplicated'),
                                     button:
                                     {
-                                        text: 'Volver',
+                                        text: getText('back'),
                                         callback: function()
                                         {
                                             changeDataEmailCodeMenu.hidden = true;
@@ -264,11 +265,11 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', function
                                 actualMenu = 'ventana';
                                 floatingWindow(
                                 {
-                                    title: 'Ha ocurrido un error',
-                                    text: `Ha ocurrido un error inesperado\nCódigo de error: ${response.data.error}`,
+                                    title: getText('somethingWentWrong'),
+                                    text: `${getText('errorCode')}: ${response.data.error}`,
                                     button:
                                     {
-                                        text: 'Aceptar',
+                                        text: getText('ok'),
                                         callback: function()
                                         {
                                             changeDataEmailCodeMenu.hidden = true;
@@ -288,11 +289,11 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', function
                         actualMenu = 'ventana';
                         floatingWindow(
                         {
-                            title: '¡Oh, no!',
-                            text: 'Parece que se ha caído el servidor, por lo que tus datos no podrán ser guardados.',
+                            title: getText('ups'),
+                            text: getText('serverDown'),
                             button:
                             {
-                                text: 'Aceptar',
+                                text: getText('ok'),
                                 callback: function()
                                 {
                                     changeDataEmailCodeMenu.hidden = true;
@@ -330,11 +331,11 @@ async function changeDataComprobeCode()
     {
         floatingWindow(
         {
-            title: 'Código no válido',
-            text: 'El código que introdujiste no es válido.',
+            title: getText('introduceAValidCode'),
+            text: getText('introduceAValidCode2'),
             button:
             {
-                text: 'Aceptar',
+                text: getText('ok'),
                 callback: closeWindow
             }
         });
@@ -342,23 +343,23 @@ async function changeDataComprobeCode()
     }
 
     actualMenu = 'changeDataComprobingCode';
-    floatingWindow({title: 'Comprobando...'});
+    floatingWindow({title: getText('waitAMoment')});
 
     try
     {
         const response = await axios.post(`${path}/updateAccountData`,{code});
         console.log(response);
+        closeWindow();
 
         if(response.data.updated)
         {
             //Que todo salió bien
-            closeWindow();
             floatingWindow(
             {
-                title: '¡Los datos de tu cuenta han sido actualizados!',
+                title: getText('accountUpdated'),
                 button:
                 {
-                    text: 'Volver al inicio',
+                    text: getText('backToHome'),
                     callback: function()
                     {
                         closeWindow();
@@ -374,14 +375,13 @@ async function changeDataComprobeCode()
         else if(response.data.hadToInsertOtherCode)
         {
             //Que se ha cambiado el email y hay que comprobar el nuevo.
-            closeWindow();
             floatingWindow(
             {
-                title: 'Un último paso',
-                text: 'Debido a que has cambiado tu correo electrónico, debemos comprobar que también tengas acceso a este, por lo que te enviaremos otro código al nuevo correo.',
+                title: getText('oneLastStep'),
+                text: getText('confirmEmailAgain'),
                 button:
                 {
-                    text: 'Aceptar',
+                    text: getText('ok'),
                     callback: function()
                     {
                         actualMenu = 'changeDataEmailCode';
@@ -394,14 +394,13 @@ async function changeDataComprobeCode()
         }
         else if(response.data.error === 'invalidCode')
         {
-            closeWindow();
             floatingWindow(
             {
-                title: 'Código no válido',
-                text: 'El código que introdujiste no es válido.',
+                title: getText('introduceAValidCode'),
+                text: getText('introduceAValidCode2'),
                 button:
                 {
-                    text: 'Aceptar',
+                    text: getText('ok'),
                     callback: function()
                     {
                         actualMenu = 'changeDataEmailCode';
@@ -412,14 +411,13 @@ async function changeDataComprobeCode()
         }
         else
         {
-            closeWindow();
             floatingWindow(
             {
-                title: 'Ha ocurrido un error',
-                text: `Ha ocurrido un error inesperado.\nCódigo de error: ${response.data.error}`,
+                title: getText('somethingWentWrong'),
+                text: `${getText('errorCode')}: ${response.data.error}`,
                 button:
                 {
-                    text: 'Aceptar',
+                    text: getText('ok'),
                     callback: function()
                     {
                         changeDataEmailCodeMenu.hidden = true;
@@ -435,15 +433,14 @@ async function changeDataComprobeCode()
     catch
     {
         //Ventana que diga que se cayó el servidor
-        closeWindow();
         actualMenu = 'ventana';
         floatingWindow(
         {
-            title: '¡Oh, no!',
-            text: 'Parece que se ha caído el servidor, por lo que tus datos no podrán ser guardados.',
+            title: getText('ups'),
+            text: getText('serverDown'),
             button:
             {
-                text: 'Aceptar',
+                text: getText('ok'),
                 callback: function()
                 {
                     changeDataEmailCodeMenu.hidden = true;

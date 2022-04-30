@@ -10,6 +10,7 @@ let actualMenu;
 //  changeData
 //  changeDataEmailCode
 //  changeDataComprobingCode
+//  changeLanguage
 //  ventana
 
 const loadingScreen = document.getElementById('loadingScreen');
@@ -18,6 +19,7 @@ const mainScreen = document.getElementById('mainScreen');
 const mainMenu = document.getElementById('mainMenu');
 const changeDataMenu = document.getElementById('changeDataMenu');
 const changeDataEmailCodeMenu = document.getElementById('changeDataEmailCodeMenu');
+const changeLanguageMenu = document.getElementById('changeLanguageMenu');
 
 const floatWindow = document.getElementById('floatingWindow');
 const windowTitle = document.getElementById('windowTitle');
@@ -152,14 +154,19 @@ document.getElementById('toChangeDataMenuButton').addEventListener('click', func
     window.scrollTo(0,0);
 });
 
-document.getElementById('changeLanguage').addEventListener('click', function()
+document.getElementById('toChangeLanguageMenuButton').addEventListener('click', function()
 {
+    if(actualMenu !== 'main') return;
 
+    mainMenu.hidden = true;
+    changeLanguageMenu.hidden = false;
+    actualMenu = 'changeLanguage';
+    window.scrollTo(0,0);
 });
 
 document.getElementById('goBackToNotes').addEventListener('click', function()
 {
     mainScreen.hidden = true;
     loadingScreen.hidden = false;
-    location.href = 'index.html';
+    location.href = `index.html#lang=${hashEquals('lang')}`;
 });

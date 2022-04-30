@@ -452,6 +452,11 @@ const allTexts =
         es: 'La contraseña es demasiado larga. (Máximo 20 caracteres)',
         en: 'The password is too long. (Maximum 20 characters)'
     },
+    tooShortPassword:
+    {
+        es: 'La contraseña es demasiado corta. (Mínimo 8 caracteres)',
+        en: 'The password is too short. (Minimun 8 characters)'
+    },
     confirmPassword:
     {
         es: 'Confirmar contraseña',
@@ -502,6 +507,11 @@ const allTexts =
         es: 'Introduce un código válido.',
         en: 'Introduce a valid code.'
     },
+    introduceAValidCode2:
+    {
+        es: 'El código que has introducido es incorrecto. Revisa si lo has escrito bien (no confundas el número 0 con la letra O)',
+        en: 'The code you have entered is incorrect. Check if you have written it correctly (do not confuse the number 0 with the letter O).'
+    },
     accountCreated:
     {
         es: '¡Ya tienes una cuenta!',
@@ -511,6 +521,116 @@ const allTexts =
     {
         es: 'Vuelve a la página principal para inciar sesión en tu nueva cuenta.',
         en: "Return to the home page to log in to your new account."
+    },
+    manageAccountNotes:
+    {
+        es: 'Gestionar cuenta | Notas',
+        en: 'Manage account | Notes'
+    },
+    modifyThisData:
+    {
+        es: 'Modificar estos datos',
+        en: 'Modify this data'
+    },
+    changeLanguage:
+    {
+        es: 'Cambiar idioma',
+        en: 'Change language'
+    },
+    changeLanguage2:
+    {
+        es: 'Cambiar idioma (Language)',
+        en: 'Change language (Idioma)'
+    },
+    whoCanAccess:
+    {
+        es: 'Ver quién tiene acceso a esta cuenta',
+        en: 'Who can access to this account'
+    },
+    logOutInAll:
+    {
+        es: 'Cerrar sesión en todos los dispositivos',
+        en: 'Log out in all devices'
+    },
+    deleteAllNotes:
+    {
+        es: 'Borrar todas las notas',
+        en: 'Delete all notes'
+    },
+    deleteAccount:
+    {
+        es: 'Borrar cuenta',
+        en: 'Delete account'
+    },
+    modifyData:
+    {
+        es: 'Modificar información de la cuenta',
+        en: 'Modify account information'
+    },
+    saveChanges:
+    {
+        es: 'Guardar cambios',
+        en: 'Save changes'
+    },
+    usernameTooLong:
+    {
+        es: 'El nombre de usuario es demasiado largo.',
+        en: 'The username is too long.'
+    },
+    nothingChange:
+    {
+        es: 'Nada ha cambiado',
+        en: 'Nothing has changed'
+    },
+    nothingChange2:
+    {
+        es: 'Modifica algún dato para poder actualizar tu perfil, si no quieres modificar nada haz click en el botón "Cancelar"',
+        en: 'Modify any data to update your profile, or if you don\'t want to modify anything click on the "Cancel" button.'
+    },
+    itIsOk:
+    {
+        es: '¿Está bien así?',
+        en: 'Is it OK?'
+    },
+    cancelButWithNo:
+    {
+        es: 'No, cancelar',
+        en: 'No, cancel'
+    },
+    yesSaveTheseChanges:
+    {
+        es: 'Sí, guarda estos cambios',
+        en: 'Yes, save these changes'
+    },
+    accountUpdated:
+    {
+        es: '¡Los datos de tu cuenta han sido actualizados!',
+        en: 'Your account information has been updated!'
+    },
+    backToHome:
+    {
+        es: 'Volver al inicio',
+        en: 'Back to home'
+    },
+    oneLastStep:
+    {
+        es: 'Un último paso',
+        en: 'One last step'
+    },
+    confirmEmailAgain:
+    {
+        es: 'Debido a que has cambiado tu correo electrónico, debemos comprobar que también tengas acceso a este, por lo que te enviaremos otro código al nuevo correo.',
+        en: 'Because you have changed your email address, we need to check that you also have access to this one, so we will send you another code to the new email address.'
+    },
+    enterTheCode:
+    {
+        es: 'Introduce el código',
+        en: 'Enter the code'
+    },
+    verify:
+    {
+        es: 'Comprobar',
+        en: 'Verify'
     }
 }
 
@@ -521,7 +641,11 @@ function getText(textID, replaceArray)
     console.log('getText', textID, actualLanguage);
     
     let txtObj = allTexts[textID];
-    if(txtObj === undefined) return undefined;
+    if(txtObj === undefined)
+    {
+        console.error('Error al obtener textos:', textID, actualLanguage);
+        return undefined;
+    }
     
     let text = txtObj[actualLanguage];
 
@@ -546,8 +670,6 @@ function languageAtStart()
     
     actualLanguage = lang;
 
-    document.title = getText(titleTextIDLang);
-
     console.time('Reemplazando los textos');
     const elementsWithText = document.getElementsByClassName('text');
     for(let i = 0; i < elementsWithText.length; i++)
@@ -558,5 +680,8 @@ function languageAtStart()
         let text = getText(textID);
         elementsWithText[i].innerText = text;
     }
+
+    document.title = getText(titleTextIDLang); //Otro script tiene que definir esta variable
+
     console.timeEnd('Reemplazando los textos');
 }

@@ -8,89 +8,114 @@
         <link rel='stylesheet' type='text/css' href='css/floatingWindow.css'>
         <link rel='stylesheet' type='text/css' href='css/manageAccount.css'>
 
-        <script defer src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script>let titleTextIDLang = 'manageAccountNotes';</script>
+        <script defer src="js/hash.js"></script>
+        <script defer src="js/language.js"></script>
         <script defer src="js/cookies.js"></script>
         <script defer src="js/floatingWindow.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script defer src="js/manageAccount/manageAccount.js"></script>
         <script defer src="js/manageAccount/changeDataMenu.js"></script>
-
+        <script defer src="js/manageAccount/changeLanguage.js"></script>
     </head>
     <body>
         <div id=loadingScreen>
             <section>
-                <b>Notas</b>
-                <p id='loadingText'>Cargando...</p>
+                <b class="text" txt="noteAppName">Notas</b>
+                <p id='loadingText' class="text" txt="loading">Cargando...</p>
             </section>
         </div>
 
         <div id='mainScreen' hidden>
             <div id='mainScreenNotesBigName'>
-                <b>Notas</b>
+                <b class="text" txt="noteAppName">Notas</b>
             </div>
             <div class="container">
                 <div id="mainMenu" hidden>
-                    <h1>Gestionar cuenta</h1>
+                    <h1 class="text" txt="manageAccount">Gestionar cuenta</h1>
                     <p>
                         <section>
-                            <p>Nombre de usuario:<br><b><span id='usernameSpace'></span></b></p>
-                            <p>Correo electrónico:<br><b><span id="emailSpace"></span></b></p>
-                            <p>Contraseña:<br><b><span id="passwordSpace"></span></b></p>
-                            <button class='greenButton' id="toChangeDataMenuButton">Modificar estos datos</button>
+                            <p>
+                                <span class="text" txt="username">Nombre de usuario</span>:<br>
+                                <b><span id='usernameSpace'></span></b>
+                            </p>
+                            <p>
+                                <span class="text" txt="email">Correo electrónico</span>:<br>
+                                <b><span id="emailSpace"></span></b>
+                            </p>
+                            <p>
+                                <span class="text" txt="password">Contraseña</span>:<br>
+                                <b><span id="passwordSpace"></span></b>
+                            </p>
+                            <button class='greenButton text' id="toChangeDataMenuButton" txt="modifyThisData">Modificar estos datos</button>
                         </section>
                         <section>
-                            <button class="greenButton" id="changeLanguage">Cambiar idioma (language)</button>
+                            <button class="greenButton text" id="toChangeLanguageMenuButton" txt="changeLanguage2">Cambiar idioma (language)</button>
                         </section>
                         <section>
-                            <button class="greenButton">Ver quién tiene acceso a esta cuenta</button>
-                            <button class='greenButton'>Cerrar sesión en todos los dispositivos</button>
+                            <button class="greenButton text" txt="whoCanAccess">Ver quién tiene acceso a esta cuenta</button>
+                            <button class='greenButton text' txt="logOutInAll">Cerrar sesión en todos los dispositivos</button>
                         </section>
                         <section>
-                            <button class='greenButton'>Borrar todas las notas</button>
-                            <button class='greenButton'>Eliminar cuenta</button>
+                            <button class='greenButton text' txt="deleteAllNotes">Borrar todas las notas</button>
+                            <button class='greenButton text' txt="deleteAccount">Eliminar cuenta</button>
                         </section>
                         <section>
-                            <button class='greenButton' id="goBackToNotes">Volver</button>
+                            <button class='greenButton text' id="goBackToNotes" txt="back">Volver</button>
                         </section>
                     </p>
                 </div>
 
                 <div id="changeDataMenu" hidden>
-                    <h1>Modificar datos</h1>
+                    <h1 class="text" txt="modifyData">Modificar datos</h1>
                     <p>
                         <section>
-                            <h2>Nombre de usuario</h2>
+                            <h2 class="text" txt="username">Nombre de usuario</h2>
                             <p><input type="text" id="changeUsernameField" placeholder=""></p>
                         </section>
                         <section>
-                            <h2>Correo electrónico</h2>
+                            <h2 class="text" txt="email">Correo electrónico</h2>
                             <p><input type="text" id="changeEmailField" placeholder=""></p>
                         </section>
                         <section>
-                            <h2>Contraseña</h2>
+                            <h2 class="text" txt="password">Contraseña</h2>
                             <p><input type="password" id="changePasswordField" placeholder=""></p>
                             <p><input type="password" id="comprobePasswordField" placeholder="Comprueba la contraseña"></p>
                         </section>
                         <section>
-                            <button class="greenButton" id="saveChangeDataMenu">Guardar cambios</button>
-                            <button class="greenButton" id="goBackChangeDataMenu">Cancelar</button>
+                            <button class="greenButton text" id="saveChangeDataMenu" txt="saveChanges">Guardar cambios</button>
+                            <button class="greenButton text" id="goBackChangeDataMenu" txt="cancel">Cancelar</button>
                         </section>
                     </p>
                 </div>
 
                 <div id="changeDataEmailCodeMenu" hidden>
-                    <h1>Revisa tu correo</h1>
+                    <h1 class="text" txt="checkYourEmail">Revisa tu correo</h1>
                     <p>
                         <section>
-                            Hemos enviado un código al correo <b><span id="changeDataEmailSent">alguien@email.com</span></b> para confirmar los cambios.
+                            <span class="text" txt="codeWeSent">Hemos enviado un código al correo</span>
+                            <b><span id="changeDataEmailSent">someone@email.com</span></b>
                         </section>
                         <section>
-                            <h2>Ingresa el código</h2>
+                            <h2 class="text" txt="enterTheCode">Ingresa el código</h2>
                             <p><input type="text" id="changeDataConfirmCode" placeholder="A1B2C" maxlength="5"></p>
-                            <button class="greenButton" id="changeDataConfirmCodeButton">Comprobar</button>
+                            <button class="greenButton text" id="changeDataConfirmCodeButton" txt="verify">Comprobar</button>
                         </section>
                     </p>
                 </div>
 
+                <div id="changeLanguageMenu" hidden>
+                    <h1 class="text" txt="changeLanguage">Cambiar idioma</h1>
+                    <p>
+                        <section>
+                            <button class="greenButton" id="changeLanguageButton_es">Español</button>
+                            <button class="greenButton" id="changeLanguageButton_en">English</button>
+                        </section>
+                        <section>
+                            <button class="greenButton text" id="changeLanguageButton_cancel" txt="cancel">Cancelar</button>
+                        </section>
+                    </p>
+                </div>
             </div>
         </div>
 

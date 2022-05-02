@@ -25,6 +25,16 @@ body
     display: flex;
 }
 
+button:hover
+{
+    cursor: pointer;
+}
+
+#loadingScreen:hover
+{
+    cursor: wait;
+}
+
 
 
 

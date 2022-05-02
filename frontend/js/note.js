@@ -115,23 +115,6 @@ async function loadNote(name, id)
     }, 15);
 }
 
-//Botón de guardar nota
-document.getElementById('saveButton').addEventListener('click', async function(e)
-{
-    if(!canInteract) return;
-
-    if(!isLocalMode) sayThings.innerText = getText('savingNote');
-
-    const saved = await saveNote();
-    if(saved) sayThings.innerText = getText('saved');
-    else sayThings.innerText = getText('saveFailed');
-
-    setTimeout(() =>
-    {
-        sayThings.innerText = '';
-    },2000);
-});
-
 let theLastTextSave = '';
 let serverDownAdvertisement = false; //Para que no salga el mensaje cada vez cuando el server está caído.
 async function saveNote()
@@ -198,6 +181,23 @@ async function saveNote()
         }
     }
 }
+
+//Botón de guardar nota
+document.getElementById('saveButton').addEventListener('click', async function(e)
+{
+    if(!canInteract) return;
+
+    if(!isLocalMode) sayThings.innerText = getText('savingNote');
+
+    const saved = await saveNote();
+    if(saved) sayThings.innerText = getText('saved');
+    else sayThings.innerText = getText('saveFailed');
+
+    setTimeout(() =>
+    {
+        sayThings.innerText = '';
+    },2000);
+});
 
 //Botón de borrar nota
 document.getElementById('deleteButton').addEventListener('click',(e) =>
@@ -286,32 +286,6 @@ document.getElementById('deleteButton').addEventListener('click',(e) =>
         ]
     });
 });
-
-setInterval(async function()
-{
-    console.log('Intentando guardar automáticamente.');
-    if(!canInteract) return;
-    if(textArea.disabled === true) return;
-    if(theLastTextSave === textArea.value) return;
-    sayThings.innerText = getText('autosave');
-    
-    const saved = await saveNote();
-    if(saved)
-    {
-        sayThings.innerText = getText('saved');
-        console.log('Guardado automáticamente');
-    }
-    else
-    {
-        sayThings.innerText = getText('saveFailed');
-        console.log('Error al guardar automáticamente');
-    }
-
-    setTimeout(function()
-    {
-        sayThings.innerText = '';
-    },2000);
-},60000/*Un minuto*/);
 
 document.getElementById('downloadButton').addEventListener('click', function()
 {
@@ -432,4 +406,35 @@ document.getElementById('renameButton').addEventListener('click', function()
             }
         ]
     });
-;})
+});
+
+setInterval(async function()
+{
+    console.log('Intentando guardar automáticamente.');
+    if(!canInteract) return;
+    if(textArea.disabled === true) return;
+    if(theLastTextSave === textArea.value) return;
+    sayThings.innerText = getText('autosave');
+    
+    const saved = await saveNote();
+    if(saved)
+    {
+        sayThings.innerText = getText('saved');
+        console.log('Guardado automáticamente');
+    }
+    else
+    {
+        sayThings.innerText = getText('saveFailed');
+        console.log('Error al guardar automáticamente');
+    }
+
+    setTimeout(function()
+    {
+        sayThings.innerText = '';
+    },2000);
+},60000/*Un minuto*/);
+
+document.getElementById('saveButton').title = getText('saveNote');
+document.getElementById('deleteButton').title = getText('deleteNote');
+document.getElementById('downloadButton').title = getText('downloadNote');
+document.getElementById('renameButton').title = getText('renameNote');

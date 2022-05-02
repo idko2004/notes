@@ -13,8 +13,10 @@ document.getElementById('changeLanguageButton_es').addEventListener('click', fun
     if(actualMenu !== 'changeLanguage') return;
     hashDelete('lang');
     hashAdd('lang=es');
-    location.reload();
-    //location.href='index.html#lang=es';
+    languageAtStart();
+    actualMenu = 'main';
+    changeLanguageMenu.hidden = true;
+    mainMenu.hidden = false;
 });
 
 document.getElementById('changeLanguageButton_en').addEventListener('click', function()
@@ -22,6 +24,8 @@ document.getElementById('changeLanguageButton_en').addEventListener('click', fun
     if(actualMenu !== 'changeLanguage') return;
     hashDelete('lang');
     hashAdd('lang=en');
-    location.reload();
-    //location.href='index.html#lang=en';
+    languageAtStart();
+    actualMenu = 'main';
+    changeLanguageMenu.hidden = true;
+    mainMenu.hidden = false;
 })

@@ -641,6 +641,26 @@ const allTexts =
     {
         es: 'Tendrás que volver a iniciar sesión en los dispositivos en los que quieras usar Notas, incluido este.',
         en: 'You will need to log in again on the devices you want to use Notes on, including this one.'
+    },
+    saveNote:
+    {
+        es: 'Guardar nota',
+        en: 'Save note'
+    },
+    deleteNote:
+    {
+        es: 'Borrar nota',
+        en: 'Delete note'
+    },
+    downloadNote:
+    {
+        es: 'Descargar nota',
+        en: 'Download note'
+    },
+    renameNote:
+    {
+        es: 'Renombrar nota',
+        en: 'Rename note'
     }
 }
 

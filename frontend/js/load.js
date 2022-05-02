@@ -1,4 +1,4 @@
-languageInHash();
+ElementsInHashAtStart();
 start();
 
 async function start()
@@ -106,12 +106,23 @@ async function start()
     }
 }
 
-function languageInHash()
+function ElementsInHashAtStart()
 {
+    //Idioma
     const hashLang = hashEquals('lang');
     if(hashLang !== undefined)
     {
         saveKey('_lang', hashLang);
         hashDelete('lang');
+        console.log('Idioma guardado mediante hash');
+    }
+
+    //Cerrar sesión
+    if(hashContains('logout'))
+    {
+        deleteKey('_login');
+        theSecretThingThatNobodyHasToKnow = undefined;
+        hashDelete('logout');
+        console.log('Sesión cerrada mediante hash');
     }
 }

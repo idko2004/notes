@@ -135,7 +135,7 @@ const allTexts =
     logginIn:
     {
         es: 'Iniciando sesión...',
-        en: 'Loggin in...'
+        en: 'Logging in...'
     },
     login_none_title:
     {
@@ -210,7 +210,7 @@ const allTexts =
     logginOut:
     {
         es: 'Cerrando sesión...',
-        en: 'Loggin out...'
+        en: 'Logging out...'
     },
     menu_eraseAllLocal_title:
     {
@@ -631,6 +631,16 @@ const allTexts =
     {
         es: 'Comprobar',
         en: 'Verify'
+    },
+    logOutAllQ:
+    {
+        es: '¿Quieres cerrar sesión en todos tus dispotivos?',
+        en: 'Do you want to log out from all your devices?'
+    },
+    logOutAllQ2:
+    {
+        es: 'Tendrás que volver a iniciar sesión en los dispositivos en los que quieras usar Notas, incluido este.',
+        en: 'You will need to log in again on the devices you want to use Notes on, including this one.'
     }
 }
 

@@ -11,6 +11,7 @@ let actualMenu;
 //  changeDataEmailCode
 //  changeDataComprobingCode
 //  changeLanguage
+//  logOutInAll
 //  ventana
 
 const loadingScreen = document.getElementById('loadingScreen');
@@ -20,6 +21,7 @@ const mainMenu = document.getElementById('mainMenu');
 const changeDataMenu = document.getElementById('changeDataMenu');
 const changeDataEmailCodeMenu = document.getElementById('changeDataEmailCodeMenu');
 const changeLanguageMenu = document.getElementById('changeLanguageMenu');
+const logOutInAllMenu = document.getElementById('logOutInAllMenu');
 
 const floatWindow = document.getElementById('floatingWindow');
 const windowTitle = document.getElementById('windowTitle');
@@ -163,6 +165,16 @@ document.getElementById('toChangeLanguageMenuButton').addEventListener('click', 
     actualMenu = 'changeLanguage';
     window.scrollTo(0,0);
 });
+
+document.getElementById('logOutInAllMenuButton').addEventListener('click', function()
+{
+    if(actualMenu !== 'main') return;
+
+    mainMenu.hidden = true;
+    logOutInAllMenu.hidden = false;
+    actualMenu = 'logOutInAll';
+    window.scrollTo(0,0);
+})
 
 document.getElementById('goBackToNotes').addEventListener('click', function()
 {

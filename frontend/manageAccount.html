@@ -17,15 +17,9 @@
         <script defer src="js/manageAccount/manageAccount.js"></script>
         <script defer src="js/manageAccount/changeDataMenu.js"></script>
         <script defer src="js/manageAccount/changeLanguage.js"></script>
+        <script defer src="js/manageAccount/logOutInAllDevices.js"></script>
     </head>
     <body>
-        <div id=loadingScreen>
-            <section>
-                <b class="text" txt="noteAppName">Notas</b>
-                <p id='loadingText' class="text" txt="loading">Cargando...</p>
-            </section>
-        </div>
-
         <div id='mainScreen' hidden>
             <div id='mainScreenNotesBigName'>
                 <b class="text" txt="noteAppName">Notas</b>
@@ -54,7 +48,7 @@
                         </section>
                         <section>
                             <button class="greenButton text" txt="whoCanAccess">Ver quién tiene acceso a esta cuenta</button>
-                            <button class='greenButton text' txt="logOutInAll">Cerrar sesión en todos los dispositivos</button>
+                            <button class='greenButton text' id="logOutInAllMenuButton" txt="logOutInAll">Cerrar sesión en todos los dispositivos</button>
                         </section>
                         <section>
                             <button class='greenButton text' txt="deleteAllNotes">Borrar todas las notas</button>
@@ -116,7 +110,30 @@
                         </section>
                     </p>
                 </div>
+
+                <div id="logOutInAllMenu" hidden>
+                    <h1 class="text" txt="logOutInAll">Cerrar sesión en todos los dispositivos</h1>
+                    <p>
+                        <section>
+                            <h2 class="text" txt="logOutAllQ">¿Quieres cerrar sesión en todos tus dispositivos?</h2>
+                            <span class="text" txt="logOutAllQ2">Tendrás que volver a iniciar sesión en los dispositivos que quieras usar, incluido este.</span>
+                            <p>
+                                <button class="greenButton text" id="logOutInAllOkButton" txt="logOutInAll">Cerrar sesión en todos los dispositivos</button>
+                            </p>
+                        </section>
+                        <section>
+                            <button class="greenButton text" id="logOutInAllCancelButton" txt="cancel">Cancelar</button>
+                        </section>
+                    </p>
+                </div>
             </div>
+        </div>
+
+        <div id=loadingScreen>
+            <section>
+                <b class="text" txt="noteAppName">Notas</b>
+                <p id='loadingText' class="text" txt="loading">Cargando...</p>
+            </section>
         </div>
 
         <div id='floatingWindow' hidden>

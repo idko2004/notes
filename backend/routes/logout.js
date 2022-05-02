@@ -12,7 +12,7 @@ module.exports = function(app)
         console.log('body',req.body);
 
         //Comprobamos si tenemos las cosas
-        if(req.body === undefined)
+        if(Object.keys(req.body).length === 0)
         {
             res.status(400).send({error: 'badRequest'});
             return;

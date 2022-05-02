@@ -13,7 +13,7 @@ module.exports = function(app)
 
         //Comprobamos si tenemos todos los datos necesarios
         //key   noteID
-        if(req.body === undefined)
+        if(Object.keys(req.body).length === 0)
         {
             res.status(400).send({error: 'badRequest'});
             return;

@@ -27,7 +27,7 @@ module.exports = function(app)
         console.log('/createAccountEmailCode');
         console.log('body', req.body);
 
-        if(req.body === undefined)
+        if(Object.keys(req.body).length === 0)
         {
             res.status(400).send({error: 'badRequest'});
             return;
@@ -241,7 +241,7 @@ module.exports = function(app)
         console.log('/createNewAccount');
         console.log('body', req.body);
     
-        if(req.body === undefined)
+        if(Object.keys(req.body).length === 0)
         {
             res.status(400).send({error: 'badRequest'});
             return;
@@ -303,7 +303,7 @@ module.exports = function(app)
         console.log('/updateAccountData');
         console.log('body', req.body);
 
-        if(req.body === undefined)
+        if(Object.keys(req.body).length === 0)
         {
             console.log('badRequest, body = undefined');
             res.status(400).send({error: 'badRequest'});

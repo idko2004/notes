@@ -14,7 +14,7 @@ module.exports = function(app)
 
         //Verificamos si tenemos los datos necesarios
         //key   noteID   newname
-        if(req.body === undefined)
+        if(Object.keys(req.body).length === 0)
         {
             res.status(400).send({error: 'badRequest'});
             return;

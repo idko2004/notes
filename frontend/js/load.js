@@ -1,4 +1,4 @@
-ElementsInHashAtStart();
+elementsInHashAtStart();
 start();
 
 async function start()
@@ -26,6 +26,16 @@ async function start()
         loadingScreen.hidden = true;
         document.getElementById('noteScreen').hidden = true;
         document.getElementById('loginScreen').hidden = false;
+        floatingWindow(
+        {
+            title: 'Aún estamos en desarrollo',
+            text: 'Por el momento sólo está disponible el modo local.',
+            button:
+            {
+                text: getText('ok'),
+                callback: closeWindow
+            }
+        });
     }
     else if(login === 'local')
     {
@@ -106,7 +116,7 @@ async function start()
     }
 }
 
-function ElementsInHashAtStart()
+function elementsInHashAtStart()
 {
     //Idioma
     const hashLang = hashEquals('lang');

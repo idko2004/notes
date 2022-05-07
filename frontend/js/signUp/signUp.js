@@ -1,5 +1,4 @@
 const path = 'http://localhost:3000';
-const titleTextIDLang = 'createAccountNotes';
 
 let step = 0;
 
@@ -48,7 +47,9 @@ async function comprobeServerWorks()
 {
     try
     {
+        console.log('pingeando server');
         const ping = await axios.get(`${path}/ping`);
+        console.log(ping);
         if(ping.data === 'pong!') displayNextStep();
     }
     catch
@@ -57,6 +58,7 @@ async function comprobeServerWorks()
         setTinyText(getText('serverDown'));
         reloadButton.hidden = false;
     }
+    document.getElementById('loadIcon').hidden = true;
 }
 
 //Step 0 = email

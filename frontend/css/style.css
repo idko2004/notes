@@ -35,7 +35,26 @@ button:hover
     cursor: wait;
 }
 
+#loadingIcon
+{
+    height: 4rem;
+    animation-name: loadingIconSpin;
+    animation-duration: 500ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
 
+@keyframes loadingIconSpin
+{
+    from
+    {
+        transform:rotate(0deg);
+    }
+    to
+    {
+        transform:rotate(360deg);
+    }
+}
 
 
 /*=====================================================

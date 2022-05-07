@@ -9,16 +9,18 @@
         <link rel='stylesheet' type='text/css' href='css/style.css'>
         <link rel='stylesheet' type='text/css' href='css/signUp.css'>
 
+        <script>const titleTextIDLang = 'createAccountNotes';</script>
         <script defer src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <script defer src="js/signUp/signUp.js"></script>
         <script defer src="js/localStorage.js"></script>
         <script defer src="js/hash.js"></script>
         <script defer src="js/language.js"></script>
+        <script defer src="js/signUp/signUp.js"></script>
     </head>
     <body>
         <article>
             <h1 class="text" txt="createAccount">Crear cuenta</h1>
-            <div id="text" class="text" txt="loading">Cargando...</div>
+            <div id="loadIcon"><img src="img/load.svg" id="loadingIcon"></div>
+            <div id="text" class="text" txt="loading"></div>
             <div id="tinyText" hidden></div>
             <div><input id="inputField" type="text" placeholder="..." hidden></div>
             <div><button id="nextButton" class="text" txt="next" hidden>Siguiente</button></div>

@@ -10,7 +10,7 @@ module.exports = function(app)
     app.post('/createNewNote', jsonParser, async function(req, res)
     {
         console.log('------------------------------------------------');
-        console.log('/createNewNote');
+        console.log('\033[1;34m/createNewNote\033[0m');
         console.log('body',req.body);
 
         //Verificamos si se tienen todos los requerimientos

@@ -6,6 +6,7 @@ const menuEraseAll = document.getElementById('menuEraseAll');
 const menuOnlineManageAccount = document.getElementById('menuOnlineManageAccount');
 const menuOnlineLogOut = document.getElementById('menuOnlineLogOut');
 const menuOnlineChangeToLocal = document.getElementById('menuOnlineChangeToLocal');
+const menuChangeLanguage = document.getElementById('menuChangeLanguage');
 
 async function menuButtonText()
 {
@@ -16,6 +17,7 @@ async function menuButtonText()
 
         menuExitLocalMode.hidden = false;
         menuEraseAll.hidden = false;
+        menuChangeLanguage.hidden = false;
 
         menuOnlineLogOut.hidden = true;
         menuOnlineManageAccount.hidden = true;
@@ -27,21 +29,43 @@ async function menuButtonText()
 
         menuExitLocalMode.hidden = true;
         menuEraseAll.hidden = true;
+        menuChangeLanguage.hidden = true;
 
         menuOnlineLogOut.hidden = false;
         menuOnlineManageAccount.hidden = false;
         menuOnlineChangeToLocal.hidden = false;
 
         //Obtener nombre de usuario
-        const response = await axios.get(`${path}/getUsername`, {headers: {key: theSecretThingThatNobodyHasToKnow}});
-        menuButton.innerText = response.data.username;
-        menuTitleText.innerText = response.data.username;
+        try
+        {
+            const response = await axios.get(`${path}/getUsername`, {headers: {key: theSecretThingThatNobodyHasToKnow}});
+            menuButton.innerText = response.data.username;
+            menuTitleText.innerText = response.data.username;
+        }
+        catch
+        {
+            menuButton.innerText = getText('someoneAccount');
+            menu.innerText = getText('someoneAccount');
+        }
     }
 }
+
+menuButton.addEventListener('click', function()
+{
+    floatingMenu.hidden = false;
+    canInteract = false;
+});
+
+closeMenuButton.addEventListener('click', function()
+{
+    floatingMenu.hidden = true;
+    canInteract = true;
+});
 
 //Botón de cerrar sesión
 menuOnlineLogOut.addEventListener('click', async function()
 {
+    if(isLocalMode) return;
     deleteKey('_login');
 
     floatingMenu.hidden = true;
@@ -62,15 +86,19 @@ menuOnlineLogOut.addEventListener('click', async function()
     location.reload();
 });
 
+//Botón de cambiar a modo local
 menuOnlineChangeToLocal.addEventListener('click', function()
 {
-    hashAdd('local') //TODO: hashAdd
+    if(isLocalMode) return;
+    hashAdd('local');
     location.reload();
 });
 
 //Botón de gestionar cuenta
 menuOnlineManageAccount.addEventListener('click', async function()
 {
+    if(isLocalMode) return;
+
     document.getElementById('noteScreen').hidden = true;
     floatingMenu.hidden = true;
     loadingScreen.hidden = false;
@@ -80,19 +108,8 @@ menuOnlineManageAccount.addEventListener('click', async function()
     location.href = `manageAccount.html#lang=${actualLanguage}`;
 });
 
-menuButton.addEventListener('click', function()
-{
-    floatingMenu.hidden = false;
-    canInteract = false;
-});
-
-closeMenuButton.addEventListener('click', function()
-{
-    floatingMenu.hidden = true;
-    canInteract = true;
-});
-
-menuExitLocalMode.addEventListener('click', function()
+//Botón de salir del modo local
+menuExitLocalMode.addEventListener('click', async function()
 {
     if(hashContains('local'))
     {
@@ -101,7 +118,7 @@ menuExitLocalMode.addEventListener('click', function()
         return;
     }
 
-    saveNote();
+    await saveNote();
     document.getElementById('noteScreen').hidden = true;
     notesList.innerHTML = '';
     noteName.innerText = getText('clickANote');
@@ -117,8 +134,34 @@ menuExitLocalMode.addEventListener('click', function()
     canInteract = true;
 });
 
+//Botón de cambiar de idioma en modo local
+menuChangeLanguage.addEventListener('click', function()
+{
+    if(!isLocalMode) return;
+
+    saveNote();
+    switch(actualLanguage)
+    {
+        case 'es':
+            saveKey('_lang', 'en');
+            break;
+
+        case 'en':
+            saveKey('_lang', 'es');
+            break;
+
+        default:
+            saveKey('_lang', 'en');
+            break;
+    }
+    location.reload();
+});
+
+//Botón borrar todas las notas
 menuEraseAll.addEventListener('click', function()
 {
+    if(!isLocalMode) return;
+
     floatingMenu.hidden = true;
     if(theSecretThingThatNobodyHasToKnow === 'local') floatingWindow(
     {

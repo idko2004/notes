@@ -22,11 +22,13 @@ aside
     border-radius: 10px;
     padding: 0.3rem;
     /*width: 3ch;*/
+    transition: all ease 100ms;
 }
 
 #newNote:hover
 {
     background-color: var(--green-hover);
+    transition: all ease 100ms;
 }
 
 #newNoteField
@@ -111,6 +113,7 @@ aside
     white-space: nowrap;
     overflow: hidden;
     line-height: 1rem;
+    transition: all ease 70ms;
 }
 
 .noteSelected
@@ -122,6 +125,7 @@ aside
 .noteListButton:focus,
 .noteSelected
 {
+    transition: all ease 70ms;
     background-color: var(--green);
     color: white;
 }

@@ -84,8 +84,8 @@ const allTexts =
     },
     manageAccount:
     {
-        es: 'Gestionar cuenta',
-        en: 'Manage account'
+        es: 'Preferencias y datos de la cuenta',
+        en: 'Preferences and account data'
     },
     menu_localNotes:
     {
@@ -524,8 +524,8 @@ const allTexts =
     },
     manageAccountNotes:
     {
-        es: 'Gestionar cuenta | Notas',
-        en: 'Manage account | Notes'
+        es: 'Preferencias y datos de la cuenta | Notas',
+        en: 'Preferences and account data | Notes'
     },
     modifyThisData:
     {
@@ -564,8 +564,8 @@ const allTexts =
     },
     modifyData:
     {
-        es: 'Modificar información de la cuenta',
-        en: 'Modify account information'
+        es: 'Modificar datos de la cuenta',
+        en: 'Modify account data'
     },
     saveChanges:
     {

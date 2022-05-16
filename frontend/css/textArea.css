@@ -52,6 +52,7 @@ article
     border-radius: 10px;
     padding: 0 0.3rem;
     margin: 0 0.3rem;
+    transition: all ease 100ms;
 }
 
 #topBarButtons img, #leftTotheNoteNameButtons img
@@ -62,35 +63,39 @@ article
 #topBarButtons .bg-green:hover, #leftToTheNoteNameButtons .bg-green:hover
 {
     background-color: var(--green);
+    transition: all ease 100ms;
 }
 
 #topBarButtons .bg-red:hover
 {
     background-color: rgb(255, 98, 98);
+    transition: all ease 100ms;
 }
 
 textarea
 {
-    min-height: 70vh;
-    height: 95%;
+    height: 80vh;
     padding: 0.5rem;
     margin: 0.5rem;
-    border: 2px solid var(--green);
+    border: 2px solid var(--gray);
     border-radius: 10px;
     font-family: var(--rubik);
     font-size: 1rem;
     resize: none;
+    caret-color: var(--green-hover);
+    transition: all ease 100ms;
 }
 
 textarea:disabled
 {
     border-color: var(--gray);
     background-color: var(--gray);
+    transition: all ease 100ms;
 }
 
 textarea:focus
 {
-    outline-style: solid;
-    outline-offset: 2px;
-    outline-color: var(--green);
+    outline-style: none;
+    border: 2px solid var(--green);
+    transition: all ease 100ms;
 }

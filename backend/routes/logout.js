@@ -8,7 +8,7 @@ module.exports = function(app)
     app.post('/logout', jsonParser, async function(req, res)
     {
         console.log('------------------------------------------------');
-        console.log('/logout');
+        console.log('\033[1;34m/logout\033[0m');
         console.log('body',req.body);
 
         //Comprobamos si tenemos las cosas
@@ -45,7 +45,7 @@ module.exports = function(app)
     app.post('/logoutalldevices', jsonParser, async function(req, res)
     {
         console.log('------------------------------------------------');
-        console.log('/logoutalldevices');
+        console.log('\033[1;34m/logoutalldevices\033[0m');
         console.log('body',req.body);
 
         //Comprobar si tenemos los datos necesarios

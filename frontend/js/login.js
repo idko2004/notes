@@ -95,7 +95,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
             loadingScreen.hidden = false;
             canClick_login = true;
     
-            loadNotesList();
+            await loadNotesList();
             menuButtonText();
             resizeTwice();
         }

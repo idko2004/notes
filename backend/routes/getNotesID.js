@@ -5,7 +5,7 @@ module.exports = function(app)
     app.get('/getNotesID', async function(req, res)
     {
         console.log('------------------------------------------------');
-        console.log('/getNotesID');
+        console.log('\033[1;34m/getNotesID\033[0m');
         console.log('header',req.headers);
     
         //Comprobar el userID para identificar al usuario y obtener sus notesID.

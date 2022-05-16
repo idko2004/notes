@@ -9,7 +9,7 @@ module.exports = function(app)
     app.post('/renameNote', jsonParser, async function(req, res)
     {
         console.log('------------------------------------------------');
-        console.log('/renameNote');
+        console.log('\033[1;34m/renameNote\033[0m');
         console.log('body',req.body);
 
         //Verificamos si tenemos los datos necesarios

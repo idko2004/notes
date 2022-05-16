@@ -5,7 +5,7 @@ module.exports = function(app)
     app.get('/getUsername', async function(req, res)
     {
         console.log('------------------------------------------------');
-        console.log('/getUsername');
+        console.log('\033[1;34m/getUsername\033[0m');
         console.log('header',req.headers);
     
         //Comprobamos si existen los requisitos

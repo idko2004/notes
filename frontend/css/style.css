@@ -17,11 +17,7 @@ body
 
 #allContainer
 {
-    /*border: 1px solid red;*/
-    /*min-width: 700px;*/
-    max-width: 1500px;
-    height: max-content;
-    margin: auto;
+    margin: 0;
     display: flex;
 }
 
@@ -33,6 +29,18 @@ button:hover
 #loadingScreen:hover
 {
     cursor: wait;
+}
+
+::-moz-selection
+{ /* Code for Firefox */
+    color: white;
+    background: var(--green-hover);
+}
+  
+::selection
+{
+    color: white;
+    background: var(--green-hover);
 }
 
 #loadingIcon

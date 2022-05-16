@@ -24,7 +24,7 @@ module.exports = function(app)
     app.post('/createAccountEmailCode', jsonParser, async function(req, res)
     {
         console.log('------------------------------------------------');
-        console.log('/createAccountEmailCode');
+        console.log('\033[1;34m/createAccountEmailCode\033[0m');
         console.log('body', req.body);
 
         if(Object.keys(req.body).length === 0)
@@ -238,7 +238,7 @@ module.exports = function(app)
     app.post('/createNewAccount', jsonParser, async function(req, res)
     {
         console.log('------------------------------------------------');
-        console.log('/createNewAccount');
+        console.log('\033[1;34m/createNewAccount\033[0m');
         console.log('body', req.body);
     
         if(Object.keys(req.body).length === 0)
@@ -300,7 +300,7 @@ module.exports = function(app)
     app.post('/updateAccountData', jsonParser, async function(req, res)
     {
         console.log('------------------------------------------------');
-        console.log('/updateAccountData');
+        console.log('\033[1;34m/updateAccountData\033[0m');
         console.log('body', req.body);
 
         if(Object.keys(req.body).length === 0)

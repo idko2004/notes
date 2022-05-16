@@ -25,9 +25,11 @@ nav
     background-color: transparent;
     border: 0;
     border-radius: 10px;
+    transition: all ease 100ms;
 }
 
 #menuButton:hover
 {
     background-color: var(--green-hover);
+    transition: all ease 100ms;
 }

@@ -58,7 +58,7 @@ async function start()
             const response = await axios.get(`${path}/iHaveAValidKey`, {headers:{key: login}});
             if(response.data.iHaveAValidKey === 'yesYouHave')
             {
-                loadNotesList();
+                await loadNotesList();
                 menuButtonText();
                 resizeTwice();
             }

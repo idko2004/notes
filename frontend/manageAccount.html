@@ -21,6 +21,13 @@
         <script defer src="js/manageAccount/logOutInAllDevices.js"></script>
     </head>
     <body>
+        <div id=loadingScreen>
+            <section>
+                <b><span class='text' txt="noteAppName">Notas</span></b>
+                <h2 class="text" txt="loading">Loading the load screen...</h2>
+            </section>
+        </div>
+        
         <div id='mainScreen' hidden>
             <div id='mainScreenNotesBigName'>
                 <b class="text" txt="noteAppName">Notas</b>
@@ -126,13 +133,6 @@
                     </p>
                 </div>
             </div>
-        </div>
-
-        <div id=loadingScreen>
-            <section>
-                <b><span class='text' txt="noteAppName">Notas</span></b>
-                <div><img src="img/load.svg" id="loadingIcon"></div>
-            </section>
         </div>
 
         <div id='floatingWindow' hidden>

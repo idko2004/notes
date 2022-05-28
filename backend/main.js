@@ -1,4 +1,4 @@
-console.log('Iniciando servidor');
+console.log('\033[1;33mIniciando servidor\033[0m');
 
 const express = require('express');
 const cors = require('cors');
@@ -13,6 +13,7 @@ require('./routes/getNotesID')(app);
 require('./routes/getUsername')(app);
 require('./routes/getSessionID')(app);
 require('./routes/createNewAccount')(app);
+require('./routes/deleteAccount')(app);
 require('./routes/iHaveAValidKey')(app);
 require('./routes/saveNote')(app);
 require('./routes/createNewNote')(app);

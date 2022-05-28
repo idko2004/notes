@@ -661,6 +661,16 @@ const allTexts =
     {
         es: 'Renombrar nota',
         en: 'Rename note'
+    },
+    deleteTheAccount:
+    {
+        es: 'Borrar la cuenta %',
+        en: "Delete %'s account"
+    },
+    accountDeleted:
+    {
+        es: 'Tu cuenta ha sido eliminada.',
+        en: 'Your account has been deleted.'
     }
 }
 

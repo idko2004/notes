@@ -19,14 +19,6 @@
         <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro&display=swap" rel="stylesheet"> 
         <style>
-            .ThingContainer
-            {
-                --green: #53b56a;
-                --green-hover: #479b5b;
-                --gray: #eeeeee;
-                --rubik: 'Rubik', sans-serif;
-            }
-
             .loginScreenBigName
             {
                 font-size: 4rem;
@@ -82,6 +74,18 @@
                 word-wrap: break-word;
             }
 
+            .ThingData
+            {
+                font-family: 'Rubik', sans-serif;
+                font-size: 1rem;
+                text-align: center;
+                color: #000000;
+                background-color: #eeeeee;
+                border-radius: 10px;
+                padding: 0.7rem;
+                margin: 0.5rem;
+            }
+
             a
             {
                 color: #53b56a;
@@ -94,15 +98,18 @@
             <b>Notas</b>
         </div>
         <h2 class=" ThingText">
-            El código para crear su cuenta:
+            Borrar cuenta
         </h2>
+        <div class=" ThingData">
+            La cuenta vinculada al correo electrónico <b>{EMAIL_HERE}</b> será eliminada. Para confirmar la operación introduzca este código en la aplicación:
+        </div>
         <div class=" ThingCodeBox">
             <span class=" ThingCodeHere">
                 <b>{CODE_HERE}</b>
             </span>
         </div>
         <div class=" ThingFootText">
-            Este código fue enviado desde <a href="http://idko.infinityfreeapp.com/notas">http://idko.infinityfreeapp.com/notas</a> para confirmar la creación de una cuenta de usuario. Si usted no solicitó este correo electrónico no es necesario que haga absolutamente nada.
+            Este código fue enviado desde <a href="http://idko.infinityfreeapp.com/notas">http://idko.infinityfreeapp.com/notas</a> para confirmar el cierre de una cuenta. Si usted no solicitó este correo electrónico no es necesario que haga absolutamente nada.
         </div>
         </div>
     </body>

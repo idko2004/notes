@@ -36,7 +36,7 @@ module.exports = function(app)
         //Verificamos que tenemos los datos necesarios
         //email   password   username   operation   oldemail(en caso de updateAccount)
         const accountEmail = req.body.email;
-        const oldEmail = req.body.oldemail;
+        let oldEmail = req.body.oldemail;
         const accountPassword = req.body.password;
         const accountUsername = req.body.username;
         const accountOperation = req.body.operation;
@@ -188,7 +188,8 @@ module.exports = function(app)
             }
         }
 
-        database.createElement('emailCodes', newElement);
+        const dbCreateEmailCode = await database.createElement('emailCodes', newElement);
+        console.log('Código añadido a la base de datos', dbCreateEmailCode);
 
         //Cargamos el html y lo modificamos para poner el código en él
         let mailContent;

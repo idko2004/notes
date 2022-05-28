@@ -20,29 +20,29 @@ async function createElement(collection, element)
     const database = mdbClient.db('Notes');
     const theCollection = database.collection(collection);
     const result = await theCollection.insertOne(element);
-    console.log('**Elemento creado en la base de datos**', result);
+    console.log('\033[1;32m**Elemento creado en la base de datos**\033[0m', result);
     return result;
 }
 
 async function updateElement(collection, objQuery, newElement)
 {
-    console.log('**Actualizando elementos**', collection);
+    console.log('\033[1;32m**Actualizando elementos**\033[0m', collection);
     await mdbClient.connect();
     const database = mdbClient.db('Notes');
     const theCollection = database.collection(collection);
     const result = await theCollection.findOneAndUpdate(objQuery, {$set: newElement});
-    console.log('**Base de datos actualizada**', collection, result.ok);
+    console.log('\033[1;32m**Base de datos actualizada**\033[0m', collection, result.ok);
     return result.ok;
 }
 
 async function updateMultipleElements(collection, objQuery, toReplace)
 {
-    console.log('**Actualizando múltiples elementos en la base de datos**');
+    console.log('\033[1;32m**Actualizando múltiples elementos en la base de datos**\033[0m');
     await mdbClient.connect();
     const database = mdbClient.db('Notes');
     const theCollection = database.collection(collection);
     const result = await theCollection.updateMany(objQuery, {$set: toReplace});
-    console.log('**Múltiples elementos actualizados en la base de datos**', result.modifiedCount);
+    console.log('\033[1;32m**Múltiples elementos actualizados en la base de datos**\033[0m', result.modifiedCount);
     return result.modifiedCount;
 }
 
@@ -52,7 +52,7 @@ async function deleteElement(collection, objQuery)
     const database = mdbClient.db('Notes');
     const theCollection = database.collection(collection);
     const result = await theCollection.deleteOne(objQuery);
-    console.log('**Elemento borrado en la base de datos**', result);
+    console.log('\033[1;32m**Elemento borrado en la base de datos**\033[0m', result);
     return result;
 }
 
@@ -62,7 +62,7 @@ async function deleteMultipleElements(collection, objQuery)
     const database = mdbClient.db('Notes');
     const theCollection = database.collection(collection);
     const result = await theCollection.deleteMany(objQuery);
-    console.log('**Multiples elementos borrados de la base de datos**', result);
+    console.log('\033[1;32m**Multiples elementos borrados de la base de datos**\033[0m', result);
     return result;
 }
 
@@ -104,18 +104,18 @@ function resetSessionIDList()
 async function upDate(element)
 {
     if(element === null) return;
-    console.log('//upDate//');
-    console.log('//Fecha guardada//',element.date.d, element.date.m, element.date.y);
+    console.log('\033[1;32m//upDate//\033[0m');
+    console.log('\033[1;32m//Fecha guardada//\033[0m',element.date.d, element.date.m, element.date.y);
 
     const today = new Date();
     const day = today.getUTCDate();
     const month = today.getUTCMonth() + 1;
     const year = today.getUTCFullYear();
-    console.log('//Fecha de hoy//', day, month, year);
+    console.log('\033[1;32m//Fecha de hoy//\033[0m', day, month, year);
 
     if(year > element.date.y)
     {
-        console.log('//El año ha cambiado//');
+        console.log('\033[1;32m//El año ha cambiado//\033[0m');
 
         element.date.y = year;
         element.date.m = month;
@@ -126,7 +126,7 @@ async function upDate(element)
     }
     else if(month > element.date.m)
     {
-        console.log('//El mes ha cambiado//');
+        console.log('\033[1;32m//El mes ha cambiado//\033[0m');
 
         element.date.m = month;
         element.date.d = day;
@@ -136,7 +136,7 @@ async function upDate(element)
     }
     else if(day > element.date.d)
     {
-        console.log('//El día ha cambiado//');
+        console.log('\033[1;32m//El día ha cambiado//\033[0m');
 
         element.date.d = day;
 

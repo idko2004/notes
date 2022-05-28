@@ -12,6 +12,8 @@ let actualMenu;
 //  changeDataComprobingCode
 //  changeLanguage
 //  logOutInAll
+//  deleteAccount
+//  deleteAccountEmailCode
 //  ventana
 
 const loadingScreen = document.getElementById('loadingScreen');
@@ -22,6 +24,8 @@ const changeDataMenu = document.getElementById('changeDataMenu');
 const changeDataEmailCodeMenu = document.getElementById('changeDataEmailCodeMenu');
 const changeLanguageMenu = document.getElementById('changeLanguageMenu');
 const logOutInAllMenu = document.getElementById('logOutInAllMenu');
+const deleteAccountMenu = document.getElementById('deleteAccountMenu');
+const deleteAccountEmailCodeMenu = document.getElementById('deleteAccountEmailCodeMenu');
 
 const floatWindow = document.getElementById('floatingWindow');
 const windowTitle = document.getElementById('windowTitle');
@@ -174,7 +178,18 @@ document.getElementById('logOutInAllMenuButton').addEventListener('click', funct
     logOutInAllMenu.hidden = false;
     actualMenu = 'logOutInAll';
     window.scrollTo(0,0);
-})
+});
+
+document.getElementById('deleteAccountMenuButton').addEventListener('click', function()
+{
+    if(actualMenu !== 'main') return;
+
+    mainMenu.hidden = true;
+    updateDeleteAccountPlaceholders();
+    deleteAccountMenu.hidden = false;
+    actualMenu = 'deleteAccount';
+    window.scrollTo(0,0);
+});
 
 document.getElementById('goBackToNotes').addEventListener('click', function()
 {

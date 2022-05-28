@@ -136,6 +136,9 @@ function floatingWindow(elements)
 
 function closeWindow()
 {
+    canInteract = true;
+    thereIsAWindows = false;
+
     floatWindow.hidden = true;
     windowTitle.innerText = '';
     windowText.innerText = '';
@@ -145,6 +148,4 @@ function closeWindow()
     if(textInputCallback !== null) windowInput.children[0].removeEventListener('keypress', textInputCallback);
     textInputCallback = null;
 
-    canInteract = true;
-    thereIsAWindows = false;
 }

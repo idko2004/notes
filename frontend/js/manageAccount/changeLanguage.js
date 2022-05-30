@@ -13,6 +13,7 @@ document.getElementById('changeLanguageButton_es').addEventListener('click', fun
     if(actualMenu !== 'changeLanguage') return;
     hashDelete('lang');
     hashAdd('lang=es');
+    thingsChanged.lang = 'es';
     languageAtStart();
     actualMenu = 'main';
     changeLanguageMenu.hidden = true;
@@ -24,6 +25,7 @@ document.getElementById('changeLanguageButton_en').addEventListener('click', fun
     if(actualMenu !== 'changeLanguage') return;
     hashDelete('lang');
     hashAdd('lang=en');
+    thingsChanged.lang = 'en';
     languageAtStart();
     actualMenu = 'main';
     changeLanguageMenu.hidden = true;

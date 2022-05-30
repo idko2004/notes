@@ -2,6 +2,8 @@ const path = 'http://localhost:3000';
 
 let step = 0;
 
+//TODO: al ingresar el código que se ponga en mayúsculas automáticamente, revisar error que sale en la consola al cargar la página
+
 let username;
 let email;
 let password;
@@ -29,9 +31,10 @@ const changeEmailButton = document.getElementById('changeEmailButton');
 const reloadButton = document.getElementById('reloadButton');
 
 nextButton.addEventListener('click', comprobeThisStep);
-inputField.addEventListener('keydown', function(e)
+inputField.addEventListener('keyup', function(e)
 {
     if(e.key === 'Enter') comprobeThisStep();
+    else if(step === 4) e.target.value = e.target.value.toUpperCase();
 });
 
 backButton.addEventListener('click', goBack);
@@ -58,7 +61,6 @@ async function comprobeServerWorks()
         setTinyText(getText('serverDown'));
         reloadButton.hidden = false;
     }
-    document.getElementById('loadIcon').hidden = true;
 }
 
 //Step 0 = email

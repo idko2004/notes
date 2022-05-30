@@ -85,6 +85,6 @@ module.exports = function(app)
         console.log('Perfil actualizado', userProfileSaved);
 
         //Respondemos al cliente
-        res.status(200).send({deleted: true, status1: deleted, status2: userProfileSaved});
+        res.status(200).send({deleted: true});
     });
 }

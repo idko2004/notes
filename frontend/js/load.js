@@ -7,6 +7,13 @@ async function start()
     let login = theSecretThingThatNobodyHasToKnow;
     console.log(login);
 
+    ////Guardar las notas localmente
+    const localCopyKey = getKey('_localCopy');
+    if(localCopyKey === 'true') localCopy = true;
+    else if(localCopyKey === 'false') localCopy = false;
+    else localCopy = true;
+    ////
+
     if(hashContains('local'))
     {
         theSecretThingThatNobodyHasToKnow = 'local';
@@ -21,7 +28,7 @@ async function start()
 
         menuButtonText();
     }
-    else if(login === null || login === undefined || login === 'undefined')
+    else if([null, undefined, 'undefined', '']. includes(login))
     {
         loadingScreen.hidden = true;
         document.getElementById('noteScreen').hidden = true;
@@ -55,9 +62,10 @@ async function start()
         isLocalMode = false;
         try
         {
-            const response = await axios.get(`${path}/iHaveAValidKey`, {headers:{key: login}});
+            const response = await axios.get(`${path}/iHaveAValidKey`, {headers: {key: login}});
             if(response.data.iHaveAValidKey === 'yesYouHave')
             {
+                checkLocalCopyValue();
                 await loadNotesList();
                 menuButtonText();
                 resizeTwice();
@@ -127,6 +135,15 @@ function elementsInHashAtStart()
         console.log('Idioma guardado mediante hash');
     }
 
+    //Copias de notas locales
+    const hashLocalCopy = hashEquals('localcopy');
+    if(hashLocalCopy !== undefined)
+    {
+        saveKey('_localCopy', hashLocalCopy);
+        hashDelete('localcopy');
+        console.log('Configuración de notas locales cambiada mediante hash');
+    }
+
     //Cerrar sesión
     if(hashContains('logout'))
     {
@@ -135,4 +152,12 @@ function elementsInHashAtStart()
         hashDelete('logout');
         console.log('Sesión cerrada mediante hash');
     }
+}
+
+function checkLocalCopyValue()
+{
+    const localCopyKey = getKey('_localCopy');
+    if(localCopyKey === 'true') localCopy = true;
+    else if(localCopyKey === 'false') localCopy = false;
+    else localCopy = true;
 }

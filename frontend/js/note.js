@@ -135,7 +135,7 @@ async function saveNote()
     else
     {
         if(noteID === undefined) return console.error('No se pudo guardar la nota, noteID undefined');
-        saveKey(name, value);
+        if(localCopy) saveKey(name, value);
 
         try
         {

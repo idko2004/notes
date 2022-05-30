@@ -90,6 +90,7 @@ menuOnlineLogOut.addEventListener('click', async function()
 menuOnlineChangeToLocal.addEventListener('click', function()
 {
     if(isLocalMode) return;
+    localCopy = undefined;
     hashAdd('local');
     location.reload();
 });
@@ -105,6 +106,7 @@ menuOnlineManageAccount.addEventListener('click', async function()
 
     await saveNote();
     saveCookie('_login', theSecretThingThatNobodyHasToKnow);
+    saveCookie('_localCopy', localCopy);
     location.href = `manageAccount.html#lang=${actualLanguage}`;
 });
 

@@ -4,6 +4,12 @@ let username;
 let email;
 let passwordLength;
 let theSecretThingThatNobodyHaveToKnow;
+let saveNotesLocally;
+const thingsChanged =
+{
+    lang: undefined,
+    localCopy: undefined
+}
 
 let actualMenu;
 //  main
@@ -14,6 +20,7 @@ let actualMenu;
 //  logOutInAll
 //  deleteAccount
 //  deleteAccountEmailCode
+//  localCopy
 //  ventana
 
 const loadingScreen = document.getElementById('loadingScreen');
@@ -26,6 +33,7 @@ const changeLanguageMenu = document.getElementById('changeLanguageMenu');
 const logOutInAllMenu = document.getElementById('logOutInAllMenu');
 const deleteAccountMenu = document.getElementById('deleteAccountMenu');
 const deleteAccountEmailCodeMenu = document.getElementById('deleteAccountEmailCodeMenu');
+const localCopyMenu = document.getElementById('localCopyMenu');
 
 const floatWindow = document.getElementById('floatingWindow');
 const windowTitle = document.getElementById('windowTitle');
@@ -42,8 +50,9 @@ start();
 async function start()
 {
     theSecretThingThatNobodyHaveToKnow = getSpecificCookie('_login');
+    saveNotesLocally = getSpecificCookie('_localCopy');
 
-    if(theSecretThingThatNobodyHaveToKnow === null)
+    if([theSecretThingThatNobodyHaveToKnow, saveNotesLocally].includes(null))
     {
         loadingScreen.hidden = true;
         floatingWindow(
@@ -170,6 +179,19 @@ document.getElementById('toChangeLanguageMenuButton').addEventListener('click', 
     window.scrollTo(0,0);
 });
 
+document.getElementById('toLocalCopyMenuButton').addEventListener('click', function()
+{
+    if(actualMenu !== 'main') return;
+    
+    mainMenu.hidden = true;
+
+    updateLocalCopyEnabledText();
+
+    localCopyMenu.hidden = false;
+    actualMenu = 'localCopy';
+    window.scrollTo(0,0);
+});
+
 document.getElementById('logOutInAllMenuButton').addEventListener('click', function()
 {
     if(actualMenu !== 'main') return;
@@ -195,5 +217,18 @@ document.getElementById('goBackToNotes').addEventListener('click', function()
 {
     mainScreen.hidden = true;
     loadingScreen.hidden = false;
-    location.href = `index.html#lang=${hashEquals('lang')}`;
+
+    if(thingsChanged.lang !== undefined && thingsChanged.localCopy !== undefined)
+    {
+        location.href = `index.html#lang=${thingsChanged.lang};localcopy=${thingsChanged.localCopy}`;
+    }
+    else if(thingsChanged.lang !== undefined)
+    {
+        location.href = `index.html#lang=${thingsChanged.lang}`;
+    }
+    else if(thingsChanged.localCopy !== undefined)
+    {
+        location.href = `index.html#localcopy=${thingsChanged.localCopy}`;
+    }
+    else location.href = 'index.html';
 });

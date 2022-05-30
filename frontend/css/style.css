@@ -1,6 +1,7 @@
 /*=====================================================
 ====================GENERAL============================
 =======================================================*/
+
 html
 {
     --green: #53b56a;
@@ -77,4 +78,9 @@ button:hover
 {
     /*Elementos con el display cambiado por algún motivo no se ocultan.*/
     display: none;
+}
+
+.justified
+{
+    text-align: justify;
 }

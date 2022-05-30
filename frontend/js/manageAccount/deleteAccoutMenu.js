@@ -188,3 +188,12 @@ document.getElementById('confirmDeleteAccount').addEventListener('click', async 
         });
     }
 });
+
+document.getElementById('deleteAccountCodeInput').addEventListener('keyup', function(e)
+{
+    if(e.key === 'Enter')
+    {
+        document.getElementById('confirmDeleteAccount').click();
+    }
+    else e.target.value = e.target.value.toUpperCase();
+});

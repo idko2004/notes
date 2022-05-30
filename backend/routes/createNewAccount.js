@@ -70,6 +70,7 @@ module.exports = function(app)
             //Buscar si el usuario ha realizado una petición anteriormente, en caso de hacerlo borrar las peticiones que haya hecho para que no hayan conflictos. Usando oldEmail como filtro de búsqueda.
             console.log('Se van a borrar peticiones realizadas anteriormente');
             await database.deleteMultipleElements('emailCodes', {oldEmail});
+            await database.deleteMultipleElements('emailCodes', {email: oldEmail});
             console.log('Peticiones anteriores borradas');
         }
 
@@ -209,7 +210,7 @@ module.exports = function(app)
             mailContent = mailContent.replace('{USERNAME_HERE}', accountUsername);
 
             let pswrd = '';
-            if(accountPassword === '') pswrd = '(Sin modificar)'
+            if(accountPassword === '') pswrd = '(La misma de antes, sin cambios)'
             else for(let i = 0; i < accountPassword.length; i++) pswrd += '*';
             
             mailContent = mailContent.replace('{PASSWORD_HERE}', pswrd);
@@ -312,11 +313,12 @@ module.exports = function(app)
         }
 
         //Comprobamos si tenemos todos los datos
-        //code
+        //code key
         let code = req.body.code;
-        if(code === undefined)
+        const key = req.body.key;
+        if(code === undefined || key === undefined)
         {
-            console.log('badRequest, faltan datos: code');
+            console.log('badRequest, faltan datos: code or key');
             res.status(400).send({error: 'badRequest'});
             return;
         }
@@ -351,15 +353,29 @@ module.exports = function(app)
             return;
         }
 
-        //Buscamos al usuario en la base de datos de usuarios con oldEmail como parámetro de búsqueda
-        const user = await database.getElement('users', {email: oldEmail});
-        if(user === null)
+        //Comprobamos que el email asociado a la key sea el mismo que el del código
+        const keyData = await database.getKeyData(key);
+        if(keyData === null)
         {
-            console.log('invalidData, el usuario no se encuentra en la base de datos');
-            res.status(500).send({error: 'invalidData'});
+            res.status(200).send({error: 'invalidKey'});
+            console.log('invalidKey');
+            return;
+        }
+        if(keyData.email === undefined)
+        {
+            res.status(200).send({error: 'theresNoEmailWTF'});
+            console.log('theresNoEmailWTF: no email in keyData');
             return;
         }
 
+        if(oldEmail !== keyData.email || newEmail !== keyData.email)
+        {
+            res.status(200).send({error: 'invalidCode'});
+            console.log('invalidCode: emails dont match');
+            return;
+        }
+
+        //Comprobamos si hay nuevo correo electrónico, en caso de haberlo debe confirmarse
         if(oldEmail !== newEmail && codeDB.operation === 'updateAccount')
         {
             console.log('El nuevo correo electrónico necesita confirmarse');
@@ -402,6 +418,15 @@ module.exports = function(app)
 
 
             res.status(200).send({hadToInsertOtherCode: true, email: newEmail});
+            return;
+        }
+
+        //Buscamos al usuario en la base de datos de usuarios con oldEmail como parámetro de búsqueda
+        const user = await database.getElement('users', {email: oldEmail});
+        if(user === null)
+        {
+            console.log('invalidData, el usuario no se encuentra en la base de datos');
+            res.status(500).send({error: 'invalidData'});
             return;
         }
 

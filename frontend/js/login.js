@@ -95,6 +95,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
             loadingScreen.hidden = false;
             canClick_login = true;
     
+            checkLocalCopyValue();
             await loadNotesList();
             menuButtonText();
             resizeTwice();
@@ -195,6 +196,7 @@ document.getElementById('localModeButton').addEventListener('click',function()
 {
     isLocalMode = true;
     theSecretThingThatNobodyHasToKnow = 'local';
+    localCopy = undefined;
     saveKey('_login','local');
 
     loadNotesList();

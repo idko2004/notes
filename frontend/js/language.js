@@ -189,7 +189,7 @@ const allTexts =
     },
     login_wrongUser_text:
     {
-        es: 'Si aún no tienes una cuenta puedes crear una. En caso de que ya tengas una revisa que el nombre de usuario o correo electrónico esté bien escrito.',
+        es: 'Si aún no tienes una cuenta puedes crear una. En caso de que ya tengas una, revisa que el nombre de usuario o correo electrónico esté bien escrito.',
         en: "If you do not have an account, you can create one. In case you already have an account, check if the username or email address is correct."
     },
     login_error_text:
@@ -671,6 +671,56 @@ const allTexts =
     {
         es: 'Tu cuenta ha sido eliminada.',
         en: 'Your account has been deleted.'
+    },
+    localCopySettings:
+    {
+        es: 'Configuración de copias locales',
+        en: 'Local copy configuration'
+    },
+    localCopyText1:
+    {
+        es: 'Cuando las copias locales están activadas, se guarda una copia de tus notas que puede ser vista en el modo local. Así, en el caso de que los servidores dejen de estar disponibles, o el dispositivo no disponga de internet, las notas puedan seguir siendo guardadas.',
+        en: 'When local copies are enabled, a copy of your notes is saved and can be viewed in local mode. Thus, in case the servers become unavailable, or the device does not have internet access, the notes can still be saved.'
+    },
+    localCopyText2:
+    {
+        es: 'Sin embargo, esto implica que tus notas pueden ser visibles en el modo local, incluso al cerrar sesión.',
+        en: 'However, this implies that your notes can still be visible in local mode, even when you log out.'
+    },
+    localCopyText3:
+    {
+        es: 'Al desactivar las copias locales ya no se guardarán tus notas en el modo local.',
+        en: 'Disabling local copies will no longer save your notes in local mode.'
+    },
+    localCopyText4:
+    {
+        es: 'Si quieres mantener las copias locales, pero no quieres que tus notas sean accesibles al cerrar sesión, puedes borrar todas las notas en el modo local luego de haber cerrado la sesión de tu cuenta.',
+        en: 'If you want to keep local copies, but do not want your notes to be accessible when you log out, you can delete all notes in local mode after you have logged out of your account.'
+    },
+    localCopiesAre:
+    {
+        es: 'Las copias locales están',
+        en: 'Local copies are'
+    },
+    enabled:
+    {
+        es: 'activadas',
+        en: 'enabled'
+    },
+    disabled:
+    {
+        es: 'desactivadas',
+        en: 'disabled'
+    },
+    disableLocalCopy:
+    {
+        es: 'Desactivar copias locales',
+        en: 'Disable local copies'
+    },
+    enableLocalCopy:
+    {
+        es: 'Activar copias locales',
+        en: 'Enable local copies'
     }
 }
 

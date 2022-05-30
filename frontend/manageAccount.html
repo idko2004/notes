@@ -18,6 +18,7 @@
         <script defer src="js/manageAccount/manageAccount.js"></script>
         <script defer src="js/manageAccount/changeDataMenu.js"></script>
         <script defer src="js/manageAccount/changeLanguage.js"></script>
+        <script defer src="js/manageAccount/localCopyMenu.js"></script>
         <script defer src="js/manageAccount/logOutInAllDevices.js"></script>
         <script defer src="js/manageAccount/deleteAccoutMenu.js"></script>
     </head>
@@ -39,7 +40,7 @@
                     <p>
                         <section>
                             <button class="greenButton text" id="toChangeLanguageMenuButton" txt="changeLanguage2">Cambiar idioma (language)</button>
-                            <button class="greenButton">Modo oscuro</button>
+                            <button class="greenButton text" id="toLocalCopyMenuButton" txt="localCopySettings">Configuración de copias locales</button>
                         </section>
                         <section>
                             <p>
@@ -62,6 +63,49 @@
                         </section>
                         <section>
                             <button class='greenButton text' id="goBackToNotes" txt="back">Volver</button>
+                        </section>
+                    </p>
+                </div>
+
+                <div id="changeLanguageMenu" hidden>
+                    <h1 class="text" txt="changeLanguage">Cambiar idioma</h1>
+                    <p>
+                        <section>
+                            <button class="greenButton" id="changeLanguageButton_es">Español</button>
+                            <button class="greenButton" id="changeLanguageButton_en">English</button>
+                        </section>
+                        <section>
+                            <button class="greenButton text" id="changeLanguageButton_cancel" txt="cancel">Cancelar</button>
+                        </section>
+                    </p>
+                </div>
+
+                <div id="localCopyMenu" hidden>
+                    <h1 class="text" txt="localCopySettings">Configuración de copias locales</h1>
+                    <p>
+                        <section>
+                            <p class="text" txt="localCopyText1">
+                                Cuando las copias locales están activadas, se guarda una copia de tus notas que puede ser vista en el modo local. Así, en el caso de que los servidores dejen de estar disponibles, o el dispositivo no disponga de internet, las notas puedan seguir siendo guardadas.
+                            </p>
+                            <p class="text" txt="localCopyText2">
+                                Sin embargo, esto implica que tus notas pueden ser visibles incluso al cerrar sesión mediante el modo local.
+                            </p>
+                            <p class="text" txt="localCopyText3">
+                                Al desactivar las copias locales ya no se guardarán tus notas en el modo local.
+                            </p>
+                            <p class="text" txt="localCopyText4">
+                                Si quieres mantener las copias locales, pero no quieres que tus notas sean accesibles al cerrar sesión, puedes borrar todas las notas en el modo local luego de haber cerrado la sesión de tu cuenta.
+                            </p>
+                        </section>
+                        <section>
+                            <p>
+                                <span class="text" txt="localCopiesAre"></span> 
+                                <b id="localCopyEnabledText"></b>
+                            </p>
+                            <button class="greenButton" id="localCopyChangeButton"></button>
+                        </section>
+                        <section>
+                            <button class="greenButton text" id="localCopyCancelButton" txt="cancel">Cancelar</button>
                         </section>
                     </p>
                 </div>
@@ -100,19 +144,6 @@
                             <h2 class="text" txt="enterTheCode">Ingresa el código</h2>
                             <p><input type="text" id="changeDataConfirmCode" placeholder="A1B2C" maxlength="5"></p>
                             <button class="greenButton text" id="changeDataConfirmCodeButton" txt="verify">Comprobar</button>
-                        </section>
-                    </p>
-                </div>
-
-                <div id="changeLanguageMenu" hidden>
-                    <h1 class="text" txt="changeLanguage">Cambiar idioma</h1>
-                    <p>
-                        <section>
-                            <button class="greenButton" id="changeLanguageButton_es">Español</button>
-                            <button class="greenButton" id="changeLanguageButton_en">English</button>
-                        </section>
-                        <section>
-                            <button class="greenButton text" id="changeLanguageButton_cancel" txt="cancel">Cancelar</button>
                         </section>
                     </p>
                 </div>

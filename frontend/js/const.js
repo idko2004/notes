@@ -39,3 +39,4 @@ let theSecretThingThatNobodyHasToKnow;
 let localCopy;
 let actualNoteID;
 let actualNoteName;
+let theActualThing;

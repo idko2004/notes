@@ -52,19 +52,24 @@ async function menuButtonText()
 
 menuButton.addEventListener('click', function()
 {
+    if(theActualThing !== 'note') return;
     floatingMenu.hidden = false;
     canInteract = false;
+    theActualThing = 'menu';
 });
 
 closeMenuButton.addEventListener('click', function()
 {
+    if(theActualThing !== 'menu') return;
     floatingMenu.hidden = true;
     canInteract = true;
+    theActualThing = 'note';
 });
 
 //Botón de cerrar sesión
 menuOnlineLogOut.addEventListener('click', async function()
 {
+    if(theActualThing !== 'menu') return;
     if(isLocalMode) return;
     deleteKey('_login');
 
@@ -89,6 +94,7 @@ menuOnlineLogOut.addEventListener('click', async function()
 //Botón de cambiar a modo local
 menuOnlineChangeToLocal.addEventListener('click', function()
 {
+    if(theActualThing !== 'menu') return;
     if(isLocalMode) return;
     localCopy = undefined;
     hashAdd('local');
@@ -98,6 +104,7 @@ menuOnlineChangeToLocal.addEventListener('click', function()
 //Botón de gestionar cuenta
 menuOnlineManageAccount.addEventListener('click', async function()
 {
+    if(theActualThing !== 'menu') return;
     if(isLocalMode) return;
 
     document.getElementById('noteScreen').hidden = true;
@@ -113,6 +120,7 @@ menuOnlineManageAccount.addEventListener('click', async function()
 //Botón de salir del modo local
 menuExitLocalMode.addEventListener('click', async function()
 {
+    if(theActualThing !== 'menu') return;
     if(hashContains('local'))
     {
         hashDelete('local');
@@ -139,6 +147,7 @@ menuExitLocalMode.addEventListener('click', async function()
 //Botón de cambiar de idioma en modo local
 menuChangeLanguage.addEventListener('click', function()
 {
+    if(theActualThing !== 'menu') return;
     if(!isLocalMode) return;
 
     saveNote();
@@ -156,15 +165,20 @@ menuChangeLanguage.addEventListener('click', function()
             saveKey('_lang', 'en');
             break;
     }
-    location.reload();
+    languageAtStart();
+    floatingMenu.hidden = true;
+    canInteract = true;
+    theActualThing = 'note';
 });
 
 //Botón borrar todas las notas
 menuEraseAll.addEventListener('click', function()
 {
+    if(theActualThing !== 'menu') return;
     if(!isLocalMode) return;
 
     floatingMenu.hidden = true;
+    theActualThing = 'ventana';
     if(theSecretThingThatNobodyHasToKnow === 'local') floatingWindow(
     {
         title: getText('menu_eraseAllLocal_title'),
@@ -174,7 +188,7 @@ menuEraseAll.addEventListener('click', function()
             {
                 text: getText('menu_eraseAllLocal_btn1'),
                 primary: false,
-                callback: () => {closeWindow()}
+                callback: () => {closeWindow(); theActualThing = 'note';}
             },
             {
                 text: getText('menu_eraseAllLocal_btn2'),
@@ -203,12 +217,13 @@ menuEraseAll.addEventListener('click', function()
                             {
                                 text: getText('menu_reallyEraseAll_btn2'),
                                 primary: false,
-                                callback: () => {closeWindow()}
+                                callback: () => {closeWindow(); theActualThing = 'note';}
                             }
                         ]
                     });
                 }
             }
         ]
-    });
+    })
+    else theActualThing = 'menu';
 });

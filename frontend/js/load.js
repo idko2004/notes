@@ -20,6 +20,7 @@ async function start()
         document.getElementById('noteScreen').hidden = false;
 
         menuButtonText();
+        theActualThing = 'note';
     }
     else if([null, undefined, 'undefined', ''].includes(login))
     {
@@ -36,6 +37,7 @@ async function start()
                 callback: closeWindow
             }
         });
+        theActualThing = 'login';
     }
     else if(login === 'local')
     {
@@ -49,6 +51,7 @@ async function start()
         document.getElementById('noteScreen').hidden = false;
 
         menuButtonText();
+        theActualThing = 'note';
     }
     else
     {
@@ -62,6 +65,7 @@ async function start()
                 await loadNotesList();
                 menuButtonText();
                 resizeTwice();
+                theActualThing = 'note';
             }
             else
             {
@@ -71,11 +75,13 @@ async function start()
                 loadingScreen.hidden = true;
                 document.getElementById('noteScreen').hidden = true;
                 document.getElementById('loginScreen').hidden = false;
+                theActualThing = 'login';
             }
         }
         catch
         {
             loadingScreen.hidden = true;
+            theActualThing = 'ventana';
             floatingWindow(
             {
                 title: getText('ups'),
@@ -102,6 +108,7 @@ async function start()
                             menuButtonText();
                             resizeTwice();
                             hashAdd('local');
+                            theActualThing = 'note';
                         }
                     },
                     {

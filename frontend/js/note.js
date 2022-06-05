@@ -4,6 +4,7 @@ textArea.disabled = true;
 async function loadNote(name, id)
 {
     console.log('Cargar nota',name, id);
+    if(theActualThing !== 'note') return;
 
     if(actualNoteName !== undefined)
     {
@@ -119,6 +120,8 @@ let theLastTextSave = '';
 let serverDownAdvertisement = false; //Para que no salga el mensaje cada vez cuando el server está caído.
 async function saveNote()
 {
+    if(theActualThing !== 'note') return;
+
     let name = actualNoteName;
     if(name === undefined) return null;
 
@@ -187,6 +190,7 @@ async function saveNote()
 //Botón de guardar nota
 document.getElementById('saveButton').addEventListener('click', async function(e)
 {
+    if(theActualThing !== 'note') return;
     if(!canInteract) return;
 
     if(!isLocalMode) sayThings.innerText = getText('savingNote');
@@ -204,6 +208,7 @@ document.getElementById('saveButton').addEventListener('click', async function(e
 //Botón de borrar nota
 document.getElementById('deleteButton').addEventListener('click',(e) =>
 {
+    if(theActualThing !== 'note') return;
     if(!canInteract) return;
 
     let name = noteName.innerText;
@@ -291,6 +296,7 @@ document.getElementById('deleteButton').addEventListener('click',(e) =>
 
 document.getElementById('downloadButton').addEventListener('click', function()
 {
+    if(theActualThing !== 'note') return;
     if(!canInteract) return;
 
     console.log('descargar documento');
@@ -309,6 +315,7 @@ document.getElementById('downloadButton').addEventListener('click', function()
 
 document.getElementById('renameButton').addEventListener('click', function()
 {
+    if(theActualThing !== 'note') return;
     if(!canInteract) return;
 
     floatingWindow
@@ -412,6 +419,7 @@ document.getElementById('renameButton').addEventListener('click', function()
 
 setInterval(async function()
 {
+    if(theActualThing !== 'note') return;
     console.log('Intentando guardar automáticamente.');
     if(!canInteract) return;
     if(textArea.disabled === true) return;

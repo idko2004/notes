@@ -1,6 +1,7 @@
 let canClick_login = true;
 document.getElementById('loginButton').addEventListener('click', async function(e)
 {
+    if(theActualThing !== 'login') return;
     if(!canClick_login) return;
     canClick_login = false;
 
@@ -12,6 +13,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
     //Comprobar que todos los campos estén completos
     if(username === '' && password === '')
     {
+        theActualThing = 'ventana';
         floatingWindow(
         {
             title: getText('login_none_title'),
@@ -23,6 +25,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
                 {
                     e.target.innerText = getText('login');
                     canClick_login = true;
+                    theActualThing = 'login';
                     closeWindow();
                 }
             }
@@ -31,6 +34,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
     }
     else if(username === '')
     {
+        theActualThing = 'ventana';
         floatingWindow(
         {
             title: getText('login_username_title'),
@@ -42,6 +46,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
                 {
                     e.target.innerText = getText('login');
                     canClick_login = true;
+                    theActualThing = 'login';
                     closeWindow();
                 }
             }
@@ -50,6 +55,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
     }
     else if(password === '')
     {
+        theActualThing = 'ventana';
         floatingWindow(
         {
             title: getText('login_password_title'),
@@ -71,6 +77,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
                     {
                         e.target.innerText = getText('login');
                         canClick_login = true;
+                        theActualThing = 'login';
                         closeWindow();
                     }
                 }
@@ -99,11 +106,13 @@ document.getElementById('loginButton').addEventListener('click', async function(
             await loadNotesList();
             menuButtonText();
             resizeTwice();
+            theActualThing = 'note';
         }
         else if(response.data.error === 'wrongPassword') //Contraseña incorrecta
         {
             console.log('Contraseña inválida');
             e.target.innerText = getText('login');
+            theActualThing = 'ventana';
             floatingWindow(
             {
                 title: getText('login_wrongPassword_title'),
@@ -114,6 +123,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
                     callback: function()
                     {
                         canClick_login = true;
+                        theActualThing = 'login';
                         closeWindow();
                     }
                 }
@@ -123,6 +133,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
         {
             console.log('usuario no existe');
             e.target.innerText = getText('login');
+            theActualThing = 'ventana';
             floatingWindow(
             {
                 title: getText('login_wrongUser_title'),
@@ -142,6 +153,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
                         callback: function()
                         {
                             canClick_login = true;
+                            theActualThing = 'login';
                             closeWindow();
                         }
                     }
@@ -151,6 +163,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
         else
         {
             console.log('error desconocido iniciando sesión');
+            theActualThing = 'ventana';
             floatingWindow(
             {
                 title: getText('somethingWentWrong'),
@@ -161,6 +174,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
                     callback: function()
                     {
                         canClick_login = true;
+                        theActualThing = 'login';
                         closeWindow();
                     }
                 }
@@ -169,6 +183,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
     }
     catch
     {
+        theActualThing = 'ventana';
         floatingWindow(
         {
             title: getText('ups'),
@@ -180,6 +195,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
                 {
                     canClick_login = true;
                     e.target.innerText = getText('login');
+                    theActualThing = 'login';
                     closeWindow();
                 }
             }
@@ -189,11 +205,14 @@ document.getElementById('loginButton').addEventListener('click', async function(
 
 document.getElementById('signUpButton').addEventListener('click', function()
 {
+    if(theActualThing !== 'login') return;
     location.href=`signup.html#lang=${actualLanguage}`
 });
 
 document.getElementById('localModeButton').addEventListener('click',function()
 {
+    if(theActualThing !== 'login') return;
+
     isLocalMode = true;
     theSecretThingThatNobodyHasToKnow = 'local';
     localCopy = undefined;
@@ -210,10 +229,12 @@ document.getElementById('localModeButton').addEventListener('click',function()
 //Que cuando le das a enter pase al siguiente campo
 document.getElementById('usernameField').addEventListener('keydown', function(e)
 {
+    if(theActualThing !== 'login') return;
     if(e.key === 'Enter') document.getElementById('passwordField').focus();
 })
 
 document.getElementById('passwordField').addEventListener('keydown', function(e)
 {
+    if(theActualThing !== 'login') return;
     if(e.key === 'Enter') document.getElementById('loginButton').click();
 });

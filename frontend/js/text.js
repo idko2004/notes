@@ -11,6 +11,7 @@ textArea.addEventListener('keydown', (e) =>
         if(e.key !== 'Tab') e.preventDefault();
         return;
     }
+    if(theActualThing !== 'note') return;
 
     let start = textArea.selectionStart;
     let end = textArea.selectionEnd;

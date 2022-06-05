@@ -130,6 +130,7 @@ async function saveNote()
     if(isLocalMode)
     {
         saveKey(name, value);
+        theLastTextSave = value;
         return true;
     }
     else
@@ -151,6 +152,7 @@ async function saveNote()
             {
                 console.log('Nota guardada');
                 serverDownAdvertisement = false; //Si se vuelve a caer el server, para poder volver a avisar.
+                theLastTextSave = value;
                 return true;
             }
             else

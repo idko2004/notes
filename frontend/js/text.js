@@ -146,15 +146,15 @@ textArea.addEventListener('keydown', (e) =>
         if(['Enter', ' ', 'Backspace', 'Tab'].includes(e.key) || e.ctrlKey && e.key === 'v')
         {
             textHistoryIndex++;
-    
+
             if(textHistoryIndex > 20) textHistoryIndex = 0;
-    
+
             let i = textHistoryIndex;
             theVeryLestHistoryIndex = textHistoryIndex;
     
             lastHistorySaved++;
             textHistory[i] = {text: textArea.value, start, end, index: lastHistorySaved};
-    
+
             console.log(textHistory);
             console.log(textHistoryIndex);
         }

@@ -11,7 +11,6 @@
     background-color: rgba(71, 155, 91, 0.35);
     width: 100vw;
     height: 100vh;
-    padding-top: 20vh;
 }
 
 #window
@@ -19,6 +18,11 @@
     width: 40%;
     min-width: 20rem;
     max-width: 40rem;
+
+    position: fixed;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -35%);
 }
 
 #menu
@@ -26,6 +30,11 @@
     width: 30%;
     min-width: 20rem;
     max-width: 30rem;
+    
+    position: fixed;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -35%);
 }
 
 #window,
@@ -45,7 +54,6 @@
 {
     margin: 0;
     padding: 0 0 0.7rem 0;
-    /*color: var(--green);*/
     color: white;
     word-wrap: break-word;
 }

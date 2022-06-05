@@ -7,13 +7,6 @@ async function start()
     let login = theSecretThingThatNobodyHasToKnow;
     console.log(login);
 
-    ////Guardar las notas localmente
-    const localCopyKey = getKey('_localCopy');
-    if(localCopyKey === 'true') localCopy = true;
-    else if(localCopyKey === 'false') localCopy = false;
-    else localCopy = true;
-    ////
-
     if(hashContains('local'))
     {
         theSecretThingThatNobodyHasToKnow = 'local';
@@ -28,7 +21,7 @@ async function start()
 
         menuButtonText();
     }
-    else if([null, undefined, 'undefined', '']. includes(login))
+    else if([null, undefined, 'undefined', ''].includes(login))
     {
         loadingScreen.hidden = true;
         document.getElementById('noteScreen').hidden = true;
@@ -54,7 +47,7 @@ async function start()
 
         loadNotesList();
         document.getElementById('noteScreen').hidden = false;
-        
+
         menuButtonText();
     }
     else
@@ -108,6 +101,7 @@ async function start()
 
                             menuButtonText();
                             resizeTwice();
+                            hashAdd('local');
                         }
                     },
                     {

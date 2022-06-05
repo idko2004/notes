@@ -721,6 +721,11 @@ const allTexts =
     {
         es: 'Activar copias locales',
         en: 'Enable local copies'
+    },
+    saveAndExit:
+    {
+        es: 'Guardar cambios y salir',
+        en: 'Save changes and exit'
     }
 }
 

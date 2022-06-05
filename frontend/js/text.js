@@ -1,5 +1,6 @@
 let textHistory = [];
 let textHistoryIndex = 0;
+let theVeryLestHistoryIndex = 0;
 let lastHistorySaved = 0;
 
 textArea.addEventListener('keydown', (e) =>
@@ -111,6 +112,26 @@ textArea.addEventListener('keydown', (e) =>
         console.log(textHistoryIndex);
     }
 
+    //Rehacer
+    if(e.ctrlKey && e.key === 'y')
+    {
+        let toRestore = textHistory[theVeryLestHistoryIndex];
+        console.log('toRestore', theVeryLestHistoryIndex, toRestore);
+
+        if(toRestore === undefined) return;
+
+        textArea.value = toRestore.text;
+        textArea.selectionStart = toRestore.start;
+        textArea.selectionEnd = toRestore.end;
+
+        textHistoryIndex = theVeryLestHistoryIndex - 1;
+        lastHistorySaved = toRestore.index - 1;
+
+        console.log(textHistory);
+        console.log('textHistoryIndex', textHistoryIndex);
+        console.log('lastHistorySaved', lastHistorySaved);
+    }
+
     function addToField(toAdd, before, after)
     {
         e.preventDefault();
@@ -129,6 +150,7 @@ textArea.addEventListener('keydown', (e) =>
             if(textHistoryIndex > 20) textHistoryIndex = 0;
     
             let i = textHistoryIndex;
+            theVeryLestHistoryIndex = textHistoryIndex;
     
             lastHistorySaved++;
             textHistory[i] = {text: textArea.value, start, end, index: lastHistorySaved};

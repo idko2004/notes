@@ -60,16 +60,20 @@ article
     height: 1rem;
 }
 
-#topBarButtons .bg-green:hover, #leftToTheNoteNameButtons .bg-green:hover
+#topBarButtons .bg-green:hover, #leftToTheNoteNameButtons .bg-green:hover,
+#topBarButtons .bg-green:focus
 {
     background-color: var(--green);
     transition: all ease 100ms;
+    outline: none;
 }
 
-#topBarButtons .bg-red:hover
+#topBarButtons .bg-red:hover,
+#topBarButtons .bg-red:focus
 {
     background-color: rgb(255, 98, 98);
     transition: all ease 100ms;
+    outline: none;
 }
 
 textarea

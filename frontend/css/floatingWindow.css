@@ -176,4 +176,5 @@
 {
     border-color: white;
     transition: all ease 100ms;
+    outline: none;
 }

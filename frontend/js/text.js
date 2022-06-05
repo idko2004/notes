@@ -1,4 +1,8 @@
-textArea.addEventListener('keydown', (e) => 
+let textHistory = [];
+let textHistoryIndex = 0;
+let lastHistorySaved = 0;
+
+textArea.addEventListener('keydown', (e) =>
 {
     console.log(e.key);
     if(!canInteract)
@@ -7,53 +11,130 @@ textArea.addEventListener('keydown', (e) =>
         return;
     }
 
-    if(e.key === 'Enter')
+    let start = textArea.selectionStart;
+    let end = textArea.selectionEnd;
+
+    //Guardar para poder hacer control z
+    saveInHistory();
+
+    if(start !== end) return;
+
+    // Listas
+    if(e.key === 'Enter' || e.key === 'Return')
     {
-        //List
+        let before = textArea.value.slice(0, textArea.selectionStart);
+        let after = textArea.value.slice(textArea.selectionStart);
 
-        let textSplit = textArea.value.split('\n');
-        let lastLine = textSplit[textSplit.length - 1];
+        let beforeSplit = before.split('\n');
+        let lastLine = beforeSplit[beforeSplit.length - 1];
 
-        if(lastLine.startsWith('- ')) addToField('\n- ');
-        else if(lastLine.startsWith('-')) addToField('\n-');
-        else if(lastLine.startsWith('* ')) addToField('\n* ');
-        else if(lastLine.startsWith('*')) addToField('\n*');
+        if(lastLine.startsWith('- ')) addToField('\n- ', before, after);
+        else if(lastLine.startsWith('-')) addToField('\n-', before, after);
+        else if(lastLine.startsWith('* ')) addToField('\n* ', before, after);
+        else if(lastLine.startsWith('*')) addToField('\n*', before, after);
         else if(!isNaN(parseInt(lastLine[0])))
         {
             //Si el primer caractér de la línea es un número.
-            let n = getTheNumber();
-            if(lastLine.startsWith(`${n}- `)) addToField(`\n${++n}- `);
-            else if(lastLine.startsWith(`${n}-`)) addToField(`\n${++n}-`);
-            else if(lastLine.startsWith(`${n} - `)) addToField(`\n${++n} - `);
-            else if(lastLine.startsWith(`${n} -`)) addToField(`\n${++n} -`);
-            else if(lastLine.startsWith(`${n}. `)) addToField(`\n${++n}. `);
-            else if(lastLine.startsWith(`${n}.`)) addToField(`\n${++n}.`);
-            else if(lastLine.startsWith(`${n}) `)) addToField(`\n${++n}) `);
-            else if(lastLine.startsWith(`${n})`)) addToField(`\n${++n})`);
-            else if(lastLine.startsWith(`${n} ) `)) addToField(`\n${++n} ) `);
-            else if(lastLine.startsWith(`${n} )`)) addToField(`\n${++n} )`);
+            let n = getTheNumber(lastLine);
+            if(lastLine.startsWith(`${n}- `)) addToField(`\n${++n}- `, before, after);
+            else if(lastLine.startsWith(`${n}-`)) addToField(`\n${++n}-`, before, after);
+            else if(lastLine.startsWith(`${n} - `)) addToField(`\n${++n} - `, before, after);
+            else if(lastLine.startsWith(`${n} -`)) addToField(`\n${++n} -`, before, after);
+            else if(lastLine.startsWith(`${n}. `)) addToField(`\n${++n}. `, before, after);
+            else if(lastLine.startsWith(`${n}.`)) addToField(`\n${++n}.`, before, after);
+            else if(lastLine.startsWith(`${n}) `)) addToField(`\n${++n}) `, before, after);
+            else if(lastLine.startsWith(`${n})`)) addToField(`\n${++n})`, before, after);
+            else if(lastLine.startsWith(`${n} ) `)) addToField(`\n${++n} ) `, before, after);
+            else if(lastLine.startsWith(`${n} )`)) addToField(`\n${++n} )`, before, after);
         }
+    }
 
-        function getTheNumber()
+    function getTheNumber(lastLine)
+    {
+        let lastNum = '';
+        for(let i = 0; i < lastLine.length; i++)
         {
-            let lastNum = '';
-            for(let i = 0; i < lastLine.length; i++)
+            if(!isNaN(parseInt(lastLine[i])))
             {
-                if(!isNaN(parseInt(lastLine[i])))
-                {
-                    lastNum += lastLine[i];
-                }
-                else break;
+                lastNum += lastLine[i];
             }
-
-            return parseInt(lastNum);
+            else break;
         }
 
-        function addToField(toAdd)
+        return parseInt(lastNum);
+    }
+
+    //Tabulaciones
+    if(e.key === 'Tab')
+    {
+        let before = textArea.value.slice(0, textArea.selectionStart);
+        let after = textArea.value.slice(textArea.selectionStart);
+
+        addToField('    ', before, after);
+    }
+
+    //Quitar el foco
+    if(e.key === 'Escape')
+    {
+        document.getElementById('renameButton').focus();
+    }
+
+    //Guardar
+    if(e.ctrlKey && e.key === 's')
+    {
+        e.preventDefault();
+        document.getElementById('saveButton').click();
+    }
+
+    //Deshacer
+    if(e.ctrlKey && e.key === 'z')
+    {
+        e.preventDefault();
+
+        let toRestore = textHistory[textHistoryIndex];
+        console.log('toRestore', textHistoryIndex, toRestore);
+        
+        if(toRestore === undefined) return;
+
+        console.log('lastHistorySaved', lastHistorySaved);
+        if(toRestore.index !== lastHistorySaved) return;
+
+        textArea.value = toRestore.text;
+        textArea.selectionStart = toRestore.start;
+        textArea.selectionEnd = toRestore.end;
+
+        lastHistorySaved--;
+        textHistoryIndex--;
+        if(textHistoryIndex < 0) textHistoryIndex = textHistory.length - 1;
+
+        console.log(textHistory);
+        console.log(textHistoryIndex);
+    }
+
+    function addToField(toAdd, before, after)
+    {
+        e.preventDefault();
+        textArea.value = before + toAdd + after;
+
+        textArea.selectionStart = start + toAdd.length;
+        textArea.selectionEnd = start + toAdd.length;
+    }
+
+    function saveInHistory()
+    {
+        if(['Enter', ' ', 'Backspace', 'Tab'].includes(e.key) || e.ctrlKey && e.key === 'v')
         {
-            e.preventDefault();
-            textArea.value += toAdd;
-            textArea.scrollTop = noteField.scrollHeight;
+            textHistoryIndex++;
+    
+            if(textHistoryIndex > 20) textHistoryIndex = 0;
+    
+            let i = textHistoryIndex;
+    
+            lastHistorySaved++;
+            textHistory[i] = {text: textArea.value, start, end, index: lastHistorySaved};
+    
+            console.log(textHistory);
+            console.log(textHistoryIndex);
         }
     }
 });

@@ -82,19 +82,74 @@ async function loadNote(name, id)
             textArea.value = '';
             topBarButtons.hidden = true;
             theLastTextSave = '';
-            floatingWindow(
+
+            //Intentar cargar copia local
+            const searchInLocal = getKey(name);
+            if(!localCopy || searchInLocal === null)
             {
-                title: getText('ups'),
-                text: getText('serverDown'),
-                button:
+                floatingWindow(
                 {
-                    text: getText('ok'),
-                    callback: function(){closeWindow()}
-                }
-            });
-            return;
+                    title: getText('ups'),
+                    text: getText('serverDown'),
+                    button:
+                    {
+                        text: getText('ok'),
+                        callback: function(){closeWindow()}
+                    }
+                });
+                return;
+            }
+            else
+            {
+                floatingWindow(
+                {
+                    title: getText('localFound1'),
+                    text: getText('localFound2'),
+                    buttons:
+                    [
+                        {
+                            text: getText('viewLocalCopy'),
+                            primary: false,
+                            callback: function()
+                            {
+                                console.log('cargar copia local');
+                                actualNoteIsLocal = true;
+
+                                noteName.innerText = name;
+                                actualNoteName = name;
+                            
+                                actualNoteID = id;
+                            
+                                textArea.value = searchInLocal;
+                                textArea.disabled = false;
+                                topBarButtons.hidden = false;
+                            
+                                theLastTextSave = searchInLocal;
+                            
+                                showTheNoteInSmallScreen(true);
+                                closeWindow();
+                            
+                                setTimeout(function()
+                                {
+                                    noteField.focus();
+                                    resizeTwice();
+                                }, 15);
+                            }
+                        },
+                        {
+                            text: getText('cancel'),
+                            primary: true,
+                            callback: closeWindow
+                        }
+                    ]
+                });
+                return;
+            }
+
         }
     }
+
+    actualNoteIsLocal = false;
 
     noteName.innerText = name;
     actualNoteName = name;
@@ -130,7 +185,7 @@ async function saveNote()
 
     let noteID = actualNoteID;
 
-    if(isLocalMode)
+    if(isLocalMode || actualNoteIsLocal)
     {
         saveKey(name, value);
         theLastTextSave = value;
@@ -188,7 +243,7 @@ async function saveNote()
 }
 
 //Botón de guardar nota
-document.getElementById('saveButton').addEventListener('click', async function(e)
+document.getElementById('saveButton').addEventListener('click', async function()
 {
     if(theActualThing !== 'note') return;
     if(!canInteract) return;
@@ -206,7 +261,7 @@ document.getElementById('saveButton').addEventListener('click', async function(e
 });
 
 //Botón de borrar nota
-document.getElementById('deleteButton').addEventListener('click',(e) =>
+document.getElementById('deleteButton').addEventListener('click',() =>
 {
     if(theActualThing !== 'note') return;
     if(!canInteract) return;
@@ -254,36 +309,53 @@ document.getElementById('deleteButton').addEventListener('click',(e) =>
                             text: getText('waitAMoment')
                         });
 
-                        const response = await axios.post(`${path}/deleteNote`, {key: theSecretThingThatNobodyHasToKnow, noteid: actualNoteID});
-
-                        if(response.data.error === undefined)
+                        try
                         {
-                            actualNoteID = undefined;
-                            actualNoteName = undefined;
-                            deleteKey(name);
+                            const response = await axios.post(`${path}/deleteNote`, {key: theSecretThingThatNobodyHasToKnow, noteid: actualNoteID});
 
-                            textArea.value = '';
-                            textArea.disabled = true;
-
-                            noteName.innerText = getText('clickANote');
-                            topBarButtons.hidden = true;
-
-                            deleteListButton(name);
-                            youDontHaveNotes();
-
-                            closeWindow();
+                            if(response.data.error === undefined)
+                            {
+                                actualNoteID = undefined;
+                                actualNoteName = undefined;
+                                deleteKey(name);
+    
+                                textArea.value = '';
+                                textArea.disabled = true;
+    
+                                noteName.innerText = getText('clickANote');
+                                topBarButtons.hidden = true;
+    
+                                deleteListButton(name);
+                                youDontHaveNotes();
+    
+                                closeWindow();
+                            }
+                            else
+                            {
+                                closeWindow();
+                                floatingWindow(
+                                {
+                                    title: 'Oh, no!',
+                                    text: `${getText('somethingWentWrong')}\n${getText('errorCode')}: ${response.data.error}`,
+                                    button:
+                                    {
+                                        text: getText('ok'),
+                                        callback: function(){closeWindow();}
+                                    }
+                                });
+                            }
                         }
-                        else
+                        catch
                         {
                             closeWindow();
                             floatingWindow(
                             {
-                                title: 'Oh, no!',
-                                text: `${getText('somethingWentWrong')}\n${getText('errorCode')}: ${response.data.error}`,
+                                title: getText('ups'),
+                                text: getText('serverDown'),
                                 button:
                                 {
                                     text: getText('ok'),
-                                    callback: function(){closeWindow();}
+                                    callback: function(){closeWindow()}
                                 }
                             });
                         }
@@ -300,7 +372,7 @@ document.getElementById('downloadButton').addEventListener('click', function()
     if(!canInteract) return;
 
     console.log('descargar documento');
-    let name = noteName.innerText;
+    let name = actualNoteName;
     let text = textArea.value;
 
     let a = document.createElement('a');
@@ -444,7 +516,11 @@ setInterval(async function()
     },2000);
 },60000/*Un minuto*/);
 
-document.getElementById('saveButton').title = getText('saveNote');
-document.getElementById('deleteButton').title = getText('deleteNote');
-document.getElementById('downloadButton').title = getText('downloadNote');
-document.getElementById('renameButton').title = getText('renameNote');
+updateBarButtonsHoverText();
+function updateBarButtonsHoverText()
+{
+    document.getElementById('saveButton').title = getText('saveNote');
+    document.getElementById('deleteButton').title = getText('deleteNote');
+    document.getElementById('downloadButton').title = getText('downloadNote');
+    document.getElementById('renameButton').title = getText('renameNote');
+}

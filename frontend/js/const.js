@@ -35,6 +35,7 @@ let showTheNote = true;
 let canInteract = true;
 
 let isLocalMode = true;
+let actualNoteIsLocal = false;
 let theSecretThingThatNobodyHasToKnow;
 let localCopy;
 let actualNoteID;

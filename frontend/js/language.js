@@ -726,6 +726,21 @@ const allTexts =
     {
         es: 'Guardar cambios y salir',
         en: 'Save changes and exit'
+    },
+    localFound1:
+    {
+        es: 'Copia local encontrada',
+        en: 'Local copy found'
+    },
+    localFound2:
+    {
+        es: 'No fue posible conectarse con el servidor, sin embargo está disponible una copia local de la nota, para utilizarla tenga en cuenta lo siguiente:\n\n- Puede que el contenido de la nota sea algo antiguo.\n- La próxima vez que quiera ver la nota tendrá que hacerlo a través del modo local.',
+        en: 'It was not possible to connect to the server, however a local copy of the note is available, to use it please note the following:\n\n- The content of the note may be old.\n- The next time you want to view the note you will have to do it through the local mode.'
+    },
+    viewLocalCopy:
+    {
+        es: 'Ver copia local',
+        en: 'View local copy'
     }
 }
 

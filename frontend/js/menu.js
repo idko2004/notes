@@ -166,6 +166,7 @@ menuChangeLanguage.addEventListener('click', function()
             break;
     }
     languageAtStart();
+    updateBarButtonsHoverText();
     floatingMenu.hidden = true;
     canInteract = true;
     theActualThing = 'note';

@@ -112,28 +112,30 @@ async function loadNote(name, id)
                             primary: false,
                             callback: function()
                             {
-                                console.log('cargar copia local');
-                                actualNoteIsLocal = true;
-
-                                noteName.innerText = name;
-                                actualNoteName = name;
-                            
-                                actualNoteID = id;
-                            
-                                textArea.value = searchInLocal;
-                                textArea.disabled = false;
-                                topBarButtons.hidden = false;
-                            
-                                theLastTextSave = searchInLocal;
-                            
-                                showTheNoteInSmallScreen(true);
-                                closeWindow();
-                            
-                                setTimeout(function()
+                                closeWindow(function()
                                 {
-                                    noteField.focus();
-                                    resizeTwice();
-                                }, 15);
+                                    console.log('cargar copia local');
+                                    actualNoteIsLocal = true;
+    
+                                    noteName.innerText = name;
+                                    actualNoteName = name;
+                                
+                                    actualNoteID = id;
+                                
+                                    textArea.value = searchInLocal;
+                                    textArea.disabled = false;
+                                    topBarButtons.hidden = false;
+                                
+                                    theLastTextSave = searchInLocal;
+                                
+                                    showTheNoteInSmallScreen(true);
+                                
+                                    setTimeout(function()
+                                    {
+                                        noteField.focus();
+                                        resizeTwice();
+                                    }, 15);
+                                });
                             }
                         },
                         {
@@ -217,7 +219,7 @@ async function saveNote()
             {
                 console.log('Hubo un error guardando la nota', response.data.result);
                 return false;
-            }    
+            }
         }
         catch
         {
@@ -286,79 +288,87 @@ document.getElementById('deleteButton').addEventListener('click',() =>
                 {
                     if(isLocalMode)
                     {
-                        actualNoteName = undefined;
-                        deleteKey(name);
-
-                        textArea.value = '';
-                        textArea.disabled = true;
-                    
-                        noteName.innerText = getText('clickANote');
-                        topBarButtons.hidden = true;
-                    
-                        deleteListButton(name);
-                        youDontHaveNotes();
+                        closeWindow(function()
+                        {
+                            actualNoteName = undefined;
+                            deleteKey(name);
+    
+                            textArea.value = '';
+                            textArea.disabled = true;
                         
-                        closeWindow();
+                            noteName.innerText = getText('clickANote');
+                            topBarButtons.hidden = true;
+                        
+                            deleteListButton(name);
+                            youDontHaveNotes();
+                        });
                     }
                     else
                     {
-                        closeWindow();
-                        floatingWindow(
+                        closeWindow(async function()
                         {
-                            title: getText('deletingNote'),
-                            text: getText('waitAMoment')
-                        });
-
-                        try
-                        {
-                            const response = await axios.post(`${path}/deleteNote`, {key: theSecretThingThatNobodyHasToKnow, noteid: actualNoteID});
-
-                            if(response.data.error === undefined)
-                            {
-                                actualNoteID = undefined;
-                                actualNoteName = undefined;
-                                deleteKey(name);
-    
-                                textArea.value = '';
-                                textArea.disabled = true;
-    
-                                noteName.innerText = getText('clickANote');
-                                topBarButtons.hidden = true;
-    
-                                deleteListButton(name);
-                                youDontHaveNotes();
-    
-                                closeWindow();
-                            }
-                            else
-                            {
-                                closeWindow();
-                                floatingWindow(
-                                {
-                                    title: 'Oh, no!',
-                                    text: `${getText('somethingWentWrong')}\n${getText('errorCode')}: ${response.data.error}`,
-                                    button:
-                                    {
-                                        text: getText('ok'),
-                                        callback: function(){closeWindow();}
-                                    }
-                                });
-                            }
-                        }
-                        catch
-                        {
-                            closeWindow();
                             floatingWindow(
                             {
-                                title: getText('ups'),
-                                text: getText('serverDown'),
-                                button:
-                                {
-                                    text: getText('ok'),
-                                    callback: function(){closeWindow()}
-                                }
+                                title: getText('deletingNote'),
+                                text: getText('waitAMoment')
                             });
-                        }
+
+                            try
+                            {
+                                const response = await axios.post(`${path}/deleteNote`, {key: theSecretThingThatNobodyHasToKnow, noteid: actualNoteID});
+
+                                if(response.data.error === undefined)
+                                {
+                                    closeWindow(function()
+                                    {
+                                        actualNoteID = undefined;
+                                        actualNoteName = undefined;
+                                        deleteKey(name);
+    
+                                        textArea.value = '';
+                                        textArea.disabled = true;
+    
+                                        noteName.innerText = getText('clickANote');
+                                        topBarButtons.hidden = true;
+    
+                                        deleteListButton(name);
+                                        youDontHaveNotes();    
+                                    });
+                                }
+                                else
+                                {
+                                    closeWindow(function()
+                                    {
+                                        floatingWindow(
+                                        {
+                                            title: 'Oh, no!',
+                                            text: `${getText('somethingWentWrong')}\n${getText('errorCode')}: ${response.data.error}`,
+                                            button:
+                                            {
+                                                text: getText('ok'),
+                                                callback: function(){closeWindow();}
+                                            }
+                                        });
+                                    });
+                                }
+                            }
+                            catch
+                            {
+                                closeWindow(function()
+                                {
+                                    floatingWindow(
+                                    {
+                                        title: getText('ups'),
+                                        text: getText('serverDown'),
+                                        button:
+                                        {
+                                            text: getText('ok'),
+                                            callback: function(){closeWindow()}
+                                        }
+                                    });
+                                });
+                            }
+                        });
                     }
                 }
             }
@@ -402,11 +412,13 @@ document.getElementById('renameButton').addEventListener('click', function()
                 primary: false,
                 callback: function()
                 {
-                    closeWindow();
-                    textArea.focus();
+                    closeWindow(function()
+                    {
+                        textArea.focus();
 
-                    const input = document.getElementById('inputInTheWindow');
-                    input.value = '';
+                        const input = document.getElementById('inputInTheWindow');
+                        input.value = '';    
+                    });
                 }
             },
             {
@@ -425,64 +437,72 @@ document.getElementById('renameButton').addEventListener('click', function()
                             const response = await axios.post(`${path}/renameNote`,{key: theSecretThingThatNobodyHasToKnow, noteid: actualNoteID, newname: value});
                             if(response.data.error === 'invalidName')
                             {
-                                closeWindow();
-                                floatingWindow(
+                                closeWindow(function()
                                 {
-                                    title: getText('newNote_invalidName_title'),
-                                    text: getText('newNote_invalidName_text'),
-                                    button:
+                                    floatingWindow(
                                     {
-                                        text: getText('ok'),
-                                        callback: function(){closeWindow()}
-                                    }
+                                        title: getText('newNote_invalidName_title'),
+                                        text: getText('newNote_invalidName_text'),
+                                        button:
+                                        {
+                                            text: getText('ok'),
+                                            callback: function(){closeWindow()}
+                                        }
+                                    });
                                 });
                                 return;
                             }
                             if(response.data.error !== undefined)
                             {
-                                closeWindow();
+                                closeWindow(function()
+                                {
+                                    floatingWindow(
+                                    {
+                                        title: getText('somethingWentWrong'),
+                                        text: `${getText('errorCode')}: ${response.error}`,
+                                        button:
+                                        {
+                                            text: getText('ok'),
+                                            callback: function(){closeWindow()}
+                                        }
+                                    });
+                                });
+                                return;
+                            }
+                        }
+                        catch
+                        {
+                            closeWindow(function()
+                            {
                                 floatingWindow(
                                 {
-                                    title: getText('somethingWentWrong'),
-                                    text: `${getText('errorCode')}: ${response.error}`,
+                                    title: getText('ups'),
+                                    text: getText('serverDown'),
                                     button:
                                     {
                                         text: getText('ok'),
                                         callback: function(){closeWindow()}
                                     }
                                 });
-                                return;
-                            }    
-                        }
-                        catch
-                        {
-                            closeWindow();
-                            floatingWindow(
-                            {
-                                title: getText('ups'),
-                                text: getText('serverDown'),
-                                button:
-                                {
-                                    text: getText('ok'),
-                                    callback: function(){closeWindow()}
-                                }
                             });
                             return;
                         }
                     }
 
-                    deleteKey(noteName.innerText);
-                    saveKey(value,textArea.value);
-
-                    deleteListButton(noteName.innerText);
-                    createListButton(value);
-                    youDontHaveNotes();
-
-                    noteName.innerText = value;
-                    selectedNote(undefined, value);
-
-                    closeWindow();
-                    textArea.focus();
+                    closeWindow(function()
+                    {
+                        deleteKey(noteName.innerText);
+                        saveKey(value,textArea.value);
+    
+                        deleteListButton(noteName.innerText);
+                        createListButton(value);
+                        youDontHaveNotes();
+    
+                        noteName.innerText = value;
+                        selectedNote(undefined, value);
+    
+                        textArea.focus();
+                    });
                 }
             }
         ]

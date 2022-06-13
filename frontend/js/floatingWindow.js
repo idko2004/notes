@@ -54,8 +54,12 @@ function floatingWindow(elements)
 
     canInteract = false;
     floatWindow.hidden = false;
-    theWindow.classList.remove('close');
-    theWindow.classList.add('open');
+
+    theWindow.classList.remove('closeWin');
+    theWindow.classList.add('openWin');
+
+    floatWindow.classList.remove('closeBg');
+    floatWindow.classList.add('openBg');
 
     function title()
     {
@@ -147,10 +151,13 @@ function floatingWindow(elements)
 let animationEndEvent;
 function closeWindow(callback)
 {
-    theWindow.classList.remove('open');
-    theWindow.classList.add('close');
+    theWindow.classList.remove('openWin');
+    theWindow.classList.add('closeWin');
 
-    animationEndEvent = function(e)
+    floatWindow.classList.remove('openBg');
+    floatWindow.classList.add('closeBg');
+
+    animationEndEvent = async function(e)
     {
         console.log(e);
         if(e.animationName !== 'closeWindow') return;

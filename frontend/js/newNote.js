@@ -35,36 +35,42 @@ async function createNewNote(name)
     if(!newNoteNameIsValid(name, 'newNote')) return;
     if(isLocalMode)
     {
-        createListButton(name);
+        closeWindow(function()
+        {
+            createListButton(name);
 
-        saveKey(name,'');
-        loadNote(name);
-    
-        youDontHaveNotes();
-    
-        selectedNote(undefined, name);
+            saveKey(name,'');
+            loadNote(name);
+        
+            youDontHaveNotes();
+        
+            selectedNote(undefined, name);    
+        });
     }
     else try
     {
         const response = await axios.post(`${path}/createNewNote`, {key: theSecretThingThatNobodyHasToKnow, notename: name});
         if(response.data.ok || response.data.noteid !== undefined)
         {
-            actualNoteID = response.data.noteid;
-            actualNoteName = name;
-
-            createListButton(name, response.data.noteid);
-            youDontHaveNotes();
-
-            selectedNote(undefined, name);
-
-            noteName.innerText = name;
-            topBarButtons.hidden = false;
-
-            textArea.value = '';
-            textArea.disabled = false;
-            textArea.focus();
-
-            saveKey(name,'');
+            closeWindow(function()
+            {
+                actualNoteID = response.data.noteid;
+                actualNoteName = name;
+    
+                createListButton(name, response.data.noteid);
+                youDontHaveNotes();
+    
+                selectedNote(undefined, name);
+    
+                noteName.innerText = name;
+                topBarButtons.hidden = false;
+    
+                textArea.value = '';
+                textArea.disabled = false;
+                textArea.focus();
+    
+                saveKey(name,'');
+            });
         }
         else if(response.data.error === 'invalidName')
         {
@@ -111,61 +117,71 @@ async function createNewNote(name)
 
 function newNoteNameIsValid(name, openAWindow)
 {
-    closeWindow(); //Por si haya una ventana abierta
-
     if(name === '')
     {
-        floatingWindow
-        ({
-            title: getText('newNote_emptyName_title'),
-            text: getText('newNote_emptyName_text'),
-            button:
-            {
-                text: getText('ok'),
-                callback: closeInvalidNameWindow
-            }
+        closeWindow(function()
+        {
+            floatingWindow
+            ({
+                title: getText('newNote_emptyName_title'),
+                text: getText('newNote_emptyName_text'),
+                button:
+                {
+                    text: getText('ok'),
+                    callback: closeInvalidNameWindow
+                }
+            });    
         });
         return false;
     }
     if(name.startsWith('_'))
     {
-        floatingWindow
-        ({
-            title: '_Error',
-            text: getText('newNote___'),
-            button:
-            {
-                text: getText('ok'),
-                callback: closeInvalidNameWindow
-            }
+        closeWindow(function()
+        {
+            floatingWindow
+            ({
+                title: '_Error',
+                text: getText('newNote___'),
+                button:
+                {
+                    text: getText('ok'),
+                    callback: closeInvalidNameWindow
+                }
+            });    
         });
         return false;
     }
     if(name.length > 30)
     {
-        floatingWindow
-        ({
-            title: getText('newNote_tooLongName_title'),
-            text: getText('newNote_tooLongName_text'),
-            button:
-            {
-                text: getText('ok'),
-                callback: closeInvalidNameWindow
-            }
+        closeWindow(function()
+        {
+            floatingWindow
+            ({
+                title: getText('newNote_tooLongName_title'),
+                text: getText('newNote_tooLongName_text'),
+                button:
+                {
+                    text: getText('ok'),
+                    callback: closeInvalidNameWindow
+                }
+            });    
         });
         return false;
     }
     if(isLocalMode && getKey(name) !== null)
     {
-        floatingWindow
-        ({
-            title: getText('newNote_duplicated_title'),
-            text: `${getText('newNote_duplicated_text')} '${name}'`,
-            button:
-            {
-                text: getText('ok'),
-                callback: closeInvalidNameWindow
-            }
+        closeWindow(function()
+        {
+            floatingWindow
+            ({
+                title: getText('newNote_duplicated_title'),
+                text: `${getText('newNote_duplicated_text')} '${name}'`,
+                button:
+                {
+                    text: getText('ok'),
+                    callback: closeInvalidNameWindow
+                }
+            });    
         });
         return false;
     }
@@ -175,9 +191,11 @@ function newNoteNameIsValid(name, openAWindow)
 
     function closeInvalidNameWindow()
     {
-        closeWindow();
-
-        if(openAWindow === 'newNote') newNote.click();
-        else if(openAWindow === 'renameNote') document.getElementById('renameButton').click();
+        closeWindow(function()
+        {
+            if(openAWindow === 'newNote') newNote.click();
+            else if(openAWindow === 'renameNote') document.getElementById('renameButton').click();
+    
+        });
     }
 }

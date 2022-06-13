@@ -1,3 +1,5 @@
+const floatingMenu = document.getElementById('floatingMenu');
+const theMenu = document.getElementById('menu');
 const menuButton = document.getElementById('menuButton');
 const menuTitleText = document.getElementById('menuTitleText');
 const closeMenuButton = document.getElementById('closeMenuButton');
@@ -7,6 +9,8 @@ const menuOnlineManageAccount = document.getElementById('menuOnlineManageAccount
 const menuOnlineLogOut = document.getElementById('menuOnlineLogOut');
 const menuOnlineChangeToLocal = document.getElementById('menuOnlineChangeToLocal');
 const menuChangeLanguage = document.getElementById('menuChangeLanguage');
+
+let menuAnimationCallback;
 
 async function menuButtonText()
 {
@@ -50,20 +54,50 @@ async function menuButtonText()
     }
 }
 
+function animationMenuOpen()
+{
+    floatingMenu.hidden = false;
+    theMenu.classList.remove('closeWin');
+    theMenu.classList.add('openWin');
+
+    floatingMenu.classList.remove('closeBg');
+    floatingMenu.classList.add('openBg');
+}
+
+function animationMenuClose(callback)
+{
+    theMenu.classList.remove('openWin');
+    theMenu.classList.add('closeWin');
+
+    floatingMenu.classList.remove('openBg');
+    floatingMenu.classList.add('closeBg');
+
+    menuAnimationCallback = function(e)
+    {
+        if(e.animationName !== 'closeWindow') return;
+        floatingMenu.hidden = true;
+        theMenu.removeEventListener('animationend', menuAnimationCallback);
+        if(callback !== undefined && typeof callback === 'function') callback();
+    }
+
+    theMenu.addEventListener('animationend', menuAnimationCallback);
+}
+
 menuButton.addEventListener('click', function()
 {
     if(theActualThing !== 'note') return;
     floatingMenu.hidden = false;
     canInteract = false;
     theActualThing = 'menu';
+    animationMenuOpen();
 });
 
 closeMenuButton.addEventListener('click', function()
 {
     if(theActualThing !== 'menu') return;
-    floatingMenu.hidden = true;
     canInteract = true;
     theActualThing = 'note';
+    animationMenuClose();
 });
 
 //Botón de cerrar sesión
@@ -87,6 +121,7 @@ menuOnlineLogOut.addEventListener('click', async function()
     catch
     {
         location.reload();
+        return;
     }
     location.reload();
 });
@@ -135,13 +170,14 @@ menuExitLocalMode.addEventListener('click', async function()
     textArea.value = '';
     textArea.disabled = true;
 
-    document.getElementById('loginScreen').hidden = false;
-    floatingMenu.hidden = true;
-
     theSecretThingThatNobodyHasToKnow = undefined;
     deleteKey('_login');
 
-    canInteract = true;
+    animationMenuClose(function()
+    {
+        document.getElementById('loginScreen').hidden = false;
+        canInteract = true;
+    });
 });
 
 //Botón de cambiar de idioma en modo local
@@ -167,7 +203,7 @@ menuChangeLanguage.addEventListener('click', function()
     }
     languageAtStart();
     updateBarButtonsHoverText();
-    floatingMenu.hidden = true;
+    animationMenuClose();
     canInteract = true;
     theActualThing = 'note';
 });
@@ -178,53 +214,61 @@ menuEraseAll.addEventListener('click', function()
     if(theActualThing !== 'menu') return;
     if(!isLocalMode) return;
 
-    floatingMenu.hidden = true;
     theActualThing = 'ventana';
-    if(theSecretThingThatNobodyHasToKnow === 'local') floatingWindow(
+    if(theSecretThingThatNobodyHasToKnow === 'local')
     {
-        title: getText('menu_eraseAllLocal_title'),
-        text: getText('menu_eraseAllLocal_text'),
-        buttons:
-        [
+        animationMenuClose(
+            floatingWindow(
             {
-                text: getText('menu_eraseAllLocal_btn1'),
-                primary: false,
-                callback: () => {closeWindow(); theActualThing = 'note';}
-            },
-            {
-                text: getText('menu_eraseAllLocal_btn2'),
-                primary: true,
-                callback: () =>
-                {
-                    closeWindow();
-                    floatingWindow(
+                title: getText('menu_eraseAllLocal_title'),
+                text: getText('menu_eraseAllLocal_text'),
+                buttons:
+                [
                     {
-                        title: getText('menu_reallyEraseAll_title'),
-                        buttons:
-                        [
-                            {
-                                text: getText('menu_reallyEraseAll_btn1'),
-                                primary: true,
-                                callback: () =>
+                        text: getText('menu_eraseAllLocal_btn1'),
+                        primary: false,
+                        callback: () => {closeWindow(); theActualThing = 'note';}
+                    },
+                    {
+                        text: getText('menu_eraseAllLocal_btn2'),
+                        primary: true,
+                        callback: () =>
+                        {
+                            closeWindow(
+                                function()
                                 {
-                                    document.getElementById('noteScreen').hidden = true;
-                                    loadingScreen.hidden = false;
-                                    const key = getKey('_login');
-                                    localStorage.clear();
-                                    if(key !== undefined) saveKey('_login', key);
-                                    location.reload();
+                                    floatingWindow(
+                                    {
+                                        title: getText('menu_reallyEraseAll_title'),
+                                        buttons:
+                                        [
+                                            {
+                                                text: getText('menu_reallyEraseAll_btn1'),
+                                                primary: true,
+                                                callback: () =>
+                                                {
+                                                    document.getElementById('noteScreen').hidden = true;
+                                                    loadingScreen.hidden = false;
+                                                    const key = getKey('_login');
+                                                    localStorage.clear();
+                                                    if(key !== undefined) saveKey('_login', key);
+                                                    location.reload();
+                                                }
+                                            },
+                                            {
+                                                text: getText('menu_reallyEraseAll_btn2'),
+                                                primary: false,
+                                                callback: () => {closeWindow(); theActualThing = 'note';}
+                                            }
+                                        ]
+                                    });
                                 }
-                            },
-                            {
-                                text: getText('menu_reallyEraseAll_btn2'),
-                                primary: false,
-                                callback: () => {closeWindow(); theActualThing = 'note';}
-                            }
-                        ]
-                    });
-                }
-            }
-        ]
-    })
+                            );
+                        }
+                    }
+                ]
+            })
+        );
+    }
     else theActualThing = 'menu';
 });

@@ -2,7 +2,7 @@
     Algunos elementos se comparten con el menú
 */
 
-#floatingWindow,
+#floatWindow,
 #floatingMenu
 {
     position: fixed;
@@ -50,7 +50,7 @@
     border-radius: 10px;
 }
 
-.open
+.openWin
 {
     animation: openWindow 200ms linear 1;
 }
@@ -74,9 +74,9 @@
     }
 }
 
-.close
+.closeWin
 {
-    animation: closeWindow 200ms linear 1;
+    animation: closeWindow 75ms linear 1;
 }
 
 @keyframes closeWindow
@@ -89,7 +89,41 @@
     100%
     {
         opacity: 0;
-        transform: translate(-50%, -35%) rotateZ(90deg);
+        transform: translate(-50%, -35%) rotateZ(15deg);
+    }
+}
+
+.openBg
+{
+    animation: openBackground 75ms linear 1;
+}
+
+@keyframes openBackground
+{
+    0%
+    {
+        opacity: 0;
+    }
+    100%
+    {
+        opacity: 1;
+    }
+}
+
+.closeBg
+{
+    animation: closeBackground 75ms linear 1;
+}
+
+@keyframes closeBackground
+{
+    0%
+    {
+        opacity: 1;
+    }
+    100%
+    {
+        opacity: 0;
     }
 }
 

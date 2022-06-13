@@ -103,12 +103,12 @@ async function start()
                             loadNotesList();
                             document.getElementById('noteScreen').hidden = false;
 
-                            closeWindow();
-
                             menuButtonText();
                             resizeTwice();
                             hashAdd('local');
                             theActualThing = 'note';
+
+                            closeWindow();
                         }
                     },
                     {

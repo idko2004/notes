@@ -21,8 +21,6 @@ const dontNotes = document.getElementById('youDontHaveNotes');
 
 const loadingScreen = document.getElementById('loadingScreen');
 
-const floatingMenu = document.getElementById('floatingMenu');
-
 const titleTextIDLang = 'noteAppName';
 
 let showTheNote = true;

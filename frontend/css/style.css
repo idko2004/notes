@@ -35,13 +35,13 @@ button:hover
 ::-moz-selection
 { /* Code for Firefox */
     color: white;
-    background: var(--green-hover);
+    background: var(--green);
 }
   
 ::selection
 {
     color: white;
-    background: var(--green-hover);
+    background: var(--green);
 }
 
 #loadingIcon

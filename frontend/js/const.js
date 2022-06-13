@@ -19,12 +19,6 @@ const newNote = document.getElementById('newNote');
 const notesList = document.getElementById('notesList');
 const dontNotes = document.getElementById('youDontHaveNotes');
 
-const floatWindow = document.getElementById('floatingWindow');
-const windowTitle = document.getElementById('windowTitle');
-const windowText = document.getElementById('windowText');
-const windowInput = document.getElementById('windowInput');
-const windowButtons = document.getElementById('windowButtons');
-
 const loadingScreen = document.getElementById('loadingScreen');
 
 const floatingMenu = document.getElementById('floatingMenu');

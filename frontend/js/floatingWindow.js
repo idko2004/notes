@@ -1,3 +1,10 @@
+const floatWindow = document.getElementById('floatWindow');
+const theWindow = document.getElementById('window');
+const windowTitle = document.getElementById('windowTitle');
+const windowText = document.getElementById('windowText');
+const windowInput = document.getElementById('windowInput');
+const windowButtons = document.getElementById('windowButtons');
+
 const windowExample = 
 {
     title: 'title',
@@ -37,6 +44,7 @@ function floatingWindow(elements)
         console.error('Ya hay una ventana abierta y se intenta abrir otra.');
         return;
     }
+
     thereIsAWindows = true;
 
     title();
@@ -46,6 +54,8 @@ function floatingWindow(elements)
 
     canInteract = false;
     floatWindow.hidden = false;
+    theWindow.classList.remove('close');
+    theWindow.classList.add('open');
 
     function title()
     {
@@ -134,18 +144,34 @@ function floatingWindow(elements)
     }
 }
 
-function closeWindow()
+let animationEndEvent;
+function closeWindow(callback)
 {
-    canInteract = true;
-    thereIsAWindows = false;
+    theWindow.classList.remove('open');
+    theWindow.classList.add('close');
 
-    floatWindow.hidden = true;
-    windowTitle.innerText = '';
-    windowText.innerText = '';
-    windowInput.hidden = true;
-    windowButtons.innerHTML = '';
-    windowInput.children[0].value = '';
-    if(textInputCallback !== null) windowInput.children[0].removeEventListener('keypress', textInputCallback);
-    textInputCallback = null;
+    animationEndEvent = function(e)
+    {
+        console.log(e);
+        if(e.animationName !== 'closeWindow') return;
+        canInteract = true;
+        thereIsAWindows = false;
+    
+        floatWindow.hidden = true;
+        windowTitle.innerText = '';
+        windowText.innerText = '';
+        windowInput.hidden = true;
+        windowButtons.innerHTML = '';
+        windowInput.children[0].value = '';
+        if(textInputCallback !== null) windowInput.children[0].removeEventListener('keypress', textInputCallback);
+        textInputCallback = null;
+
+        console.log(animationEndEvent);
+        if(animationEndEvent !== undefined) theWindow.removeEventListener('animationend', animationEndEvent);
+    
+        if(callback !== undefined && typeof callback === 'function') callback();
+    }
+
+    theWindow.addEventListener('animationend', animationEndEvent);
 
 }

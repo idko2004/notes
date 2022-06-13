@@ -40,11 +40,13 @@ document.getElementById('deleteAccountButton').addEventListener('click', async f
                     text: getText('ok'),
                     callback: function()
                     {
-                        deleteAccountEmailCodeMenu.hidden = true;
-                        deleteAccountMenu.hidden = false;
-                        window.scrollTo(0,0);
-                        actualMenu = 'deleteAccount';
-                        closeWindow();
+                        closeWindow(function()
+                        {
+                            deleteAccountEmailCodeMenu.hidden = true;
+                            deleteAccountMenu.hidden = false;
+                            window.scrollTo(0,0);
+                            actualMenu = 'deleteAccount';    
+                        });
                     }
                 }
             });
@@ -62,11 +64,13 @@ document.getElementById('deleteAccountButton').addEventListener('click', async f
                 text: getText('ok'),
                 callback: function()
                 {
-                    deleteAccountEmailCodeMenu.hidden = true;
-                    deleteAccountMenu.hidden = false;
-                    window.scrollTo(0,0);
-                    actualMenu = 'deleteAccount';
-                    closeWindow();
+                    closeWindow(function()
+                    {
+                        deleteAccountEmailCodeMenu.hidden = true;
+                        deleteAccountMenu.hidden = false;
+                        window.scrollTo(0,0);
+                        actualMenu = 'deleteAccount';    
+                    });
                 }
             }
         });
@@ -109,82 +113,88 @@ document.getElementById('confirmDeleteAccount').addEventListener('click', async 
 
         if(response.data.error !== undefined)
         {
-            closeWindow();
-            if(response.data.error === 'invalidCode')
+            closeWindow(function()
             {
-                floatingWindow(
+                if(response.data.error === 'invalidCode')
                 {
-                    title: getText('introduceAValidCode'),
-                    text: getText('introduceAValidCode2'),
-                    button:
+                    floatingWindow(
                     {
-                        text: getText('ok'),
-                        callback: function()
+                        title: getText('introduceAValidCode'),
+                        text: getText('introduceAValidCode2'),
+                        button:
                         {
-
-                            actualMenu = 'deleteAccountEmailCode';
-                            closeWindow();
-                            document.getElementById('deleteAccountCodeInput').value = '';
+                            text: getText('ok'),
+                            callback: function()
+                            {
+    
+                                actualMenu = 'deleteAccountEmailCode';
+                                document.getElementById('deleteAccountCodeInput').value = '';
+                                closeWindow();
+                            }
                         }
-                    }
-                });
-                return;
-            }
-            else
-            {
-                floatingWindow(
+                    });
+                    return;
+                }
+                else
                 {
-                    title: getText('somethingWentWrong'),
-                    text: `${getText('errorCode')}: ${response.data.error}`,
-                    button:
+                    floatingWindow(
                     {
-                        text: getText('ok'),
-                        callback: function()
+                        title: getText('somethingWentWrong'),
+                        text: `${getText('errorCode')}: ${response.data.error}`,
+                        button:
                         {
-                            actualMenu = 'deleteAccountEmailCode';
-                            closeWindow();
+                            text: getText('ok'),
+                            callback: function()
+                            {
+                                actualMenu = 'deleteAccountEmailCode';
+                                closeWindow();
+                            }
                         }
-                    }
-                });
-                return;
-            }
+                    });
+                    return;
+                }    
+            });
         }
         else if(response.data.accountDeleted)
         {
             //Todo salió bien
-            closeWindow();
             console.log('Cuenta eliminada');
-            floatingWindow(
+            closeWindow(function()
             {
-                title: getText('accountDeleted'),
-                button:
+                floatingWindow(
                 {
-                    text: getText('ok'),
-                    callback: function()
+                    title: getText('accountDeleted'),
+                    button:
                     {
-                        location.href = 'index.html#logout';
+                        text: getText('ok'),
+                        callback: function()
+                        {
+                            location.href = 'index.html#logout';
+                        }
                     }
-                }
+                });
             });
         }
     }
     catch
     {
-        closeWindow();
         actualMenu = 'ventana';
-        floatingWindow(
+        closeWindow(function()
         {
-            title: getText('ups'),
-            text: getText('serverDown'),
-            button:
+            floatingWindow(
             {
-                text: getText('ok'),
-                callback: function()
+                title: getText('ups'),
+                text: getText('serverDown'),
+                button:
                 {
-                    actualMenu = 'deleteAccountEmailCode';
-                    closeWindow();
+                    text: getText('ok'),
+                    callback: function()
+                    {
+                        actualMenu = 'deleteAccountEmailCode';
+                        closeWindow();
+                    }
                 }
-            }
+            });
         });
     }
 });

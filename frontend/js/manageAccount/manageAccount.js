@@ -35,12 +35,6 @@ const deleteAccountMenu = document.getElementById('deleteAccountMenu');
 const deleteAccountEmailCodeMenu = document.getElementById('deleteAccountEmailCodeMenu');
 const localCopyMenu = document.getElementById('localCopyMenu');
 
-const floatWindow = document.getElementById('floatingWindow');
-const windowTitle = document.getElementById('windowTitle');
-const windowText = document.getElementById('windowText');
-const windowInput = document.getElementById('windowInput');
-const windowButtons = document.getElementById('windowButtons');
-
 const emailSpace = document.getElementById('emailSpace');
 const usernameSpace = document.getElementById('usernameSpace');
 const passwordSpace = document.getElementById('passwordSpace');

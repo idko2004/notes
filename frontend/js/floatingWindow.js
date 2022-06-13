@@ -32,7 +32,7 @@ const windowExample =
     ]
 }
 
-let thereIsAWindows = false;
+let thereIsAWindows = false; //También sé que está mal escrito
 
 //Lo definimos aquí para poder borrarlo luego.
 let textInputCallback;
@@ -148,7 +148,7 @@ function floatingWindow(elements)
     }
 }
 
-let animationEndEvent;
+let animationEndEvent; //Para borrar el callback
 function closeWindow(callback)
 {
     theWindow.classList.remove('openWin');

@@ -5,17 +5,19 @@ body
 
 article
 {
-    margin: 0 auto;
-    padding: 1rem;
-    background-color: var(--green);
-    display: block;
-    height: auto;
-    border: solid 3px var(--green);
-    border-radius: 10px;
     width: 40%;
     min-width: 20rem;
     max-width: 40rem;
-    margin-top: 20vh;
+
+    position: fixed;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -35%);
+
+    padding: 1rem;
+    background-color: var(--green);
+    border: solid 3px var(--green);
+    border-radius: 10px;
     text-align: center;
 }
 

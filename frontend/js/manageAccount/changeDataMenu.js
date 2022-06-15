@@ -17,16 +17,31 @@ document.getElementById('goBackChangeDataMenu').addEventListener('click', functi
 {
     if(actualMenu !== 'changeData') return;
 
-    changeDataMenu.hidden = true;
+    let endAnimationCallback = function(e)
+    {
+        if(e.animationName !== 'closeMenuAnimation') return;
 
-    changeUsernameField.value = '';
-    changeEmailField.value = '';
-    changePasswordField.value = '';
-    comprobePasswordField.value = '';
+        changeDataMenu.hidden = true;
+        mainMenu.hidden = false;
 
-    mainMenu.hidden = false;
-    actualMenu = 'main';
-    window.scrollTo(0,0);
+        mainMenu.classList.remove('closeMenu');
+        mainMenu.classList.add('openMenu');
+    
+        actualMenu = 'main';
+        window.scrollTo(0,0);
+
+        changeUsernameField.value = '';
+        changeEmailField.value = '';
+        changePasswordField.value = '';
+        comprobePasswordField.value = '';
+
+        changeDataMenu.removeEventListener('animationend', endAnimationCallback);
+    }
+    
+    changeDataMenu.classList.remove('openMenu');
+    changeDataMenu.classList.add('closeMenu');
+
+    changeDataMenu.addEventListener('animationend', endAnimationCallback);
 });
 
 document.getElementById('saveChangeDataMenu').addEventListener('click', function()
@@ -204,10 +219,26 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', function
                 {
                     closeWindow(async function()
                     {
+                        let endAnimationCallback = function(e)
+                        {
+                            if(e.animationName !== 'closeMenuAnimation') return;
+
+                            changeDataMenu.hidden = true;
+                            changeDataEmailCodeMenu.hidden = false;
+
+                            changeDataEmailCodeMenu.classList.remove('closeMenu');
+                            changeDataEmailCodeMenu.classList.add('openMenu');
+
+                            actualMenu = 'changeDataEmailCode';
+
+                            changeDataMenu.removeEventListener('animationend', endAnimationCallback);
+                        }
                         document.getElementById('changeDataEmailSent').innerText = email;
-                        changeDataMenu.hidden = true;
-                        changeDataEmailCodeMenu.hidden = false;
-                        actualMenu = 'changeDataEmailCode';
+
+                        changeDataMenu.classList.remove('openMenu');
+                        changeDataMenu.classList.add('closeMenu');
+                    
+                        changeDataMenu.addEventListener('animationend', endAnimationCallback);                    
     
                         //Hacer la llamada al servidor para actualizar a los nuevos datos, generar un código y enviar el email
                         try
@@ -231,12 +262,7 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', function
                                             text: getText('back'),
                                             callback: function()
                                             {
-                                                closeWindow(function()
-                                                {
-                                                    changeDataEmailCodeMenu.hidden = true;
-                                                    changeDataMenu.hidden = false;
-                                                    actualMenu = 'changeData';    
-                                                });
+                                                closeWindow(changeDataEmailCodeMenuGoBackAnimation);
                                             }
                                         }
                                     });
@@ -254,12 +280,7 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', function
                                             text: getText('back'),
                                             callback: function()
                                             {
-                                                closeWindow(function()
-                                                {
-                                                    changeDataEmailCodeMenu.hidden = true;
-                                                    changeDataMenu.hidden = false;
-                                                    actualMenu = 'changeData';    
-                                                });
+                                                closeWindow(changeDataEmailCodeMenuGoBackAnimation);
                                             }
                                         }
                                     });
@@ -277,12 +298,7 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', function
                                             text: getText('ok'),
                                             callback: function()
                                             {
-                                                closeWindow(function()
-                                                {
-                                                    changeDataEmailCodeMenu.hidden = true;
-                                                    changeDataMenu.hidden = false;
-                                                    actualMenu = 'changeData';
-                                                });
+                                                closeWindow(changeDataEmailCodeMenuGoBackAnimation);
                                             }
                                         }
                                     });
@@ -303,22 +319,40 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', function
                                     text: getText('ok'),
                                     callback: function()
                                     {
-                                        closeWindow(function()
-                                        {
-                                            changeDataEmailCodeMenu.hidden = true;
-                                            changeDataMenu.hidden = false;
-                                            actualMenu = 'changeData';    
-                                        });
+                                        closeWindow(changeDataEmailCodeMenuGoBackAnimation);
                                     }
                                 }
                             });
-                        }    
+                        }
                     });
                 }
             }
         ]
     });
 });
+
+function changeDataEmailCodeMenuGoBackAnimation()
+{
+    let endAnimationCallback = function(e)
+    {
+        if(e.animationName !== 'closeMenuAnimation') return;
+
+        changeDataEmailCodeMenu.hidden = true;
+        changeDataMenu.hidden = false;
+
+        changeDataMenu.classList.remove('closeMenu');
+        changeDataMenu.classList.add('openMenu');
+
+        actualMenu = 'changeData';
+
+        changeDataEmailCodeMenu.removeEventListener('animationend', endAnimationCallback);
+    }
+
+    changeDataEmailCodeMenu.classList.remove('openMenu');
+    changeDataEmailCodeMenu.classList.add('closeMenu');
+
+    changeDataEmailCodeMenu.addEventListener('animationend', endAnimationCallback);
+}
 
 //Botón de comprobar código
 document.getElementById('changeDataConfirmCodeButton').addEventListener('click', changeDataComprobeCode);
@@ -376,6 +410,11 @@ async function changeDataComprobeCode()
                                 mainScreen.hidden = true;
                                 loadingScreen.hidden = false;
                                 saveCookie('_login', theSecretThingThatNobodyHaveToKnow);
+
+                                changeUsernameField.value = '';
+                                changeEmailField.value = '';
+                                changePasswordField.value = '';
+                                comprobePasswordField.value = '';
                                 location.reload();
                             });
                         }
@@ -431,12 +470,7 @@ async function changeDataComprobeCode()
                         text: getText('ok'),
                         callback: function()
                         {
-                            closeWindow(function()
-                            {
-                                changeDataEmailCodeMenu.hidden = true;
-                                changeDataMenu.hidden = false;
-                                actualMenu = 'changeData';
-                            });
+                            closeWindow(changeDataEmailCodeMenuGoBackAnimation);
                         }
                     }
                 });

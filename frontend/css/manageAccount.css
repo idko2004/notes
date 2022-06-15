@@ -103,3 +103,47 @@ input[type='password']:focus
     outline: none;
     transition: all ease 100ms;
 }
+
+.openMenu
+{
+    display: block;
+    animation: openMenuAnimation 350ms ease-in-out 1;
+}
+
+@keyframes openMenuAnimation
+{
+    0%
+    {
+        transform: translateX(30%);
+        opacity: 0;
+    }
+    60%
+    {
+        transform: translateX(-5%);
+        opacity: 0.5;
+    }
+    100%
+    {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.closeMenu
+{
+    animation: closeMenuAnimation 200ms ease-in-out 1;
+}
+
+@keyframes closeMenuAnimation
+{
+    0%
+    {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    100%
+    {
+        transform: translateY(15%);
+        opacity: 0;
+    }
+}

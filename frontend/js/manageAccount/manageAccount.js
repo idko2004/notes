@@ -154,57 +154,135 @@ document.getElementById('toChangeDataMenuButton').addEventListener('click', func
 {
     if(actualMenu !== 'main') return;
 
-    mainMenu.hidden = true;
+    let endAnimationCallback = function(e)
+    {
+        if(e.animationName !== 'closeMenuAnimation') return;
+
+        mainMenu.hidden = true;
+        changeDataMenu.hidden = false;
+
+        changeDataMenu.classList.remove('closeMenu');
+        changeDataMenu.classList.add('openMenu');
+
+        actualMenu = 'changeData';
+        window.scrollTo(0,0);
+
+        mainMenu.removeEventListener('animationend', endAnimationCallback);
+    }
 
     updateDataMenuPlaceholders();
 
-    changeDataMenu.hidden = false;
-    actualMenu = 'changeData';
-    window.scrollTo(0,0);
+    mainMenu.classList.remove('openMenu');
+    mainMenu.classList.add('closeMenu');
+
+    mainMenu.addEventListener('animationend', endAnimationCallback);
 });
 
 document.getElementById('toChangeLanguageMenuButton').addEventListener('click', function()
 {
     if(actualMenu !== 'main') return;
 
-    mainMenu.hidden = true;
-    changeLanguageMenu.hidden = false;
-    actualMenu = 'changeLanguage';
-    window.scrollTo(0,0);
+    let endAnimationCallback = function(e)
+    {
+        if(e.animationName !== 'closeMenuAnimation') return;
+
+        mainMenu.hidden = true;
+        changeLanguageMenu.hidden = false;
+
+        changeLanguageMenu.classList.remove('closeMenu');
+        changeLanguageMenu.classList.add('openMenu');
+
+        actualMenu = 'changeLanguage';
+        window.scrollTo(0,0);
+
+        mainMenu.removeEventListener('animationend', endAnimationCallback);
+    }
+
+    mainMenu.classList.remove('openMenu');
+    mainMenu.classList.add('closeMenu');
+
+    mainMenu.addEventListener('animationend', endAnimationCallback);
 });
 
 document.getElementById('toLocalCopyMenuButton').addEventListener('click', function()
 {
     if(actualMenu !== 'main') return;
-    
-    mainMenu.hidden = true;
+
+    let endAnimationCallback = function(e)
+    {
+        if(e.animationName !== 'closeMenuAnimation') return;
+
+        mainMenu.hidden = true;
+        localCopyMenu.hidden = false;
+
+        localCopyMenu.classList.remove('closeMenu');
+        localCopyMenu.classList.add('openMenu');
+
+        actualMenu = 'localCopy';
+        window.scrollTo(0,0);
+
+        mainMenu.removeEventListener('animationend', endAnimationCallback);
+    }
 
     updateLocalCopyEnabledText();
 
-    localCopyMenu.hidden = false;
-    actualMenu = 'localCopy';
-    window.scrollTo(0,0);
+    mainMenu.classList.remove('openMenu');
+    mainMenu.classList.add('closeMenu');
+
+    mainMenu.addEventListener('animationend', endAnimationCallback);
 });
 
 document.getElementById('logOutInAllMenuButton').addEventListener('click', function()
 {
     if(actualMenu !== 'main') return;
 
-    mainMenu.hidden = true;
-    logOutInAllMenu.hidden = false;
-    actualMenu = 'logOutInAll';
-    window.scrollTo(0,0);
+    let endAnimationCallback = function(e)
+    {
+        if(e.animationName !== 'closeMenuAnimation') return;
+        mainMenu.hidden = true;
+        logOutInAllMenu.hidden = false;
+
+        logOutInAllMenu.classList.remove('closeMenu');
+        logOutInAllMenu.classList.add('openMenu');
+
+        actualMenu = 'logOutInAll';
+        window.scrollTo(0,0);
+
+        mainMenu.removeEventListener('animationend', endAnimationCallback);
+    }
+
+    mainMenu.classList.remove('openMenu');
+    mainMenu.classList.add('closeMenu');
+
+    mainMenu.addEventListener('animationend', endAnimationCallback);
 });
 
 document.getElementById('deleteAccountMenuButton').addEventListener('click', function()
 {
     if(actualMenu !== 'main') return;
 
-    mainMenu.hidden = true;
+    let endAnimationCallback = function(e)
+    {
+        if(e.animationName !== 'closeMenuAnimation') return;
+
+        mainMenu.hidden = true;
+        deleteAccountMenu.hidden = false;
+
+        deleteAccountMenu.classList.remove('closeMenu');
+        deleteAccountMenu.classList.add('openMenu');
+        
+        actualMenu = 'deleteAccount';
+        window.scrollTo(0,0);
+
+        mainMenu.removeEventListener('animationend', endAnimationCallback);
+    }
+
     updateDeleteAccountPlaceholders();
-    deleteAccountMenu.hidden = false;
-    actualMenu = 'deleteAccount';
-    window.scrollTo(0,0);
+
+    mainMenu.classList.remove('openMenu');
+    mainMenu.classList.add('closeMenu');
+
+    mainMenu.addEventListener('animationend', endAnimationCallback);
 });
 
 document.getElementById('goBackToNotes').addEventListener('click', function()

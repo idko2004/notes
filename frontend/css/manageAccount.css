@@ -131,7 +131,7 @@ input[type='password']:focus
 
 .closeMenu
 {
-    animation: closeMenuAnimation 200ms ease-in-out 1;
+    animation: closeMenuAnimation 150ms ease-in-out 1;
 }
 
 @keyframes closeMenuAnimation

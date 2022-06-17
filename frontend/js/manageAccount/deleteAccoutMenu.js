@@ -8,20 +8,48 @@ document.getElementById('goBackDeleteAccountMenu').addEventListener('click', fun
 {
     if(actualMenu !== 'deleteAccount') return;
 
-    deleteAccountMenu.hidden = true;
-    mainMenu.hidden = false;
-    actualMenu = 'main';
-    window.scrollTo(0,0);
+    let endAnimationCallback = function(e)
+    {
+        if(e.animationName !== 'closeMenuAnimation') return;
+
+        deleteAccountMenu.hidden = true;
+        mainMenu.hidden = false;
+
+        mainMenu.classList.remove('closeMenu');
+        mainMenu.classList.add('openMenu');
+
+        actualMenu = 'main';
+        window.scrollTo(0,0);
+        deleteAccountMenu.removeEventListener('animationend', endAnimationCallback);
+    }
+
+    deleteAccountMenu.classList.remove('openMenu');
+    deleteAccountMenu.classList.add('closeMenu');
+    deleteAccountMenu.addEventListener('animationend', endAnimationCallback);
 });
 
 document.getElementById('deleteAccountButton').addEventListener('click', async function()
 {
     if(actualMenu !== 'deleteAccount') return;
 
-    deleteAccountMenu.hidden = true;
-    deleteAccountEmailCodeMenu.hidden = false;
-    actualMenu = 'deleteAccountEmailCode';
-    window.scrollTo(0,0);
+    let endAnimationCallback = function(e)
+    {
+        if(e.animationName !== 'closeMenuAnimation') return;
+
+        deleteAccountMenu.hidden = true;
+        deleteAccountEmailCodeMenu.hidden = false;
+
+        deleteAccountEmailCodeMenu.classList.remove('closeMenu');
+        deleteAccountEmailCodeMenu.classList.add('openMenu');
+
+        actualMenu = 'deleteAccountEmailCode';
+        window.scrollTo(0,0);
+        deleteAccountMenu.removeEventListener('animationend', endAnimationCallback);
+    }
+
+    deleteAccountMenu.classList.remove('openMenu');
+    deleteAccountMenu.classList.add('closeMenu');
+    deleteAccountMenu.addEventListener('animationend', endAnimationCallback);
 
     try
     {
@@ -42,10 +70,24 @@ document.getElementById('deleteAccountButton').addEventListener('click', async f
                     {
                         closeWindow(function()
                         {
-                            deleteAccountEmailCodeMenu.hidden = true;
-                            deleteAccountMenu.hidden = false;
-                            window.scrollTo(0,0);
-                            actualMenu = 'deleteAccount';    
+                            let endAnimationCallback = function(e)
+                            {
+                                if(e.animationName !== 'closeMenuAnimation') return;
+    
+                                deleteAccountEmailCodeMenu.hidden = true;
+                                deleteAccountMenu.hidden = false;
+    
+                                deleteAccountMenu.classList.remove('closeMenu');
+                                deleteAccountMenu.classList.add('openMenu');
+    
+                                window.scrollTo(0,0);
+                                actualMenu = 'deleteAccount';
+                                deleteAccountEmailCodeMenu.removeEventListener('animationend', endAnimationCallback);
+                            }
+    
+                            deleteAccountEmailCodeMenu.classList.remove('openMenu');
+                            deleteAccountEmailCodeMenu.classList.add('closeMenu');
+                            deleteAccountEmailCodeMenu.addEventListener('animationend', endAnimationCallback);
                         });
                     }
                 }
@@ -66,10 +108,24 @@ document.getElementById('deleteAccountButton').addEventListener('click', async f
                 {
                     closeWindow(function()
                     {
-                        deleteAccountEmailCodeMenu.hidden = true;
-                        deleteAccountMenu.hidden = false;
-                        window.scrollTo(0,0);
-                        actualMenu = 'deleteAccount';    
+                        let endAnimationCallback = function(e)
+                        {
+                            if(e.animationName !== 'closeMenuAnimation') return;
+
+                            deleteAccountEmailCodeMenu.hidden = true;
+                            deleteAccountMenu.hidden = false;
+
+                            deleteAccountMenu.classList.remove('closeMenu');
+                            deleteAccountMenu.classList.add('openMenu');
+
+                            window.scrollTo(0,0);
+                            actualMenu = 'deleteAccount';
+                            deleteAccountEmailCodeMenu.removeEventListener('animationend', endAnimationCallback);
+                        }
+
+                        deleteAccountEmailCodeMenu.classList.remove('openMenu');
+                        deleteAccountEmailCodeMenu.classList.add('closeMenu');
+                        deleteAccountEmailCodeMenu.addEventListener('animationend', endAnimationCallback);
                     });
                 }
             }

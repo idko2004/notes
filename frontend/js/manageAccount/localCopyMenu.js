@@ -19,6 +19,21 @@ document.getElementById('localCopyChangeButton').addEventListener('click', funct
 {
     if(actualMenu !== 'localCopy') return;
 
+    let endAnimationCallback = function(e)
+    {
+        if(e.animationName !== 'closeMenuAnimation') return;
+
+        localCopyMenu.hidden = true;
+        mainMenu.hidden = false;
+
+        mainMenu.classList.remove('closeMenu');
+        mainMenu.classList.add('openMenu');
+
+        actualMenu = 'main';
+        window.scrollTo(0,0);
+        localCopyMenu.removeEventListener('animationend', endAnimationCallback);
+    }
+
     if(saveNotesLocally === 'true')
     {
         saveNotesLocally = 'false';
@@ -29,18 +44,32 @@ document.getElementById('localCopyChangeButton').addEventListener('click', funct
         saveNotesLocally = 'true';
         thingsChanged.localCopy = 'true';
     }
-    localCopyMenu.hidden = true;
-    mainMenu.hidden = false;
-    actualMenu = 'main';
-    window.scrollTo(0,0);
+
+    localCopyMenu.classList.remove('openMenu');
+    localCopyMenu.classList.add('closeMenu');
+    localCopyMenu.addEventListener('animationend', endAnimationCallback);
 });
 
 document.getElementById('localCopyCancelButton').addEventListener('click', function()
 {
     if(actualMenu !== 'localCopy') return;
 
-    localCopyMenu.hidden = true;
-    mainMenu.hidden = false;
-    actualMenu = 'main';
-    window.scrollTo(0,0);
+    let endAnimationCallback = function(e)
+    {
+        if(e.animationName !== 'closeMenuAnimation') return;
+
+        localCopyMenu.hidden = true;
+        mainMenu.hidden = false;
+
+        mainMenu.classList.remove('closeMenu');
+        mainMenu.classList.add('openMenu');
+
+        actualMenu = 'main';
+        window.scrollTo(0,0);
+        localCopyMenu.removeEventListener('animationend', endAnimationCallback);
+    }
+
+    localCopyMenu.classList.remove('openMenu');
+    localCopyMenu.classList.add('closeMenu');
+    localCopyMenu.addEventListener('animationend', endAnimationCallback);
 });

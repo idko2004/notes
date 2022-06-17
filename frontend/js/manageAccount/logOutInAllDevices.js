@@ -62,8 +62,22 @@ document.getElementById('logOutInAllCancelButton').addEventListener('click', fun
 {
     if(actualMenu !== 'logOutInAll') return;
 
-    actualMenu = 'main';
-    logOutInAllMenu.hidden = true;
-    mainMenu.hidden = false;
-    window.scrollTo(0,0);
+    let endAnimationCallback = function(e)
+    {
+        if(e.animationName !== 'closeMenuAnimation') return;
+
+        logOutInAllMenu.hidden = true;
+        mainMenu.hidden = false;
+
+        mainMenu.classList.remove('closeMenu');
+        mainMenu.classList.add('openMenu');
+
+        actualMenu = 'main';
+        window.scrollTo(0,0);
+        logOutInAllMenu.removeEventListener('animationend', endAnimationCallback);
+    }
+
+    logOutInAllMenu.classList.remove('openMenu');
+    logOutInAllMenu.classList.add('closeMenu');
+    logOutInAllMenu.addEventListener('animationend', endAnimationCallback);
 });

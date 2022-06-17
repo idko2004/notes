@@ -1,7 +1,8 @@
-const {MongoClient} = require('mongodb');
-const things = require('./things.json');
+if(process.env.NODE_ENV !== 'production') require('dotenv').config();
 
-const mdbClient = new MongoClient(things.dbURL);
+const {MongoClient} = require('mongodb');
+
+const mdbClient = new MongoClient(process.env.DB_URL);
 
 let sessionIDList = {};
 

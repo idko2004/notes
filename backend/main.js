@@ -1,10 +1,16 @@
 console.log('\033[1;33mIniciando servidor\033[0m');
 
+if(process.env.NODE_ENV !== 'production')
+{
+    require('dotenv').config();
+    console.log('\033[1;33mEntorno de pruebas\033[0m');
+}
+
 const express = require('express');
 const cors = require('cors');
 
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT;
 
 app.use(cors());
 
@@ -23,8 +29,8 @@ require('./routes/logout')(app);
 require('./routes/pingpong')(app);
 
 
-app.listen(port, function()
+app.listen(PORT, function()
 {
-    console.log('Servidor inciado en el puerto', port);
+    console.log('Servidor inciado en el puerto', PORT);
 });
 

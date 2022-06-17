@@ -1,5 +1,6 @@
+if(process.env.NODE_ENV !== 'production') require('dotenv').config();
+
 const database = require('../database');
-const things = require('../things.json');
 
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
@@ -14,8 +15,8 @@ const transporter = mailer.createTransport(
     host: 'smtp.zoho.com',
     auth:
     {
-        user: things.emailUser,
-        pass: things.emailPassword
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD
     }
 });
 
@@ -110,7 +111,7 @@ module.exports = function(app)
         //Enviar el email
         const mailOptions =
         {
-            from: things.emailUser,
+            from: process.env.EMAIL_USER,
             to: email,
             subject: 'Borrar cuenta de Notas',
             html: mailContent

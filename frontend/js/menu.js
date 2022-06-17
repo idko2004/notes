@@ -164,19 +164,19 @@ menuExitLocalMode.addEventListener('click', async function()
     }
 
     await saveNote();
-    document.getElementById('noteScreen').hidden = true;
-    notesList.innerHTML = '';
-    noteName.innerText = getText('clickANote');
-    textArea.value = '';
-    textArea.disabled = true;
-
     theSecretThingThatNobodyHasToKnow = undefined;
     deleteKey('_login');
 
     animationMenuClose(function()
     {
+        document.getElementById('noteScreen').hidden = true;
         document.getElementById('loginScreen').hidden = false;
+        notesList.innerHTML = '';
+        noteName.innerText = getText('clickANote');
+        textArea.value = '';
+        textArea.disabled = true;    
         canInteract = true;
+        theActualThing = 'login';
     });
 });
 

@@ -1,2 +1,3 @@
 backend/node_modules/
 backend/things.json
+backend/.env

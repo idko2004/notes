@@ -224,6 +224,7 @@ document.getElementById('localModeButton').addEventListener('click',function()
     document.getElementById('noteScreen').hidden = false;
     menuButtonText();
     resizeTwice();
+    theActualThing = 'note';
 });
 
 //Que cuando le das a enter pase al siguiente campo

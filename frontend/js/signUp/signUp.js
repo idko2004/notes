@@ -471,7 +471,7 @@ async function comprobeEmailCode()
             changeEmailButton.hidden = false;
             nextButton.hidden = false;
             text.innerText = getText('introduceAValidCode');
-            setTinyText(`${getText('codeWeSent')} ${email}`);
+            setTinyText(getText('introduceAValidCode2'));
         }
         else
         {

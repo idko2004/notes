@@ -51,7 +51,7 @@
 
 .openWin
 {
-    animation: openWindow 200ms linear 1;
+    animation: openWindow 250ms ease-in-out 1;
 }
 
 @keyframes openWindow
@@ -62,9 +62,9 @@
         top: 10%;
         opacity: 0;
     }
-    70%
+    60%
     {
-        transform: translate(-50%, -40%);
+        transform: translate(-50%, -37%);
         top: 40%;
         opacity: 0.7;
     }
@@ -99,7 +99,7 @@
 
 .openBg
 {
-    animation: openBackground 100ms linear 1;
+    animation: openBackground 100ms ease-in-out 1;
 }
 
 @keyframes openBackground
@@ -116,7 +116,7 @@
 
 .closeBg
 {
-    animation: closeBackground 100ms linear 1;
+    animation: closeBackground 100ms ease-in-out 1;
 }
 
 @keyframes closeBackground

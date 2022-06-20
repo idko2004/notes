@@ -238,7 +238,7 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', function
                         changeDataMenu.classList.remove('openMenu');
                         changeDataMenu.classList.add('closeMenu');
                     
-                        changeDataMenu.addEventListener('animationend', endAnimationCallback);                    
+                        changeDataMenu.addEventListener('animationend', endAnimationCallback);
     
                         //Hacer la llamada al servidor para actualizar a los nuevos datos, generar un código y enviar el email
                         try

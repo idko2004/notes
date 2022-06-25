@@ -27,7 +27,7 @@
 
 #menu
 {
-    width: 30%;
+    width: 15ch;
     min-width: 20rem;
     max-width: 30rem;
     
@@ -259,4 +259,13 @@
     border-color: white;
     transition: all ease 100ms;
     outline: none;
+}
+
+#menuTitleText
+{
+    max-width: 13ch;
+    max-height: 1.1em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }

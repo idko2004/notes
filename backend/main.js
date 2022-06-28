@@ -12,6 +12,8 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT;
 
+require('./crypto');
+
 app.use(cors());
 
 require('./routes/note')(app);
@@ -27,6 +29,7 @@ require('./routes/deleteNote')(app);
 require('./routes/renameNote')(app);
 require('./routes/logout')(app);
 require('./routes/pingpong')(app);
+require('./routes/generateLoginPassword')(app);
 
 
 app.listen(PORT, function()

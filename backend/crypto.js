@@ -21,11 +21,6 @@ function decrypt(input, password)
     }
 }
 
-const a = encrypt('tapa la patata', 'asdf324');
-console.log('cifrado:', a);
-const b = decrypt(a, 'asdf324');
-console.log('descifrado:', b);
-
 module.exports =
 {
     encrypt,

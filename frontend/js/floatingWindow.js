@@ -159,7 +159,6 @@ function closeWindow(callback)
 
     animationEndEvent = async function(e)
     {
-        console.log(e);
         if(e.animationName !== 'closeWindow') return;
         canInteract = true;
         thereIsAWindows = false;
@@ -173,7 +172,6 @@ function closeWindow(callback)
         if(textInputCallback !== null) windowInput.children[0].removeEventListener('keypress', textInputCallback);
         textInputCallback = null;
 
-        console.log(animationEndEvent);
         if(animationEndEvent !== undefined) theWindow.removeEventListener('animationend', animationEndEvent);
     
         if(callback !== undefined && typeof callback === 'function') callback();

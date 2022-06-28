@@ -1,4 +1,8 @@
 let canClick_login = true;
+
+let codePassword;
+let loginPassword;
+
 document.getElementById('loginButton').addEventListener('click', async function(e)
 {
     if(theActualThing !== 'login') return;
@@ -239,3 +243,44 @@ document.getElementById('passwordField').addEventListener('keydown', function(e)
     if(theActualThing !== 'login') return;
     if(e.key === 'Enter') document.getElementById('loginButton').click();
 });
+
+async function requestLoginPassword()
+{
+    codePassword = "_" + Math.random().toString().split('.')[1];
+    try
+    {
+        const response = await axios.post(`${path}/generateLoginPassword`, {code: codePassword});
+
+        if(response.data.error !== undefined || response.data.secret === undefined)
+        {
+            floatingWindow(
+            {
+                title: getText('somethingWentWrong'),
+                text: `${getText('errorCode')}: ${response.data.error}`,
+                button:
+                {
+                    text: getText('ok'),
+                    callback: closeWindow
+                }
+            });
+        }
+        else
+        {
+            loginPassword = response.data.secret;
+        }
+    }
+    catch
+    {
+        floatingWindow(
+        {
+            title: getText('ups'),
+            text: getText('serverDown'),
+            button:
+            {
+                text: getText('ok'),
+                callback: closeWindow
+            }
+        });
+    }
+
+}

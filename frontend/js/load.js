@@ -5,7 +5,8 @@ async function start()
 {
     theSecretThingThatNobodyHasToKnow = getKey('_login');
     let login = theSecretThingThatNobodyHasToKnow;
-    console.log(login);
+    
+    theOtherSecretThing = getKey('_pswrd');
 
     if(hashContains('local'))
     {
@@ -22,12 +23,13 @@ async function start()
         menuButtonText();
         theActualThing = 'note';
     }
-    else if([null, undefined, 'undefined', ''].includes(login))
+    else if([null, undefined, 'undefined', ''].includes(login) || [null, undefined, 'undefined', ''].includes(theOtherSecretThing))
     {
+        await requestLoginPassword();
         loadingScreen.hidden = true;
         document.getElementById('noteScreen').hidden = true;
         document.getElementById('loginScreen').hidden = false;
-        floatingWindow(
+        /*floatingWindow(
         {
             title: 'Aún estamos en desarrollo',
             text: 'Por el momento sólo está disponible el modo local.',
@@ -36,7 +38,7 @@ async function start()
                 text: getText('ok'),
                 callback: closeWindow
             }
-        });
+        });*/
         theActualThing = 'login';
     }
     else if(login === 'local')
@@ -56,9 +58,11 @@ async function start()
     else
     {
         isLocalMode = false;
+
         try
         {
             const response = await axios.get(`${path}/iHaveAValidKey`, {headers: {key: login}});
+
             if(response.data.iHaveAValidKey === 'yesYouHave')
             {
                 checkLocalCopyValue();
@@ -72,6 +76,7 @@ async function start()
                 //No tenemos una clave válida
                 deleteKey('_login');
                 theSecretThingThatNobodyHasToKnow = undefined;
+                theOtherSecretThing = undefined;
                 loadingScreen.hidden = true;
                 document.getElementById('noteScreen').hidden = true;
                 document.getElementById('loginScreen').hidden = false;
@@ -95,6 +100,7 @@ async function start()
                         {
                             console.log('Modo local');
                             theSecretThingThatNobodyHasToKnow = 'local';
+                            theOtherSecretThing = undefined;
                             isLocalMode = true;
 
                             document.getElementById('loginScreen').hidden = true;

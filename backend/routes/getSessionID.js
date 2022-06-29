@@ -1,4 +1,5 @@
 const database = require('../database');
+const crypto = require('../crypto');
 const rand = require('generate-key');
 
 const bodyParser = require('body-parser');
@@ -18,13 +19,55 @@ module.exports = function(app)
             console.log('BadRequest: no body');
             return;
         }
+        const encrypted = req.body.encrypt;
+        if(encrypted === undefined)
+        {
+            res.status(400).send({error: 'notEncrypted'});
+            console.log('notEncrypted');
+            return;
+        }
+        const decryptPasswordID = req.body.code;
+        if(decryptPasswordID === undefined)
+        {
+            res.status(400).send({error: 'badRequest'});
+            console.log('badRequest: no decrypt ID');
+            return;
+        }
+
+        //Obtener la clave para descifrar los datos
+        const decryptPasswordElement = await database.getElement('sessionID', {code: decryptPasswordID});
+        if(decryptPasswordElement === null)
+        {
+            res.status(400).send({error: 'invalidPasswordCode'});
+            console.log('invalidPasswordCode');
+            return;
+        }
+
+        const decryptPassword = decryptPasswordElement.pswrd;
+        if(decryptPassword === undefined)
+        {
+            res.status(400).send({error: 'pswrdUndefined'});
+            console.log('pswrdUndefined');
+            return;
+        }
+
+        //Descifrar los datos
+        let decrypted = crypto.decrypt(encrypted, decryptPassword);
+        if(decrypted === undefined)
+        {
+            res.status(200).send({error: 'decryptFailed'});
+            console.log('decryptFailed');
+            return;
+        }
+        decrypted = JSON.parse(decrypted);
         
-        const username = req.body.username;
-        const password = req.body.password;
+        const username = decrypted.username;
+        const password = decrypted.password;
 
         if(username === undefined || password === undefined)
         {
             res.status(400).send({error: 'badRequest'});
+            console.log('badRequest: no username or password');
             return;
         }
     
@@ -39,6 +82,7 @@ module.exports = function(app)
             else
             {
                 res.status(200).send({error: 'wrongPassword'});
+                console.log('wrongPassword');
                 return;
             }
         }
@@ -55,6 +99,7 @@ module.exports = function(app)
                 else
                 {
                     res.status(200).send({error: 'wrongPassword'});
+                    console.log('wrongPassword');
                     return;
                 }
             }
@@ -67,19 +112,22 @@ module.exports = function(app)
             let key;
             while(true)
             {
-                key = rand.generateKey(7);
+                key = rand.generateKey(12);
                 if(database.sessionIDList[key] === undefined)
                 {
                     let element = await database.getElement('sessionID', {key});
-                    console.log(element);
+                    console.log('tiene que dar null eventualmente:', element);
                     if(element === null) break;
                 }
             }
     
+            const newPassword = rand.generateKey(30);
+
             const dateCreated = new Date();
             const keyData =
             {
                 key,
+                pswrd: newPassword,
                 email,
                 date:
                 {
@@ -88,11 +136,16 @@ module.exports = function(app)
                     y: dateCreated.getUTCFullYear()
                 }
             }
-    
+
             database.sessionIDList[key] = keyData;
             database.createElement('sessionID', keyData);
+
+            const keyEncrypted = crypto.encrypt(JSON.stringify({key: key, pswrd: newPassword}), decryptPassword);
+
+            await database.deleteElement('sessionID', {code: decryptPasswordID});
     
-            res.status(200).send({key});
+            res.status(200).send({decrypt: keyEncrypted});
+            console.log('sessionID enviado');
         }
     });
 }

@@ -93,14 +93,19 @@ document.getElementById('loginButton').addEventListener('click', async function(
     //Realizar la llamada para iniciar sesión
     try
     {
-        const response = await axios.get(`${path}/getSessionID`, {headers: {username, password}});
+        //const response = await axios.get(`${path}/getSessionID`, {headers: {username, password}});
+        const response = await encryptHttpCall('/getSessionID', {encrypt: {username, password}, code: codePassword}, loginPassword);
         console.log(response);
-        if(response.data.error === undefined && response.data.key !== undefined) //Clave obtenida con éxito
+        if(response.data.error === undefined && response.data.decrypt.key !== undefined && response.data.decrypt.pswrd !== undefined) //Clave obtenida con éxito
         {
             console.log('Clave obtenida');
             isLocalMode = false;
-            saveKey('_login', response.data.key);
-            theSecretThingThatNobodyHasToKnow = response.data.key;
+            theSecretThingThatNobodyHasToKnow = response.data.decrypt.key;
+            theOtherSecretThing = response.data.decrypt.pswrd;
+            saveKey('_login', theSecretThingThatNobodyHasToKnow);
+            saveKey('_pswrd', theOtherSecretThing);
+            codePassword = undefined;
+            loginPassword = undefined;
     
             document.getElementById('loginScreen').hidden = true;
             loadingScreen.hidden = false;
@@ -171,7 +176,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
             floatingWindow(
             {
                 title: getText('somethingWentWrong'),
-                text: getText('login_error_text'),
+                text: `${getText('login_error_text')}\nerror code: ${response.data.error}`,
                 button:
                 {
                     text: getText('ok'),
@@ -267,6 +272,7 @@ async function requestLoginPassword()
         else
         {
             loginPassword = response.data.secret;
+            console.log('Secret key obtained');
         }
     }
     catch

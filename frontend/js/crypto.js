@@ -8,7 +8,7 @@ function encrypt(input, password)
         return;
     }
 
-    const result = CryptoJS.AES.encrypt(input, password);
+    const result = CryptoJS.AES.encrypt(input, password).toString();
     return result;
 }
 
@@ -30,4 +30,41 @@ function decrypt(input, password)
         console.error('Error al descifrar');
         return;
     }
+}
+
+async function encryptHttpCall(route, body, password)
+{
+    if(typeof body !== 'object')
+    {
+        console.error('not an object');
+        return;
+    }
+    if(body.encrypt === undefined)
+    {
+        console.error('nothing to encrypt');
+        return;
+    }
+
+    body.encrypt = JSON.stringify(body.encrypt);
+    body.encrypt = encrypt(body.encrypt, password);
+
+    console.log(body);
+    
+    const response = await axios.post(`${path}${route}`, body);
+    console.log(response);
+
+    if(response.data.decrypt !== undefined)
+    {
+        try
+        {
+            response.data.decrypt = JSON.parse(decrypt(response.data.decrypt, password));
+        }
+        catch
+        {
+            console.error('ERROR AL DESCIFRAR LA RESPUESTA');
+            return;
+        }
+    }
+    console.log(response.data);
+    return response;
 }

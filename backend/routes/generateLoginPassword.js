@@ -57,16 +57,28 @@ module.exports = function(app)
         }
 
         //Generar una contraseña
-        const password = rand.generateKey(40);
+        const password = rand.generateKey(30);
 
         //Crear el objeto que contienen la contraseña y el código
+        const dateCreated = new Date();
         const obj =
         {
-            
+            code,
+            pswrd: password,
+            date:
+            {
+                d: dateCreated.getUTCDate(),
+                m: dateCreated.getUTCMonth() + 1,
+                y: dateCreated.getUTCFullYear()
+            }
         }
+        //TODO: que se puedan borrar estos objetos periódicamente
 
         //Guardar el objeto en la base de datos de sessionID
+        await database.createElement('sessionID', obj);
 
         //Responder al cliente con la contraseña
+        res.status(200).send({secret: password});
+        console.log('Contraseña enviada');
     });
 }

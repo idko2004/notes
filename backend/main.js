@@ -31,6 +31,21 @@ require('./routes/logout')(app);
 require('./routes/pingpong')(app);
 require('./routes/generateLoginPassword')(app);
 
+app.get('*', function(req, res)
+{
+    console.log('------------------------------------------------');
+    console.log(req.headers);
+    console.log('not here');
+    res.status(404).send('not here');
+});
+
+app.post('*', function(req, res)
+{
+    console.log('------------------------------------------------');
+    console.log(req.headers);
+    console.log('not here');
+    res.status(404).send('not here');
+});
 
 app.listen(PORT, function()
 {

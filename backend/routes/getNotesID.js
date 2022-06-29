@@ -1,15 +1,25 @@
 const database = require('../database');
 
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
+
 module.exports = function(app)
 {
-    app.get('/getNotesID', async function(req, res)
+    app.post('/getNotesID', jsonParser, async function(req, res)
     {
         console.log('------------------------------------------------');
         console.log('\033[1;34m/getNotesID\033[0m');
-        console.log('header',req.headers);
-    
+        console.log('body',req.body);
+
         //Comprobar el userID para identificar al usuario y obtener sus notesID.
-        const key = req.headers.key;
+        if(Object.keys(req.body).length === 0)
+        {
+            res.status(400).send({error: 'badRequest'});
+            console.log('BadRequest: no body');
+            return;
+        }
+
+        const key = req.body.key;
         if(key === undefined)
         {
             res.status(400).send({error: 'badRequest'});

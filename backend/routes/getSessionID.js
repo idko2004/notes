@@ -1,16 +1,26 @@
 const database = require('../database');
 const rand = require('generate-key');
 
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
+
 module.exports = function(app)
 {
-    app.get('/getSessionID', async function(req, res)
+    app.post('/getSessionID', jsonParser, async function(req, res)
     {
         console.log('------------------------------------------------');
         console.log('\033[1;34m/getSessionID\033[0m');
-        console.log('header',req.headers);
+        console.log('body',req.body);
+
+        if(Object.keys(req.body).length === 0)
+        {
+            res.status(400).send({error: 'badRequest'});
+            console.log('BadRequest: no body');
+            return;
+        }
         
-        const username = req.headers.username;
-        const password = req.headers.password;
+        const username = req.body.username;
+        const password = req.body.password;
 
         if(username === undefined || password === undefined)
         {

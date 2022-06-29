@@ -1,15 +1,25 @@
 const database = require('../database');
 
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
+
 module.exports = function(app)
 {
-    app.get('/getUsername', async function(req, res)
+    app.post('/getUsername', jsonParser, async function(req, res)
     {
         console.log('------------------------------------------------');
         console.log('\033[1;34m/getUsername\033[0m');
-        console.log('header',req.headers);
+        console.log('body',req.body);
+
+        if(Object.keys(req.body).length === 0)
+        {
+            res.status(400).send({error: 'badRequest'});
+            console.log('BadRequest: no body');
+            return;
+        }
     
         //Comprobamos si existen los requisitos
-        const key = req.headers.key;
+        const key = req.body.key;
         if(key === undefined)
         {
             res.status(400).send({error: 'badRequest'});

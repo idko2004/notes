@@ -47,12 +47,12 @@ module.exports = function(app)
             return;
         }
 
-        //Comprobar que el código recibido sea único
-        const uniqueCode = await database.getElement('sessionID', {code});
-        if(uniqueCode !== null)
+        //En caso de que el código ya haya sido generado anteriormente, simplemente volver a enviarlo
+        const codeExists = await database.getElement('sessionID', {code});
+        if(codeExists !== null)
         {
-            res.status(200).send({error: 'repeatedCode'});
-            console.log('repeatedCode: code not unique');
+            res.status(200).send({secret: codeExists.pswrd});
+            console.log('Contraseña generada anteriormente enviada');
             return;
         }
 

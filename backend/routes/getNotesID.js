@@ -11,6 +11,7 @@ module.exports = function(app)
         console.log('\033[1;34m/getNotesID\033[0m');
         console.log('body',req.body);
 
+        //Esta ruta recibe datos sin encriptar
         //Comprobar el userID para identificar al usuario y obtener sus notesID.
         if(Object.keys(req.body).length === 0)
         {

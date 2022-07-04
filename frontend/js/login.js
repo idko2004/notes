@@ -106,11 +106,11 @@ document.getElementById('loginButton').addEventListener('click', async function(
             saveKey('_pswrd', theOtherSecretThing);
             codePassword = undefined;
             loginPassword = undefined;
-    
+
             document.getElementById('loginScreen').hidden = true;
             loadingScreen.hidden = false;
             canClick_login = true;
-    
+
             checkLocalCopyValue();
             await loadNotesList();
             menuButtonText();
@@ -188,7 +188,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
                     }
                 }
             });
-        } 
+        }
     }
     catch
     {
@@ -251,10 +251,18 @@ document.getElementById('passwordField').addEventListener('keydown', function(e)
 
 async function requestLoginPassword()
 {
-    codePassword = "_" + Math.random().toString().split('.')[1];
+    let deviceID = getKey('_id');
+    if([undefined, null, '', 'undefined', 'null'].includes(deviceID))
+    {
+        deviceID = "_" + Math.random().toString().split('.')[1];
+        saveKey('_id', deviceID);
+    }
+    codePassword = deviceID;
+
     try
     {
         const response = await axios.post(`${path}/generateLoginPassword`, {code: codePassword});
+        console.log(response);
 
         if(response.data.error !== undefined || response.data.secret === undefined)
         {
@@ -288,5 +296,4 @@ async function requestLoginPassword()
             }
         });
     }
-
 }

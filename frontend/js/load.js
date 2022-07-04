@@ -5,7 +5,7 @@ async function start()
 {
     theSecretThingThatNobodyHasToKnow = getKey('_login');
     let login = theSecretThingThatNobodyHasToKnow;
-    
+
     theOtherSecretThing = getKey('_pswrd');
 
     if(hashContains('local'))
@@ -105,7 +105,7 @@ async function start()
 
                             document.getElementById('loginScreen').hidden = true;
                             loadingScreen.hidden = true;
-                    
+
                             loadNotesList();
                             document.getElementById('noteScreen').hidden = false;
 

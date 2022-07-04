@@ -19,7 +19,7 @@ async function loadNotesList()
         let loginKey = theSecretThingThatNobodyHasToKnow;
         console.log(loginKey);
         //const response = await axios.get(`${path}/getNotesID`, {headers: {key: loginKey}});
-        const response = await encryptHttpCall('/getNotesID', {key: loginKey}, theSecretThingThatNobodyHasToKnow);
+        const response = await encryptHttpCall('/getNotesID', {key: loginKey}, theOtherSecretThing);
         console.log(response);
         if(response.data.error !== undefined)
         {
@@ -52,9 +52,11 @@ async function loadNotesList()
             });
             return;
         }
-        const notesArray = response.data.notesID;
+        const notesArray = response.data.decrypt.notesID;
+        console.log(notesArray);
         for(let i = 0; i < notesArray.length; i++)
         {
+            console.log(notesArray[i]);
             let name = notesArray[i].name;
             let id = notesArray[i].id;
             createListButton(name,id);

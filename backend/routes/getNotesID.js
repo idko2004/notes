@@ -1,4 +1,5 @@
 const database = require('../database');
+const crypto = require('../crypto');
 
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
@@ -43,6 +44,14 @@ module.exports = function(app)
             return;
         }
 
+        //Obtener contraseña para cifrar los datos
+        const pswrd = keyData.pswrd;
+        console.log('password', pswrd);
+        if(pswrd === undefined)
+        {
+            res.status(200).send({error: 'cantGetPassword'});
+        }
+
         const userElement = await database.getElement('users', {email});
         if(userElement === null)
         {
@@ -50,9 +59,11 @@ module.exports = function(app)
             console.log('userNull');
             return;
         }
-    
-        //Obtener notesID
-        const notesID = userElement.notesID;
-        res.status(200).send({notesID});
+
+        //Obtener notesID y cifrar
+        const notesID = JSON.stringify({notesID: userElement.notesID});
+        const notesIdEncrypted = crypto.encrypt(notesID, pswrd);
+
+        res.status(200).send({decrypt: notesIdEncrypted});
     });
 }

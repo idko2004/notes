@@ -1,4 +1,3 @@
-const crypto = require('../crypto');
 const database = require('../database');
 const rand = require('generate-key');
 
@@ -49,6 +48,7 @@ module.exports = function(app)
 
         //En caso de que el código ya haya sido generado anteriormente, simplemente volver a enviarlo
         const codeExists = await database.getElement('sessionID', {code});
+        console.log(codeExists);
         if(codeExists !== null)
         {
             res.status(200).send({secret: codeExists.pswrd});
@@ -79,6 +79,7 @@ module.exports = function(app)
 
         //Responder al cliente con la contraseña
         res.status(200).send({secret: password});
+        console.log('contraseña', password);
         console.log('Contraseña enviada');
     });
 }

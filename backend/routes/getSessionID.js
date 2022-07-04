@@ -140,6 +140,7 @@ module.exports = function(app)
             database.sessionIDList[key] = keyData;
             database.createElement('sessionID', keyData);
 
+            console.log('the new password', newPassword);
             const keyEncrypted = crypto.encrypt(JSON.stringify({key: key, pswrd: newPassword}), decryptPassword);
 
             await database.deleteElement('sessionID', {code: decryptPasswordID});

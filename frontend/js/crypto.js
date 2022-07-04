@@ -39,6 +39,7 @@ async function encryptHttpCall(route, body, password)
         console.error('not an object');
         return;
     }
+    console.log('password', password);
     if(body.encrypt !== undefined)
     {
         body.encrypt = JSON.stringify(body.encrypt);

@@ -99,6 +99,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
         if(response.data.error === undefined && response.data.decrypt.key !== undefined && response.data.decrypt.pswrd !== undefined) //Clave obtenida con éxito
         {
             console.log('Clave obtenida');
+            console.log('la nueva contraseña', response.data.decrypt.pswrd);
             isLocalMode = false;
             theSecretThingThatNobodyHasToKnow = response.data.decrypt.key;
             theOtherSecretThing = response.data.decrypt.pswrd;
@@ -263,6 +264,7 @@ async function requestLoginPassword()
     {
         const response = await axios.post(`${path}/generateLoginPassword`, {code: codePassword});
         console.log(response);
+        console.log('contraseña', response.data.secret);
 
         if(response.data.error !== undefined || response.data.secret === undefined)
         {

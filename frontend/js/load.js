@@ -8,6 +8,7 @@ async function start()
 
     theOtherSecretThing = getKey('_pswrd');
 
+    //Forzar modo local
     if(hashContains('local'))
     {
         theSecretThingThatNobodyHasToKnow = 'local';
@@ -23,6 +24,7 @@ async function start()
         menuButtonText();
         theActualThing = 'note';
     }
+    //No hay datos guardados
     else if([null, undefined, 'undefined', ''].includes(login) || [null, undefined, 'undefined', ''].includes(theOtherSecretThing))
     {
         await requestLoginPassword();
@@ -41,6 +43,7 @@ async function start()
         });*/
         theActualThing = 'login';
     }
+    //Modo local
     else if(login === 'local')
     {
         console.log('Modo local');
@@ -55,13 +58,14 @@ async function start()
         menuButtonText();
         theActualThing = 'note';
     }
+    //Hay una clave guardada
     else
     {
         isLocalMode = false;
 
         try
         {
-            const response = await axios.get(`${path}/iHaveAValidKey`, {headers: {key: login}});
+            const response = await axios.post(`${path}/iHaveAValidKey`, {key: login});
 
             if(response.data.iHaveAValidKey === 'yesYouHave')
             {
@@ -75,6 +79,7 @@ async function start()
             {
                 //No tenemos una clave válida
                 deleteKey('_login');
+                deleteKey('_pswrd');
                 theSecretThingThatNobodyHasToKnow = undefined;
                 theOtherSecretThing = undefined;
                 loadingScreen.hidden = true;

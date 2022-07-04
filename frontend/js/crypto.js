@@ -64,6 +64,7 @@ async function encryptHttpCall(route, body, password)
             return;
         }
     }
+    else console.log('Nothing to decrypt');
     console.log(response.data);
     return response;
 }

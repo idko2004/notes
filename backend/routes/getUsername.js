@@ -1,4 +1,5 @@
 const database = require('../database');
+const crypto = require('../crypto');
 
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
@@ -36,10 +37,18 @@ module.exports = function(app)
         
         //Buscar el email en la base de datos
         const email = keyData.email;
-        if(keyData.email === undefined)
+        if(email === undefined)
         {
             res.status(200).send({error: 'emailUndefined'});
             console.log('emailUndefined');
+            return;
+        }
+
+        const pswrd = keyData.pswrd;
+        if(pswrd === undefined)
+        {
+            res.status(200).send({error: 'cantGetPassword'});
+            console.log('cantGetPassword');
             return;
         }
 
@@ -54,8 +63,9 @@ module.exports = function(app)
         //Obtener el nombre de usuario
         const username = element.username;
         const passwordLength = element.password.length;
-        const language = element.language;
 
-        res.status(200).send({username, email, passwordLength});
+        const encrypted = crypto.encrypt(JSON.stringify({username, email, passwordLength}), pswrd);
+
+        res.status(200).send({decrypt: encrypted});
     });
 }

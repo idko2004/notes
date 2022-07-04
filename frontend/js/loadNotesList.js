@@ -53,10 +53,8 @@ async function loadNotesList()
             return;
         }
         const notesArray = response.data.decrypt.notesID;
-        console.log(notesArray);
         for(let i = 0; i < notesArray.length; i++)
         {
-            console.log(notesArray[i]);
             let name = notesArray[i].name;
             let id = notesArray[i].id;
             createListButton(name,id);

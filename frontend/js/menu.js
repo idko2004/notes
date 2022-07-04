@@ -42,14 +42,15 @@ async function menuButtonText()
         //Obtener nombre de usuario
         try
         {
-            const response = await axios.get(`${path}/getUsername`, {headers: {key: theSecretThingThatNobodyHasToKnow}});
-            menuButton.innerText = response.data.username;
-            menuTitleText.innerText = response.data.username;
+            //const response = await axios.get(`${path}/getUsername`, {headers: {key: theSecretThingThatNobodyHasToKnow}});
+            const response = await encryptHttpCall('/getUsername', {key: theSecretThingThatNobodyHasToKnow}, theOtherSecretThing);
+            menuButton.innerText = response.data.decrypt.username;
+            menuTitleText.innerText = response.data.decrypt.username;
         }
         catch
         {
             menuButton.innerText = getText('someoneAccount');
-            menu.innerText = getText('someoneAccount');
+            menuTitleText.innerText = getText('someoneAccount');
         }
     }
 }

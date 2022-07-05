@@ -27,7 +27,8 @@ async function loadNote(name, id)
         try
         {
             //Cargar la nota
-            const response = await axios.get(`${path}/note`, {headers: {key: theSecretThingThatNobodyHasToKnow, noteid: id}});
+            //const response = await axios.get(`${path}/note`, {headers: {key: theSecretThingThatNobodyHasToKnow, noteid: id}});
+            const response = await encryptHttpCall('/note', {encrypt: {noteid: id}, key: theSecretThingThatNobodyHasToKnow}, theOtherSecretThing);
             console.log(response);
             if(response.data.error !== undefined) //Ocurre un error
             {
@@ -50,7 +51,7 @@ async function loadNote(name, id)
                 });
                 return;
             }
-            if(response.data.note !== undefined) noteContent = response.data.note;
+            if(response.data.decrypt.note !== undefined) noteContent = response.data.decrypt.note;
             else
             {
                 console.error('error cargando la nota');

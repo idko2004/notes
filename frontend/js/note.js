@@ -202,12 +202,20 @@ async function saveNote()
         try
         {
             console.log('Guardando nota', actualNoteID);
-            const response = await axios.post(`${path}/saveNote`,
+            /*const response = await axios.post(`${path}/saveNote`,
             {
                 key: theSecretThingThatNobodyHasToKnow,
                 noteID: noteID,
                 noteContent: value
-            });
+            });*/
+            const response = await encryptHttpCall('/saveNote',
+            {
+                key: theSecretThingThatNobodyHasToKnow,
+                encrypt:
+                {
+                    noteID, noteContent: value
+                }
+            }, theOtherSecretThing);
 
             if(response.data.result === 1)
             {

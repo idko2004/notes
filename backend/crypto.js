@@ -27,7 +27,7 @@ function decrypt(input, password)
     catch
     {
         console.log('HUBO UN ERROR AL DESENCRIPTAR');
-        return;
+        return null;
     }
 }
 

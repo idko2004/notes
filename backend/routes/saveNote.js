@@ -2,6 +2,7 @@ const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
 const database = require('../database');
+const crypto = require('../crypto');
 
 module.exports = function(app)
 {
@@ -15,16 +16,23 @@ module.exports = function(app)
         if(Object.keys(req.body).length === 0)
         {
             res.status(400).send({error: 'badRequest'});
+            console.log('badRequest: no body');
+            return;
+        }
+
+        const reqEncrypted = req.body.encrypt;
+        if(reqEncrypted === undefined)
+        {
+            res.status(400).send({error: 'badRequest'});
+            console.log('badRequest: no encrypted');
             return;
         }
 
         const key = req.body.key;
-        const noteID = req.body.noteID;
-        const noteContent = req.body.noteContent;
-
-        if(key === undefined || noteID === undefined || noteContent === undefined)
+        if(key === undefined)
         {
             res.status(400).send({error: 'badRequest'});
+            console.log('badRequest: no key');
             return;
         }
 
@@ -33,6 +41,7 @@ module.exports = function(app)
         if(keyData === null)
         {
             res.status(200).send({error: 'invalidKey'});
+            console.log('invalidKey');
             return;
         }
 
@@ -41,6 +50,27 @@ module.exports = function(app)
         {
             res.status(200).send({error: 'emailUndefined'});
             console.log('emailUndefined');
+            return;
+        }
+
+        //Desciframos los datos
+        let reqDecrypted = crypto.decrypt(reqEncrypted, keyData.pswrd);
+        if(reqDecrypted === null)
+        {
+            res.status(200).send({error: 'failToObtainData'});
+            console.log('failToObtainData: cant decrypt');
+            return;
+        }
+        reqDecrypted = JSON.parse(reqDecrypted);
+        console.log(reqDecrypted);
+
+        const noteID = reqDecrypted.noteID;
+        const noteContent = reqDecrypted.noteContent;
+
+        if(noteID === undefined || noteContent === undefined)
+        {
+            res.status(400).send({error: 'badRequest'});
+            console.log('badRequest: no noteID or noteContent');
             return;
         }
 
@@ -57,6 +87,7 @@ module.exports = function(app)
         if(note.owner !== email)
         {
             res.status(200).send({error: 'notTheOwner'});
+            console.log('notTheOwner');
             return;
         }
 
@@ -68,5 +99,6 @@ module.exports = function(app)
 
         //Enviamos la señal de que la nota fue guardada
         res.status(200).send({result});
+        console.log('nota guardada');
     });
 }

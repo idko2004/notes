@@ -2,7 +2,7 @@ const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
 const database = require('../database');
-
+const crypto = require('../crypto');
 
 module.exports = function(app)
 {
@@ -17,19 +17,62 @@ module.exports = function(app)
         if(Object.keys(req.body).length === 0)
         {
             res.status(400).send({error: 'badRequest'});
+            console.log('badRequest: no body');
+            return;
+        }
+
+        const reqEncrypted = req.body.encrypt;
+        if(reqEncrypted === undefined)
+        {
+            res.status(400).send({error: 'badRequest'});
+            console.log('badRequest: no encrypted');
             return;
         }
 
         const key = req.body.key;
-        const noteID = req.body.noteid;
-        let newName = req.body.newname;
-
-        if(key === undefined || noteID === undefined || newName === undefined)
+        if(key === undefined)
         {
             res.status(400).send({error: 'badRequest'});
+            console.log('badRequest: no key');
             return;
         }
 
+        //Verificamos la key y obtenemos el email
+        const keyData = await database.getKeyData(key);
+        if(keyData === null)
+        {
+            res.status(200).send({error: 'invalidKey'});
+            console.log('invalidKey');
+            return;
+        }
+
+        const email = keyData.email;
+        if(email === undefined)
+        {
+            res.status(200).send({error: 'emailUndefined'});
+            console.log('emailUndefined');
+            return;
+        }
+
+        let reqDecrypted = crypto.decrypt(reqEncrypted, keyData.pswrd);
+        if(reqDecrypted === null)
+        {
+            res.status(200).send({error: 'failToObtainData'});
+            console.log('failToObtainData: cant decrypt');
+            return;
+        }
+        reqDecrypted = JSON.parse(reqDecrypted);
+        console.log(reqDecrypted);
+
+        const noteID = reqDecrypted.noteid;
+        let newName = reqDecrypted.newname;
+
+        if(noteID === undefined || newName === undefined)
+        {
+            res.status(400).send({error: 'badRequest'});
+            console.log('badRequest: no noteid or newname');
+            return;
+        }
         newName = newName.trim();
 
         //Verificamos si es un nombre válido
@@ -45,15 +88,6 @@ module.exports = function(app)
             if(newName.startsWith('_')) return invalidName();
             //Pasar de 30 caracteres
             if(newName.length > 30) return invalidName();
-
-        //Verificamos la key y obtenemos el email
-        const keyData = await database.getKeyData(key);
-        if(keyData === null)
-        {
-            res.status(200).send({error: 'invalidKey'});
-            return;
-        }
-        const email = keyData.email;
 
         //Obtenemos el perfil del usuario
         const user = await database.getElement('users', {email});
@@ -83,6 +117,7 @@ module.exports = function(app)
         if(noteIndex === -1)
         {
             res.status(200).send({error: 'notTheOwner'});
+            console.log('notTheOwner');
             return;
         }
 
@@ -92,5 +127,6 @@ module.exports = function(app)
 
         //Respondemos al cliente
         res.status(200).send({result});
+        console.log('nota renombrada');
     });
 }

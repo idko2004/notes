@@ -426,7 +426,7 @@ document.getElementById('renameButton').addEventListener('click', function()
                         textArea.focus();
 
                         const input = document.getElementById('inputInTheWindow');
-                        input.value = '';    
+                        input.value = '';
                     });
                 }
             },
@@ -441,64 +441,81 @@ document.getElementById('renameButton').addEventListener('click', function()
 
                     if(!isLocalMode)
                     {
-                        try
+                        closeWindow(async function()
                         {
-                            const response = await axios.post(`${path}/renameNote`,{key: theSecretThingThatNobodyHasToKnow, noteid: actualNoteID, newname: value});
-                            if(response.data.error === 'invalidName')
+                            try
                             {
-                                closeWindow(function()
+                                floatingWindow({title: getText('waitAMoment')});
+                                //const response = await axios.post(`${path}/renameNote`,{key: theSecretThingThatNobodyHasToKnow, noteid: actualNoteID, newname: value});
+                                const response = await encryptHttpCall('/renameNote',
                                 {
-                                    floatingWindow(
+                                    encrypt:
                                     {
-                                        title: getText('newNote_invalidName_title'),
-                                        text: getText('newNote_invalidName_text'),
-                                        button:
-                                        {
-                                            text: getText('ok'),
-                                            callback: function(){closeWindow()}
-                                        }
-                                    });
-                                });
-                                return;
-                            }
-                            if(response.data.error !== undefined)
-                            {
-                                closeWindow(function()
-                                {
-                                    floatingWindow(
-                                    {
-                                        title: getText('somethingWentWrong'),
-                                        text: `${getText('errorCode')}: ${response.error}`,
-                                        button:
-                                        {
-                                            text: getText('ok'),
-                                            callback: function(){closeWindow()}
-                                        }
-                                    });
-                                });
-                                return;
-                            }
-                        }
-                        catch
-                        {
-                            closeWindow(function()
-                            {
-                                floatingWindow(
-                                {
-                                    title: getText('ups'),
-                                    text: getText('serverDown'),
-                                    button:
-                                    {
-                                        text: getText('ok'),
-                                        callback: function(){closeWindow()}
-                                    }
-                                });
-                            });
-                            return;
-                        }
-                    }
+                                        noteid: actualNoteID,
+                                        newname: value
+                                    },
+                                    key: theSecretThingThatNobodyHasToKnow
+                                }, theOtherSecretThing);
 
-                    closeWindow(function()
+                                if(response.data.error === 'invalidName')
+                                {
+                                    closeWindow(function()
+                                    {
+                                        floatingWindow(
+                                        {
+                                            title: getText('newNote_invalidName_title'),
+                                            text: getText('newNote_invalidName_text'),
+                                            button:
+                                            {
+                                                text: getText('ok'),
+                                                callback: function(){closeWindow()}
+                                            }
+                                        });
+                                    });
+                                    return;
+                                }
+                                if(response.data.error !== undefined)
+                                {
+                                    closeWindow(function()
+                                    {
+                                        floatingWindow(
+                                        {
+                                            title: getText('somethingWentWrong'),
+                                            text: `${getText('errorCode')}: ${response.error}`,
+                                            button:
+                                            {
+                                                text: getText('ok'),
+                                                callback: function(){closeWindow()}
+                                            }
+                                        });
+                                    });
+                                    return;
+                                }
+
+                                closeWindow(renameNoteLocally);
+                            }
+                            catch
+                            {
+                                closeWindow(function()
+                                {
+                                    floatingWindow(
+                                    {
+                                        title: getText('ups'),
+                                        text: getText('serverDown'),
+                                        button:
+                                        {
+                                            text: getText('ok'),
+                                            callback: function(){closeWindow()}
+                                        }
+                                    });
+                                });
+                                return;
+                            }
+                        });
+                    }
+                    else closeWindow(renameNoteLocally);
+
+                    function renameNoteLocally()
                     {
                         deleteKey(noteName.innerText);
                         saveKey(value,textArea.value);
@@ -511,7 +528,7 @@ document.getElementById('renameButton').addEventListener('click', function()
                         selectedNote(undefined, value);
     
                         textArea.focus();
-                    });
+                    }
                 }
             }
         ]

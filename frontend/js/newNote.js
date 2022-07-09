@@ -164,7 +164,7 @@ function newNoteNameIsValid(name, openAWindow)
                     text: getText('ok'),
                     callback: closeInvalidNameWindow
                 }
-            });    
+            });
         });
         return false;
     }

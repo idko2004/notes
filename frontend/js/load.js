@@ -103,23 +103,24 @@ async function start()
                         primary: false,
                         callback: function()
                         {
-                            console.log('Modo local');
-                            theSecretThingThatNobodyHasToKnow = 'local';
-                            theOtherSecretThing = undefined;
-                            isLocalMode = true;
+                            closeWindow(function()
+                            {
+                                console.log('Modo local');
+                                theSecretThingThatNobodyHasToKnow = 'local';
+                                theOtherSecretThing = undefined;
+                                isLocalMode = true;
 
-                            document.getElementById('loginScreen').hidden = true;
-                            loadingScreen.hidden = true;
+                                document.getElementById('loginScreen').hidden = true;
+                                loadingScreen.hidden = true;
 
-                            loadNotesList();
-                            document.getElementById('noteScreen').hidden = false;
+                                loadNotesList();
+                                document.getElementById('noteScreen').hidden = false;
 
-                            menuButtonText();
-                            resizeTwice();
-                            hashAdd('local');
-                            theActualThing = 'note';
-
-                            closeWindow();
+                                menuButtonText();
+                                resizeTwice();
+                                hashAdd('local');
+                                theActualThing = 'note';
+                            });
                         }
                     },
                     {
@@ -127,7 +128,10 @@ async function start()
                         primary: true,
                         callback: function()
                         {
-                            location.reload();
+                            closeWindow(function()
+                            {
+                                location.reload();
+                            })
                         }
                     }
                 ]

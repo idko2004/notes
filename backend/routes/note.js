@@ -52,6 +52,12 @@ module.exports = function(app)
             return;
         }
         let reqDecrypted = crypto.decrypt(reqEncrypted, keyData.pswrd);
+        if(reqDecrypted === null)
+        {
+            res.status(200).send({error: 'failToObtainData'});
+            console.log('failToObtainData: cant decrypt');
+            return;
+        }
         reqDecrypted = JSON.parse(reqDecrypted);
         console.log(reqDecrypted);
         const targetNoteID = reqDecrypted.noteid;

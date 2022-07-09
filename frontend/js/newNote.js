@@ -44,20 +44,29 @@ async function createNewNote(name)
         
             youDontHaveNotes();
         
-            selectedNote(undefined, name);    
+            selectedNote(undefined, name);
         });
     }
     else try
     {
-        const response = await axios.post(`${path}/createNewNote`, {key: theSecretThingThatNobodyHasToKnow, notename: name});
-        if(response.data.ok || response.data.noteid !== undefined)
+        //const response = await axios.post(`${path}/createNewNote`, {key: theSecretThingThatNobodyHasToKnow, notename: name});
+        const response = await encryptHttpCall('/createNewNote',
+        {
+            encrypt:
+            {
+                notename: name,
+            },
+            key: theSecretThingThatNobodyHasToKnow
+        }, theOtherSecretThing);
+
+        if(response.data.ok || response.data.decrypt.noteid !== undefined)
         {
             closeWindow(function()
             {
-                actualNoteID = response.data.noteid;
+                actualNoteID = response.data.decrypt.noteid;
                 actualNoteName = name;
     
-                createListButton(name, response.data.noteid);
+                createListButton(name, response.data.decrypt.noteid);
                 youDontHaveNotes();
     
                 selectedNote(undefined, name);
@@ -130,7 +139,7 @@ function newNoteNameIsValid(name, openAWindow)
                     text: getText('ok'),
                     callback: closeInvalidNameWindow
                 }
-            });    
+            });
         });
         return false;
     }
@@ -147,7 +156,7 @@ function newNoteNameIsValid(name, openAWindow)
                     text: getText('ok'),
                     callback: closeInvalidNameWindow
                 }
-            });    
+            });
         });
         return false;
     }
@@ -181,7 +190,7 @@ function newNoteNameIsValid(name, openAWindow)
                     text: getText('ok'),
                     callback: closeInvalidNameWindow
                 }
-            });    
+            });
         });
         return false;
     }

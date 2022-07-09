@@ -4,6 +4,7 @@ const jsonParser = bodyParser.json();
 const rand = require('generate-key');
 
 const database = require('../database');
+const crypto = require('../crypto');
 
 module.exports = function(app)
 {
@@ -18,31 +19,26 @@ module.exports = function(app)
         if(Object.keys(req.body).length === 0)
         {
             res.status(400).send({error: 'badRequest'});
+            console.log('badRequest: no body');
+            return;
+        }
+
+        const reqEncrypted = req.body.encrypt;
+        if(reqEncrypted === undefined)
+        {
+            res.status(400).send({error: 'badRequest'});
+            console.log('badRequest: no encrypted');
             return;
         }
 
         const key = req.body.key;
-        let noteName = req.body.notename;
-        if(key === undefined || noteName === undefined)
+        if(key === undefined)
         {
             res.status(400).send({error: 'badRequest'});
+            console.log('badRequest: no key');
             return;
         }
-        noteName = noteName.trim();
 
-        //Verificamos si la nota tiene un nombre válido
-        function invalidName()
-        {
-            res.status(200).send({error: 'invalidName'});
-            return;
-        }
-        ///No estar vacía
-        if(noteName === '') return invalidName();
-        ///No empezar por _
-        if(noteName.startsWith('_')) return invalidName();
-        //Pasar de 30 caracteres
-        if(noteName.length > 30) return invalidName();
-        
         //Obtenemos key del usuario
         const KeyData = await database.getKeyData(key);
         console.log(KeyData);
@@ -60,6 +56,39 @@ module.exports = function(app)
             return;
         }
 
+        let reqDecrypted = crypto.decrypt(reqEncrypted, KeyData.pswrd);
+        if(reqDecrypted === null)
+        {
+            res.status(200).send({error: 'failToObtainData'});
+            console.log('failToObtainData: cant decrypt');
+            return;
+        }
+        reqDecrypted = JSON.parse(reqDecrypted);
+        console.log(reqDecrypted);
+
+        let noteName = reqDecrypted.notename;
+        if(noteName === undefined)
+        {
+            res.status(400).send({error: 'badRequest'});
+            console.log('badRequest: no notename');
+            return;
+        }
+        noteName = noteName.trim();
+
+        //Verificamos si la nota tiene un nombre válido
+        function invalidName()
+        {
+            res.status(200).send({error: 'invalidName'});
+            console.log('invalidName');
+            return;
+        }
+        ///No estar vacía
+        if(noteName === '') return invalidName();
+        ///No empezar por _
+        if(noteName.startsWith('_')) return invalidName();
+        //Pasar de 30 caracteres
+        if(noteName.length > 30) return invalidName();
+        
         //Verificamos si la nota no tiene un nombre repetido para el usuario.
         const userInfo = await database.getElement('users', {email});
         if(userInfo === null)
@@ -90,7 +119,7 @@ module.exports = function(app)
 
             //Buscamos si el código existe en la base de datos.
             const itAlredyExist = await database.getElement('notes', {id: noteID}); 
-            console.log(itAlredyExist);
+            console.log('eventualmente debe dar null:', itAlredyExist);
 
             //Si no existe, salimos del bucle ya que el código es válido
             if(itAlredyExist === null) break;
@@ -112,6 +141,8 @@ module.exports = function(app)
 
         //Responder al cliente
         //ok    noteID
-        res.status(200).send({ok: true, noteid: noteID});
+        const decrypt = crypto.encrypt(JSON.stringify({noteid: noteID}), KeyData.pswrd);
+        res.status(200).send({ok: true, decrypt});
+        console.log('nota creada');
     });
 }

@@ -324,7 +324,15 @@ document.getElementById('deleteButton').addEventListener('click',() =>
 
                             try
                             {
-                                const response = await axios.post(`${path}/deleteNote`, {key: theSecretThingThatNobodyHasToKnow, noteid: actualNoteID});
+                                //const response = await axios.post(`${path}/deleteNote`, {key: theSecretThingThatNobodyHasToKnow, noteid: actualNoteID});
+                                const response = await encryptHttpCall('/deleteNote',
+                                {
+                                    encrypt:
+                                    {
+                                        noteid: actualNoteID
+                                    },
+                                    key: theSecretThingThatNobodyHasToKnow
+                                }, theOtherSecretThing);
 
                                 if(response.data.error === undefined)
                                 {
@@ -341,7 +349,7 @@ document.getElementById('deleteButton').addEventListener('click',() =>
                                         topBarButtons.hidden = true;
     
                                         deleteListButton(name);
-                                        youDontHaveNotes();    
+                                        youDontHaveNotes();
                                     });
                                 }
                                 else

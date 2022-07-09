@@ -2,6 +2,7 @@ const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
 const database = require('../database');
+const crypto = require('../crypto');
 
 module.exports = function(app)
 {
@@ -16,13 +17,24 @@ module.exports = function(app)
         if(Object.keys(req.body).length === 0)
         {
             res.status(400).send({error: 'badRequest'});
+            console.log('badRequest: no body');
             return;
         }
-        const key = req.body.key;
-        const noteID = req.body.noteid;
-        if(key === undefined || noteID === undefined)
+
+        const reqEncrypted = req.body.encrypt;
+        if(reqEncrypted === undefined)
         {
             res.status(400).send({error: 'badRequest'});
+            console.log('badRequest: no encrypted');
+            return;
+        }
+
+        const key = req.body.key;
+        if(key === undefined)
+        {
+            res.status(400).send({error: 'badRequest'});
+            console.log('badRequest: no key');
+            return;
         }
 
         //Verificamos si la clave es válida y obtenemos el correo
@@ -33,12 +45,37 @@ module.exports = function(app)
             return;
         }
         const email = keyData.email;
+        if(email === undefined)
+        {
+            res.status(200).send({error: 'emailUndefined'});
+            console.log('emailUndefined');
+            return;
+        }
+
+        let reqDecrypted = crypto.decrypt(reqEncrypted, keyData.pswrd);
+        if(reqDecrypted === null)
+        {
+            res.status(200).send({error: 'failToObtainData'});
+            console.log('failToObtainData: cant decrypt');
+            return;
+        }
+        reqDecrypted = JSON.parse(reqDecrypted);
+        console.log(reqDecrypted);
+
+        const noteID = reqDecrypted.noteid;
+        if(noteID === undefined)
+        {
+            res.status(400).send({error: 'badRequest'});
+            console.log('badRequest: no noteid');
+            return;
+        }
 
         //Buscamos la nota en la base de datos de notas
         const note = await database.getElement('notes', {id: noteID});
         if(note === null)
         {
             res.status(200).send({error: 'noteNull'});
+            console.log('noteNull');
             return;
         }
         console.log('La nota existe');
@@ -47,6 +84,7 @@ module.exports = function(app)
         if(note.owner !== email)
         {
             res.status(200).send({error: 'notTheOwner'});
+            console.log('notTheOwner');
             return;
         }
         console.log('Es el dueño de la nota');
@@ -86,5 +124,6 @@ module.exports = function(app)
 
         //Respondemos al cliente
         res.status(200).send({deleted: true});
+        console.log('nota borrada');
     });
 }

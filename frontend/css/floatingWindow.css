@@ -51,10 +51,53 @@
 
 .openWin
 {
-    animation: openWindow 250ms ease-in-out 1;
+    animation: openWindow 300ms ease-in-out 1;
 }
 
 @keyframes openWindow
+{
+    0%
+    {
+        transform: translate(-50%, -35%) rotateZ(20deg);
+        opacity: 0;
+    }
+    60%
+    {
+        transform: translate(-50%, -35%) rotateZ(-6deg);
+        opacity: 0.6;
+    }
+    100%
+    {
+        transform: translate(-50%, -35%) rotateZ(0deg);
+        opacity: 1;
+    }
+}
+
+.closeWin
+{
+    animation: closeWindow 100ms linear 1;
+}
+
+@keyframes closeWindow
+{
+    0%
+    {
+        transform: translate(-50%, -35%) rotateZ(0deg);
+        opacity: 1;
+    }
+    100%
+    {
+        transform: translate(-50%, -35%) rotateZ(15deg);
+        opacity: 0;
+    }
+}
+
+.openWinSlide
+{
+    animation: openWindowSlide 250ms ease-in-out 1;
+}
+
+@keyframes openWindowSlide
 {
     0%
     {
@@ -76,12 +119,12 @@
     }
 }
 
-.closeWin
+.closeWinSlide
 {
-    animation: closeWindow 100ms linear 1;
+    animation: closeWindowSlide 100ms linear 1;
 }
 
-@keyframes closeWindow
+@keyframes closeWindowSlide
 {
     0%
     {

@@ -58,8 +58,8 @@ async function menuButtonText()
 function animationMenuOpen()
 {
     floatingMenu.hidden = false;
-    theMenu.classList.remove('closeWin');
-    theMenu.classList.add('openWin');
+    theMenu.classList.remove('closeWinSlide');
+    theMenu.classList.add('openWinSlide');
 
     floatingMenu.classList.remove('closeBg');
     floatingMenu.classList.add('openBg');
@@ -67,15 +67,15 @@ function animationMenuOpen()
 
 function animationMenuClose(callback)
 {
-    theMenu.classList.remove('openWin');
-    theMenu.classList.add('closeWin');
+    theMenu.classList.remove('openWinSlide');
+    theMenu.classList.add('closeWinSlide');
 
     floatingMenu.classList.remove('openBg');
     floatingMenu.classList.add('closeBg');
 
     menuAnimationCallback = function(e)
     {
-        if(e.animationName !== 'closeWindow') return;
+        if(e.animationName !== 'closeWindowSlide') return;
         floatingMenu.hidden = true;
         theMenu.removeEventListener('animationend', menuAnimationCallback);
         if(callback !== undefined && typeof callback === 'function') callback();

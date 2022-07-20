@@ -23,7 +23,10 @@ newNote.addEventListener('click',function()
                 callback()
                 {
                     const name = document.getElementById('inputInTheWindow').value;
-                    createNewNote(name);
+                    closeWindow(function()
+                    {
+                        createNewNote(name);
+                    });
                 }
             }
         ]
@@ -33,23 +36,28 @@ newNote.addEventListener('click',function()
 async function createNewNote(name)
 {
     if(!newNoteNameIsValid(name, 'newNote')) return;
+    
+    textArea.disabled = true;
+    topBarButtons.hidden = true;
+    await saveNote();
+
     if(isLocalMode)
     {
-        closeWindow(function()
-        {
-            createListButton(name);
+        createListButton(name);
 
-            saveKey(name,'');
-            loadNote(name);
-        
-            youDontHaveNotes();
-        
-            selectedNote(undefined, name);
-        });
+        saveKey(name,'');
+        loadNote(name);
+    
+        youDontHaveNotes();
+    
+        selectedNote(undefined, name);
     }
     else try
     {
         //const response = await axios.post(`${path}/createNewNote`, {key: theSecretThingThatNobodyHasToKnow, notename: name});
+        noteName.innerText = getText('creatingNote');
+        textArea.value = '';
+    
         const response = await encryptHttpCall('/createNewNote',
         {
             encrypt:
@@ -61,25 +69,22 @@ async function createNewNote(name)
 
         if(response.data.ok || response.data.decrypt.noteid !== undefined)
         {
-            closeWindow(function()
-            {
-                actualNoteID = response.data.decrypt.noteid;
-                actualNoteName = name;
-    
-                createListButton(name, response.data.decrypt.noteid);
-                youDontHaveNotes();
-    
-                selectedNote(undefined, name);
-    
-                noteName.innerText = name;
-                topBarButtons.hidden = false;
-    
-                textArea.value = '';
-                textArea.disabled = false;
-                textArea.focus();
-    
-                saveKey(name,'');
-            });
+            actualNoteID = response.data.decrypt.noteid;
+            actualNoteName = name;
+
+            createListButton(name, response.data.decrypt.noteid);
+            youDontHaveNotes();
+
+            selectedNote(undefined, name);
+
+            noteName.innerText = name;
+            topBarButtons.hidden = false;
+
+            textArea.value = '';
+            textArea.disabled = false;
+            textArea.focus();
+
+            saveKey(name,'');
         }
         else if(response.data.error === 'invalidName')
         {
@@ -128,69 +133,57 @@ function newNoteNameIsValid(name, openAWindow)
 {
     if(name === '')
     {
-        closeWindow(function()
-        {
-            floatingWindow
-            ({
-                title: getText('newNote_emptyName_title'),
-                text: getText('newNote_emptyName_text'),
-                button:
-                {
-                    text: getText('ok'),
-                    callback: closeInvalidNameWindow
-                }
-            });
+        floatingWindow
+        ({
+            title: getText('newNote_emptyName_title'),
+            text: getText('newNote_emptyName_text'),
+            button:
+            {
+                text: getText('ok'),
+                callback: closeInvalidNameWindow
+            }
         });
         return false;
     }
     if(name.startsWith('_'))
     {
-        closeWindow(function()
-        {
-            floatingWindow
-            ({
-                title: '_Error',
-                text: getText('newNote___'),
-                button:
-                {
-                    text: getText('ok'),
-                    callback: closeInvalidNameWindow
-                }
-            });
+        floatingWindow
+        ({
+            title: '_Error',
+            text: getText('newNote___'),
+            button:
+            {
+                text: getText('ok'),
+                callback: closeInvalidNameWindow
+            }
         });
         return false;
     }
     if(name.length > 30)
     {
-        closeWindow(function()
-        {
-            floatingWindow
-            ({
-                title: getText('newNote_tooLongName_title'),
-                text: getText('newNote_tooLongName_text'),
-                button:
-                {
-                    text: getText('ok'),
-                    callback: closeInvalidNameWindow
-                }
-            });
+        floatingWindow
+        ({
+            title: getText('newNote_tooLongName_title'),
+            text: getText('newNote_tooLongName_text'),
+            button:
+            {
+                text: getText('ok'),
+                callback: closeInvalidNameWindow
+            }
         });
         return false;
     }
     if(isLocalMode && getKey(name) !== null)
     {
-        closeWindow(function()
-        {
-            floatingWindow
-            ({
-                title: getText('newNote_duplicated_title'),
-                text: `${getText('newNote_duplicated_text')} '${name}'`,
-                button:
-                {
-                    text: getText('ok'),
-                    callback: closeInvalidNameWindow
-                }
-            });
+        floatingWindow
+        ({
+            title: getText('newNote_duplicated_title'),
+            text: `${getText('newNote_duplicated_text')} '${name}'`,
+            button:
+            {
+                text: getText('ok'),
+                callback: closeInvalidNameWindow
+            }
         });
         return false;
     }
@@ -204,7 +197,6 @@ function newNoteNameIsValid(name, openAWindow)
         {
             if(openAWindow === 'newNote') newNote.click();
             else if(openAWindow === 'renameNote') document.getElementById('renameButton').click();
-    
         });
     }
 }

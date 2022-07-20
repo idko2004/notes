@@ -42,6 +42,7 @@ function floatingWindow(elements)
     if(thereIsAWindows)
     {
         console.error('Ya hay una ventana abierta y se intenta abrir otra.');
+        alert(getText('errorAlert'));
         return;
     }
 

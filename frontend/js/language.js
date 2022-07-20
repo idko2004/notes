@@ -1,4 +1,6 @@
-var actualLanguage;
+let actualLanguage;
+
+const supportedLanguages = ['es', 'en'];
 
 const allTexts =
 {
@@ -741,6 +743,16 @@ const allTexts =
     {
         es: 'Ver copia local',
         en: 'View local copy'
+    },
+    errorAlert:
+    {
+        es: 'HA OCURRIDO UN ERROR, para ayudar a corregirlo, por favor siga los siguientes pasos:\n(Lea todas las instrucciones antes de cerrar esta ventana)\n\n- Haga click derecho y seleccione la opción inspeccionar o inspeccionar elemento\n\n- Dirígase a la pestaña consola\n\n- Si ve un mensaje en rojo y este tiene una flecha a la izquierda, por favor expanda el mensaje\n\n- Tome una captura de pantalla y por favor envíela a idkotest@gmail.com junto con una explicación de que estaba haciendo antes del error.\n\nGracias.',
+        en: 'AN ERROR HAS OCCURRED, to help correct it, please follow the steps below:\n(Read all instructions before closing this window).\n\n- Right click and select the inspect or inspect element option.\n\n- Go to the console tab\n\n- If you see a message in red and it has an arrow on the left, please expand the message.\n\n- Take a screenshot and please send it to idkotest@gmail.com along with an explanation of what you were doing before the error.\n\nThank you.'
+    },
+    creatingNote:
+    {
+        es: 'Creando nota...',
+        en: 'Creating note...'
     }
 }
 
@@ -776,7 +788,7 @@ function languageAtStart()
 
     if(['', undefined, null].includes(lang)) lang = navigator.language.split('-')[0];
 
-    if(!['es', 'en'].includes(lang)) lang = 'en';
+    if(!supportedLanguages.includes(lang)) lang = 'en';
     
     actualLanguage = lang;
 

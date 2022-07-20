@@ -316,14 +316,10 @@ document.getElementById('deleteButton').addEventListener('click',() =>
                     {
                         closeWindow(async function()
                         {
-                            floatingWindow(
-                            {
-                                title: getText('deletingNote'),
-                                text: getText('waitAMoment')
-                            });
-
                             try
                             {
+                                noteName.innerText = getText('deletingNote');
+
                                 //const response = await axios.post(`${path}/deleteNote`, {key: theSecretThingThatNobodyHasToKnow, noteid: actualNoteID});
                                 const response = await encryptHttpCall('/deleteNote',
                                 {
@@ -336,36 +332,30 @@ document.getElementById('deleteButton').addEventListener('click',() =>
 
                                 if(response.data.error === undefined)
                                 {
-                                    closeWindow(function()
-                                    {
-                                        actualNoteID = undefined;
-                                        actualNoteName = undefined;
-                                        deleteKey(name);
-    
-                                        textArea.value = '';
-                                        textArea.disabled = true;
-    
-                                        noteName.innerText = getText('clickANote');
-                                        topBarButtons.hidden = true;
-    
-                                        deleteListButton(name);
-                                        youDontHaveNotes();
-                                    });
+                                    actualNoteID = undefined;
+                                    actualNoteName = undefined;
+                                    deleteKey(name);
+
+                                    textArea.value = '';
+                                    textArea.disabled = true;
+
+                                    noteName.innerText = getText('clickANote');
+                                    topBarButtons.hidden = true;
+
+                                    deleteListButton(name);
+                                    youDontHaveNotes();
                                 }
                                 else
                                 {
-                                    closeWindow(function()
+                                    floatingWindow(
                                     {
-                                        floatingWindow(
+                                        title: 'Oh, no!',
+                                        text: `${getText('somethingWentWrong')}\n${getText('errorCode')}: ${response.data.error}`,
+                                        button:
                                         {
-                                            title: 'Oh, no!',
-                                            text: `${getText('somethingWentWrong')}\n${getText('errorCode')}: ${response.data.error}`,
-                                            button:
-                                            {
-                                                text: getText('ok'),
-                                                callback: function(){closeWindow();}
-                                            }
-                                        });
+                                            text: getText('ok'),
+                                            callback: function(){closeWindow();}
+                                        }
                                     });
                                 }
                             }

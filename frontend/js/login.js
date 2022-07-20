@@ -252,21 +252,62 @@ document.getElementById('passwordField').addEventListener('keydown', function(e)
 
 async function requestLoginPassword()
 {
-    let deviceID = getKey('_id');
-    if([undefined, null, '', 'undefined', 'null'].includes(deviceID))
-    {
-        deviceID = "_" + Math.random().toString().split('.')[1];
-        saveKey('_id', deviceID);
-    }
-    codePassword = deviceID;
-
     try
     {
-        const response = await axios.post(`${path}/generateLoginPassword`, {code: codePassword});
+        let deviceID = getKey('_id');
+        let pswrd = getKey('_pswrd2');
+
+        //Requerir un nuevo deviceID
+        if([undefined, null, '', 'undefined', 'null'].includes(deviceID) || [undefined, null, '', 'undefined', 'null'].includes(pswrd)) await requestNewDeviceID();
+        //Ya tenemos un código y queremos comprobar que sigue válido
+        else
+        {
+            const response = await axios.post(`${path}/generateLoginPassword`, {code: deviceID});
+            console.log(response);
+
+            if(response.data.stillValid === undefined)
+            {
+                floatingWindow(
+                {
+                    title: getText('somethingWentWrong'),
+                    text: `${getText('errorCode')}: ${response.data.error}`,
+                    button:
+                    {
+                        text: getText('ok'),
+                        callback: closeWindow
+                    }
+                });
+            }
+            else if(!response.data.stillValid) await requestNewDeviceID();
+            else
+            {
+                loginPassword = pswrd;
+                codePassword = deviceID;
+            }
+        }
+    }
+    catch
+    {
+        floatingWindow(
+        {
+            title: getText('ups'),
+            text: getText('serverDown'),
+            button:
+            {
+                text: getText('ok'),
+                callback: closeWindow
+            }
+        });
+    }
+
+    async function requestNewDeviceID()
+    {
+        const response = await axios.post(`${path}/generateLoginPassword`, {code: 'requesting'});
         console.log(response);
         console.log('contraseña', response.data.secret);
+        console.log('id', response.data.id);
 
-        if(response.data.error !== undefined || response.data.secret === undefined)
+        if(response.data.error !== undefined || response.data.secret === undefined || response.data.id === undefined)
         {
             floatingWindow(
             {
@@ -282,20 +323,10 @@ async function requestLoginPassword()
         else
         {
             loginPassword = response.data.secret;
+            codePassword = response.data.id;
+            saveKey('_id', codePassword);
+            saveKey('_pswrd2', loginPassword);
             console.log('Secret key obtained');
         }
-    }
-    catch
-    {
-        floatingWindow(
-        {
-            title: getText('ups'),
-            text: getText('serverDown'),
-            button:
-            {
-                text: getText('ok'),
-                callback: closeWindow
-            }
-        });
     }
 }

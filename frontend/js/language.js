@@ -753,6 +753,11 @@ const allTexts =
     {
         es: 'Creando nota...',
         en: 'Creating note...'
+    },
+    renaming:
+    {
+        es: 'Renombrando...',
+        en: 'Renaming...'
     }
 }
 

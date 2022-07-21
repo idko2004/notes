@@ -73,8 +73,8 @@ module.exports = function(app)
         console.log(theNote);
         if(theNote === null)
         {
-            res.status(200).send({error: 'noteDontExist'});
-            console.log('noteDontExist');
+            res.status(200).send({error: 'noteDoesntExist'});
+            console.log('noteDoesntExist');
             return;
         }
 

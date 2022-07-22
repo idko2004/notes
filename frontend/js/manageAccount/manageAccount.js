@@ -58,7 +58,10 @@ async function start()
                 text: 'Aceptar',
                 callback: function()
                 {
-                    location.href = 'index.html';
+                    closeWindow(function()
+                    {
+                        location.href = 'index.html';
+                    })
                 }
             }
         });
@@ -84,8 +87,11 @@ async function start()
                     text: 'Aceptar',
                     callback: function()
                     {
-                        location.href = 'index.html';
-                    }    
+                        closeWindow(function()
+                        {
+                            location.href = 'index.html';
+                        })
+                    }
                 }
             });
             return;
@@ -102,8 +108,11 @@ async function start()
                     text: 'Aceptar',
                     callback: function()
                     {
-                        location.href = 'index.html';
-                    }    
+                        closeWindow(function()
+                        {
+                            location.href = 'index.html';
+                        })
+                    }
                 }
             });
             return;
@@ -130,7 +139,10 @@ async function start()
                 text: 'Aceptar',
                 callback: function()
                 {
-                    location.href = 'index.html';
+                    closeWindow(function()
+                    {
+                        location.href = 'index.html';
+                    })
                 }
             }
         });

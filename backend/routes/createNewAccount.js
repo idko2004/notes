@@ -1,6 +1,7 @@
 if(process.env.NODE_ENV !== 'production') require('dotenv').config();
 
 const database = require('../database');
+const crypto = require('../crypto');
 
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
@@ -22,38 +23,107 @@ const transporter = mailer.createTransport(
 
 module.exports = function(app)
 {
+    //////////////////////////////////////////////////////////////////////
+    //                     _          _                             _   //
+    //  ___ _ __ ___  __ _| |_ ___   / \   ___ ___ ___  _   _ _ __ | |_ //
+    /// __| '__/ _ \/ _` | __/ _ \ / _ \ / __/ __/ _ \| | | | '_ \| __| //
+    //| (__| | |  __/ (_| | ||  __// ___ \ (_| (_| (_) | |_| | | | | |_ //
+    //\___|_|  \___|\__,_|\__\___/_/   \_\___\___\___/ \__,_|_| |_|\__| //
+    //                                                                  //
+    //_____                 _ _  ____          _                        //
+    //| ____|_ __ ___   __ _(_) |/ ___|___   __| | ___                  //
+    //|  _| | '_ ` _ \ / _` | | | |   / _ \ / _` |/ _ \                 //
+    //| |___| | | | | | (_| | | | |__| (_) | (_| |  __/                 //
+    //|_____|_| |_| |_|\__,_|_|_|\____\___/ \__,_|\___|                 //
+    //////////////////////////////////////////////////////////////////////
+
     app.post('/createAccountEmailCode', jsonParser, async function(req, res)
     {
         console.log('------------------------------------------------');
         console.log('\033[1;34m/createAccountEmailCode\033[0m');
         console.log('body', req.body);
 
+        //FIXME: por algún motivo ya no se puede cambiar las contraseñas
+
         if(Object.keys(req.body).length === 0)
         {
             res.status(400).send({error: 'badRequest'});
+            console.log('badRequest: no body');
             return;
         }
 
         //Verificamos que tenemos los datos necesarios
-        //email   password   username   operation   oldemail(en caso de updateAccount)
-        const accountEmail = req.body.email;
-        let oldEmail = req.body.oldemail;
-        const accountPassword = req.body.password;
-        const accountUsername = req.body.username;
-        const accountOperation = req.body.operation;
+        //email   password   username   operation   oldemail(en caso de updateAccount)   key/id
 
-        if(accountEmail === undefined ||
-        accountPassword === undefined ||
-        accountUsername === undefined ||
-        accountOperation === undefined)
+        //Verificamos que método de cifrado tenemos, si sessionID o deviceID
+        const key = req.body.key;
+        const deviceID = req.body.id;
+        const reqEncrypted = req.body.encrypt;
+        let pswrd;
+        if(key !== undefined) //El método de cifrado es key, por lo que están actualizando datos
+        {
+            const keyData = await database.getKeyData(key);
+            if(keyData === null)
+            {
+                res.status(200).send({error: 'invalidKey'});
+                console.log('invalidKey');
+                return;
+            }
+            pswrd = keyData.pswrd; //Obtenemos la contraseña para descifrar
+            if(pswrd === undefined)
+            {
+                res.status(200).send({error: 'invalidKey'});
+                console.log('invalidKey: the key somehow doesnt have a password');
+                return;
+            }
+        }
+        else if(deviceID !== undefined) //El método de cifrado es deviceID, por lo que están creando una nueva cuenta
+        {
+            return;
+        }
+        else
         {
             res.status(400).send({error: 'badRequest'});
+            console.log('badRequest: no key or deviceID');
+            return;
+        }
+
+        let reqDecrypted = crypto.decrypt(reqEncrypted, pswrd);
+        console.log(reqDecrypted);
+        if(reqEncrypted === null)
+        {
+            res.status(200).send({error: 'failToObtainData'});
+            console.log('failToObtainData: cant decrypt');
+            return;
+        }
+        reqDecrypted = JSON.parse(reqDecrypted);
+        console.log(reqDecrypted);
+
+        const accountEmail = reqDecrypted.email;
+        let oldEmail = reqDecrypted.oldemail;
+        const accountPassword = reqDecrypted.password;
+        const accountUsername = reqDecrypted.username;
+        const accountOperation = reqDecrypted.operation;
+
+        if(accountEmail === undefined ||
+        accountUsername === undefined ||
+        accountOperation === undefined||
+        (accountPassword === undefined && accountOperation !== 'updateAccount'))
+        {
+            res.status(400).send({error: 'badRequest'});
+            console.log('badRequest: no email, password, username or operation');
+            console.log('email', accountEmail !== undefined);
+            console.log('password', accountPassword !== undefined);
+            console.log('username', accountUsername !== undefined);
+            console.log('operation', accountOperation);
             return;
         }
 
         if(!['newAccount', 'updateAccount'].includes(accountOperation))
         {
             res.status(400).send({error: 'badRequest'});
+            console.log('badRequest: operation must be newAccount or updateAccount');
+            console.log('operation is', operation);
             return;
         }
 
@@ -61,9 +131,10 @@ module.exports = function(app)
         {
             oldEmail = accountEmail;
         }
-        else if(oldEmail === undefined)
+        else if(oldEmail === undefined) //updateAccount pero no hay oldEmail
         {
             res.status(400).send({error: 'badRequest'});
+            console.log('badRequest: oldEmail is needed');
             return;
         }
         else //Se supone que es updateAccount
@@ -86,13 +157,14 @@ module.exports = function(app)
         let passwordHasLowercase;
         let passwordHasNumbers;
         let passwordLength;
-        if(accountOperation === 'updateAccount' && accountPassword === '')
+        if(accountOperation === 'updateAccount' && ['', undefined, 'undefined', null, 'null'].includes(accountPassword))
         {
             //Si se va a actualizar la cuenta pero la contraseña va a seguir igual
             passwordHasCapitals = true;
             passwordHasLowercase = true;
             passwordHasNumbers = true;
             passwordLength = 10;
+            console.log('la contraseña no se actualiza');
         }
         else
         {
@@ -109,9 +181,18 @@ module.exports = function(app)
         accountEmail.lenght > 320 ||
         passwordLength < 8 ||
         passwordLength > 20 ||
-        accountUsername > 30)
+        accountUsername.lenght > 30)
         {
             res.status(200).send({error: 'invalidFields'});
+            console.log('invalidFields');
+            console.log('validEmail', validEmail);
+            console.log('passwordHasCapitals', passwordHasCapitals);
+            console.log('passwordHasLowercase', passwordHasLowercase);
+            console.log('passwordsHasNumbers', passwordHasNumbers);
+            console.log('accountEmail.length < 320', accountEmail.length < 320);
+            console.log('passwordLength >= 8', passwordLength >= 8);
+            console.log('passwordLength <= 20', passwordLength <= 20);
+            console.log('accountUsername <= 30', accountUsername.length <= 30);
             return;
         }
 
@@ -121,6 +202,7 @@ module.exports = function(app)
         {
             //Si estamos creando una nueva cuenta, no debe existir una cuenta con este email
             res.status(200).send({error: 'duplicatedEmail'});
+            console.log('duplicatedEmail');
             return;
         }
 
@@ -130,6 +212,7 @@ module.exports = function(app)
             {
                 //si estamos actualizando una cuenta, debe existir una cuenta con este email
                 res.status(200).send({error: 'accountDontExist'});
+                console.log('accountDontExist: operation is updateAccount but there is no account to update');
                 return;
             }
 
@@ -140,6 +223,7 @@ module.exports = function(app)
                 if(newEmailAlredyExist !== null)
                 {
                     res.status(200).send({error: 'duplicatedEmail'});
+                    console.log('duplicatedEmail on updateAccount');
                     return;
                 }
             }
@@ -190,6 +274,7 @@ module.exports = function(app)
             }
         }
 
+        console.log('nuevo emailCode:', newElement);
         const dbCreateEmailCode = await database.createElement('emailCodes', newElement);
         console.log('Código añadido a la base de datos', dbCreateEmailCode);
 
@@ -201,7 +286,7 @@ module.exports = function(app)
             mailContent = fs.readFileSync('emailPresets/signUpMail.html', 'utf-8');
             mailContent = mailContent.replace('{CODE_HERE}', code);
         
-            subject = `Notas - Código para tu nueva cuenta: ${code}` //Definimos ya el nombre del correo
+            subject = `Notas - Código para tu nueva cuenta: ${code}`; //Definimos ya el nombre del correo
         }
         else //updateAccount
         {
@@ -211,7 +296,7 @@ module.exports = function(app)
             mailContent = mailContent.replace('{USERNAME_HERE}', accountUsername);
 
             let pswrd = '';
-            if(accountPassword === '') pswrd = '(La misma de antes, sin cambios)'
+            if(['', undefined, 'undefined', null, 'null'].includes(accountPassword)) pswrd = '(La misma de antes, sin cambios)';
             else for(let i = 0; i < accountPassword.length; i++) pswrd += '*';
             
             mailContent = mailContent.replace('{PASSWORD_HERE}', pswrd);
@@ -236,7 +321,23 @@ module.exports = function(app)
 
         //Respondemos al cliente
         res.status(200).send({emailSent: true});
+        console.log('Email solicitado exitosamente');
     });
+
+    //////////////////////////////////////////////////////////////////////
+    //                     _       _   _                                //
+    //  ___ _ __ ___  __ _| |_ ___| \ | | _____      __                 //
+    /// __| '__/ _ \/ _` | __/ _ \  \| |/ _ \ \ /\ / /                  //
+    //| (__| | |  __/ (_| | ||  __/ |\  |  __/\ V  V /                  //
+    //\___|_|  \___|\__,_|\__\___|_| \_|\___| \_/\_/                    //
+    //                                                                  //
+    //    _                             _                               //
+    //   / \   ___ ___ ___  _   _ _ __ | |_                             //
+    //  / _ \ / __/ __/ _ \| | | | '_ \| __|                            //
+    // / ___ \ (_| (_| (_) | |_| | | | | |_                             //
+    ///_/   \_\___\___\___/ \__,_|_| |_|\__|                            //
+    //////////////////////////////////////////////////////////////////////
+
 
     app.post('/createNewAccount', jsonParser, async function(req, res)
     {
@@ -247,6 +348,7 @@ module.exports = function(app)
         if(Object.keys(req.body).length === 0)
         {
             res.status(400).send({error: 'badRequest'});
+            console.log('badRequest: no body');
             return;
         }
 
@@ -256,15 +358,18 @@ module.exports = function(app)
         if(code === undefined)
         {
             res.status(400).send({error: 'badRequest'});
+            console.log('badRequest: no code');
             return;
         }
         code = code.toUpperCase();
 
         //Verificamos si el código enviado al email existe
         const codeDB = await database.getElement('emailCodes', {code});
+        console.log(codeDB);
         if(codeDB === null || codeDB.operation !== 'newAccount')
         {
             res.status(200).send({error: 'invalidCode'});
+            console.log('invalidcode');
             return;
         }
 
@@ -274,6 +379,7 @@ module.exports = function(app)
         if(email === undefined || password === undefined || username === undefined)
         {
             res.status(500).send({error: 'invalidData'});
+            console.log('invalidData');
             return;
         }
 
@@ -282,6 +388,7 @@ module.exports = function(app)
         if(emailAlredyExist !== null)
         {
             res.status(500).send({error: 'duplicatedEmail'});
+            console.log('duplicatedEmail');
             return;
         }
 
@@ -300,6 +407,20 @@ module.exports = function(app)
         res.status(200).send({hadToInsertOtherCode: false});
     });
 
+    //////////////////////////////////////////////////////////////////////////
+    //                 _       _          _                             _   //
+    // _   _ _ __   __| | __ _| |_ ___   / \   ___ ___ ___  _   _ _ __ | |_ //
+    //| | | | '_ \ / _` |/ _` | __/ _ \ / _ \ / __/ __/ _ \| | | | '_ \| __|//
+    //| |_| | |_) | (_| | (_| | ||  __// ___ \ (_| (_| (_) | |_| | | | | |_ //
+    //\__,_| .__/ \__,_|\__,_|\__\___/_/   \_\___\___\___/ \__,_|_| |_|\__| //
+    //      |_|                                                             //
+    //____        _                                                         //
+    //|  _ \  __ _| |_ __ _                                                 //
+    //| | | |/ _` | __/ _` |                                                //
+    //| |_| | (_| | || (_| |                                                //
+    //|____/ \__,_|\__\__,_|                                                //
+    //////////////////////////////////////////////////////////////////////////
+
     app.post('/updateAccountData', jsonParser, async function(req, res)
     {
         console.log('------------------------------------------------');
@@ -315,46 +436,15 @@ module.exports = function(app)
 
         //Comprobamos si tenemos todos los datos
         //code key
-        let code = req.body.code;
+        const reqEncrypted = req.body.encrypt;
         const key = req.body.key;
-        if(code === undefined || key === undefined)
+        if(key === undefined || reqEncrypted === undefined)
         {
-            console.log('badRequest, faltan datos: code or key');
             res.status(400).send({error: 'badRequest'});
-            return;
-        }
-        code = code.toUpperCase();
-
-        //Buscamos si el código existe en la base de datos de códigos
-        const codeDB = await database.getElement('emailCodes',{code});
-        if(codeDB === null || !['updateAccount', 'updateAccount2'].includes(codeDB.operation))
-        {
-            console.log('invalidCode, el código introducido no es válido.');
-            res.status(200).send({error: 'invalidCode'});
+            console.log('badRequest: no key or encrypted data');
             return;
         }
 
-        const newUsername = codeDB.username;
-        const newPassword = codeDB.password;
-        const newEmail = codeDB.email;
-        const oldEmail = codeDB.oldEmail;
-
-        if(newUsername === undefined ||
-        newPassword === undefined ||
-        newEmail === undefined ||
-        oldEmail === undefined)
-        {
-            console.log('invalidData, algunos de los datos han dado undefined');
-            console.log('newUsername', newUsername);
-            console.log('newPassword', newPassword);
-            console.log('newEmail', newEmail);
-            console.log('oldEmail', oldEmail);
-
-            res.status(500).send({error: 'invalidData'});
-            return;
-        }
-
-        //Comprobamos que el email asociado a la key sea el mismo que el del código
         const keyData = await database.getKeyData(key);
         if(keyData === null)
         {
@@ -369,6 +459,55 @@ module.exports = function(app)
             return;
         }
 
+        let reqDecrypted = crypto.decrypt(reqEncrypted, keyData.pswrd);
+        if(reqDecrypted === null)
+        {
+            res.status(200).send({error: 'failToObtainData'});
+            console.log('failToObtainData');
+            return;
+        }
+        reqDecrypted = JSON.parse(reqDecrypted);
+
+
+        let code = reqDecrypted.code;
+        if(code === undefined)
+        {
+            console.log('badRequest, faltan datos: code or key');
+            res.status(400).send({error: 'badRequest'});
+            return;
+        }
+        code = code.toUpperCase();
+
+        //Buscamos si el código existe en la base de datos de códigos
+        const codeDB = await database.getElement('emailCodes',{code});
+        console.log(codeDB);
+        if(codeDB === null || !['updateAccount', 'updateAccount2'].includes(codeDB.operation))
+        {
+            console.log('invalidCode, el código introducido no es válido.');
+            res.status(200).send({error: 'invalidCode'});
+            return;
+        }
+
+        const newUsername = codeDB.username;
+        const newPassword = codeDB.password;
+        const newEmail = codeDB.email;
+        const oldEmail = codeDB.oldEmail;
+
+        if(newUsername === undefined ||
+        newEmail === undefined ||
+        oldEmail === undefined)
+        {
+            console.log('invalidData, algunos de los datos han dado undefined');
+            console.log('newUsername', newUsername);
+            console.log('newPassword', newPassword);
+            console.log('newEmail', newEmail);
+            console.log('oldEmail', oldEmail);
+
+            res.status(500).send({error: 'invalidData'});
+            return;
+        }
+
+        //Comprobamos que el email asociado a la key sea el mismo que el del código
         if(oldEmail !== keyData.email || newEmail !== keyData.email)
         {
             res.status(200).send({error: 'invalidCode'});
@@ -419,6 +558,7 @@ module.exports = function(app)
 
 
             res.status(200).send({hadToInsertOtherCode: true, email: newEmail});
+            console.log('Necesita ingresar otro código, email solicitado exitosamente');
             return;
         }
 
@@ -435,7 +575,9 @@ module.exports = function(app)
         let newUser = user;
         newUser.email = newEmail;
         newUser.username = newUsername;
-        if(newPassword !== '') newUser.password = newPassword;
+        if(!['', undefined, 'undefined', null, 'null'].includes(newPassword)) newUser.password = newPassword;
+
+        console.log('El usuario queda así:', newUser);
 
         //Guardamos en la base de datos de usuarios
         console.log('Guardando usuario');

@@ -53,13 +53,14 @@ module.exports = function(app)
         }
 
         const element = await database.getElement('users', {email});
+        console.log(element);
         if(element === null)
         {
             res.status(200).send({error: 'userNull'});
             console.log('userNull');
             return;
         }
-    
+
         //Obtener el nombre de usuario
         const username = element.username;
         const passwordLength = element.password.length;

@@ -255,9 +255,9 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', function
                                     oldemail: email
                                 },
                                 key: theSecretThingThatNobodyHaveToKnow
-                            })
+                            }, theOtherSecretThing);
                             console.log(response);
-    
+
                             if(!response.data.emailSent && response.data.error !== undefined)
                             {
                                 console.log(response.data.error);
@@ -398,119 +398,127 @@ async function changeDataComprobeCode()
     }
 
     actualMenu = 'changeDataComprobingCode';
-    floatingWindow({title: getText('waitAMoment')});
+    //floatingWindow({title: getText('waitAMoment')});
+    document.getElementById('changeDataConfirmCodeButton').innerText = getText('waitAMoment');
 
     try
     {
-        const response = await axios.post(`${path}/updateAccountData`,{code, key:theSecretThingThatNobodyHaveToKnow});
+        //const response = await axios.post(`${path}/updateAccountData`,{code, key:theSecretThingThatNobodyHaveToKnow});
+        const response = await encryptHttpCall('/updateAccountData',
+        {
+            encrypt:
+            {
+                code
+            },
+            key: theSecretThingThatNobodyHaveToKnow
+        }, theOtherSecretThing);
         console.log(response);
-        closeWindow(function()
-        {
-            if(response.data.updated)
-            {
-                //Que todo salió bien
-                floatingWindow(
-                {
-                    title: getText('accountUpdated'),
-                    button:
-                    {
-                        text: getText('backToHome'),
-                        callback: function()
-                        {
-                            closeWindow(function()
-                            {
-                                mainScreen.hidden = true;
-                                loadingScreen.hidden = false;
-                                saveCookie('_login', theSecretThingThatNobodyHaveToKnow);
 
-                                changeUsernameField.value = '';
-                                changeEmailField.value = '';
-                                changePasswordField.value = '';
-                                comprobePasswordField.value = '';
-                                location.reload();
-                            });
-                        }
-                    }
-                });
-                changeDataConfirmCodeField.value = '';
-            }
-            else if(response.data.hadToInsertOtherCode)
-            {
-                //Que se ha cambiado el email y hay que comprobar el nuevo.
-                floatingWindow(
-                {
-                    title: getText('oneLastStep'),
-                    text: getText('confirmEmailAgain'),
-                    button:
-                    {
-                        text: getText('ok'),
-                        callback: function()
-                        {
-                            actualMenu = 'changeDataEmailCode';
-                            closeWindow();
-                        }
-                    }
-                });
-                document.getElementById('changeDataEmailSent').innerText = response.data.email;
-                changeDataConfirmCodeField.value = '';
-            }
-            else if(response.data.error === 'invalidCode')
-            {
-                floatingWindow(
-                {
-                    title: getText('introduceAValidCode'),
-                    text: getText('introduceAValidCode2'),
-                    button:
-                    {
-                        text: getText('ok'),
-                        callback: function()
-                        {
-                            actualMenu = 'changeDataEmailCode';
-                            closeWindow();
-                        }
-                    }
-                });
-            }
-            else
-            {
-                floatingWindow(
-                {
-                    title: getText('somethingWentWrong'),
-                    text: `${getText('errorCode')}: ${response.data.error}`,
-                    button:
-                    {
-                        text: getText('ok'),
-                        callback: function()
-                        {
-                            closeWindow(changeDataEmailCodeMenuGoBackAnimation);
-                        }
-                    }
-                });
-                changeDataConfirmCodeField.value = '';
-            }    
-        });
-    }
-    catch
-    {
-        //Ventana que diga que se cayó el servidor
-        actualMenu = 'ventana';
-        closeWindow(function()
+        if(response.data.updated)
         {
+            //Que todo salió bien
             floatingWindow(
             {
-                title: getText('ups'),
-                text: getText('serverDown'),
+                title: getText('accountUpdated'),
+                button:
+                {
+                    text: getText('backToHome'),
+                    callback: function()
+                    {
+                        mainScreen.hidden = true;
+                        loadingScreen.hidden = false;
+                        saveCookie('_login', theSecretThingThatNobodyHaveToKnow);
+                        saveCookie('_pswrd', theOtherSecretThing);
+                        saveCookie('_localCopy', saveNotesLocally);
+
+                        changeUsernameField.value = '';
+                        changeEmailField.value = '';
+                        changePasswordField.value = '';
+                        comprobePasswordField.value = '';
+                        location.reload();
+                    }
+                }
+            });
+            changeDataConfirmCodeField.value = '';
+        }
+        else if(response.data.hadToInsertOtherCode)
+        {
+            //Que se ha cambiado el email y hay que comprobar el nuevo.
+            floatingWindow(
+            {
+                title: getText('oneLastStep'),
+                text: getText('confirmEmailAgain'),
                 button:
                 {
                     text: getText('ok'),
                     callback: function()
                     {
-                        closeWindow();
                         actualMenu = 'changeDataEmailCode';
+                        document.getElementById('changeDataConfirmCodeButton').innerText = getText('verify');
+                        closeWindow();
                     }
                 }
             });
+            document.getElementById('changeDataEmailSent').innerText = response.data.email;
+            changeDataConfirmCodeField.value = '';
+        }
+        else if(response.data.error === 'invalidCode')
+        {
+            floatingWindow(
+            {
+                title: getText('introduceAValidCode'),
+                text: getText('introduceAValidCode2'),
+                button:
+                {
+                    text: getText('ok'),
+                    callback: function()
+                    {
+                        actualMenu = 'changeDataEmailCode';
+                        document.getElementById('changeDataConfirmCodeButton').innerText = getText('verify');
+                        closeWindow();
+                    }
+                }
+            });
+        }
+        else
+        {
+            floatingWindow(
+            {
+                title: getText('somethingWentWrong'),
+                text: `${getText('errorCode')}: ${response.data.error}`,
+                button:
+                {
+                    text: getText('ok'),
+                    callback: function()
+                    {
+                        document.getElementById('changeDataConfirmCodeButton').innerText = getText('verify');
+                        closeWindow(changeDataEmailCodeMenuGoBackAnimation);
+                    }
+                }
+            });
+            changeDataConfirmCodeField.value = '';
+        }
+    }
+    catch
+    {
+        //Ventana que diga que se cayó el servidor
+        actualMenu = 'ventana';
+        floatingWindow(
+        {
+            title: getText('ups'),
+            text: getText('serverDown'),
+            button:
+            {
+                text: getText('ok'),
+                callback: function()
+                {
+                    closeWindow();
+                    document.getElementById('changeDataConfirmCodeButton').innerText = getText('verify');
+                    actualMenu = 'changeDataEmailCode';
+                }
+            }
         });
+
         changeDataConfirmCodeField.value = '';
     }
 }

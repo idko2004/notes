@@ -42,6 +42,11 @@ async function encryptHttpCall(route, body, password)
     console.log('password', password);
     if(body.encrypt !== undefined)
     {
+        if(password === undefined)
+        {
+            console.error('there is no password to encrypt');
+            return;
+        }
         body.encrypt = JSON.stringify(body.encrypt);
         body.encrypt = encrypt(body.encrypt, password);
     }
@@ -54,6 +59,12 @@ async function encryptHttpCall(route, body, password)
 
     if(response.data.decrypt !== undefined)
     {
+        if(password === undefined)
+        {
+            console.error('there is no password to decrypt');
+            return;
+        }
+
         try
         {
             response.data.decrypt = JSON.parse(decrypt(response.data.decrypt, password));

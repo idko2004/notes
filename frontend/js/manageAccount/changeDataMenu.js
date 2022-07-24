@@ -243,7 +243,19 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', function
                         //Hacer la llamada al servidor para actualizar a los nuevos datos, generar un código y enviar el email
                         try
                         {
-                            const response = await axios.post(`${path}/createAccountEmailCode`,{email: newEmail, password: newPassword, username: newUsername, operation: 'updateAccount', oldemail: email});
+                            //const response = await axios.post(`${path}/createAccountEmailCode`,{email: newEmail, password: newPassword, username: newUsername, operation: 'updateAccount', oldemail: email});
+                            const response = await encryptHttpCall('/createAccountEmailCode',
+                            {
+                                encrypt:
+                                {
+                                    email: newEmail,
+                                    paassword: newPassword,
+                                    username: newUsername,
+                                    operation: 'updateAccount',
+                                    oldemail: email
+                                },
+                                key: theSecretThingThatNobodyHaveToKnow
+                            })
                             console.log(response);
     
                             if(!response.data.emailSent && response.data.error !== undefined)

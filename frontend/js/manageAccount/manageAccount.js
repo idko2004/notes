@@ -44,9 +44,10 @@ start();
 async function start()
 {
     theSecretThingThatNobodyHaveToKnow = getSpecificCookie('_login');
+    theOtherSecretThing = getSpecificCookie('_pswrd');
     saveNotesLocally = getSpecificCookie('_localCopy');
 
-    if([theSecretThingThatNobodyHaveToKnow, saveNotesLocally].includes(null))
+    if([theSecretThingThatNobodyHaveToKnow, saveNotesLocally, theOtherSecretThing].includes(null))
     {
         loadingScreen.hidden = true;
         floatingWindow(
@@ -73,7 +74,8 @@ async function start()
     //Comprobar que tenemos una clave válida y obtener el nombre de usuario
     try
     {
-        const usernameCall = await axios.get(`${path}/getUsername`, {headers: {key: theSecretThingThatNobodyHaveToKnow}});
+        //const usernameCall = await axios.get(`${path}/getUsername`, {headers: {key: theSecretThingThatNobodyHaveToKnow}});
+        const usernameCall = await encryptHttpCall('/getUsername', {key: theSecretThingThatNobodyHaveToKnow}, theOtherSecretThing);
         console.log(usernameCall);
 
         if(usernameCall.data.error === 'invalidKey')
@@ -96,7 +98,7 @@ async function start()
             });
             return;
         }
-        else if(usernameCall.data.username === undefined)
+        else if(usernameCall.data.decrypt.username === undefined)
         {
             loadingScreen.hidden = true;
             floatingWindow(
@@ -118,9 +120,9 @@ async function start()
             return;
         }
 
-        username = usernameCall.data.username;
-        email = usernameCall.data.email;
-        passwordLength = usernameCall.data.passwordLength;
+        username = usernameCall.data.decrypt.username;
+        email = usernameCall.data.decrypt.email;
+        passwordLength = usernameCall.data.decrypt.passwordLength;
         updateUserData();
         mainMenu.hidden = false;
         loadingScreen.hidden = true;

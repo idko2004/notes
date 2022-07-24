@@ -176,7 +176,7 @@ menuExitLocalMode.addEventListener('click', async function()
         notesList.innerHTML = '';
         noteName.innerText = getText('clickANote');
         textArea.value = '';
-        textArea.disabled = true;    
+        textArea.disabled = true;
         canInteract = true;
         theActualThing = 'login';
     });

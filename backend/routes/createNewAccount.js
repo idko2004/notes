@@ -98,7 +98,6 @@ module.exports = function(app)
         }
         reqDecrypted = JSON.parse(reqDecrypted);
         console.log(reqDecrypted);
-        console.log('QUITAR LUEGO: contraseña:', reqDecrypted.password);
 
         const accountEmail = reqDecrypted.email;
         let oldEmail = reqDecrypted.oldemail;

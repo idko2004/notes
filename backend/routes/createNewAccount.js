@@ -43,8 +43,6 @@ module.exports = function(app)
         console.log('\033[1;34m/createAccountEmailCode\033[0m');
         console.log('body', req.body);
 
-        //FIXME: por algún motivo ya no se puede cambiar las contraseñas
-
         if(Object.keys(req.body).length === 0)
         {
             res.status(400).send({error: 'badRequest'});
@@ -60,6 +58,14 @@ module.exports = function(app)
         const deviceID = req.body.id;
         const reqEncrypted = req.body.encrypt;
         let pswrd;
+
+        if(reqEncrypted === undefined)
+        {
+            res.status(400).send({error: 'notEncrypted'});
+            console.log('badRequest: notEncrypted');
+            return;
+        }
+
         if(key !== undefined) //El método de cifrado es key, por lo que están actualizando datos
         {
             const keyData = await database.getKeyData(key);
@@ -90,7 +96,7 @@ module.exports = function(app)
 
         let reqDecrypted = crypto.decrypt(reqEncrypted, pswrd);
         console.log(reqDecrypted);
-        if(reqEncrypted === null)
+        if(reqDecrypted === null)
         {
             res.status(200).send({error: 'failToObtainData'});
             console.log('failToObtainData: cant decrypt');

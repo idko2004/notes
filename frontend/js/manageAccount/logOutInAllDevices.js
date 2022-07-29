@@ -18,7 +18,7 @@ document.getElementById('logOutInAllOkButton').addEventListener('click', async f
             else
             {
                 //floating window con error code
-               floatingWindow(
+                floatingWindow(
                 {
                     title: getText('somethingWentWrong'),
                     text: `${getText('errorCode')}:${response.data.error}`,

@@ -366,8 +366,8 @@ const allTexts =
     },
     waitAMoment:
     {
-        es: 'Espera un momento.',
-        en: 'Wait a moment.'
+        es: 'Espera un momento...',
+        en: 'Wait a moment...'
     },
     autosave:
     {

@@ -1,6 +1,7 @@
 if(process.env.NODE_ENV !== 'production') require('dotenv').config();
 
 const database = require('../database');
+const crypto = require('../crypto');
 
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
@@ -23,6 +24,20 @@ const transporter = mailer.createTransport(
 
 module.exports = function(app)
 {
+    /////////////////////////////////////////////////////////////////////
+    //      _      _      _          _                             _   //
+    //  __| | ___| | ___| |_ ___   / \   ___ ___ ___  _   _ _ __ | |_  //
+    //  / _` |/ _ \ |/ _ \ __/ _ \ / _ \ / __/ __/ _ \| | | | '_ \| __|//
+    // | (_| |  __/ |  __/ ||  __// ___ \ (_| (_| (_) | |_| | | | | |_ //
+    //  \__,_|\___|_|\___|\__\___/_/   \_\___\___\___/ \__,_|_| |_|\__|//
+    //                                                                 //
+    //   ____          _                                               //
+    //  / ___|___   __| | ___                                          //
+    // | |   / _ \ / _` |/ _ \                                         //
+    // | |__| (_) | (_| |  __/                                         //
+    //  \____\___/ \__,_|\___|                                         //
+    /////////////////////////////////////////////////////////////////////
+ 
     app.post('/deleteAccountCode', jsonParser, async function(req, res)
     {
         console.log('------------------------------------------------');
@@ -127,6 +142,14 @@ module.exports = function(app)
         res.status(200).send({mailSent: true});
     });
 
+    /////////////////////////////////////////////////////////////////////
+    //      _      _      _          _                             _   //
+    //   __| | ___| | ___| |_ ___   / \   ___ ___ ___  _   _ _ __ | |_ //
+    //  / _` |/ _ \ |/ _ \ __/ _ \ / _ \ / __/ __/ _ \| | | | '_ \| __|//
+    // | (_| |  __/ |  __/ ||  __// ___ \ (_| (_| (_) | |_| | | | | |_ //
+    //  \__,_|\___|_|\___|\__\___/_/   \_\___\___\___/ \__,_|_| |_|\__|//
+    /////////////////////////////////////////////////////////////////////
+
     app.post('/deleteAccount', jsonParser, async function(req, res)
     {
         console.log('------------------------------------------------');
@@ -142,12 +165,45 @@ module.exports = function(app)
 
         //Revisar si tenemos todos los datos
         //code   key
-        let code = req.body.code;
+        const reqEncrypted = req.body.encrypt;
+        if(reqEncrypted === undefined)
+        {
+            res.status(400).send({error: 'notEncrypted'});
+            console.log('notEncrypted');
+            return;
+        }
+
         let key = req.body.key;
-        if(code === undefined || key === undefined)
+        if(key === undefined)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no code or key');
+            console.log('badRequest: no key');
+            return;
+        }
+
+        //Comprobar que la clave sea válida
+        const keyData = await database.getKeyData(key);
+        if(keyData === null)
+        {
+            res.status(200).send({error: 'invalidKey'});
+            console.log('invalidKey');
+            return;
+        }
+
+        let reqDecrypted = crypto.decrypt(reqEncrypted, keyData.pswrd);
+        if(reqDecrypted === null)
+        {
+            res.status(200).send({error: 'failToObtainData'});
+            console.log('failToObtainData: cant decrypt');
+            return;
+        }
+        reqDecrypted = JSON.parse(reqDecrypted);
+
+        let code = reqDecrypted.code;
+        if(code === undefined)
+        {
+            res.status(400).send({error: 'badRequest'});
+            console.log('badRequest: no code');
             return;
         }
 
@@ -184,15 +240,6 @@ module.exports = function(app)
         {
             res.status(200).send({error: 'theresNoEmailWTF'});
             console.log('theresNoEmailWTF');
-            return;
-        }
-
-        //Comprobar que la clave sea válida
-        const keyData = await database.getKeyData(key);
-        if(keyData === null)
-        {
-            res.status(200).send({error: 'invalidKey'});
-            console.log('invalidKey');
             return;
         }
 

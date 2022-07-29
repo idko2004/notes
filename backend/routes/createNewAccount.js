@@ -39,14 +39,15 @@ module.exports = function(app)
 
     app.post('/createAccountEmailCode', jsonParser, async function(req, res)
     {
-        console.log('------------------------------------------------');
-        console.log('\033[1;34m/createAccountEmailCode\033[0m');
-        console.log('body', req.body);
+        const logID = `(${rand.generateKey(3)})`;
+        console.log(logID, '------------------------------------------------');
+        console.log(logID, '\033[1;34m/createAccountEmailCode\033[0m');
+        console.log(logID, 'body', req.body);
 
         if(Object.keys(req.body).length === 0)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no body');
+            console.log(logID, 'badRequest: no body');
             return;
         }
 
@@ -62,7 +63,7 @@ module.exports = function(app)
         if(reqEncrypted === undefined)
         {
             res.status(400).send({error: 'notEncrypted'});
-            console.log('badRequest: notEncrypted');
+            console.log(logID, 'badRequest: notEncrypted');
             return;
         }
 
@@ -72,14 +73,14 @@ module.exports = function(app)
             if(keyData === null)
             {
                 res.status(200).send({error: 'invalidKey'});
-                console.log('invalidKey');
+                console.log(logID, 'invalidKey');
                 return;
             }
             pswrd = keyData.pswrd; //Obtenemos la contraseña para descifrar
             if(pswrd === undefined)
             {
                 res.status(200).send({error: 'invalidKey'});
-                console.log('invalidKey: the key somehow doesnt have a password');
+                console.log(logID, 'invalidKey: the key somehow doesnt have a password');
                 return;
             }
         }
@@ -90,7 +91,7 @@ module.exports = function(app)
         else
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no key or deviceID');
+            console.log(logID, 'badRequest: no key or deviceID');
             return;
         }
 
@@ -99,7 +100,7 @@ module.exports = function(app)
         if(reqDecrypted === null)
         {
             res.status(200).send({error: 'failToObtainData'});
-            console.log('failToObtainData: cant decrypt');
+            console.log(logID, 'failToObtainData: cant decrypt');
             return;
         }
         reqDecrypted = JSON.parse(reqDecrypted);
@@ -117,19 +118,19 @@ module.exports = function(app)
         (accountPassword === undefined && accountOperation !== 'updateAccount'))
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no email, password, username or operation');
-            console.log('email', accountEmail !== undefined);
-            console.log('password', accountPassword !== undefined);
-            console.log('username', accountUsername !== undefined);
-            console.log('operation', accountOperation);
+            console.log(logID, 'badRequest: no email, password, username or operation');
+            console.log(logID, 'email', accountEmail !== undefined);
+            console.log(logID, 'password', accountPassword !== undefined);
+            console.log(logID, 'username', accountUsername !== undefined);
+            console.log(logID, 'operation', accountOperation);
             return;
         }
 
         if(!['newAccount', 'updateAccount'].includes(accountOperation))
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: operation must be newAccount or updateAccount');
-            console.log('operation is', operation);
+            console.log(logID, 'badRequest: operation must be newAccount or updateAccount');
+            console.log(logID, 'operation is', operation);
             return;
         }
 
@@ -140,16 +141,16 @@ module.exports = function(app)
         else if(oldEmail === undefined) //updateAccount pero no hay oldEmail
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: oldEmail is needed');
+            console.log(logID, 'badRequest: oldEmail is needed');
             return;
         }
         else //Se supone que es updateAccount
         {
             //Buscar si el usuario ha realizado una petición anteriormente, en caso de hacerlo borrar las peticiones que haya hecho para que no hayan conflictos. Usando oldEmail como filtro de búsqueda.
-            console.log('Se van a borrar peticiones realizadas anteriormente');
+            console.log(logID, 'Se van a borrar peticiones realizadas anteriormente');
             await database.deleteMultipleElements('emailCodes', {oldEmail});
             await database.deleteMultipleElements('emailCodes', {email: oldEmail});
-            console.log('Peticiones anteriores borradas');
+            console.log(logID, 'Peticiones anteriores borradas');
         }
 
         //Comprobar si los datos son válidos
@@ -165,7 +166,7 @@ module.exports = function(app)
         let passwordLength;
         if(accountOperation === 'updateAccount' && ['', undefined, 'undefined', null, 'null'].includes(accountPassword))
         {
-            console.log('Asumimos que la contraseña no se cambia debido a que es undefined o null y la operación realizada es updateAccount', accountPassword);
+            console.log(logID, 'Asumimos que la contraseña no se cambia debido a que es undefined o null y la operación realizada es updateAccount', accountPassword);
             //Si se va a actualizar la cuenta pero la contraseña va a seguir igual
             passwordHasCapitals = true;
             passwordHasLowercase = true;
@@ -190,15 +191,15 @@ module.exports = function(app)
         accountUsername.lenght > 30)
         {
             res.status(200).send({error: 'invalidFields'});
-            console.log('invalidFields');
-            console.log('validEmail', validEmail);
-            console.log('passwordHasCapitals', passwordHasCapitals);
-            console.log('passwordHasLowercase', passwordHasLowercase);
-            console.log('passwordsHasNumbers', passwordHasNumbers);
-            console.log('accountEmail.length < 320', accountEmail.length < 320);
-            console.log('passwordLength >= 8', passwordLength >= 8);
-            console.log('passwordLength <= 20', passwordLength <= 20);
-            console.log('accountUsername <= 30', accountUsername.length <= 30);
+            console.log(logID, 'invalidFields');
+            console.log(logID, 'validEmail', validEmail);
+            console.log(logID, 'passwordHasCapitals', passwordHasCapitals);
+            console.log(logID, 'passwordHasLowercase', passwordHasLowercase);
+            console.log(logID, 'passwordsHasNumbers', passwordHasNumbers);
+            console.log(logID, 'accountEmail.length < 320', accountEmail.length < 320);
+            console.log(logID, 'passwordLength >= 8', passwordLength >= 8);
+            console.log(logID, 'passwordLength <= 20', passwordLength <= 20);
+            console.log(logID, 'accountUsername <= 30', accountUsername.length <= 30);
             return;
         }
 
@@ -208,7 +209,7 @@ module.exports = function(app)
         {
             //Si estamos creando una nueva cuenta, no debe existir una cuenta con este email
             res.status(200).send({error: 'duplicatedEmail'});
-            console.log('duplicatedEmail');
+            console.log(logID, 'duplicatedEmail');
             return;
         }
 
@@ -218,7 +219,7 @@ module.exports = function(app)
             {
                 //si estamos actualizando una cuenta, debe existir una cuenta con este email
                 res.status(200).send({error: 'accountDontExist'});
-                console.log('accountDontExist: operation is updateAccount but there is no account to update');
+                console.log(logID, 'accountDontExist: operation is updateAccount but there is no account to update');
                 return;
             }
 
@@ -229,7 +230,7 @@ module.exports = function(app)
                 if(newEmailAlredyExist !== null)
                 {
                     res.status(200).send({error: 'duplicatedEmail'});
-                    console.log('duplicatedEmail on updateAccount');
+                    console.log(logID, 'duplicatedEmail on updateAccount');
                     return;
                 }
             }
@@ -237,19 +238,19 @@ module.exports = function(app)
 
         //Buscamos si este mismo usuario no ha hecho una request antes con los mismos datos
         const emailCodeAlredyExist = await database.getElement('emailCodes', {email: accountEmail});
-        console.log('emailCodeAlredyExist', emailCodeAlredyExist !== null)
+        console.log(logID, 'emailCodeAlredyExist', emailCodeAlredyExist !== null)
         if(emailCodeAlredyExist !== null)
         {
             if(emailCodeAlredyExist.email === accountEmail && emailCodeAlredyExist.password === accountPassword && emailCodeAlredyExist.username === accountUsername && emailCodeAlredyExist.operation === accountOperation)
             {
                 //Si los datos son exactamente iguales y están guardados en la base de datos, significa que la misma petición ya se realizó y por ende, se supone que el correo electrónico ya debería haber sido enviado.
                 res.status(200).send({emailSent: true});
-                console.log('No se envió un correo nuevo porque ya debería tener uno');
-                console.log('Expected code', emailCodeAlredyExist.code);
+                console.log(logID, 'No se envió un correo nuevo porque ya debería tener uno');
+                console.log(logID, 'Expected code', emailCodeAlredyExist.code);
                 return;
             }
         }
-        console.log('Se enviará un nuevo correo');
+        console.log(logID, 'Se enviará un nuevo correo');
 
         //Generamos el código y comprobamos que no esté repetido en la base de datos
         let code;
@@ -257,10 +258,10 @@ module.exports = function(app)
         {
             code = rand.generateKey(5).toUpperCase();
             let element = await database.getElement('emailCodes', {code});
-            console.log('tiene que dar null eventualmente:', element);
+            console.log(logID, 'tiene que dar null eventualmente:', element);
             if(element === null) break;
         }
-        console.log('Expected code', code);
+        console.log(logID, 'Expected code', code);
 
         //Guardamos el código en la base de datos
         const dateCreated = new Date();
@@ -280,9 +281,9 @@ module.exports = function(app)
             }
         }
 
-        console.log('nuevo emailCode:', newElement);
+        console.log(logID, 'nuevo emailCode:', newElement);
         const dbCreateEmailCode = await database.createElement('emailCodes', newElement);
-        console.log('Código añadido a la base de datos', dbCreateEmailCode);
+        console.log(logID, 'Código añadido a la base de datos', dbCreateEmailCode);
 
         //Cargamos el html y lo modificamos para poner el código en él
         let mailContent;
@@ -321,13 +322,13 @@ module.exports = function(app)
 
         transporter.sendMail(mailOptions, function(error)
         {
-            if(error) console.log('//Error mandando el mail en /createAccountEmailCode', error);
-            else console.log('//Email mandado /createAccountEmailCode');
+            if(error) console.log(logID, '//Error mandando el mail en /createAccountEmailCode', error);
+            else console.log(logID, '//Email mandado /createAccountEmailCode');
         });
 
         //Respondemos al cliente
         res.status(200).send({emailSent: true});
-        console.log('Email solicitado exitosamente');
+        console.log(logID, 'Email solicitado exitosamente');
     });
 
     //////////////////////////////////////////////////////////////////////
@@ -347,14 +348,15 @@ module.exports = function(app)
 
     app.post('/createNewAccount', jsonParser, async function(req, res)
     {
-        console.log('------------------------------------------------');
-        console.log('\033[1;34m/createNewAccount\033[0m');
-        console.log('body', req.body);
+        const logID = `(${rand.generateKey(3)})`;
+        console.log(logID, '------------------------------------------------');
+        console.log(logID, '\033[1;34m/createNewAccount\033[0m');
+        console.log(logID, 'body', req.body);
     
         if(Object.keys(req.body).length === 0)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no body');
+            console.log(logID, 'badRequest: no body');
             return;
         }
 
@@ -364,18 +366,18 @@ module.exports = function(app)
         if(code === undefined)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no code');
+            console.log(logID, 'badRequest: no code');
             return;
         }
         code = code.toUpperCase();
 
         //Verificamos si el código enviado al email existe
         const codeDB = await database.getElement('emailCodes', {code});
-        console.log(codeDB);
+        console.log(logID, codeDB);
         if(codeDB === null || codeDB.operation !== 'newAccount')
         {
             res.status(200).send({error: 'invalidCode'});
-            console.log('invalidcode');
+            console.log(logID, 'invalidcode');
             return;
         }
 
@@ -385,7 +387,7 @@ module.exports = function(app)
         if(email === undefined || password === undefined || username === undefined)
         {
             res.status(500).send({error: 'invalidData'});
-            console.log('invalidData');
+            console.log(logID, 'invalidData');
             return;
         }
 
@@ -394,7 +396,7 @@ module.exports = function(app)
         if(emailAlredyExist !== null)
         {
             res.status(500).send({error: 'duplicatedEmail'});
-            console.log('duplicatedEmail');
+            console.log(logID, 'duplicatedEmail');
             return;
         }
 
@@ -404,7 +406,7 @@ module.exports = function(app)
             email, username, password, notesID: []
         }
         const saved = await database.createElement('users', newUser);
-        console.log('Usuario creado', saved);
+        console.log(logID, 'Usuario creado', saved);
 
         //Borrar el elemento de emailCodes porque ya se ha usado
         database.deleteElement('emailCodes',{code});
@@ -429,13 +431,14 @@ module.exports = function(app)
 
     app.post('/updateAccountData', jsonParser, async function(req, res)
     {
-        console.log('------------------------------------------------');
-        console.log('\033[1;34m/updateAccountData\033[0m');
-        console.log('body', req.body);
+        const logID = `(${rand.generateKey(3)})`;
+        console.log(logID, '------------------------------------------------');
+        console.log(logID, '\033[1;34m/updateAccountData\033[0m');
+        console.log(logID, 'body', req.body);
 
         if(Object.keys(req.body).length === 0)
         {
-            console.log('badRequest, body = undefined');
+            console.log(logID, 'badRequest, body = undefined');
             res.status(400).send({error: 'badRequest'});
             return;
         }
@@ -447,7 +450,7 @@ module.exports = function(app)
         if(key === undefined || reqEncrypted === undefined)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no key or encrypted data');
+            console.log(logID, 'badRequest: no key or encrypted data');
             return;
         }
 
@@ -455,13 +458,13 @@ module.exports = function(app)
         if(keyData === null)
         {
             res.status(200).send({error: 'invalidKey'});
-            console.log('invalidKey');
+            console.log(logID, 'invalidKey');
             return;
         }
         if(keyData.email === undefined)
         {
             res.status(200).send({error: 'theresNoEmailWTF'});
-            console.log('theresNoEmailWTF: no email in keyData');
+            console.log(logID, 'theresNoEmailWTF: no email in keyData');
             return;
         }
 
@@ -469,7 +472,7 @@ module.exports = function(app)
         if(reqDecrypted === null)
         {
             res.status(200).send({error: 'failToObtainData'});
-            console.log('failToObtainData');
+            console.log(logID, 'failToObtainData');
             return;
         }
         reqDecrypted = JSON.parse(reqDecrypted);
@@ -478,7 +481,7 @@ module.exports = function(app)
         let code = reqDecrypted.code;
         if(code === undefined)
         {
-            console.log('badRequest, faltan datos: code or key');
+            console.log(logID, 'badRequest, faltan datos: code or key');
             res.status(400).send({error: 'badRequest'});
             return;
         }
@@ -486,10 +489,10 @@ module.exports = function(app)
 
         //Buscamos si el código existe en la base de datos de códigos
         const codeDB = await database.getElement('emailCodes',{code});
-        console.log(codeDB);
+        console.log(logID, codeDB);
         if(codeDB === null || !['updateAccount', 'updateAccount2'].includes(codeDB.operation))
         {
-            console.log('invalidCode, el código introducido no es válido.');
+            console.log(logID, 'invalidCode, el código introducido no es válido.');
             res.status(200).send({error: 'invalidCode'});
             return;
         }
@@ -503,11 +506,11 @@ module.exports = function(app)
         newEmail === undefined ||
         oldEmail === undefined)
         {
-            console.log('invalidData, algunos de los datos han dado undefined');
-            console.log('newUsername', newUsername);
-            console.log('newPassword', newPassword);
-            console.log('newEmail', newEmail);
-            console.log('oldEmail', oldEmail);
+            console.log(logID, 'invalidData, algunos de los datos han dado undefined');
+            console.log(logID, 'newUsername', newUsername);
+            console.log(logID, 'newPassword', newPassword);
+            console.log(logID, 'newEmail', newEmail);
+            console.log(logID, 'oldEmail', oldEmail);
 
             res.status(500).send({error: 'invalidData'});
             return;
@@ -517,14 +520,14 @@ module.exports = function(app)
         if(oldEmail !== keyData.email || newEmail !== keyData.email)
         {
             res.status(200).send({error: 'invalidCode'});
-            console.log('invalidCode: emails dont match');
+            console.log(logID, 'invalidCode: emails dont match');
             return;
         }
 
         //Comprobamos si hay nuevo correo electrónico, en caso de haberlo debe confirmarse
         if(oldEmail !== newEmail && codeDB.operation === 'updateAccount')
         {
-            console.log('El nuevo correo electrónico necesita confirmarse');
+            console.log(logID, 'El nuevo correo electrónico necesita confirmarse');
             const updateCode = codeDB;
 
             //Generamos el código y comprobamos que no esté repetido en la base de datos
@@ -533,10 +536,10 @@ module.exports = function(app)
             {
                 newCode = rand.generateKey(5).toUpperCase();
                 let element = await database.getElement('emailCodes', {newCode});
-                console.log('tiene que dar null eventualmente:', element);
+                console.log(logID, 'tiene que dar null eventualmente:', element);
                 if(element === null) break;
             }
-            console.log('Expected code:', newCode);
+            console.log(logID, 'Expected code:', newCode);
 
             //Actualizamos el elemento de la base de datos de códigos poniendo el nuevo código para el otro correo.
             updateCode.code = newCode;
@@ -558,13 +561,13 @@ module.exports = function(app)
 
             transporter.sendMail(mailOptions, function(error)
             {
-                if(error) console.log('//Error mandando el mail en /createAccountEmailCode', error);
-                else console.log('//Email mandado /createAccountEmailCode');
+                if(error) console.log(logID, '//Error mandando el mail en /createAccountEmailCode', error);
+                else console.log(logID, '//Email mandado /createAccountEmailCode');
             });
 
 
             res.status(200).send({hadToInsertOtherCode: true, email: newEmail});
-            console.log('Necesita ingresar otro código, email solicitado exitosamente');
+            console.log(logID, 'Necesita ingresar otro código, email solicitado exitosamente');
             return;
         }
 
@@ -572,7 +575,7 @@ module.exports = function(app)
         const user = await database.getElement('users', {email: oldEmail});
         if(user === null)
         {
-            console.log('invalidData, el usuario no se encuentra en la base de datos');
+            console.log(logID, 'invalidData, el usuario no se encuentra en la base de datos');
             res.status(500).send({error: 'invalidData'});
             return;
         }
@@ -583,29 +586,29 @@ module.exports = function(app)
         newUser.username = newUsername;
         if(!['', undefined, 'undefined', null, 'null'].includes(newPassword)) newUser.password = newPassword;
 
-        console.log('El usuario queda así:', newUser);
+        console.log(logID, 'El usuario queda así:', newUser);
 
         //Guardamos en la base de datos de usuarios
-        console.log('Guardando usuario');
+        console.log(logID, 'Guardando usuario');
         await database.updateElement('users', {email: oldEmail}, newUser);
 
         //Borramos el elemento de la base de datos de códigos
-        console.log('Borrando código de email');
+        console.log(logID, 'Borrando código de email');
         await database.deleteElement('emailCodes', {code});
 
         //Cambiar la propiedad de todas las notas
-        console.log('Actualizando notas');
+        console.log(logID, 'Actualizando notas');
         await database.updateMultipleElements('notes', {owner: oldEmail}, {owner: newEmail});
 
         //Cambiar el correo electrónico de todas las llaves
-        console.log('Actualizando llaves');
+        console.log(logID, 'Actualizando llaves');
         await database.updateMultipleElements('sessionID', {email: oldEmail}, {email: newEmail});
 
-        console.log(database.sessionIDList);
+        console.log(logID, database.sessionIDList);
         database.resetSessionIDList();
-        console.log(database.sessionIDList);
+        console.log(logID, database.sessionIDList);
 
-        console.log('Usuario supuestamente actualizado');
+        console.log(logID, 'Usuario supuestamente actualizado');
 
         //Respondemos al cliente
         res.status(200).send({updated: true});

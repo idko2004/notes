@@ -10,16 +10,17 @@ module.exports = function(app)
 {
     app.post('/createNewNote', jsonParser, async function(req, res)
     {
-        console.log('------------------------------------------------');
-        console.log('\033[1;34m/createNewNote\033[0m');
-        console.log('body',req.body);
+        const logID = `(${rand.generateKey(3)})`;
+        console.log(logID, '------------------------------------------------');
+        console.log(logID, '\033[1;34m/createNewNote\033[0m');
+        console.log(logID, 'body',req.body);
 
         //Verificamos si se tienen todos los requerimientos
         //key   noteName
         if(Object.keys(req.body).length === 0)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no body');
+            console.log(logID, 'badRequest: no body');
             return;
         }
 
@@ -27,7 +28,7 @@ module.exports = function(app)
         if(reqEncrypted === undefined)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no encrypted');
+            console.log(logID, 'badRequest: no encrypted');
             return;
         }
 
@@ -35,7 +36,7 @@ module.exports = function(app)
         if(key === undefined)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no key');
+            console.log(logID, 'badRequest: no key');
             return;
         }
 
@@ -45,14 +46,14 @@ module.exports = function(app)
         if(KeyData === null)
         {
             res.status(200).send({error: 'invalidKey'});
-            console.log('invalidKey');
+            console.log(logID, 'invalidKey');
             return;
         }
         const email = KeyData.email;
         if(email === undefined)
         {
             res.status(200).send({error: 'emailNull'});
-            console.log('emailNull');
+            console.log(logID, 'emailNull');
             return;
         }
 
@@ -60,17 +61,17 @@ module.exports = function(app)
         if(reqDecrypted === null)
         {
             res.status(200).send({error: 'failToObtainData'});
-            console.log('failToObtainData: cant decrypt');
+            console.log(logID, 'failToObtainData: cant decrypt');
             return;
         }
         reqDecrypted = JSON.parse(reqDecrypted);
-        console.log(reqDecrypted);
+        console.log(logID, reqDecrypted);
 
         let noteName = reqDecrypted.notename;
         if(noteName === undefined)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no notename');
+            console.log(logID, 'badRequest: no notename');
             return;
         }
         noteName = noteName.trim();
@@ -79,7 +80,7 @@ module.exports = function(app)
         function invalidName()
         {
             res.status(200).send({error: 'invalidName'});
-            console.log('invalidName');
+            console.log(logID, 'invalidName');
             return;
         }
         ///No estar vacía
@@ -94,13 +95,13 @@ module.exports = function(app)
         if(userInfo === null)
         {
             res.status(200).send({error: 'userNull'});
-            console.log('userNull');
+            console.log(logID, 'userNull');
             return;
         }
         if(userInfo.notesID === undefined)
         {
             res.status(200).send({error: 'idUndefined'});
-            console.log('idUndefined');
+            console.log(logID, 'idUndefined');
             return;
         }
 
@@ -115,16 +116,16 @@ module.exports = function(app)
         {
             //Generamos un código
             noteID = rand.generateKey(12); 
-            console.log(noteID);
+            console.log(logID, noteID);
 
             //Buscamos si el código existe en la base de datos.
             const itAlredyExist = await database.getElement('notes', {id: noteID}); 
-            console.log('eventualmente debe dar null:', itAlredyExist);
+            console.log(logID, 'eventualmente debe dar null:', itAlredyExist);
 
             //Si no existe, salimos del bucle ya que el código es válido
             if(itAlredyExist === null) break;
         }
-        console.log('El código es único');
+        console.log(logID, 'El código es único');
 
         //Crear el elemento para la base de datos de notas
         const newNote =
@@ -143,6 +144,6 @@ module.exports = function(app)
         //ok    noteID
         const decrypt = crypto.encrypt(JSON.stringify({noteid: noteID}), KeyData.pswrd);
         res.status(200).send({ok: true, decrypt});
-        console.log('nota creada');
+        console.log(logID, 'nota creada');
     });
 }

@@ -4,20 +4,23 @@ const jsonParser = bodyParser.json();
 const database = require('../database');
 const crypto = require('../crypto');
 
+const rand = require('generate-key');
+
 module.exports = function(app)
 {
     app.post('/deleteNote', jsonParser, async function(req, res)
     {
-        console.log('------------------------------------------------');
-        console.log('\033[1;34m/deleteNote\033[0m');
-        console.log('body',req.body);
+        const logID = `(${rand.generateKey(3)})`;
+        console.log(logID, '------------------------------------------------');
+        console.log(logID, '\033[1;34m/deleteNote\033[0m');
+        console.log(logID, 'body',req.body);
 
         //Comprobamos si tenemos todos los datos necesarios
         //key   noteID
         if(Object.keys(req.body).length === 0)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no body');
+            console.log(logID, 'badRequest: no body');
             return;
         }
 
@@ -25,7 +28,7 @@ module.exports = function(app)
         if(reqEncrypted === undefined)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no encrypted');
+            console.log(logID, 'badRequest: no encrypted');
             return;
         }
 
@@ -33,7 +36,7 @@ module.exports = function(app)
         if(key === undefined)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no key');
+            console.log(logID, 'badRequest: no key');
             return;
         }
 
@@ -42,13 +45,14 @@ module.exports = function(app)
         if(keyData === null)
         {
             res.status(200).send({error: 'invalidKey'});
+            console.log(logID, 'invalidKey');
             return;
         }
         const email = keyData.email;
         if(email === undefined)
         {
             res.status(200).send({error: 'emailUndefined'});
-            console.log('emailUndefined');
+            console.log(logID, 'emailUndefined');
             return;
         }
 
@@ -56,17 +60,17 @@ module.exports = function(app)
         if(reqDecrypted === null)
         {
             res.status(200).send({error: 'failToObtainData'});
-            console.log('failToObtainData: cant decrypt');
+            console.log(logID, 'failToObtainData: cant decrypt');
             return;
         }
         reqDecrypted = JSON.parse(reqDecrypted);
-        console.log(reqDecrypted);
+        console.log(logID, reqDecrypted);
 
         const noteID = reqDecrypted.noteid;
         if(noteID === undefined)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no noteid');
+            console.log(logID, 'badRequest: no noteid');
             return;
         }
 
@@ -75,30 +79,30 @@ module.exports = function(app)
         if(note === null)
         {
             res.status(200).send({error: 'noteNull'});
-            console.log('noteNull');
+            console.log(logID, 'noteNull');
             return;
         }
-        console.log('La nota existe');
+        console.log(logID, 'La nota existe');
 
         //Comprobamos si la nota es suya
         if(note.owner !== email)
         {
             res.status(200).send({error: 'notTheOwner'});
-            console.log('notTheOwner');
+            console.log(logID, 'notTheOwner');
             return;
         }
-        console.log('Es el dueño de la nota');
+        console.log(logID, 'Es el dueño de la nota');
 
         //Borramos la nota
         const deleted = await database.deleteElement('notes', {id: noteID});
-        console.log('Nota borrada', deleted);
+        console.log(logID, 'Nota borrada', deleted);
 
         //Buscamos la nota en el perfil del usuario y lo borramos
         let userProfile = await database.getElement('users', {email});
         if(userProfile === null)
         {
             res.status(200).send({error: 'cantFindUserProfile'});
-            console.log('cantFindUserProfile');
+            console.log(logID, 'cantFindUserProfile');
             return;
         }
 
@@ -106,7 +110,7 @@ module.exports = function(app)
         if(notesList === undefined)
         {
             res.status(200).send({error: 'cantFindNotesID'});
-            console.log('cantFindNotesID');
+            console.log(logID, 'cantFindNotesID');
             return;
         }
 
@@ -118,12 +122,12 @@ module.exports = function(app)
         }
 
         userProfile.notesID = newNotesList;
-        console.log(userProfile);
+        console.log(logID, userProfile);
         const userProfileSaved = await database.updateElement('users', {email}, userProfile);
-        console.log('Perfil actualizado', userProfileSaved);
+        console.log(logID, 'Perfil actualizado', userProfileSaved);
 
         //Respondemos al cliente
         res.status(200).send({deleted: true});
-        console.log('nota borrada');
+        console.log(logID, 'nota borrada');
     });
 }

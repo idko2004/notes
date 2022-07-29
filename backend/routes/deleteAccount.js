@@ -40,14 +40,15 @@ module.exports = function(app)
  
     app.post('/deleteAccountCode', jsonParser, async function(req, res)
     {
-        console.log('------------------------------------------------');
-        console.log('\033[1;34m/deleteAccountCode\033[0m');
-        console.log('body', req.body);
+        const logID = `(${rand.generateKey(3)})`;
+        console.log(logID, '------------------------------------------------');
+        console.log(logID, '\033[1;34m/deleteAccountCode\033[0m');
+        console.log(logID, 'body', req.body);
 
         if(Object.keys(req.body).length === 0)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no body');
+            console.log(logID, 'badRequest: no body');
             return;
         }
 
@@ -57,7 +58,7 @@ module.exports = function(app)
         if(key === undefined)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no key');
+            console.log(logID, 'badRequest: no key');
             return;
         }
 
@@ -66,14 +67,14 @@ module.exports = function(app)
         if(keyData === null)
         {
             res.status(200).send({error: 'invalidKey'});
-            console.log('invalidKey');
+            console.log(logID, 'invalidKey');
             return;
         }
         const email = keyData.email;
         if(email === undefined)
         {
             res.status(500).send({error: 'emailUndefined'});
-            console.log('emailUndefined');
+            console.log(logID, 'emailUndefined');
             return;
         }
 
@@ -87,10 +88,10 @@ module.exports = function(app)
         {
             code = rand.generateKey(5).toUpperCase();
             let element = await database.getElement('emailCodes', {code});
-            console.log('tiene que dar null eventualmente:', element);
+            console.log(logID, 'tiene que dar null eventualmente:', element);
             if(element === null) break;
         }
-        console.log('Expected code', code);
+        console.log(logID, 'Expected code', code);
         
         //Crear el objeto para guardar en la base de datos
         //Debe contener: código, operación=deleteAccount, email
@@ -110,14 +111,14 @@ module.exports = function(app)
 
         //Guardar el objeto en la base de datos
         const dbCreateEmailCode = await database.createElement('emailCodes', newElement);
-        console.log('Código añadido a la base de datos', dbCreateEmailCode);
+        console.log(logID, 'Código añadido a la base de datos', dbCreateEmailCode);
 
         //Cargar el email
         let mailContent = fs.readFileSync('emailPresets/deleteAccountEmail.html', 'utf-8');
         if([undefined, null, ''].includes(mailContent))
         {
             res.status(500).send({error: 'cantLoadEmail'});
-            console.log('deleteAccount: NO SE PUDO CARGAR EL EMAIL');
+            console.log(logID, 'deleteAccount: NO SE PUDO CARGAR EL EMAIL');
             return;
         }
         mailContent = mailContent.replace('{EMAIL_HERE}', email);
@@ -134,12 +135,13 @@ module.exports = function(app)
 
         transporter.sendMail(mailOptions, function(error)
         {
-            if(error) console.log('//Error mandando el mail en /createAccountEmailCode', error);
-            else console.log('//Email mandado /createAccountEmailCode');
+            if(error) console.log(logID, '//Error mandando el mail en /createAccountEmailCode', error);
+            else console.log(logID, '//Email mandado /createAccountEmailCode');
         });
 
         //Responder al cliente
         res.status(200).send({mailSent: true});
+        console.log(logID, 'email solicitado');
     });
 
     /////////////////////////////////////////////////////////////////////
@@ -152,14 +154,15 @@ module.exports = function(app)
 
     app.post('/deleteAccount', jsonParser, async function(req, res)
     {
-        console.log('------------------------------------------------');
-        console.log('\033[1;34m/deleteAccount\033[0m');
-        console.log('body', req.body);
+        const logID = `(${rand.generateKey(3)})`;
+        console.log(logID, '------------------------------------------------');
+        console.log(logID, '\033[1;34m/deleteAccount\033[0m');
+        console.log(logID, 'body', req.body);
 
         if(Object.keys(req.body).length === 0)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no body');
+            console.log(logID, 'badRequest: no body');
             return;
         }
 
@@ -169,7 +172,7 @@ module.exports = function(app)
         if(reqEncrypted === undefined)
         {
             res.status(400).send({error: 'notEncrypted'});
-            console.log('notEncrypted');
+            console.log(logID, 'notEncrypted');
             return;
         }
 
@@ -177,7 +180,7 @@ module.exports = function(app)
         if(key === undefined)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no key');
+            console.log(logID, 'badRequest: no key');
             return;
         }
 
@@ -186,7 +189,7 @@ module.exports = function(app)
         if(keyData === null)
         {
             res.status(200).send({error: 'invalidKey'});
-            console.log('invalidKey');
+            console.log(logID, 'invalidKey');
             return;
         }
 
@@ -194,7 +197,7 @@ module.exports = function(app)
         if(reqDecrypted === null)
         {
             res.status(200).send({error: 'failToObtainData'});
-            console.log('failToObtainData: cant decrypt');
+            console.log(logID, 'failToObtainData: cant decrypt');
             return;
         }
         reqDecrypted = JSON.parse(reqDecrypted);
@@ -203,7 +206,7 @@ module.exports = function(app)
         if(code === undefined)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no code');
+            console.log(logID, 'badRequest: no code');
             return;
         }
 
@@ -212,17 +215,17 @@ module.exports = function(app)
         if(code === '' || code.length !== 5)
         {
             res.status(200).send({error: 'invalidCode'});
-            console.log('invalidCode: is empty or dont have 5 characters');
+            console.log(logID, 'invalidCode: is empty or dont have 5 characters');
             return;
         }
 
         //Buscar el código en la base de datos
         const emailCode = await database.getElement('emailCodes', {code});
-        console.log('emailCode', emailCode);
+        console.log(logID, 'emailCode', emailCode);
         if(emailCode === null)
         {
             res.status(200).send({error: 'invalidCode'});
-            console.log('invalidCode: no existe');
+            console.log(logID, 'invalidCode: no existe');
             return;
         }
 
@@ -230,7 +233,7 @@ module.exports = function(app)
         if(emailCode.operation !== 'deleteAccount')
         {
             res.status(200).send({error: 'invalidOperation'});
-            console.log('invalidOperation');
+            console.log(logID, 'invalidOperation');
             return;
         }
 
@@ -239,7 +242,7 @@ module.exports = function(app)
         if(email === undefined)
         {
             res.status(200).send({error: 'theresNoEmailWTF'});
-            console.log('theresNoEmailWTF');
+            console.log(logID, 'theresNoEmailWTF');
             return;
         }
 
@@ -247,35 +250,35 @@ module.exports = function(app)
         if(email !== keyData.email)
         {
             res.status(200).send({error: 'invalidCode'});
-            console.log('invalidCode: is valid but not yours');
+            console.log(logID, 'invalidCode: is valid but not yours');
             return;
         }
 
         //Borrar el elemento en mailCodes
-        console.log('Borrando emailCode');
+        console.log(logID, 'Borrando emailCode');
         const deleteEmailCode = await database.deleteElement('emailCodes', {code});
-        console.log('deleteEmailCode', deleteEmailCode);
+        console.log(logID, 'deleteEmailCode', deleteEmailCode);
 
         //Borrar los elementos de sessionID
-        console.log('Borrando SessionID');
+        console.log(logID, 'Borrando SessionID');
         const deleteSessionID = await database.deleteMultipleElements('sessionID', {email});
-        console.log('deleteSessionID', deleteSessionID);
+        console.log(logID, 'deleteSessionID', deleteSessionID);
 
         //Restablecer la lista local de sessionID
         database.resetSessionIDList();
 
         //Borrar las notas
-        console.log('Borrando las notas');
+        console.log(logID, 'Borrando las notas');
         const deleteNotes = await database.deleteMultipleElements('notes', {owner: email});
-        console.log('deleteNotes', deleteNotes);
+        console.log(logID, 'deleteNotes', deleteNotes);
 
         //Borrar el elemento del usuario en users
-        console.log('Borrando usuario');
+        console.log(logID, 'Borrando usuario');
         const deleteUser = await database.deleteElement('users', {email});
-        console.log('deleteUser', deleteUser);
+        console.log(logID, 'deleteUser', deleteUser);
 
         //Responder al cliente
         res.status(200).send({accountDeleted: true});
-        console.log('Cuenta eliminada');
+        console.log(logID, 'Cuenta eliminada');
     });
 }

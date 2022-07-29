@@ -249,7 +249,7 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', function
                                 encrypt:
                                 {
                                     email: newEmail,
-                                    paassword: newPassword,
+                                    password: newPassword,
                                     username: newUsername,
                                     operation: 'updateAccount',
                                     oldemail: email

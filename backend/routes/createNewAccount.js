@@ -98,6 +98,7 @@ module.exports = function(app)
         }
         reqDecrypted = JSON.parse(reqDecrypted);
         console.log(reqDecrypted);
+        console.log('QUITAR LUEGO: contraseña:', reqDecrypted.password);
 
         const accountEmail = reqDecrypted.email;
         let oldEmail = reqDecrypted.oldemail;
@@ -159,12 +160,12 @@ module.exports = function(app)
         let passwordLength;
         if(accountOperation === 'updateAccount' && ['', undefined, 'undefined', null, 'null'].includes(accountPassword))
         {
+            console.log('Asumimos que la contraseña no se cambia debido a que es undefined o null y la operación realizada es updateAccount', accountPassword);
             //Si se va a actualizar la cuenta pero la contraseña va a seguir igual
             passwordHasCapitals = true;
             passwordHasLowercase = true;
             passwordHasNumbers = true;
             passwordLength = 10;
-            console.log('la contraseña no se actualiza');
         }
         else
         {

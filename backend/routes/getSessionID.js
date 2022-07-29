@@ -106,6 +106,7 @@ module.exports = function(app)
         }
     
         res.status(200).send({error: 'userDontExist'});
+        console.log('userDontExist');
     
         async function linkKey(email)
         {

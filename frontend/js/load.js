@@ -82,6 +82,7 @@ async function start()
                 deleteKey('_pswrd');
                 theSecretThingThatNobodyHasToKnow = undefined;
                 theOtherSecretThing = undefined;
+                await requestLoginPassword();
                 loadingScreen.hidden = true;
                 document.getElementById('noteScreen').hidden = true;
                 document.getElementById('loginScreen').hidden = false;

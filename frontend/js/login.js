@@ -94,6 +94,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
     try
     {
         //const response = await axios.get(`${path}/getSessionID`, {headers: {username, password}});
+        console.log('loginPassword', loginPassword);
         const response = await encryptHttpCall('/getSessionID', {encrypt: {username, password}, code: codePassword}, loginPassword);
         console.log(response);
         if(response.data.error === undefined && response.data.decrypt.key !== undefined && response.data.decrypt.pswrd !== undefined) //Clave obtenida con éxito

@@ -4,12 +4,12 @@
 
 html
 {
-    --green: #53b56a;
-    --green-hover: #479b5b;
-    --green-win-bg: rgba(71, 155, 91, 0.35);
-    --bg-color: #FFF;
-    --font-color: #000;
-    --gray: #eeeeee;
+    --green: #339B4A;
+    --green-hover: #1B8132;
+    --green-win-bg: rgba(27, 129, 50, 0.35);
+    --bg-color: #000;
+    --font-color: #EDEDED;
+    --gray: #333333;
     --rubik: 'Rubik', sans-serif;
 }
 

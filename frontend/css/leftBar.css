@@ -113,6 +113,7 @@ aside
     white-space: nowrap;
     overflow: hidden;
     line-height: 1rem;
+    color: var(--font-color);
     transition: all ease 70ms;
 }
 

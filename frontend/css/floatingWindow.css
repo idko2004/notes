@@ -8,7 +8,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    background-color: rgba(71, 155, 91, 0.35);
+    background-color: var(--green-win-bg);
     width: 100vw;
     height: 100vh;
 }

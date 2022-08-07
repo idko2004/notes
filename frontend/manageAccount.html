@@ -7,7 +7,18 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
 
-        <link rel='stylesheet' type='text/css' href='css/style.css'>
+        <!--Cargar los css dependiendo de si está en modo oscuro o no-->
+        <script>
+            let darkModeActive = true;
+            loadDarkCss(darkModeActive);
+            function loadDarkCss(dark)
+            {
+                if(dark) document.write(`<link rel='stylesheet type='text/css' href='css/style-dark.css'>`);
+                else document.write(`<link rel='stylesheet type='text/css' href='css/style.css'>`);
+            }
+        </script>
+
+
         <link rel='stylesheet' type='text/css' href='css/load.css'>
         <link rel='stylesheet' type='text/css' href='css/floatingWindow.css'>
         <link rel='stylesheet' type='text/css' href='css/manageAccount.css'>
@@ -32,7 +43,7 @@
         <div id=loadingScreen>
             <section>
                 <b><span class='text' txt="noteAppName">Notas</span></b>
-                <h2 class="text" txt="loading">Loading this text</h2>
+                <h2 class="text" txt="loading">Loading this text...</h2>
             </section>
         </div>
 

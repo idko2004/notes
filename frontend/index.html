@@ -9,7 +9,8 @@
 
         <!--Cargar los css dependiendo de si está en modo oscuro o no-->
         <script>
-            loadDarkCss(true);
+            let darkModeActive = true;
+            loadDarkCss(darkModeActive);
             function loadDarkCss(dark)
             {
                 if(dark) document.write(`<link rel='stylesheet type='text/css' href='css/style-dark.css'>`);
@@ -17,7 +18,6 @@
             }
         </script>
 
-        <!--link rel='stylesheet' type='text/css' href='css/style.css'-->
         <link rel='stylesheet' type='text/css' href='css/load.css'>
         <link rel='stylesheet' type='text/css' href='css/login.css'>
         <link rel='stylesheet' type='text/css' href='css/topBar.css'>
@@ -56,22 +56,22 @@
 
         <div id='loginScreen' hidden>
             <div id='loginScreenBigName'>
-                <b><span class="text" txt="noteAppName">Notas</span></b>
+                <b><span class="text" txt="noteAppName"></span></b>
             </div>
             <div>
-                <h1><span class="text" txt="login">Iniciar sesión</span></h1>
+                <h1><span class="text" txt="login"></span></h1>
                 <p>
                     <section>
-                        <span class="text" txt="username">Nombre de usuario</span><br>
+                        <span class="text" txt="username"></span><br>
                         <input type='text' id='usernameField'>
                     </section>
                     <section>
-                        <span class="text" txt="password">Contraseña</span><br>
+                        <span class="text" txt="password"></span><br>
                         <input type='password' id='passwordField'><br>
                         <small>
                             <i>
                                 <a>
-                                    <span class="text" txt="forgotPassword">Olvidé mi contraseña</span>
+                                    <span class="text" txt="forgotPassword"></span>
                                 </a>
                             </i>
                         </small>
@@ -80,16 +80,16 @@
                 <p>
                     <section>
                         <button class='loginScreenButton1' id='loginButton'>
-                            <span class="text" txt="login">Iniciar sesión</span>
+                            <span class="text" txt="login"></span>
                         </button>
                     </section>
                     <section>
                         <button class='loginScreenButton2' id='signUpButton'>
-                            <span class="text" txt="createAccount">Crear cuenta</span>
+                            <span class="text" txt="createAccount"></span>
                         </button>
                         <br>
                         <button id='localModeButton' class='loginScreenButton2'>
-                            <span class="text" txt="localMode">Modo local</span>
+                            <span class="text" txt="localMode"></span>
                         </button>
                     </section>
                 </p>
@@ -98,37 +98,37 @@
 
         <div id='noteScreen' hidden>
             <nav>
-                <b><span class="text" txt="noteAppName">Notas</span></b>
+                <b><span class="text" txt="noteAppName"></span></b>
                 <button id='menuButton' class="text" txt="localMode"></button>
             </nav>
             <div id='allContainer'>
                 <aside id='leftBar'>
                     <div id='leftBarTitle'>
-                        <b><span class="text" txt="yourNotes">Tus notas</span></b>
+                        <b><span class="text" txt="yourNotes"></span></b>
                         <button id='newNote'>
-                            <span class="text" txt="create">Crear</span>
+                            <span class="text" txt="create"></span>
                         </button>
                     </div>
                     <div id='youDontHaveNotes'>
-                        <span class="text" txt="youDontHaveNotes">No tienes notas.</span>
+                        <span class="text" txt="youDontHaveNotes"></span>
                     </div>
                     <div id='notesList'></div>
                 </aside>
                 <article id='noteSection'>
                     <section id='topBar'>
                         <span id='leftToTheNoteNameButtons'>
-                            <button class='bg-green' id='showNotesListButton'><img src='img/menu.png'></button>
+                            <button class='bg-green' id='showNotesListButton'><img id='menuImg' src='img/menu.png'></button>
                         </span>
                         <div id='topBarText'>
                             <b id='noteName'>
-                                <span class="text" txt="clickANote">Haz click sobre una nota.</span>
+                                <span class="text" txt="clickANote"></span>
                             </b>
                             <span id='sayThings'></span>
                             <span id='topBarButtons' hidden>
-                                <button class='bg-green' id='renameButton' alt='Renombrar nota' title='Renombrar nota'><img src='img/rename.png'></button>
-                                <button class='bg-green' id='downloadButton' alt='Descargar nota' title='Descargar nota'><img src='img/download.png'></button>
-                                <button class='bg-green' id='saveButton' alt='Guardar nota' title='Guardar nota'><img src='img/save.png'></button>
-                                <button class='bg-red' id='deleteButton' alt='Borrar nota' title='Borrar nota'><img src='img/delete.png'></button>
+                                <button class='bg-green' id='renameButton' alt='Renombrar nota' title='Renombrar nota'><img id='renameImg' src='img/rename.png'></button>
+                                <button class='bg-green' id='downloadButton' alt='Descargar nota' title='Descargar nota'><img id='downloadImg' src='img/download.png'></button>
+                                <button class='bg-green' id='saveButton' alt='Guardar nota' title='Guardar nota'><img id='saveImg' src='img/save.png'></button>
+                                <button class='bg-red' id='deleteButton' alt='Borrar nota' title='Borrar nota'><img id='deleteImg' src='img/delete.png'></button>
                             </span>
                         </div>
                     </section>
@@ -154,46 +154,18 @@
             <div id='menu'>
                 <h1 id='menuTitle'>
                     <button id='closeMenuButton'>
-                        <span class="text" txt="close">Cerrar</span>
+                        <span class="text" txt="close"></span>
                     </button>
-                    <div id='menuTitleText'>Modo local</div>
+                    <div id='menuTitleText'></div>
                 </h1>
                 <section id='menuButtons'>
-                    <article>
-                        <button id=menuExitLocalMode class="text" txt="menu_exitLocalMode">
-                            Salir de modo local
-                        </button>
-                    </article>
-                    <article>
-                        <button id="menuChangeLanguage" class="text" txt="changeLanguage2">
-                            Idioma
-                        </button>
-                    </article>
-                    <article>
-                        <button id='menuEraseAll' class="text" txt="menu_eraseAll">
-                            Borrar todos los datos
-                        </button>
-                    </article>
-                    <article>
-                        <button id='menuOnlineLogOut' class="text" txt="logOut">
-                            Cerrar sesión
-                        </button>
-                    </article>
-                    <article>
-                        <button id='menuOnlineManageAccount' class="text" txt="manageAccount">
-                            Gestionar cuenta
-                        </button>
-                    </article>
-                    <article>
-                        <button id='menuOnlineChangeToLocal' class="text" txt="menu_localNotes">
-                            Ver notas locales
-                        </button>
-                    </article>
-                    <article>
-                        <button id='menuAbout' class="text" txt="menu_about">
-                            Acerca de notas
-                        </button>
-                    </article>
+                    <article><button id=menuExitLocalMode class="text" txt="menu_exitLocalMode"></button></article>
+                    <article><button id="menuChangeLanguage" class="text" txt="changeLanguage2"></button></article>
+                    <article><button id='menuEraseAll' class="text" txt="menu_eraseAll"></button></article>
+                    <article><button id='menuOnlineLogOut' class="text" txt="logOut"></button></article>
+                    <article><button id='menuOnlineManageAccount' class="text" txt="manageAccount"></button></article>
+                    <article><button id='menuOnlineChangeToLocal' class="text" txt="menu_localNotes"></button></article>
+                    <article><button id='menuAbout' class="text" txt="menu_about"></button></article>
                 </section>
             </div>
         </div>

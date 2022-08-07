@@ -551,7 +551,29 @@ setInterval(async function()
     },2000);
 },60000/*Un minuto*/);
 
+updateButtonsImg();
 updateBarButtonsHoverText();
+
+function updateButtonsImg()
+{
+    if(darkModeActive)
+    {
+        document.getElementById('menuImg').src = 'img/menu-dark.png';
+        document.getElementById('renameImg').src = 'img/rename-dark.png';
+        document.getElementById('downloadImg').src = 'img/download-dark.png';
+        document.getElementById('saveImg').src= 'img/save-dark.png';
+        document.getElementById('deleteImg').src = 'img/delete-dark.png';
+    }
+    else
+    {
+        document.getElementById('menuImg').src = 'img/menu.png';
+        document.getElementById('renameImg').src = 'img/rename.png';
+        document.getElementById('downloadImg').src = 'img/download.png';
+        document.getElementById('saveImg').src= 'img/save.png';
+        document.getElementById('deleteImg').src = 'img/delete.png';
+    }
+}
+
 function updateBarButtonsHoverText()
 {
     document.getElementById('saveButton').title = getText('saveNote');

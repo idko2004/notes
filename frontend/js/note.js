@@ -38,7 +38,7 @@ async function loadNote(name, id)
                 textArea.value = '';
                 topBarButtons.hidden = true;
                 theLastTextSave = '';
-    
+
                 floatingWindow(
                 {
                     title: getText('somethingWentWrong'),
@@ -117,7 +117,7 @@ async function loadNote(name, id)
                                 {
                                     console.log('cargar copia local');
                                     actualNoteIsLocal = true;
-    
+
                                     noteName.innerText = name;
                                     actualNoteName = name;
                                 
@@ -301,7 +301,7 @@ document.getElementById('deleteButton').addEventListener('click',() =>
                         {
                             actualNoteName = undefined;
                             deleteKey(name);
-    
+
                             textArea.value = '';
                             textArea.disabled = true;
                         
@@ -437,7 +437,7 @@ document.getElementById('renameButton').addEventListener('click', function()
                     closeWindow(async function()
                     {
                         if(!newNoteNameIsValid(value, 'renameNote')) return;
-    
+
                         if(!isLocalMode)
                         {
                             try
@@ -453,7 +453,7 @@ document.getElementById('renameButton').addEventListener('click', function()
                                     },
                                     key: theSecretThingThatNobodyHasToKnow
                                 }, theOtherSecretThing);
-    
+
                                 if(response.data.error === 'invalidName')
                                 {
                                     floatingWindow(
@@ -482,7 +482,7 @@ document.getElementById('renameButton').addEventListener('click', function()
                                     });
                                     return;
                                 }
-    
+
                                 renameNoteLocally();
                             }
                             catch
@@ -501,20 +501,20 @@ document.getElementById('renameButton').addEventListener('click', function()
                             }
                         }
                         else renameNoteLocally();
-    
+
                         function renameNoteLocally()
                         {
                             deleteKey(actualNoteName);
                             saveKey(value,textArea.value);
-        
+
                             deleteListButton(actualNoteName);
                             createListButton(value);
                             selectedNote(undefined, value);
                             youDontHaveNotes();
-        
+
                             noteName.innerText = value;
                             actualNoteName = value;
-        
+
                             textArea.focus();
                         }
                     });
@@ -532,7 +532,7 @@ setInterval(async function()
     if(textArea.disabled === true) return;
     if(theLastTextSave === textArea.value) return;
     sayThings.innerText = getText('autosave');
-    
+
     const saved = await saveNote();
     if(saved)
     {

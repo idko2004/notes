@@ -151,7 +151,7 @@ menuOnlineManageAccount.addEventListener('click', async function()
     saveCookie('_login', theSecretThingThatNobodyHasToKnow);
     saveCookie('_pswrd', theOtherSecretThing);
     saveCookie('_localCopy', localCopy);
-    location.href = `manageAccount.html#lang=${actualLanguage}`;
+    location.href = `manageAccount.html#lang=${actualLanguage};colortheme=${colorTheme}`;
 });
 
 //Botón de salir del modo local

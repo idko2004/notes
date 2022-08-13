@@ -556,7 +556,7 @@ updateBarButtonsHoverText();
 
 function updateButtonsImg()
 {
-    if(darkModeActive)
+    if(colorTheme === 'dark')
     {
         document.getElementById('menuImg').src = 'img/menu-dark.png';
         document.getElementById('renameImg').src = 'img/rename-dark.png';

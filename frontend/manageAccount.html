@@ -9,8 +9,9 @@
 
         <!--Cargar los css dependiendo de si está en modo oscuro o no-->
         <script>
-            let darkModeActive = true;
-            loadDarkCss(darkModeActive);
+            if(location.hash.includes('colortheme=dark')) loadDarkCss(true);
+            else loadDarkCss(false);
+
             function loadDarkCss(dark)
             {
                 if(dark) document.write(`<link rel='stylesheet type='text/css' href='css/style-dark.css'>`);
@@ -35,6 +36,7 @@
         <script defer src="js/manageAccount/manageAccount.js"></script>
         <script defer src="js/manageAccount/changeDataMenu.js"></script>
         <script defer src="js/manageAccount/changeLanguage.js"></script>
+        <script defer src="js/manageAccount/colorTheme.js"></script>
         <script defer src="js/manageAccount/localCopyMenu.js"></script>
         <script defer src="js/manageAccount/logOutInAllDevices.js"></script>
         <script defer src="js/manageAccount/deleteAccoutMenu.js"></script>
@@ -57,6 +59,7 @@
                     <p>
                         <section>
                             <button class="greenButton text" id="toChangeLanguageMenuButton" txt="changeLanguage2">Cambiar idioma (language)</button>
+                            <button class="greenButton text" id="toChangeColorTheme" txt="changeColorTheme">Change color theme</button>
                             <button class="greenButton text" id="toLocalCopyMenuButton" txt="localCopySettings">Configuración de copias locales</button>
                         </section>
                         <section>
@@ -93,6 +96,19 @@
                         </section>
                         <section>
                             <button class="greenButton text" id="changeLanguageButton_cancel" txt="cancel">Cancelar</button>
+                        </section>
+                    </p>
+                </div>
+
+                <div id="changeColorThemeMenu" hidden>
+                    <h1 class="text" txt="changeColorTheme"></h1>
+                    <p>
+                        <section>
+                            <button class="greenButton text" id="changeColorTheme_light" txt="lightTheme"></button>
+                            <button class="greenButton text" id="changeColorTheme_dark" txt="darkTheme"></button>
+                        </section>
+                        <section>
+                            <button class="greenButton text" id="changeColorTheme_cancel" txt="cancel"></button>
                         </section>
                     </p>
                 </div>

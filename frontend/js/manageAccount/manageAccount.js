@@ -8,7 +8,8 @@ let saveNotesLocally;
 const thingsChanged =
 {
     lang: undefined,
-    localCopy: undefined
+    localCopy: undefined,
+    colorTheme: undefined
 }
 
 let actualMenu;
@@ -21,6 +22,7 @@ let actualMenu;
 //  deleteAccount
 //  deleteAccountEmailCode
 //  localCopy
+//  colorTheme
 //  ventana
 
 const loadingScreen = document.getElementById('loadingScreen');
@@ -34,6 +36,7 @@ const logOutInAllMenu = document.getElementById('logOutInAllMenu');
 const deleteAccountMenu = document.getElementById('deleteAccountMenu');
 const deleteAccountEmailCodeMenu = document.getElementById('deleteAccountEmailCodeMenu');
 const localCopyMenu = document.getElementById('localCopyMenu');
+const colorThemeMenu = document.getElementById('changeColorThemeMenu');
 
 const emailSpace = document.getElementById('emailSpace');
 const usernameSpace = document.getElementById('usernameSpace');
@@ -218,6 +221,32 @@ document.getElementById('toChangeLanguageMenuButton').addEventListener('click', 
     mainMenu.addEventListener('animationend', endAnimationCallback);
 });
 
+document.getElementById('toChangeColorTheme').addEventListener('click', function()
+{
+    if(actualMenu !== 'main') return;
+
+    let endAnimationCallback = function(e)
+    {
+        if(e.animationName !== 'closeMenuAnimation') return;
+
+        mainMenu.hidden = true;
+        colorThemeMenu.hidden = false;
+
+        colorThemeMenu.classList.remove('closeMenu');
+        colorThemeMenu.classList.add('openMenu');
+
+        actualMenu = 'colorTheme';
+        window.scrollTo(0,0);
+
+        mainMenu.removeEventListener('animationend', endAnimationCallback);
+    }
+
+    mainMenu.classList.remove('openMenu');
+    mainMenu.classList.add('closeMenu');
+
+    mainMenu.addEventListener('animationend', endAnimationCallback);
+});
+
 document.getElementById('toLocalCopyMenuButton').addEventListener('click', function()
 {
     if(actualMenu !== 'main') return;
@@ -304,17 +333,21 @@ document.getElementById('goBackToNotes').addEventListener('click', function()
     mainScreen.hidden = true;
     loadingScreen.hidden = false;
 
-    if(thingsChanged.lang !== undefined && thingsChanged.localCopy !== undefined)
+    let str = 'index.html#';
+
+    if(thingsChanged.lang !== undefined)
     {
-        location.href = `index.html#lang=${thingsChanged.lang};localcopy=${thingsChanged.localCopy}`;
+        str += `lang=${thingsChanged.lang};`;
     }
-    else if(thingsChanged.lang !== undefined)
+    if(thingsChanged.localCopy !== undefined)
     {
-        location.href = `index.html#lang=${thingsChanged.lang}`;
+        str += `localcopy=${thingsChanged.localCopy};`;
     }
-    else if(thingsChanged.localCopy !== undefined)
+    if(thingsChanged.colorTheme !== undefined)
     {
-        location.href = `index.html#localcopy=${thingsChanged.localCopy}`;
+        str += `colortheme=${thingsChanged.colorTheme};`;
     }
-    else location.href = 'index.html';
+
+    str = str.slice(0, -1);
+    location.href = str;
 });

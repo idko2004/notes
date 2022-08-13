@@ -758,6 +758,36 @@ const allTexts =
     {
         es: 'Renombrando...',
         en: 'Renaming...'
+    },
+    changeColorTheme:
+    {
+        es: 'Cambiar tema de color',
+        en: 'Change color theme'
+    },
+    lightTheme:
+    {
+        es: 'Tema claro',
+        en: 'Light theme'
+    },
+    darkTheme:
+    {
+        es: 'Tema oscuro',
+        en: 'Dark theme'
+    },
+    lightThemeWillBeApplied:
+    {
+        es: 'Se aplicará el tema claro',
+        en: 'Light theme will be applied'
+    },
+    darkThemeWillBeApplied:
+    {
+        es: 'Se aplicará el tema oscuro',
+        en: 'Dark theme will be applied'
+    },
+    saveToApplyTheme:
+    {
+        es: 'Tu tema se aplicará cuando apliques los cambios y vuelvas a la pantalla principal.',
+        en: 'Your theme will be applied when you save your changes and return to the main screen'
     }
 }
 

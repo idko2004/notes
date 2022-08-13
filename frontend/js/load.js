@@ -143,6 +143,15 @@ async function start()
 
 function elementsInHashAtStart()
 {
+    //Tema
+    const colorTheme = hashEquals('colortheme');
+    if(colorTheme !== undefined)
+    {
+        saveKey('_theme', colorTheme);
+        hashDelete('colortheme');
+        location.reload();
+    }
+
     //Idioma
     const hashLang = hashEquals('lang');
     if(hashLang !== undefined)

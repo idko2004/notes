@@ -1,5 +1,5 @@
 elementsInHashAtStart();
-start();
+//start(); ahora se llama desde elementsInHashAtStart()
 
 async function start()
 {
@@ -150,6 +150,7 @@ function elementsInHashAtStart()
         saveKey('_theme', colorTheme);
         hashDelete('colortheme');
         location.reload();
+        return;
     }
 
     //Idioma
@@ -178,6 +179,8 @@ function elementsInHashAtStart()
         hashDelete('logout');
         console.log('Sesión cerrada mediante hash');
     }
+
+    start();
 }
 
 function checkLocalCopyValue()

@@ -85,6 +85,9 @@ aside
 #notesList
 {
     padding: 0.5rem 0;
+    max-height: 80vh;
+    width: 100%;
+    overflow: scroll;
 }
 
 #youDontHaveNotes

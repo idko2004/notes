@@ -108,11 +108,8 @@ menuOnlineLogOut.addEventListener('click', async function()
     if(isLocalMode) return;
     deleteKey('_login');
 
-    floatingMenu.hidden = true;
-    floatingWindow(
-    {
-        title: getText('logginOut')
-    });
+    document.title = getText('logginOut');
+    animationMenuClose();
 
     try
     {

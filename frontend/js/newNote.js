@@ -67,8 +67,38 @@ async function createNewNote(name)
             key: theSecretThingThatNobodyHasToKnow
         }, theOtherSecretThing);
 
-        if(response.data.ok || response.data.decrypt.noteid !== undefined)
+        if(response.data.error === 'invalidName')
         {
+            floatingWindow(
+            {
+                title: getText('newNote_invalidName_title'),
+                text: getText('newNote_invalidName_text'),
+                button:
+                {
+                    text: getText('ok'),
+                    callback: function(){closeWindow()}
+                }
+            });
+            noteName.innerText = getText('clickANote');
+        }
+        else if(response.data.decrypt === undefined || response.data.error !== undefined)
+        {
+            console.error(response);
+            floatingWindow(
+            {
+                title: getText('somethingWentWrong'),
+                text: `${getText('errorCode')}: ${response.data.error}`,
+                button:
+                {
+                    text: getText('ok'),
+                    callback: function(){closeWindow()}
+                }
+            });
+            noteName.innerText = getText('somethingWentWrong');
+        }
+        else if(response.data.ok || response.data.decrypt.noteid !== undefined)
+        {
+            //salió bien y la nota se crea exitosamente
             actualNoteID = response.data.decrypt.noteid;
             actualNoteName = name;
 
@@ -86,19 +116,6 @@ async function createNewNote(name)
 
             saveKey(name,'');
         }
-        else if(response.data.error === 'invalidName')
-        {
-            floatingWindow(
-            {
-                title: getText('newNote_invalidName_title'),
-                text: getText('newNote_invalidName_text'),
-                button:
-                {
-                    text: getText('ok'),
-                    callback: function(){closeWindow()}
-                }
-            });
-        }
         else
         {
             console.error(response);
@@ -112,6 +129,7 @@ async function createNewNote(name)
                     callback: function(){closeWindow()}
                 }
             });
+            noteName.innerText = getText('somethingWentWrong');
         }
     }
     catch
@@ -126,6 +144,7 @@ async function createNewNote(name)
                 callback: closeWindow
             }
         });
+        noteName.innerText = getText('somethingWentWrong');
     }
 }
 

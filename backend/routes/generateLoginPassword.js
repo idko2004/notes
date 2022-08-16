@@ -8,16 +8,17 @@ module.exports = function(app)
 {
     app.post('/generateLoginPassword', jsonParser, async function(req, res)
     {
-        console.log('------------------------------------------------');
-        console.log('\033[1;34m/generateLoginPassword\033[0m');
-        console.log('body',req.body);
+        const logID = `(${rand.generateKey(3)})`;
+        console.log(logID, '------------------------------------------------');
+        console.log(logID, '\033[1;34m/generateLoginPassword\033[0m');
+        console.log(logID, 'body',req.body);
 
         //Vemos si tienemos los datos necesarios
         //code
         if(Object.keys(req.body).length === 0)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('BadRequest: no body');
+            console.log(logID, 'BadRequest: no body');
             return;
         }
 
@@ -25,7 +26,7 @@ module.exports = function(app)
         if(code === undefined)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no code');
+            console.log(logID, 'badRequest: no code');
             return;
         }
 
@@ -34,7 +35,7 @@ module.exports = function(app)
         //Requiriendo código
         if(code === 'requesting')
         {
-            console.log('Requiriendo un código nuevo');
+            console.log(logID, 'Requiriendo un código nuevo');
             let deviceID;
 
             while(true)
@@ -42,7 +43,7 @@ module.exports = function(app)
                 deviceID = '_' + Math.random().toString().split('.')[1];
 
                 const codeExists = await database.getElement('sessionID', {code: deviceID});
-                console.log('Eventualmente tiene que dar null:', codeExists);
+                console.log(logID, 'Eventualmente tiene que dar null:', codeExists);
                 if(codeExists === null) break;
             }
 
@@ -69,18 +70,18 @@ module.exports = function(app)
 
             //Responder al cliente con la contraseña
             res.status(200).send({secret: password, id: deviceID});
-            console.log('contraseña', password, 'id', deviceID);
-            console.log('Contraseña enviada');
+            console.log(logID, 'contraseña', password, 'id', deviceID);
+            console.log(logID, 'Contraseña enviada');
         }
         //Respondiendo si el código sigue siendo válido
         else
         {
-            console.log('Preguntando si un código sigue siendo válido');
+            console.log(logID, 'Preguntando si un código sigue siendo válido');
             //El código debe empezar con _ y luego debe contener números
             if(!code.startsWith('_'))
             {
                 res.status(400).send({error: 'invalidCode'});
-                console.log('invalidCode');
+                console.log(logID, 'invalidCode');
                 return;
             }
             let codeNumbers = code.replace('_', '');
@@ -88,22 +89,22 @@ module.exports = function(app)
             if(isNaN(codeNumbers))
             {
                 res.status(400).send({error: 'invalidCode'});
-                console.log('invalidCode');
+                console.log(logID, 'invalidCode');
                 return;
             }
         
             //En caso de que se esté comprobando, el código debe existir en la base de datos
             const codeExists = await database.getElement('sessionID', {code});
-            console.log(codeExists);
+            console.log(logID, codeExists);
             if(codeExists !== null)
             {
                 res.status(200).send({stillValid: true});
-                console.log('La contraseña sigue siendo válida');
+                console.log(logID, 'La contraseña sigue siendo válida');
             }
             else
             {
                 res.status(200).send({stillValid: false});
-                console.log('El deviceID ya no existe en la base de datos');
+                console.log(logID, 'El deviceID ya no existe en la base de datos');
             }
         }
     });

@@ -9,28 +9,29 @@ module.exports = function(app)
 {
     app.post('/getSessionID', jsonParser, async function(req, res)
     {
-        console.log('------------------------------------------------');
-        console.log('\033[1;34m/getSessionID\033[0m');
-        console.log('body',req.body);
+        const logID = `(${rand.generateKey(3)})`;
+        console.log(logID, '------------------------------------------------');
+        console.log(logID, '\033[1;34m/getSessionID\033[0m');
+        console.log(logID, 'body',req.body);
 
         if(Object.keys(req.body).length === 0)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('BadRequest: no body');
+            console.log(logID, 'BadRequest: no body');
             return;
         }
         const encrypted = req.body.encrypt;
         if(encrypted === undefined)
         {
             res.status(400).send({error: 'notEncrypted'});
-            console.log('notEncrypted');
+            console.log(logID, 'notEncrypted');
             return;
         }
         const decryptPasswordID = req.body.code;
         if(decryptPasswordID === undefined)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no decrypt ID');
+            console.log(logID, 'badRequest: no decrypt ID');
             return;
         }
 
@@ -39,7 +40,7 @@ module.exports = function(app)
         if(decryptPasswordElement === null)
         {
             res.status(400).send({error: 'invalidPasswordCode'});
-            console.log('invalidPasswordCode');
+            console.log(logID, 'invalidPasswordCode');
             return;
         }
 
@@ -47,7 +48,7 @@ module.exports = function(app)
         if(decryptPassword === undefined)
         {
             res.status(400).send({error: 'pswrdUndefined'});
-            console.log('pswrdUndefined');
+            console.log(logID, 'pswrdUndefined');
             return;
         }
 
@@ -56,7 +57,7 @@ module.exports = function(app)
         if(decrypted === undefined)
         {
             res.status(200).send({error: 'decryptFailed'});
-            console.log('decryptFailed');
+            console.log(logID, 'decryptFailed');
             return;
         }
         decrypted = JSON.parse(decrypted);
@@ -67,7 +68,7 @@ module.exports = function(app)
         if(username === undefined || password === undefined)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no username or password');
+            console.log(logID, 'badRequest: no username or password');
             return;
         }
     
@@ -82,7 +83,7 @@ module.exports = function(app)
             else
             {
                 res.status(200).send({error: 'wrongPassword'});
-                console.log('wrongPassword');
+                console.log(logID, 'wrongPassword');
                 return;
             }
         }
@@ -99,14 +100,14 @@ module.exports = function(app)
                 else
                 {
                     res.status(200).send({error: 'wrongPassword'});
-                    console.log('wrongPassword');
+                    console.log(logID, 'wrongPassword');
                     return;
                 }
             }
         }
     
         res.status(200).send({error: 'userDontExist'});
-        console.log('userDontExist');
+        console.log(logID, 'userDontExist');
     
         async function linkKey(email)
         {
@@ -117,7 +118,7 @@ module.exports = function(app)
                 if(database.sessionIDList[key] === undefined)
                 {
                     let element = await database.getElement('sessionID', {key});
-                    console.log('tiene que dar null eventualmente:', element);
+                    console.log(logID, 'tiene que dar null eventualmente:', element);
                     if(element === null) break;
                 }
             }
@@ -141,13 +142,13 @@ module.exports = function(app)
             database.sessionIDList[key] = keyData;
             database.createElement('sessionID', keyData);
 
-            console.log('the new password', newPassword);
+            console.log(logID, 'the new password', newPassword);
             const keyEncrypted = crypto.encrypt(JSON.stringify({key: key, pswrd: newPassword}), decryptPassword);
 
             await database.deleteElement('sessionID', {code: decryptPasswordID});
     
             res.status(200).send({decrypt: keyEncrypted});
-            console.log('sessionID enviado');
+            console.log(logID, 'sessionID enviado');
         }
     });
 }

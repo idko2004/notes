@@ -4,19 +4,22 @@ const jsonParser = bodyParser.json();
 const database = require('../database');
 const crypto = require('../crypto');
 
+const rand = require('generate-key');
+
 module.exports = function(app)
 {
     app.post('/saveNote', jsonParser, async function(req, res)
     {
-        console.log('------------------------------------------------');
-        console.log('\033[1;34m/saveNote\033[0m');
-        console.log('body', req.body);
+        const logID = `(${rand.generateKey(3)})`;
+        console.log(logID, '------------------------------------------------');
+        console.log(logID, '\033[1;34m/saveNote\033[0m');
+        console.log(logID, 'body', req.body);
 
         //Comprobamos que tenemos todos los datos necesarios
         if(Object.keys(req.body).length === 0)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no body');
+            console.log(logID, 'badRequest: no body');
             return;
         }
 
@@ -24,7 +27,7 @@ module.exports = function(app)
         if(reqEncrypted === undefined)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no encrypted');
+            console.log(logID, 'badRequest: no encrypted');
             return;
         }
 
@@ -32,7 +35,7 @@ module.exports = function(app)
         if(key === undefined)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no key');
+            console.log(logID, 'badRequest: no key');
             return;
         }
 
@@ -41,7 +44,7 @@ module.exports = function(app)
         if(keyData === null)
         {
             res.status(200).send({error: 'invalidKey'});
-            console.log('invalidKey');
+            console.log(logID, 'invalidKey');
             return;
         }
 
@@ -49,7 +52,7 @@ module.exports = function(app)
         if(email === undefined)
         {
             res.status(200).send({error: 'emailUndefined'});
-            console.log('emailUndefined');
+            console.log(logID, 'emailUndefined');
             return;
         }
 
@@ -58,11 +61,11 @@ module.exports = function(app)
         if(reqDecrypted === null)
         {
             res.status(200).send({error: 'failToObtainData'});
-            console.log('failToObtainData: cant decrypt');
+            console.log(logID, 'failToObtainData: cant decrypt');
             return;
         }
         reqDecrypted = JSON.parse(reqDecrypted);
-        console.log(reqDecrypted);
+        console.log(logID, reqDecrypted);
 
         const noteID = reqDecrypted.noteID;
         const noteContent = reqDecrypted.noteContent;
@@ -70,7 +73,7 @@ module.exports = function(app)
         if(noteID === undefined || noteContent === undefined)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no noteID or noteContent');
+            console.log(logID, 'badRequest: no noteID or noteContent');
             return;
         }
 
@@ -79,15 +82,15 @@ module.exports = function(app)
         if(note === null)
         {
             res.status(200).send({error: 'noteDontExist'});
-            console.log('noteDontExist');
+            console.log(logID, 'noteDontExist');
             return;
         }
 
         //Comprobamos si el usuario es dueño de esa nota
         if(note.owner !== email)
         {
-            res.status(200).send({error: 'notTheOwner'});
-            console.log('notTheOwner');
+            res.status(200).send({error: 'noteDontExist'});
+            console.log(logID, 'notTheOwner');
             return;
         }
 
@@ -99,6 +102,6 @@ module.exports = function(app)
 
         //Enviamos la señal de que la nota fue guardada
         res.status(200).send({result});
-        console.log('nota guardada');
+        console.log(logID, 'nota guardada');
     });
 }

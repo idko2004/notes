@@ -4,20 +4,23 @@ const crypto = require('../crypto');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
+const rand = require('generate-key');
+
 module.exports = function(app)
 {
     app.post('/getNotesID', jsonParser, async function(req, res)
     {
-        console.log('------------------------------------------------');
-        console.log('\033[1;34m/getNotesID\033[0m');
-        console.log('body',req.body);
+        const logID = `(${rand.generateKey(3)})`;
+        console.log(logID, '------------------------------------------------');
+        console.log(logID, '\033[1;34m/getNotesID\033[0m');
+        console.log(logID, 'body',req.body);
 
         //Esta ruta recibe datos sin encriptar
         //Comprobar el userID para identificar al usuario y obtener sus notesID.
         if(Object.keys(req.body).length === 0)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('BadRequest: no body');
+            console.log(logID, 'BadRequest: no body');
             return;
         }
 
@@ -25,6 +28,7 @@ module.exports = function(app)
         if(key === undefined)
         {
             res.status(400).send({error: 'badRequest'});
+            console.log(logID, 'badRequest, no key');
             return;
         }
 
@@ -32,6 +36,7 @@ module.exports = function(app)
         if(keyData === null)
         {
             res.status(200).send({error: 'invalidKey'});
+            console.log(logID, 'invalidKey');
             return;
         }
     
@@ -40,23 +45,24 @@ module.exports = function(app)
         if(email === undefined)
         {
             res.status(200).send({error: 'emailUndefined'});
-            console.log('emailUndefined');
+            console.log(logID, 'emailUndefined');
             return;
         }
 
         //Obtener contraseña para cifrar los datos
         const pswrd = keyData.pswrd;
-        console.log('password', pswrd);
+        console.log(logID, 'password', pswrd);
         if(pswrd === undefined)
         {
             res.status(200).send({error: 'cantGetPassword'});
+            console.log(logID, 'cantGetPassword');
         }
 
         const userElement = await database.getElement('users', {email});
         if(userElement === null)
         {
             res.status(200).send({error: 'userNull'});
-            console.log('userNull');
+            console.log(logID, 'userNull');
             return;
         }
 
@@ -65,5 +71,6 @@ module.exports = function(app)
         const notesIdEncrypted = crypto.encrypt(notesID, pswrd);
 
         res.status(200).send({decrypt: notesIdEncrypted});
+        console.log(logID, 'notesID enviadas');
     });
 }

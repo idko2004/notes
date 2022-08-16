@@ -4,20 +4,23 @@ const jsonParser = bodyParser.json();
 const database = require('../database');
 const crypto = require('../crypto');
 
+const rand = require('generate-key');
+
 module.exports = function(app)
 {
     app.post('/renameNote', jsonParser, async function(req, res)
     {
-        console.log('------------------------------------------------');
-        console.log('\033[1;34m/renameNote\033[0m');
-        console.log('body',req.body);
+        const logID = `(${rand.generateKey(3)})`;
+        console.log(logID, '------------------------------------------------');
+        console.log(logID, '\033[1;34m/renameNote\033[0m');
+        console.log(logID, 'body',req.body);
 
         //Verificamos si tenemos los datos necesarios
         //key   noteID   newname
         if(Object.keys(req.body).length === 0)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no body');
+            console.log(logID, 'badRequest: no body');
             return;
         }
 
@@ -25,7 +28,7 @@ module.exports = function(app)
         if(reqEncrypted === undefined)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no encrypted');
+            console.log(logID, 'badRequest: no encrypted');
             return;
         }
 
@@ -33,7 +36,7 @@ module.exports = function(app)
         if(key === undefined)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no key');
+            console.log(logID, 'badRequest: no key');
             return;
         }
 
@@ -42,7 +45,7 @@ module.exports = function(app)
         if(keyData === null)
         {
             res.status(200).send({error: 'invalidKey'});
-            console.log('invalidKey');
+            console.log(logID, 'invalidKey');
             return;
         }
 
@@ -50,7 +53,7 @@ module.exports = function(app)
         if(email === undefined)
         {
             res.status(200).send({error: 'emailUndefined'});
-            console.log('emailUndefined');
+            console.log(logID, 'emailUndefined');
             return;
         }
 
@@ -58,11 +61,11 @@ module.exports = function(app)
         if(reqDecrypted === null)
         {
             res.status(200).send({error: 'failToObtainData'});
-            console.log('failToObtainData: cant decrypt');
+            console.log(logID, 'failToObtainData: cant decrypt');
             return;
         }
         reqDecrypted = JSON.parse(reqDecrypted);
-        console.log(reqDecrypted);
+        console.log(logID, reqDecrypted);
 
         const noteID = reqDecrypted.noteid;
         let newName = reqDecrypted.newname;
@@ -70,7 +73,7 @@ module.exports = function(app)
         if(noteID === undefined || newName === undefined)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('badRequest: no noteid or newname');
+            console.log(logID, 'badRequest: no noteid or newname');
             return;
         }
         newName = newName.trim();
@@ -79,6 +82,7 @@ module.exports = function(app)
         function invalidName()
         {
             res.status(200).send({error: 'invalidName'});
+            console.log(logID, 'invalidName');
             return;
         }
 
@@ -94,14 +98,15 @@ module.exports = function(app)
         if(user === null)
         {
             res.status(200).send({error: 'invalidUser'});
+            console.log(logID, 'invalidUser');
             return;
-        }        
+        }
 
         //Verificamos que notesID exista
         if(user.notesID === undefined)
         {
             res.status(200).send({error: 'idUndefined'});
-            console.log('idUndefined');
+            console.log(logID, 'idUndefined');
             return;
         }
 
@@ -116,8 +121,8 @@ module.exports = function(app)
         //Verificamos si es el dueño de la nota
         if(noteIndex === -1)
         {
-            res.status(200).send({error: 'notTheOwner'});
-            console.log('notTheOwner');
+            res.status(200).send({error: 'idUndefined'});
+            console.log(logID, 'notTheOwner');
             return;
         }
 
@@ -127,6 +132,6 @@ module.exports = function(app)
 
         //Respondemos al cliente
         res.status(200).send({result});
-        console.log('nota renombrada');
+        console.log(logID, 'nota renombrada');
     });
 }

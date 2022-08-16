@@ -4,18 +4,21 @@ const crypto = require('../crypto');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
+const rand = require('generate-key');
+
 module.exports = function(app)
 {
     app.post('/getUsername', jsonParser, async function(req, res)
     {
-        console.log('------------------------------------------------');
-        console.log('\033[1;34m/getUsername\033[0m');
-        console.log('body',req.body);
+        const logID = `(${rand.generateKey(3)})`;
+        console.log(logID, '------------------------------------------------');
+        console.log(logID, '\033[1;34m/getUsername\033[0m');
+        console.log(logID, 'body',req.body);
 
         if(Object.keys(req.body).length === 0)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log('BadRequest: no body');
+            console.log(logID, 'BadRequest: no body');
             return;
         }
     
@@ -24,6 +27,7 @@ module.exports = function(app)
         if(key === undefined)
         {
             res.status(400).send({error: 'badRequest'});
+            console.log(logID, 'badRequest: no key');
             return;
         }
     
@@ -32,6 +36,7 @@ module.exports = function(app)
         if(keyData === null)
         {
             res.status(200).send({error: 'invalidKey'});
+            console.log(logID, 'invalidKey');
             return;
         }
         
@@ -40,7 +45,7 @@ module.exports = function(app)
         if(email === undefined)
         {
             res.status(200).send({error: 'emailUndefined'});
-            console.log('emailUndefined');
+            console.log(logID, 'emailUndefined');
             return;
         }
 
@@ -48,7 +53,7 @@ module.exports = function(app)
         if(pswrd === undefined)
         {
             res.status(200).send({error: 'cantGetPassword'});
-            console.log('cantGetPassword');
+            console.log(logID, 'cantGetPassword');
             return;
         }
 
@@ -57,7 +62,7 @@ module.exports = function(app)
         if(element === null)
         {
             res.status(200).send({error: 'userNull'});
-            console.log('userNull');
+            console.log(logID, 'userNull');
             return;
         }
 
@@ -68,5 +73,6 @@ module.exports = function(app)
         const encrypted = crypto.encrypt(JSON.stringify({username, email, passwordLength}), pswrd);
 
         res.status(200).send({decrypt: encrypted});
+        console.log(logID, 'nombre de usuario enviado');
     });
 }

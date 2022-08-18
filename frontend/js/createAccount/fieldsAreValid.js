@@ -1,25 +1,44 @@
 function fieldsAreValid(username, email, password, comprobePassword)
 {
-    if(!usernameIsValid()) return false;
-    if(!emailIsValid()) return false;
-    if(!passwordIsValid()) return false;
-    if(!comprobePasswordIsValid()) return false;
+    let areValid = true;
+    if(!usernameIsValid()) areValid = false;
+    if(!emailIsValid()) areValid = false;
+    if(!passwordIsValid()) areValid = false;
+    else if(!comprobePasswordIsValid()) areValid = false;
+
+    return areValid;
 
     function usernameIsValid()
     {
+        if(username === undefined || username === null || username.trim() === '')
+        {
+            username = email.split('@')[0];
+        }
+        else if(username.length > 30)
+        {
+            usernameText(getText('newNote_tooLongName_title'));
+            return false;
+        }
+        else username = value.trim();
         return true;
     }
 
     function emailIsValid()
     {
-        if(email === undefined || email === null || email.trim() === '')
+        if(email === undefined || email === null)
         {
             emailText(getText('fieldCannotBeEmpty'));
             return false;
         }
-    
-        email = value.trim();
-    
+
+        email = email.trim();
+
+        if(email === '')
+        {
+            emailText(getText('fieldCannotBeEmpty'));
+            return false;
+        }
+
         const regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
         if(regex.test(email))
         {
@@ -36,12 +55,52 @@ function fieldsAreValid(username, email, password, comprobePassword)
 
     function passwordIsValid()
     {
+        if(password === undefined || password === null || password.trim() === '')
+        {
+            passwordText(getText('fieldCannotBeEmpty'));
+            return false;
+        }
+        else if(password.length < 8)
+        {
+            passwordText(getText('passwordMustContains'));
+            return false;
+        }
+        else if(password.length > 30)
+        {
+            passwordText(getText('tooLongPassword'));
+            return false;
+        }
+    
+        const capitalsRegex = new RegExp('[A-Z]+');
+        const notCapitalsRegex = new RegExp('[a-z]+');
+        const numbersRegex = new RegExp('[0-9]+');
+    
+        const containsCapitals = capitalsRegex.test(password);
+        const containsNotCapitals = notCapitalsRegex.test(password);
+        const containsNumbers = numbersRegex.test(password);
+    
+        console.log('containsCapitals', containsCapitals);
+        console.log('containsNotCapitals', containsNotCapitals)
+        console.log('containsNumbers', containsNumbers);
+        console.log(containsCapitals && containsNotCapitals && containsNumbers);
+    
+        if(!containsCapitals || !containsNotCapitals || !containsNumbers)
+        {
+            passwordText(getText('passwordMustContains'));
+            return false;
+        }
+
         return true;
     }
 
     function comprobePasswordIsValid()
     {
-        return true;
+        if(password === comprobePassword) return true;
+        else
+        {
+            passwordText(getText('passwordsDontMatch'));
+            return false;
+        }
     }
 }
 

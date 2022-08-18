@@ -1,7 +1,9 @@
-let username;
-let email;
-let password;
-let confirmPassword;
+let account =
+{
+    username: undefined,
+    email: undefined,
+    password: undefined
+}
 
 let actualMenu;
 //main
@@ -40,6 +42,10 @@ document.getElementById('continueButton').addEventListener('click', function()
     //Comprobar si son válidos
     if(!fieldsAreValid(usernameFieldValue, emailFieldValue, passwordFieldValue, comprobePasswordFieldValue)) return;
 
+    account.username = usernameFieldValue.trim();
+    account.email = emailFieldValue.trim();
+    account.password = passwordFieldValue;
+
     //Animación para cambiar a la pantalla de comprobar correo electrónico
     let endAnimationCallback = function(e)
     {
@@ -63,6 +69,19 @@ document.getElementById('continueButton').addEventListener('click', function()
 
     mainMenu.addEventListener('animationend', endAnimationCallback);
 });
+
+emailField.addEventListener('keyup', updateUsernamePlaceholder);
+
+function updateUsernamePlaceholder()
+{
+    let placeholder = emailField.value.split('@')[0];
+    if(placeholder.trim() === '') placeholder = 'Adam Smith';
+    else
+    {
+        placeholder = placeholder[0].toUpperCase() + placeholder.slice(1);
+    }
+    usernameField.placeholder = placeholder;
+}
 
 //Quitar la pantalla de carga
 document.getElementById('loadingScreen').hidden = true;

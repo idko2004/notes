@@ -476,8 +476,8 @@ const allTexts =
     },
     passwordsDontMatch:
     {
-        es: 'Las contraseñas no coinciden. Asegúrate de poner la misma contraseña que en el campo anterior.',
-        en: "The passwords don't match. Be sure to put the same password as in the previous field."
+        es: 'Las contraseñas no coinciden.',
+        en: "The passwords don't match."
     },
     oneFieldInvalid:
     {

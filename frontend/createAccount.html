@@ -1,0 +1,107 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Gestionar Cuenta | Notas</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+        <!--Cargar los css dependiendo de si está en modo oscuro o no-->
+        <script>
+            if(location.hash.includes('colortheme=dark')) loadDarkCss(true);
+            else loadDarkCss(false);
+
+            function loadDarkCss(dark)
+            {
+                if(dark) document.write(`<link rel='stylesheet type='text/css' href='css/style-dark.css'>`);
+                else document.write(`<link rel='stylesheet type='text/css' href='css/style.css'>`);
+            }
+        </script>
+
+
+        <link rel='stylesheet' type='text/css' href='css/load.css'>
+        <link rel='stylesheet' type='text/css' href='css/floatingWindow.css'>
+        <link rel='stylesheet' type='text/css' href='css/manageAccount.css'>
+        <link rel="shorcut icon" type="image/svg" href="img/favicon.svg">
+
+        <script>let titleTextIDLang = 'manageAccountNotes';</script>
+        <script defer src="js/hash.js"></script>
+        <script defer src="js/language.js"></script>
+        <script defer src="js/cookies.js"></script>
+        <script defer src="js/floatingWindow.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"> </script>
+        <script defer src="js/crypto.js"></script>
+        <script defer src="js/createAccount/fieldsAreValid.js"></script>
+        <script defer src="js/createAccount/main.js"></script>
+    </head>
+    <body>
+        <div id="loadingScreen">
+            <section>
+                <b><span class='text' txt="noteAppName">Notas</span></b>
+                <h2 class="text" txt="loading">Loading this text...</h2>
+            </section>
+        </div>
+
+        <div id='mainScreen'>
+            <div id='mainScreenNotesBigName'>
+                <b class="text" txt="noteAppName">Notas</b>
+            </div>
+            <div class="container">
+                <div id="mainMenu" class="openMenu">
+                    <h1>Crear cuenta</h1>
+                    <p>
+                        <section>
+                            <h2>Nombre de usuario</h2>
+                            <p id="usernameText"></p>
+                            <input type="text" id="usernameField" placeholder="Adam Smith">
+                        </section>
+                        <section>
+                            <h2>Correo electrónico</h2>
+                            <p id="emailText"></p>
+                            <input type="text" id="emailField" placeholder="someone@example.com">
+                        </section>
+                        <section>
+                            <h2>Contraseña</h2>
+                            <p id="passwordText"></p>
+                            <input type="password" id="passwordField" placeholder="a strong password">
+                            <input type="password" id="comprobePasswordField" placeholder="type it again">
+                        </section>
+                        <section>
+                            <button class="greenButton" id="continueButton">Continuar</button>
+                            <button class="greenButton" id="cancelButton">Cancelar</button>
+                        </section>
+                    </p>
+                </div>
+
+                <div id="emailCodeMenu" hidden>
+                    <h1 class="text" txt="checkYourEmail">Revisa tu correo</h1>
+                    <p>
+                        <section>
+                            <span class="text" txt="codeWeSent">Hemos enviado un código al correo</span>
+                            <b><span id="changeDataEmailSent">someone@email.com</span></b>
+                        </section>
+                        <section>
+                            <h2 class="text" txt="enterTheCode">Ingresa el código</h2>
+                            <p><input type="text" id="changeDataConfirmCode" placeholder="A1B2C" maxlength="5"></p>
+                            <button class="greenButton text" id="changeDataConfirmCodeButton" txt="verify">Comprobar</button>
+                        </section>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <div id='floatWindow' hidden>
+            <div id='window'>
+                <h1 id='windowTitle'></h1>
+                <div id='windowText'></div>
+                <div id='windowInput'>
+                    <input type='text' id='inputInTheWindow'>
+                </div>
+                <div id='windowButtons'></div>
+            </div>
+        </div>
+    </body>
+</html>

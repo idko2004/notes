@@ -217,7 +217,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
 document.getElementById('signUpButton').addEventListener('click', function()
 {
     if(theActualThing !== 'login') return;
-    location.href=`signup.html#lang=${actualLanguage}`
+    location.href=`createAccount.html#lang=${actualLanguage};colortheme=${colorTheme}`;
 });
 
 document.getElementById('localModeButton').addEventListener('click',function()

@@ -83,6 +83,7 @@ function createListButton(noteName, id)
     noteListButton.addEventListener('click',(e) =>
     {
         if(!canInteract) return;
+        if(theActualThing !== 'note') return;
         let id = undefined;
         if(e.target.attributes.noteID) id = e.target.attributes.noteID.value;
 

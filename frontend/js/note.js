@@ -5,6 +5,7 @@ async function loadNote(name, id)
 {
     console.log('Cargar nota',name, id);
     if(theActualThing !== 'note') return;
+    theActualThing = 'loading';
 
     if(actualNoteName !== undefined)
     {
@@ -38,6 +39,7 @@ async function loadNote(name, id)
                 textArea.value = '';
                 topBarButtons.hidden = true;
                 theLastTextSave = '';
+                theActualThing = 'ventana';
 
                 floatingWindow(
                 {
@@ -46,7 +48,11 @@ async function loadNote(name, id)
                     button:
                     {
                         text: getText('ok'),
-                        callback: function(){closeWindow()}
+                        callback: function()
+                        {
+                            theActualThing = 'note';
+                            closeWindow();
+                        }
                     }
                 });
                 return;
@@ -61,6 +67,7 @@ async function loadNote(name, id)
                 textArea.value = '';
                 topBarButtons.hidden = true;
                 theLastTextSave = '';
+                theActualThing = 'ventana';
                 
                 floatingWindow(
                 {
@@ -69,7 +76,11 @@ async function loadNote(name, id)
                     button:
                     {
                         text: getText('ok'),
-                        callback: function(){closeWindow()}
+                        callback: function()
+                        {
+                            theActualThing = 'note';
+                            closeWindow();
+                        }
                     }
                 });
                 return;
@@ -88,6 +99,7 @@ async function loadNote(name, id)
             const searchInLocal = getKey(name);
             if(!localCopy || searchInLocal === null)
             {
+                theActualThing = 'ventana';
                 floatingWindow(
                 {
                     title: getText('ups'),
@@ -95,13 +107,18 @@ async function loadNote(name, id)
                     button:
                     {
                         text: getText('ok'),
-                        callback: function(){closeWindow()}
+                        callback: function()
+                        {
+                            theActualThing = 'note';
+                            closeWindow();
+                        }
                     }
                 });
                 return;
             }
             else
             {
+                theActualThing = 'ventana';
                 floatingWindow(
                 {
                     title: getText('localFound1'),
@@ -130,6 +147,8 @@ async function loadNote(name, id)
                                     theLastTextSave = searchInLocal;
                                 
                                     showTheNoteInSmallScreen(true);
+
+                                    theActualThing = 'note';
                                 
                                     setTimeout(function()
                                     {
@@ -142,7 +161,11 @@ async function loadNote(name, id)
                         {
                             text: getText('cancel'),
                             primary: true,
-                            callback: closeWindow
+                            callback: function()
+                            {
+                                theActualThing = 'note';
+                                closeWindow();
+                            }
                         }
                     ]
                 });
@@ -166,6 +189,8 @@ async function loadNote(name, id)
     theLastTextSave = noteContent;
 
     showTheNoteInSmallScreen(true);
+
+    theActualThing = 'note';
 
     setTimeout(function()
     {
@@ -276,6 +301,7 @@ document.getElementById('deleteButton').addEventListener('click',() =>
 {
     if(theActualThing !== 'note') return;
     if(!canInteract) return;
+    theActualThing = 'ventana';
 
     let name = noteName.innerText;
 
@@ -288,7 +314,11 @@ document.getElementById('deleteButton').addEventListener('click',() =>
             {
                 text: getText('deleteNote_btn1'),
                 primary: false,
-                callback: () => {closeWindow()}
+                callback: () => 
+                {
+                    theActualThing = 'note';
+                    closeWindow();
+                }
             },
             {
                 text: getText('deleteNote_btn2'),
@@ -310,6 +340,7 @@ document.getElementById('deleteButton').addEventListener('click',() =>
                         
                             deleteListButton(name);
                             youDontHaveNotes();
+                            theActualThing = 'note';
                         });
                     }
                     else
@@ -318,6 +349,7 @@ document.getElementById('deleteButton').addEventListener('click',() =>
                         {
                             try
                             {
+                                theActualThing = 'loading';
                                 noteName.innerText = getText('deletingNote');
 
                                 //const response = await axios.post(`${path}/deleteNote`, {key: theSecretThingThatNobodyHasToKnow, noteid: actualNoteID});
@@ -344,9 +376,11 @@ document.getElementById('deleteButton').addEventListener('click',() =>
 
                                     deleteListButton(name);
                                     youDontHaveNotes();
+                                    theActualThing = 'note';
                                 }
                                 else
                                 {
+                                    theActualThing = 'ventana';
                                     floatingWindow(
                                     {
                                         title: 'Oh, no!',
@@ -354,25 +388,32 @@ document.getElementById('deleteButton').addEventListener('click',() =>
                                         button:
                                         {
                                             text: getText('ok'),
-                                            callback: function(){closeWindow();}
+                                            callback: function()
+                                            {
+                                                theActualThing = 'note';
+                                                closeWindow();
+                                            }
                                         }
                                     });
                                 }
                             }
                             catch
                             {
-                                closeWindow(function()
+                                theActualThing = 'ventana';
+                                floatingWindow(
                                 {
-                                    floatingWindow(
+                                    title: getText('ups'),
+                                    text: getText('serverDown'),
+                                    button:
                                     {
-                                        title: getText('ups'),
-                                        text: getText('serverDown'),
-                                        button:
+                                        text: getText('ok'),
+                                        callback: function()
                                         {
-                                            text: getText('ok'),
-                                            callback: function(){closeWindow()}
+                                            theActualThing = 'note';
+                                            noteName.innerText = actualNoteName;
+                                            closeWindow();
                                         }
-                                    });
+                                    }
                                 });
                             }
                         });

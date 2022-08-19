@@ -1,6 +1,8 @@
 newNote.addEventListener('click',function()
 {
     if(!canInteract) return;
+    if(theActualThing !== 'note') return;
+    theActualThing = 'ventana';
 
     floatingWindow(
     {
@@ -14,6 +16,7 @@ newNote.addEventListener('click',function()
                 primary: false,
                 callback: function()
                 {
+                    theActualThing = 'note';
                     closeWindow();
                 }
             },
@@ -25,6 +28,7 @@ newNote.addEventListener('click',function()
                     const name = document.getElementById('inputInTheWindow').value;
                     closeWindow(function()
                     {
+                        theActualThing = 'note';
                         createNewNote(name);
                     });
                 }
@@ -36,6 +40,8 @@ newNote.addEventListener('click',function()
 async function createNewNote(name)
 {
     if(!newNoteNameIsValid(name, 'newNote')) return;
+    if(theActualThing !== 'note') return;
+    theActualThing = 'loading';
     
     textArea.disabled = true;
     topBarButtons.hidden = true;
@@ -146,6 +152,7 @@ async function createNewNote(name)
         });
         noteName.innerText = getText('somethingWentWrong');
     }
+    theActualThing = 'loading';
 }
 
 function newNoteNameIsValid(name, openAWindow)

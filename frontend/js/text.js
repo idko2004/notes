@@ -3,9 +3,10 @@ let textHistoryIndex = 0;
 let theVeryLestHistoryIndex = 0;
 let lastHistorySaved = 0;
 
+let maxHistoryItems = 40;
+
 textArea.addEventListener('keydown', (e) =>
 {
-    console.log(e.key);
     if(!canInteract)
     {
         if(e.key !== 'Tab') e.preventDefault();
@@ -109,8 +110,8 @@ textArea.addEventListener('keydown', (e) =>
         textHistoryIndex--;
         if(textHistoryIndex < 0) textHistoryIndex = textHistory.length - 1;
 
-        console.log(textHistory);
-        console.log(textHistoryIndex);
+        //console.log(textHistory);
+        //console.log(textHistoryIndex);
     }
 
     //Rehacer
@@ -128,9 +129,9 @@ textArea.addEventListener('keydown', (e) =>
         textHistoryIndex = theVeryLestHistoryIndex - 1;
         lastHistorySaved = toRestore.index - 1;
 
-        console.log(textHistory);
-        console.log('textHistoryIndex', textHistoryIndex);
-        console.log('lastHistorySaved', lastHistorySaved);
+        //console.log(textHistory);
+        //console.log('textHistoryIndex', textHistoryIndex);
+        //console.log('lastHistorySaved', lastHistorySaved);
     }
 
     function addToField(toAdd, before, after)
@@ -148,7 +149,7 @@ textArea.addEventListener('keydown', (e) =>
         {
             textHistoryIndex++;
 
-            if(textHistoryIndex > 20) textHistoryIndex = 0;
+            if(textHistoryIndex > maxHistoryItems) textHistoryIndex = 0;
 
             let i = textHistoryIndex;
             theVeryLestHistoryIndex = textHistoryIndex;
@@ -156,8 +157,8 @@ textArea.addEventListener('keydown', (e) =>
             lastHistorySaved++;
             textHistory[i] = {text: textArea.value, start, end, index: lastHistorySaved};
 
-            console.log(textHistory);
-            console.log(textHistoryIndex);
+            //console.log(textHistory);
+            //console.log(textHistoryIndex);
         }
     }
 });

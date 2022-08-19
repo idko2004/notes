@@ -42,14 +42,23 @@ document.getElementById('continueButton').addEventListener('click', function()
     //Comprobar si son válidos
     if(!fieldsAreValid(usernameFieldValue, emailFieldValue, passwordFieldValue, comprobePasswordFieldValue)) return;
 
-    account.username = usernameFieldValue.trim();
     account.email = emailFieldValue.trim();
     account.password = passwordFieldValue;
+
+    account.username = usernameFieldValue.trim();
+    if(account.username === '')
+    {
+        let emailName = account.email.split('@')[0];
+        emailName = emailName[0].toUpperCase() + emailName.slice(1);
+        account.username = emailName;
+    }
+
+    updateWeSentAnEmail();
+    sendEmail();
 
     //Animación para cambiar a la pantalla de comprobar correo electrónico
     let endAnimationCallback = function(e)
     {
-        console.log(emailCodeMenu);
         if(e.animationName !== 'closeMenuAnimation') return;
 
         mainMenu.hidden = true;

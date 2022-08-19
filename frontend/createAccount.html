@@ -27,6 +27,7 @@
 
         <script>let titleTextIDLang = 'manageAccountNotes';</script>
         <script defer src="js/hash.js"></script>
+        <script defer src="js/localStorage.js"></script>
         <script defer src="js/language.js"></script>
         <script defer src="js/cookies.js"></script>
         <script defer src="js/floatingWindow.js"></script>
@@ -86,7 +87,10 @@
                         <section>
                             <h2 class="text" txt="enterTheCode">Ingresa el código</h2>
                             <p><input type="text" id="changeDataConfirmCode" placeholder="A1B2C" maxlength="5"></p>
-                            <button class="greenButton text" id="changeDataConfirmCodeButton" txt="verify">Comprobar</button>
+                            <button class="greenButton text" id="changeDataConfirmCodeButton" txt="verify"></button>
+                        </section>
+                        <section>
+                            <button class="greenButton text" id="changeDataCancelCodeButton" txt="cancel"></button>
                         </section>
                     </p>
                 </div>

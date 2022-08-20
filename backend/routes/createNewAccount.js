@@ -26,9 +26,9 @@ module.exports = function(app)
     //////////////////////////////////////////////////////////////////////
     //                     _          _                             _   //
     //  ___ _ __ ___  __ _| |_ ___   / \   ___ ___ ___  _   _ _ __ | |_ //
-    /// __| '__/ _ \/ _` | __/ _ \ / _ \ / __/ __/ _ \| | | | '_ \| __| //
+    // / __| '__/ _ \/ _` | __/ _ \ / _ \ / __/ __/ _ \| | | | '_ \| __|//
     //| (__| | |  __/ (_| | ||  __// ___ \ (_| (_| (_) | |_| | | | | |_ //
-    //\___|_|  \___|\__,_|\__\___/_/   \_\___\___\___/ \__,_|_| |_|\__| //
+    // \___|_|  \___|\__,_|\__\___/_/   \_\___\___\___/ \__,_|_| |_|\__|//
     //                                                                  //
     //_____                 _ _  ____          _                        //
     //| ____|_ __ ___   __ _(_) |/ ___|___   __| | ___                  //
@@ -86,7 +86,22 @@ module.exports = function(app)
         }
         else if(deviceID !== undefined) //El método de cifrado es deviceID, por lo que están creando una nueva cuenta
         {
-            return;
+            //Obtener la clave para descifrar los datos
+            const decryptPasswordElement = await database.getElement('sessionID', {code: deviceID});
+            if(decryptPasswordElement === null)
+            {
+                res.status(400).send({error: 'invalidPasswordCode'});
+                console.log(logID, 'invalidPasswordCode');
+                return;
+            }
+
+            pswrd = decryptPasswordElement.pswrd;
+            if(pswrd === undefined)
+            {
+                res.status(400).send({error: 'pswrdUndefined'});
+                console.log(logID, 'pswrdUndefined');
+                return;
+            }
         }
         else
         {
@@ -334,9 +349,9 @@ module.exports = function(app)
     //////////////////////////////////////////////////////////////////////
     //                     _       _   _                                //
     //  ___ _ __ ___  __ _| |_ ___| \ | | _____      __                 //
-    /// __| '__/ _ \/ _` | __/ _ \  \| |/ _ \ \ /\ / /                  //
+    // / __| '__/ _ \/ _` | __/ _ \  \| |/ _ \ \ /\ / /                 //
     //| (__| | |  __/ (_| | ||  __/ |\  |  __/\ V  V /                  //
-    //\___|_|  \___|\__,_|\__\___|_| \_|\___| \_/\_/                    //
+    // \___|_|  \___|\__,_|\__\___|_| \_|\___| \_/\_/                   //
     //                                                                  //
     //    _                             _                               //
     //   / \   ___ ___ ___  _   _ _ __ | |_                             //
@@ -360,9 +375,47 @@ module.exports = function(app)
             return;
         }
 
+        const reqEncrypted = req.body.encrypt;
+        const deviceID = req.body.id;
+
+        if([reqEncrypted, deviceID].includes(undefined))
+        {
+            res.status(400).send({error: 'badRequest'});
+            console.log('badRequest: no encrypt or id');
+            return;
+        }
+
+        //Obtener la clave para descifrar los datos
+        const decryptPasswordElement = await database.getElement('sessionID', {code: deviceID});
+        if(decryptPasswordElement === null)
+        {
+            res.status(400).send({error: 'invalidPasswordCode'});
+            console.log(logID, 'invalidPasswordCode');
+            return;
+        }
+
+        let pswrd = decryptPasswordElement.pswrd;
+        if(pswrd === undefined)
+        {
+            res.status(400).send({error: 'pswrdUndefined'});
+            console.log(logID, 'pswrdUndefined');
+            return;
+        }
+
+        let reqDecrypted = crypto.decrypt(reqEncrypted, pswrd);
+        console.log(reqDecrypted);
+        if(reqDecrypted === null)
+        {
+            res.status(200).send({error: 'failToObtainData'});
+            console.log(logID, 'failToObtainData: cant decrypt');
+            return;
+        }
+        reqDecrypted = JSON.parse(reqDecrypted);
+        console.log(reqDecrypted);
+
         //Verificamos que tenemos los datos necesarios
         //código mandado por email
-        let code = req.body.code;
+        let code = reqDecrypted.code;
         if(code === undefined)
         {
             res.status(400).send({error: 'badRequest'});
@@ -420,9 +473,9 @@ module.exports = function(app)
     // _   _ _ __   __| | __ _| |_ ___   / \   ___ ___ ___  _   _ _ __ | |_ //
     //| | | | '_ \ / _` |/ _` | __/ _ \ / _ \ / __/ __/ _ \| | | | '_ \| __|//
     //| |_| | |_) | (_| | (_| | ||  __// ___ \ (_| (_| (_) | |_| | | | | |_ //
-    //\__,_| .__/ \__,_|\__,_|\__\___/_/   \_\___\___\___/ \__,_|_| |_|\__| //
+    // \__,_| .__/ \__,_|\__,_|\__\___/_/   \_\___\___\___/ \__,_|_| |_|\__|//
     //      |_|                                                             //
-    //____        _                                                         //
+    // ____        _                                                        //
     //|  _ \  __ _| |_ __ _                                                 //
     //| | | |/ _` | __/ _` |                                                //
     //| |_| | (_| | || (_| |                                                //

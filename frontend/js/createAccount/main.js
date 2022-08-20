@@ -1,3 +1,5 @@
+const path = 'http://localhost:3000';
+
 let account =
 {
     username: undefined,
@@ -92,7 +94,31 @@ function updateUsernamePlaceholder()
     usernameField.placeholder = placeholder;
 }
 
-//Quitar la pantalla de carga
-document.getElementById('loadingScreen').hidden = true;
-document.getElementById('mainScreen').hidden = false;
-actualMenu = 'main';
+//Comprobar si tenemos los datos encritar
+const deviceID = getSpecificCookie('_id');
+const idPassword = getSpecificCookie('_idPswrd');
+if([deviceID, idPassword].includes(null))
+{
+    actualMenu = 'ventana';
+    document.getElementById('loadingScreen').hidden = true;
+    floatingWindow(
+    {
+        title: 'Vuelve a ingresar',
+        text: 'Vuelve a elegir la opción "iniciar sesión" en la página principal.',
+        button:
+        {
+            text: getText('ok'),
+            callback: function()
+            {
+                location.href = 'index.html';
+            }
+        }
+    });
+}
+else
+{
+    //Quitar la pantalla de carga
+    document.getElementById('loadingScreen').hidden = true;
+    document.getElementById('mainScreen').hidden = false;
+    actualMenu = 'main';
+}

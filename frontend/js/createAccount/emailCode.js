@@ -6,7 +6,11 @@ function updateWeSentAnEmail()
 document.getElementById('changeDataCancelCodeButton').addEventListener('click', function()
 {
     if(actualMenu !== 'email') return;
+    emailCodeGoBackAnimation();
+});
 
+function emailCodeGoBackAnimation()
+{
     usernameField.value = '';
     emailField.value = '';
     passwordField.value = '';
@@ -33,10 +37,127 @@ document.getElementById('changeDataCancelCodeButton').addEventListener('click', 
     emailCodeMenu.classList.add('closeMenu');
 
     emailCodeMenu.addEventListener('animationend', endAnimationCallback);
+}
 
-});
-
+//Solicitar el email
 async function sendEmail()
 {
-    
+    let a = [null, undefined, ''];
+    for(let i = 0; i < a.length; i++)
+    {
+        if([account.email, account.username, account.password].includes(a[i]))
+        {
+            actualMenu = 'ventana';
+            console.log('datos inválidos');
+            floatingWindow(
+            {
+                title: 'Datos no válidos',
+                text: 'Alguno de los datos usados para crear la cuenta no son válidos.',
+                button:
+                {
+                    text: getText('ok'),
+                    callback: function()
+                    {
+                        closeWindow(function()
+                        {
+                            location.reload();
+                        })
+                    }
+                }
+            });
+            return;
+        }
+    }
+
+    try
+    {
+        const response = await encryptHttpCall('/createAccountEmailCode',
+        {
+            id: deviceID,
+            encrypt:
+            {
+                email: account.email,
+                username: account.username,
+                operation: 'newAccount',
+                password: account.password
+            }
+        }, idPassword);
+        
+        console.log(response);
+
+        if(response.data.error === 'invalidFields')
+        {
+            actualMenu = 'ventana';
+            floatingMenu(
+            {
+                title: getText('somethingWentWrong'),
+                text: getText('oneFieldInvalid'),
+                button:
+                {
+                    text: getText('ok'),
+                    callback: function()
+                    {
+                        closeWindow(emailCodeGoBackAnimation);
+                    }
+                }
+            });
+        }
+        else if(response.data.error === 'duplicatedEmail')
+        {
+            actualMenu = 'ventana';
+            floatingWindow(
+            {
+                title: getText('somethingWentWront'),
+                text: getText('emailDuplicated'),
+                button:
+                {
+                    text: getText('ok'),
+                    callback: function()
+                    {
+                        closeWind(emailCodeGoBackAnimation);
+                    }
+                }
+            });
+        }
+        else if(response.data.error !== undefined)
+        {
+            actualMenu = 'ventana';
+            floatingWindow(
+            {
+                title: getText('somethingWentWrong'),
+                text: `${getText('errorCode')}: ${response.data.error}`,
+                button:
+                {
+                    text: getText('ok'),
+                    callback: function()
+                    {
+                        closeWindow(emailCodeGoBackAnimation);
+                    }
+                }
+            });
+        }
+    }
+    catch
+    {
+        actualMenu = 'ventana';
+        floatingWindow(
+        {
+            title: getText('ups'),
+            text: getText('serverDown'),
+            button:
+            {
+                text: getText('ok'),
+                callback: function()
+                {
+                    closeWindow(emailCodeGoBackAnimation);
+                }
+            }
+        })
+    }
 }
+
+//Comprobar si el código es correcto
+document.getElementById('changeDataConfirmCodeButton').addEventListener('click', async function()
+{
+
+});

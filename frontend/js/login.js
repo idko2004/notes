@@ -217,6 +217,8 @@ document.getElementById('loginButton').addEventListener('click', async function(
 document.getElementById('signUpButton').addEventListener('click', function()
 {
     if(theActualThing !== 'login') return;
+    saveCookie('_id', codePassword);
+    saveCookie('_idPswrd', loginPassword);
     location.href=`createAccount.html#lang=${actualLanguage};colortheme=${colorTheme}`;
 });
 

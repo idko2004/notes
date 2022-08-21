@@ -114,7 +114,7 @@ async function sendEmail()
                     text: getText('ok'),
                     callback: function()
                     {
-                        closeWind(emailCodeGoBackAnimation);
+                        closeWindow(emailCodeGoBackAnimation);
                     }
                 }
             });
@@ -156,8 +156,116 @@ async function sendEmail()
     }
 }
 
-//Comprobar si el código es correcto
-document.getElementById('changeDataConfirmCodeButton').addEventListener('click', async function()
-{
+const emailCodeField = document.getElementById('changeDataConfirmCode');
+const comprobeEmailCodeButton = document.getElementById('changeDataConfirmCodeButton');
 
+emailCodeField.addEventListener('keyup', function(e)
+{
+    if(e.key === 'Return' || e.key === 'Enter') comprobeEmailCodeButton.click();
+    else e.target.value = e.target.value.toUpperCase();
+})
+
+//Comprobar si el código es correcto
+comprobeEmailCodeButton.addEventListener('click', async function()
+{
+    if(actualMenu !== 'email') return;
+    const code = emailCodeField.value?.trim();
+    if([undefined, null, ''].includes(code)) return;
+
+    comprobeEmailCodeButton.innerText = getText('waitAMoment');
+    actualMenu = 'loading';
+
+    try
+    {
+        const response = await encryptHttpCall('/createNewAccount',
+        {
+            id: deviceID,
+            encrypt:
+            {
+                code
+            }
+        }, idPassword);
+
+        console.log(response);
+
+        if(response.data.error === 'invalidCode')
+        {
+            actualMenu = 'ventana';
+            floatingWindow(
+            {
+                title: getText('introduceAValidCode'),
+                text: getText('introduceAValidCode2'),
+                button:
+                {
+                    text: 'ok',
+                    callback: function()
+                    {
+                        actualMenu = 'email';
+                        closeWindow();
+                    }
+                }
+            })
+        }
+        else if(response.data.error !== undefined)
+        {
+            actualMenu = 'ventana';
+            floatingWindow(
+            {
+                title: getText('somethingWentWrong'),
+                text: `${getText('errorCode')}: ${response.data.error}`,
+                button:
+                {
+                    text: getText('ok'),
+                    callback: function()
+                    {
+                        actualMenu = 'email';
+                        closeWindow();
+                    }
+                }
+            });
+        }
+        else
+        {
+            //Cuenta creada
+            actualMenu = 'ventana';
+            deleteCookie('_id');
+            deleteCookie('_idPswrd');
+            floatingWindow(
+            {
+                title: getText('accountCreated'),
+                text: getText('accountCreated2'),
+                button:
+                {
+                    text: getText('ok'),
+                    callback: function()
+                    {
+                        closeWindow(function()
+                        {
+                            location.href = 'index.html';
+                        });
+                    }
+                }
+            });
+        }
+    }
+    catch
+    {
+        actualMenu = 'ventana';
+        floatingWindow(
+        {
+            title: getText('ups'),
+            text: getText('serverDown'),
+            button:
+            {
+                text: getText('ok'),
+                callback: function()
+                {
+                    actualMenu = 'email';
+                    closeWindow();
+                }
+            }
+        })
+    }
+
+    comprobeEmailCodeButton.innerText = getText('verify');
 });

@@ -19,14 +19,29 @@ const usernameField = document.getElementById('usernameField');
 const emailField = document.getElementById('emailField');
 const passwordField = document.getElementById('passwordField');
 const comprobePasswordField = document.getElementById('comprobePasswordField');
+const continueButton = document.getElementById('continueButton');
 
 //Asignar funcionamiento a los botones
 document.getElementById('cancelButton').addEventListener('click', function()
 {
-    location.href = 'index.html';
+    let endAnimationCallback = function(e)
+    {
+        if(e.animationName !== 'closeMenuAnimation') return;
+
+        mainMenu.hidden = true;
+        window.scrollTo(0,0);
+
+        mainMenu.removeEventListener('animationend', endAnimationCallback);
+        location.href = 'index.html';
+    }
+
+    mainMenu.classList.remove('openMenu');
+    mainMenu.classList.add('closeMenu');
+
+    mainMenu.addEventListener('animationend', endAnimationCallback);
 });
 
-document.getElementById('continueButton').addEventListener('click', function()
+continueButton.addEventListener('click', function()
 {
     if(actualMenu !== 'main') return;
 
@@ -122,3 +137,24 @@ else
     document.getElementById('mainScreen').hidden = false;
     actualMenu = 'main';
 }
+
+//Pasar de un campo a otro pulsando enter
+usernameField.addEventListener('keypress', function(e)
+{
+    if(e.key === 'Return' || e.key === 'Enter') emailField.focus();
+});
+
+emailField.addEventListener('keypress', function(e)
+{
+    if(e.key === 'Return' || e.key === 'Enter') passwordField.focus();
+});
+
+passwordField.addEventListener('keypress', function(e)
+{
+    if(e.key === 'Return' || e.key === 'Enter') comprobePasswordField.focus();
+});
+
+comprobePasswordField.addEventListener('keypress', function(e)
+{
+    if(e.key === 'Return' || e.key === 'Enter') continueButton.click();
+});

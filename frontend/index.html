@@ -62,39 +62,39 @@
             </div>
             <div>
                 <h1><span class="text" txt="login"></span></h1>
-                <p>
-                    <section>
-                        <span class="text" txt="username"></span><br>
-                        <input type='text' id='usernameField'>
-                    </section>
-                    <section>
-                        <span class="text" txt="password"></span><br>
-                        <input type='password' id='passwordField'><br>
-                        <small>
-                            <i>
-                                <a>
-                                    <span class="text" txt="forgotPassword"></span>
-                                </a>
-                            </i>
-                        </small>
-                    </section>
-                </p>
-                <p>
-                    <section>
-                        <button class='loginScreenButton1' id='loginButton'>
-                            <span class="text" txt="login"></span>
-                        </button>
-                    </section>
-                    <section>
-                        <button class='loginScreenButton2' id='signUpButton'>
-                            <span class="text" txt="createAccount"></span>
-                        </button>
-                        <br>
-                        <button id='localModeButton' class='loginScreenButton2'>
-                            <span class="text" txt="localMode"></span>
-                        </button>
-                    </section>
-                </p>
+                <section id="usernameLoginSection">
+                    <span class="text" txt="username"></span><br>
+                    <input type='text' id='usernameField'>
+                </section>
+                <section id="passwordLoginSection">
+                    <span class="text" txt="password"></span><br>
+                    <input type='password' id='passwordField'><br>
+                    <small>
+                        <i>
+                            <a>
+                                <span class="text" txt="forgotPassword"></span>
+                            </a>
+                        </i>
+                    </small>
+                </section>
+                <section id="loginButtonSection">
+                    <button class='loginScreenButton1' id='loginButton'>
+                        <span class="text" txt="login"></span>
+                    </button>
+                </section>
+                <section id="reloadLoginSection">
+                    <div class="text" txt="unableToLogIn"></div>
+                    <button class="loginScreenButton2 text" id="reloadLoginButton" txt="reload" hidden></button>
+                </section>
+                <section>
+                    <button class='loginScreenButton2' id='signUpButton'>
+                        <span class="text" txt="createAccount"></span>
+                    </button>
+                    <br>
+                    <button id='localModeButton' class='loginScreenButton2'>
+                        <span class="text" txt="localMode"></span>
+                    </button>
+                </section>
             </div>
         </div>
 

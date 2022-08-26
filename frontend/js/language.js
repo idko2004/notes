@@ -788,6 +788,11 @@ const allTexts =
     {
         es: 'Tu tema se aplicará cuando apliques los cambios y vuelvas a la pantalla principal.',
         en: 'Your theme will be applied when you save your changes and return to the main screen'
+    },
+    unableToLogIn:
+    {
+        es: 'No es posible iniciar sesión debido a que no se pudo conectar con el servidor.',
+        en: 'Unable to log in due to failed server connection.'
     }
 }
 

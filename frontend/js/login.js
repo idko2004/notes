@@ -291,6 +291,7 @@ async function requestLoginPassword()
     }
     catch
     {
+        hideLoginFields();
         floatingWindow(
         {
             title: getText('ups'),
@@ -331,5 +332,21 @@ async function requestLoginPassword()
             saveKey('_pswrd2', loginPassword);
             console.log('Secret key obtained');
         }
+    }
+
+    function hideLoginFields()
+    {
+        console.log('Escondiendo botones de iniciar sesión debido a que no se pudo conectar con el servidor');
+        document.getElementById('usernameLoginSection').hidden = true;
+        document.getElementById('passwordLoginSection').hidden = true;
+        document.getElementById('loginButtonSection').hidden = true;
+        document.getElementById('signUpButton').hidden = true;
+        
+        const reloadButton =  document.getElementById('reloadLoginButton');
+        reloadButton.addEventListener('click', function()
+        {
+            location.reload();
+        });
+        reloadButton.hidden = false;
     }
 }

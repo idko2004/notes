@@ -253,6 +253,13 @@ document.getElementById('passwordField').addEventListener('keydown', function(e)
     if(e.key === 'Enter') document.getElementById('loginButton').click();
 });
 
+//Botón de configuración
+document.getElementById('loginSettings').addEventListener('click', function()
+{
+    if(theActualThing !== 'login') return;
+    localManageAccount();
+});
+
 async function requestLoginPassword()
 {
     try
@@ -341,12 +348,12 @@ async function requestLoginPassword()
         document.getElementById('passwordLoginSection').hidden = true;
         document.getElementById('loginButtonSection').hidden = true;
         document.getElementById('signUpButton').hidden = true;
+
+        document.getElementById('reloadLoginSection').hidden = false;
         
-        const reloadButton =  document.getElementById('reloadLoginButton');
-        reloadButton.addEventListener('click', function()
+        document.getElementById('reloadLoginButton').addEventListener('click', function()
         {
             location.reload();
         });
-        reloadButton.hidden = false;
     }
 }

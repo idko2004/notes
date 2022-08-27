@@ -4,11 +4,12 @@ const menuButton = document.getElementById('menuButton');
 const menuTitleText = document.getElementById('menuTitleText');
 const closeMenuButton = document.getElementById('closeMenuButton');
 const menuExitLocalMode = document.getElementById('menuExitLocalMode');
-const menuEraseAll = document.getElementById('menuEraseAll');
+//const menuEraseAll = document.getElementById('menuEraseAll');
 const menuOnlineManageAccount = document.getElementById('menuOnlineManageAccount');
 const menuOnlineLogOut = document.getElementById('menuOnlineLogOut');
 const menuOnlineChangeToLocal = document.getElementById('menuOnlineChangeToLocal');
-const menuChangeLanguage = document.getElementById('menuChangeLanguage');
+//const menuChangeLanguage = document.getElementById('menuChangeLanguage');
+const menuSettingsLocal = document.getElementById('menuSettingsLocal');
 
 let menuAnimationCallback;
 
@@ -20,8 +21,9 @@ async function menuButtonText()
         menuTitleText.innerText = getText('localMode');
 
         menuExitLocalMode.hidden = false;
-        menuEraseAll.hidden = false;
-        menuChangeLanguage.hidden = false;
+        //menuEraseAll.hidden = false;
+        //menuChangeLanguage.hidden = false;
+        menuSettingsLocal.hidden = false;
 
         menuOnlineLogOut.hidden = true;
         menuOnlineManageAccount.hidden = true;
@@ -32,8 +34,9 @@ async function menuButtonText()
         menuButton.innerText = getText('someoneAccount');
 
         menuExitLocalMode.hidden = true;
-        menuEraseAll.hidden = true;
-        menuChangeLanguage.hidden = true;
+        //menuEraseAll.hidden = true;
+        //menuChangeLanguage.hidden = true;
+        menuSettingsLocal.hidden = true;
 
         menuOnlineLogOut.hidden = false;
         menuOnlineManageAccount.hidden = false;
@@ -180,7 +183,7 @@ menuExitLocalMode.addEventListener('click', async function()
 });
 
 //Botón de cambiar de idioma en modo local
-menuChangeLanguage.addEventListener('click', function()
+/*menuChangeLanguage.addEventListener('click', function()
 {
     if(theActualThing !== 'menu') return;
     if(!isLocalMode) return;
@@ -205,10 +208,10 @@ menuChangeLanguage.addEventListener('click', function()
     animationMenuClose();
     canInteract = true;
     theActualThing = 'note';
-});
+});*/
 
 //Botón borrar todas las notas
-menuEraseAll.addEventListener('click', function()
+/*menuEraseAll.addEventListener('click', function()
 {
     if(theActualThing !== 'menu') return;
     if(!isLocalMode) return;
@@ -270,4 +273,24 @@ menuEraseAll.addEventListener('click', function()
         );
     }
     else theActualThing = 'menu';
-});
+});*/
+
+function localManageAccount()
+{
+    saveCookie('_login', 'local');
+    location.href = `manageAccount.html#lang=${actualLanguage};colortheme=${colorTheme}`;
+}
+
+menuSettingsLocal.addEventListener('click', function()
+{
+    if (theActualThing !== 'menu') return;
+    if (!isLocalMode) return;
+
+    document.getElementById('noteScreen').hidden = true;
+    floatingMenu.hidden = true;
+    loadingScreen.hidden = false;
+
+    saveNote();
+
+    localManageAccount();
+})

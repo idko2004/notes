@@ -60,6 +60,7 @@
             <div id='loginScreenBigName'>
                 <b><span class="text" txt="noteAppName"></span></b>
             </div>
+            <img id="loginSettings" src="img/settings-dark.png">
             <div>
                 <h1><span class="text" txt="login"></span></h1>
                 <section id="usernameLoginSection">
@@ -71,9 +72,7 @@
                     <input type='password' id='passwordField'><br>
                     <small>
                         <i>
-                            <a>
-                                <span class="text" txt="forgotPassword"></span>
-                            </a>
+                            <a class="text" txt="forgotPassword"></a>
                         </i>
                     </small>
                 </section>
@@ -82,9 +81,9 @@
                         <span class="text" txt="login"></span>
                     </button>
                 </section>
-                <section id="reloadLoginSection">
+                <section id="reloadLoginSection" hidden>
                     <div class="text" txt="unableToLogIn"></div>
-                    <button class="loginScreenButton2 text" id="reloadLoginButton" txt="reload" hidden></button>
+                    <button class="loginScreenButton2 text" id="reloadLoginButton" txt="reload"></button>
                 </section>
                 <section>
                     <button class='loginScreenButton2' id='signUpButton'>
@@ -161,9 +160,10 @@
                     <div id='menuTitleText'></div>
                 </h1>
                 <section id='menuButtons'>
-                    <article><button id=menuExitLocalMode class="text" txt="menu_exitLocalMode"></button></article>
-                    <article><button id="menuChangeLanguage" class="text" txt="changeLanguage2"></button></article>
-                    <article><button id='menuEraseAll' class="text" txt="menu_eraseAll"></button></article>
+                    <article><button id='menuExitLocalMode' class="text" txt="menu_exitLocalMode"></button></article>
+                    <article><button id='menuSettingsLocal'>Preferencias</button></article>
+                    <!--article><button id='menuChangeLanguage' class="text" txt="changeLanguage2"></button></article-->
+                    <!--article><button id='menuEraseAll' class="text" txt="menu_eraseAll"></button></article-->
                     <article><button id='menuOnlineLogOut' class="text" txt="logOut"></button></article>
                     <article><button id='menuOnlineManageAccount' class="text" txt="manageAccount"></button></article>
                     <article><button id='menuOnlineChangeToLocal' class="text" txt="menu_localNotes"></button></article>

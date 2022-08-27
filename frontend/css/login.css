@@ -82,3 +82,46 @@
     color: white;
     transition: all ease 100ms;
 }
+
+#loginSettings
+{
+    position: fixed;
+    bottom: 0.5rem;
+    right: 0.5rem;
+    padding: 0.5rem;
+    height: 2rem;
+
+    animation: spinGearOff 200ms linear 1;
+}
+
+#loginSettings:hover
+{
+    cursor: pointer;
+    animation: spinGearOn 200ms linear 1;
+}
+
+@keyframes spinGearOn
+{
+    0%
+    {
+        transform: rotateZ(0deg);
+    }
+
+    100%
+    {
+        transform: rotateZ(45deg);
+    }
+}
+
+@keyframes spinGearOff
+{
+    0%
+    {
+        transform: rotateZ(45deg);
+    }
+
+    100%
+    {
+        transform: rotateZ(0deg);
+    }
+}

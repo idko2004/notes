@@ -793,6 +793,11 @@ const allTexts =
     {
         es: 'No es posible iniciar sesión debido a que no se pudo conectar con el servidor.',
         en: 'Unable to log in due to failed server connection.'
+    },
+    preferences:
+    {
+        es: 'Preferencias',
+        en: 'Preferences'
     }
 }
 

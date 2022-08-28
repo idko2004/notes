@@ -39,24 +39,31 @@ newNote.addEventListener('click',function()
 
 async function createNewNote(name)
 {
-    if(!newNoteNameIsValid(name, 'newNote')) return;
     if(theActualThing !== 'note') return;
+    if(!newNoteNameIsValid(name, 'newNote')) return;
     theActualThing = 'loading';
-    
+
     textArea.disabled = true;
     topBarButtons.hidden = true;
     await saveNote();
 
     if(isLocalMode)
     {
+        actualNoteName = name;
+
         createListButton(name);
+        youDontHaveNotes();
+
+        selectedNote(undefined, name);
+
+        noteName.innerText = name;
+        topBarButtons.hidden = false;
+
+        textArea.value = '';
+        textArea.disabled = false;
+        textArea.focus();
 
         saveKey(name,'');
-        loadNote(name);
-    
-        youDontHaveNotes();
-    
-        selectedNote(undefined, name);
     }
     else try
     {
@@ -152,7 +159,7 @@ async function createNewNote(name)
         });
         noteName.innerText = getText('somethingWentWrong');
     }
-    theActualThing = 'loading';
+    theActualThing = 'note';
 }
 
 function newNoteNameIsValid(name, openAWindow)

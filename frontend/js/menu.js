@@ -155,30 +155,24 @@ menuOnlineManageAccount.addEventListener('click', async function()
 });
 
 //Botón de salir del modo local
-menuExitLocalMode.addEventListener('click', async function()
+menuExitLocalMode.addEventListener('click', function()
 {
     if(theActualThing !== 'menu') return;
-    if(hashContains('local'))
+
+    animationMenuClose(async function()
     {
-        hashDelete('local');
+        await saveNote();
+
+        if(hashContains('local'))
+        {
+            hashDelete('local');
+            location.reload();
+            return;
+        }
+    
+        deleteKey('_login');
+    
         location.reload();
-        return;
-    }
-
-    await saveNote();
-    theSecretThingThatNobodyHasToKnow = undefined;
-    deleteKey('_login');
-
-    animationMenuClose(function()
-    {
-        document.getElementById('noteScreen').hidden = true;
-        document.getElementById('loginScreen').hidden = false;
-        notesList.innerHTML = '';
-        noteName.innerText = getText('clickANote');
-        textArea.value = '';
-        textArea.disabled = true;
-        canInteract = true;
-        theActualThing = 'login';
     });
 });
 

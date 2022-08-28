@@ -8,8 +8,8 @@ async function start()
 
     theOtherSecretThing = getKey('_pswrd');
 
-    //Forzar modo local
-    if(hashContains('local'))
+    //Forzar modo local | modo local activo
+    if(hashContains('local') || login === 'local')
     {
         theSecretThingThatNobodyHasToKnow = 'local';
         console.log('Forzar modo local');
@@ -42,21 +42,6 @@ async function start()
             }
         });*/
         theActualThing = 'login';
-    }
-    //Modo local
-    else if(login === 'local')
-    {
-        console.log('Modo local');
-        isLocalMode = true;
-
-        document.getElementById('loginScreen').hidden = true;
-        loadingScreen.hidden = true;
-
-        loadNotesList();
-        document.getElementById('noteScreen').hidden = false;
-
-        menuButtonText();
-        theActualThing = 'note';
     }
     //Hay una clave guardada
     else

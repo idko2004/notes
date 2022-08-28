@@ -90,6 +90,26 @@ document.getElementById('loginButton').addEventListener('click', async function(
         return;
     }
 
+    if([codePassword, loginPassword].includes(undefined))
+    {
+        floatingWindow(
+        {
+            title: getText('somethingWentWrong'),
+            text: `${getText('login_error_text')}\n${getText('errorCode')}: codePassword(${codePassword === undefined}) or loginPassword(${loginPassword === undefined}) are undefined`,
+            button:
+            {
+                text: getText('ok'),
+                callback: function()
+                {
+                    closeWindow(function()
+                    {
+                        location.reload();
+                    });
+                }
+            }
+        });
+    }
+
     //Realizar la llamada para iniciar sesión
     try
     {

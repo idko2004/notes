@@ -51,8 +51,8 @@ async function sendEmail()
             console.log('datos inválidos');
             floatingWindow(
             {
-                title: 'Datos no válidos',
-                text: 'Alguno de los datos usados para crear la cuenta no son válidos.',
+                title: ':(',
+                text: getText('oneFieldInvalid'),
                 button:
                 {
                     text: getText('ok'),

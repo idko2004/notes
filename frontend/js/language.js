@@ -798,6 +798,21 @@ const allTexts =
     {
         es: 'Preferencias',
         en: 'Preferences'
+    },
+    continue:
+    {
+        es: 'Continuar',
+        en: 'Continue'
+    },
+    reenter:
+    {
+        es: 'Vuelve a ingresar',
+        en: 'Re-enter'
+    },
+    reenter_createAccount:
+    {
+        es: 'Vuelve a elegir la opción "Crear cuenta" en la página principal.',
+        en: 'Choose again the "Create account" option on the main page.'
     }
 }
 

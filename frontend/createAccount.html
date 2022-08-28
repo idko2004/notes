@@ -25,7 +25,7 @@
         <link rel='stylesheet' type='text/css' href='css/manageAccount.css'>
         <link rel="shorcut icon" type="image/svg" href="img/favicon.svg">
 
-        <script>let titleTextIDLang = 'manageAccountNotes';</script>
+        <script>let titleTextIDLang = 'createAccountNotes';</script>
         <script defer src="js/hash.js"></script>
         <script defer src="js/localStorage.js"></script>
         <script defer src="js/language.js"></script>
@@ -48,44 +48,44 @@
 
         <div id='mainScreen' hidden>
             <div id='mainScreenNotesBigName'>
-                <b class="text" txt="noteAppName">Notas</b>
+                <b class="text" txt="noteAppName"></b>
             </div>
             <div class="container">
                 <div id="mainMenu" class="openMenu">
-                    <h1>Crear cuenta</h1>
+                    <h1 class="text" txt="createAccount"></h1>
                     <p>
                         <section>
-                            <h2>Nombre de usuario</h2>
+                            <h2 class="text" txt="username"></h2>
                             <b><p id="usernameText"></p></b>
                             <input type="text" id="usernameField" placeholder="Adam Smith">
                         </section>
                         <section>
-                            <h2>Correo electrónico</h2>
+                            <h2 class="text" txt="email"></h2>
                             <b><p id="emailText"></p></b>
                             <input type="text" id="emailField" placeholder="someone@example.com">
                         </section>
                         <section>
-                            <h2>Contraseña</h2>
+                            <h2 class="text" txt="password"></h2>
                             <b><p id="passwordText"></p></b>
                             <input type="password" id="passwordField" placeholder="a strong password">
                             <input type="password" id="comprobePasswordField" placeholder="type it again">
                         </section>
                         <section>
-                            <button class="greenButton" id="continueButton">Continuar</button>
-                            <button class="greenButton" id="cancelButton">Cancelar</button>
+                            <button class="greenButton text" id="continueButton" txt="continue"></button>
+                            <button class="greenButton text" id="cancelButton" txt="cancel"></button>
                         </section>
                     </p>
                 </div>
 
                 <div id="emailCodeMenu" hidden>
-                    <h1 class="text" txt="checkYourEmail">Revisa tu correo</h1>
+                    <h1 class="text" txt="checkYourEmail"></h1>
                     <p>
                         <section>
-                            <span class="text" txt="codeWeSent">Hemos enviado un código al correo</span>
+                            <span class="text" txt="codeWeSent"></span>
                             <b><span id="changeDataEmailSent">someone@email.com</span></b>
                         </section>
                         <section>
-                            <h2 class="text" txt="enterTheCode">Ingresa el código</h2>
+                            <h2 class="text" txt="enterTheCode"></h2>
                             <p><input type="text" id="changeDataConfirmCode" placeholder="A1B2C" maxlength="5"></p>
                             <button class="greenButton text" id="changeDataConfirmCodeButton" txt="verify"></button>
                         </section>

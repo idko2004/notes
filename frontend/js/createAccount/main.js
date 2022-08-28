@@ -96,18 +96,6 @@ continueButton.addEventListener('click', function()
     mainMenu.addEventListener('animationend', endAnimationCallback);
 });
 
-emailField.addEventListener('keyup', updateUsernamePlaceholder);
-
-function updateUsernamePlaceholder()
-{
-    let placeholder = emailField.value.split('@')[0];
-    if(placeholder.trim() === '') placeholder = 'Adam Smith';
-    else
-    {
-        placeholder = placeholder[0].toUpperCase() + placeholder.slice(1);
-    }
-    usernameField.placeholder = placeholder;
-}
 
 //Comprobar si tenemos los datos encritar
 const deviceID = getSpecificCookie('_id');
@@ -118,8 +106,8 @@ if([deviceID, idPassword].includes(null))
     document.getElementById('loadingScreen').hidden = true;
     floatingWindow(
     {
-        title: 'Vuelve a ingresar',
-        text: 'Vuelve a elegir la opción "iniciar sesión" en la página principal.',
+        title: getText('reenter'),
+        text: getText('reenter_createAccount'),
         button:
         {
             text: getText('ok'),
@@ -158,3 +146,21 @@ comprobePasswordField.addEventListener('keypress', function(e)
 {
     if(e.key === 'Return' || e.key === 'Enter') continueButton.click();
 });
+
+//Placeholders
+emailField.addEventListener('keyup', updateUsernamePlaceholder);
+
+function updateUsernamePlaceholder()
+{
+    let placeholder = emailField.value.split('@')[0];
+    if(placeholder.trim() === '') placeholder = 'Adam Smith';
+    else
+    {
+        placeholder = placeholder[0].toUpperCase() + placeholder.slice(1);
+    }
+    usernameField.placeholder = placeholder;
+}
+
+emailField.placeholder = getText('emailExample');
+passwordField.placeholder = getText('hyperSecurePassword');
+comprobePasswordField.placeholder = getText('typeItAgain');

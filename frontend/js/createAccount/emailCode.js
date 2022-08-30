@@ -71,6 +71,7 @@ async function sendEmail()
 
     try
     {
+        console.log('http: solicitando código por email');
         const response = await encryptHttpCall('/createAccountEmailCode',
         {
             id: deviceID,
@@ -177,6 +178,7 @@ comprobeEmailCodeButton.addEventListener('click', async function()
 
     try
     {
+        console.log('http: comprobando si el código es correcto');
         const response = await encryptHttpCall('/createNewAccount',
         {
             id: deviceID,

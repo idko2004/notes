@@ -18,7 +18,7 @@ async function loadNotesList()
     {
         let loginKey = theSecretThingThatNobodyHasToKnow;
         console.log(loginKey);
-        //const response = await axios.get(`${path}/getNotesID`, {headers: {key: loginKey}});
+        console.log('http: obteniendo ids de las notas');
         const response = await encryptHttpCall('/getNotesID', {key: loginKey}, theOtherSecretThing);
         console.log(response);
         if(response.data.error !== undefined)

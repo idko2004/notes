@@ -4,11 +4,9 @@ const menuButton = document.getElementById('menuButton');
 const menuTitleText = document.getElementById('menuTitleText');
 const closeMenuButton = document.getElementById('closeMenuButton');
 const menuExitLocalMode = document.getElementById('menuExitLocalMode');
-//const menuEraseAll = document.getElementById('menuEraseAll');
 const menuOnlineManageAccount = document.getElementById('menuOnlineManageAccount');
 const menuOnlineLogOut = document.getElementById('menuOnlineLogOut');
 const menuOnlineChangeToLocal = document.getElementById('menuOnlineChangeToLocal');
-//const menuChangeLanguage = document.getElementById('menuChangeLanguage');
 const menuSettingsLocal = document.getElementById('menuSettingsLocal');
 
 let menuAnimationCallback;
@@ -21,8 +19,6 @@ async function menuButtonText()
         menuTitleText.innerText = getText('localMode');
 
         menuExitLocalMode.hidden = false;
-        //menuEraseAll.hidden = false;
-        //menuChangeLanguage.hidden = false;
         menuSettingsLocal.hidden = false;
 
         menuOnlineLogOut.hidden = true;
@@ -34,8 +30,6 @@ async function menuButtonText()
         menuButton.innerText = getText('someoneAccount');
 
         menuExitLocalMode.hidden = true;
-        //menuEraseAll.hidden = true;
-        //menuChangeLanguage.hidden = true;
         menuSettingsLocal.hidden = true;
 
         menuOnlineLogOut.hidden = false;
@@ -45,7 +39,7 @@ async function menuButtonText()
         //Obtener nombre de usuario
         try
         {
-            //const response = await axios.get(`${path}/getUsername`, {headers: {key: theSecretThingThatNobodyHasToKnow}});
+            console.log('http: obteniendo nombre de usuario');
             const response = await encryptHttpCall('/getUsername', {key: theSecretThingThatNobodyHasToKnow}, theOtherSecretThing);
             menuButton.innerText = response.data.decrypt.username;
             menuTitleText.innerText = response.data.decrypt.username;

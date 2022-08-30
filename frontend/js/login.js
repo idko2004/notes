@@ -115,6 +115,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
     {
         //const response = await axios.get(`${path}/getSessionID`, {headers: {username, password}});
         console.log('loginPassword', loginPassword);
+        console.log('http: iniciando sesión');
         const response = await encryptHttpCall('/getSessionID', {encrypt: {username, password}, code: codePassword}, loginPassword);
         console.log(response);
         if(response.data.error === undefined && response.data.decrypt.key !== undefined && response.data.decrypt.pswrd !== undefined) //Clave obtenida con éxito
@@ -292,6 +293,7 @@ async function requestLoginPassword()
         //Ya tenemos un código y queremos comprobar que sigue válido
         else
         {
+            console.log('http: comprobando si la clave de inicio de sesión sigue siendo válida');
             const response = await axios.post(`${path}/generateLoginPassword`, {code: deviceID});
             console.log(response);
 
@@ -311,6 +313,7 @@ async function requestLoginPassword()
             else if(!response.data.stillValid) await requestNewDeviceID();
             else
             {
+                console.log('al parecer sigue siendo válida');
                 loginPassword = pswrd;
                 codePassword = deviceID;
             }
@@ -333,6 +336,7 @@ async function requestLoginPassword()
 
     async function requestNewDeviceID()
     {
+        console.log('http: requiriendo una nueva clave de inicio de sesión');
         const response = await axios.post(`${path}/generateLoginPassword`, {code: 'requesting'});
         console.log(response);
         console.log('contraseña', response.data.secret);

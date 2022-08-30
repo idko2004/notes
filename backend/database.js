@@ -8,62 +8,67 @@ let sessionIDList = {};
 
 async function getElement(collection, objQuery)
 {
+    console.log('\033[32m**Obteniendo elemento de la base de datos**\033[0m');
     await mdbClient.connect();
     const database = mdbClient.db('Notes');
     const theCollection = database.collection(collection);
     const element = await theCollection.findOne(objQuery);
+    console.log('\033[32m**Elemento obtenido**\033[0m');
     return element;
 }
 
 async function createElement(collection, element)
 {
+    console.log('\033[32m**Creando elemento en la base de datos**\033[0m');
     await mdbClient.connect();
     const database = mdbClient.db('Notes');
     const theCollection = database.collection(collection);
     const result = await theCollection.insertOne(element);
-    console.log('\033[1;32m**Elemento creado en la base de datos**\033[0m', result);
+    console.log('\033[32m**Elemento creado en la base de datos**\033[0m', result);
     return result;
 }
 
 async function updateElement(collection, objQuery, newElement)
 {
-    console.log('\033[1;32m**Actualizando elementos**\033[0m', collection);
+    console.log('\033[32m**Actualizando elementos en la base de datos**\033[0m', collection);
     await mdbClient.connect();
     const database = mdbClient.db('Notes');
     const theCollection = database.collection(collection);
     const result = await theCollection.findOneAndUpdate(objQuery, {$set: newElement});
-    console.log('\033[1;32m**Base de datos actualizada**\033[0m', collection, result.ok);
+    console.log('\033[32m**Base de datos actualizada**\033[0m', collection, result.ok);
     return result.ok;
 }
 
 async function updateMultipleElements(collection, objQuery, toReplace)
 {
-    console.log('\033[1;32m**Actualizando múltiples elementos en la base de datos**\033[0m');
+    console.log('\033[32m**Actualizando múltiples elementos en la base de datos**\033[0m');
     await mdbClient.connect();
     const database = mdbClient.db('Notes');
     const theCollection = database.collection(collection);
     const result = await theCollection.updateMany(objQuery, {$set: toReplace});
-    console.log('\033[1;32m**Múltiples elementos actualizados en la base de datos**\033[0m', result.modifiedCount);
+    console.log('\033[32m**Múltiples elementos actualizados en la base de datos**\033[0m', result.modifiedCount);
     return result.modifiedCount;
 }
 
 async function deleteElement(collection, objQuery)
 {
+    console.log('\033[32m**Borrando elementos de la base de datos**\033[0m');
     await mdbClient.connect();
     const database = mdbClient.db('Notes');
     const theCollection = database.collection(collection);
     const result = await theCollection.deleteOne(objQuery);
-    console.log('\033[1;32m**Elemento borrado en la base de datos**\033[0m', result);
+    console.log('\033[32m**Elemento borrado en la base de datos**\033[0m', result);
     return result;
 }
 
 async function deleteMultipleElements(collection, objQuery)
 {
+    console.log('\033[32m**Borrando múltiples elementos de la base de datos**\033[0m');
     await mdbClient.connect();
     const database = mdbClient.db('Notes');
     const theCollection = database.collection(collection);
     const result = await theCollection.deleteMany(objQuery);
-    console.log('\033[1;32m**Multiples elementos borrados de la base de datos**\033[0m', result);
+    console.log('\033[32m**Multiples elementos borrados de la base de datos**\033[0m', result);
     return result;
 }
 
@@ -73,22 +78,17 @@ async function getKeyData(key)
     let cache = sessionIDList[key];
     if(cache === undefined || cache === null)
     {
-        console.log('Buscando usuario en la base de datos');
+        console.log('\033[32m**Buscando usuario en la base de datos**\033[0m');
         await mdbClient.connect();
-
-        console.log('Base de datos conectada');
         const database = mdbClient.db('Notes');
-
         const collection = database.collection('sessionID');
-        console.log('Buscando elemento');
-
         const element = await collection.findOne({key});
         sessionIDList[key] = element;
-        console.log('Cargado desde la base de datos', element);
+        console.log('\033[32mCargado desde la base de datos\033[0m', element);
 
         cache = element;
     }
-    else console.log('Cargado desde caché', cache);
+    else console.log('\033[32mCargado desde caché\033[0m', cache);
 
     upDate(cache);
 

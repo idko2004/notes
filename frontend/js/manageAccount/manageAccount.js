@@ -1,4 +1,4 @@
-const path = 'http://localhost:3000';
+const path = 'http://localhost:8888';
 
 let username;
 let email;

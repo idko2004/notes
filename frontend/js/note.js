@@ -28,7 +28,7 @@ async function loadNote(name, id)
         try
         {
             //Cargar la nota
-            //const response = await axios.get(`${path}/note`, {headers: {key: theSecretThingThatNobodyHasToKnow, noteid: id}});
+            console.log('http: cargando nota');
             const response = await encryptHttpCall('/note', {encrypt: {noteid: id}, key: theSecretThingThatNobodyHasToKnow}, theOtherSecretThing);
             console.log(response);
             if(response.data.error !== undefined) //Ocurre un error
@@ -227,12 +227,7 @@ async function saveNote()
         try
         {
             console.log('Guardando nota', actualNoteID);
-            /*const response = await axios.post(`${path}/saveNote`,
-            {
-                key: theSecretThingThatNobodyHasToKnow,
-                noteID: noteID,
-                noteContent: value
-            });*/
+            console.log('http: guardando nota');
             const response = await encryptHttpCall('/saveNote',
             {
                 key: theSecretThingThatNobodyHasToKnow,
@@ -352,7 +347,7 @@ document.getElementById('deleteButton').addEventListener('click',() =>
                                 theActualThing = 'loading';
                                 noteName.innerText = getText('deletingNote');
 
-                                //const response = await axios.post(`${path}/deleteNote`, {key: theSecretThingThatNobodyHasToKnow, noteid: actualNoteID});
+                                console.log('http: borrando nota');
                                 const response = await encryptHttpCall('/deleteNote',
                                 {
                                     encrypt:
@@ -484,7 +479,8 @@ document.getElementById('renameButton').addEventListener('click', function()
                             try
                             {
                                 noteName.innerText = getText('renaming');
-                                //const response = await axios.post(`${path}/renameNote`,{key: theSecretThingThatNobodyHasToKnow, noteid: actualNoteID, newname: value});
+
+                                console.log('http: renombrando nota');
                                 const response = await encryptHttpCall('/renameNote',
                                 {
                                     encrypt:

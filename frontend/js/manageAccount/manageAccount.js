@@ -50,7 +50,9 @@ async function start()
     theOtherSecretThing = getSpecificCookie('_pswrd');
     saveNotesLocally = getSpecificCookie('_localCopy');
 
-    if([theSecretThingThatNobodyHaveToKnow, saveNotesLocally, theOtherSecretThing].includes(null))
+    if([theSecretThingThatNobodyHaveToKnow, saveNotesLocally, theOtherSecretThing].includes(null)
+    || [theSecretThingThatNobodyHaveToKnow, saveNotesLocally, theOtherSecretThing].includes(undefined)
+    || [theSecretThingThatNobodyHaveToKnow, saveNotesLocally, theOtherSecretThing].includes(''))
     {
         loadingScreen.hidden = true;
         floatingWindow(

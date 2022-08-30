@@ -110,6 +110,7 @@ menuOnlineLogOut.addEventListener('click', async function()
 
     try
     {
+        console.log('http: cerrando sesión');
         const response = await axios.post(`${path}/logout`, {key: theSecretThingThatNobodyHasToKnow});
         if(response.data.ok) console.log('Sesión cerrada');
     }

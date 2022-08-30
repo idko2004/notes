@@ -67,10 +67,10 @@ async function createNewNote(name)
     }
     else try
     {
-        //const response = await axios.post(`${path}/createNewNote`, {key: theSecretThingThatNobodyHasToKnow, notename: name});
         noteName.innerText = getText('creatingNote');
         textArea.value = '';
     
+        console.log('http: creando nota');
         const response = await encryptHttpCall('/createNewNote',
         {
             encrypt:

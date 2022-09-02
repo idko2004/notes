@@ -25,14 +25,15 @@
         <link rel='stylesheet' type='text/css' href='css/manageAccount.css'>
         <link rel="shorcut icon" type="image/svg" href="img/favicon.svg">
 
+        <script defer src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"> </script>
+
         <script>let titleTextIDLang = 'createAccountNotes';</script>
         <script defer src="js/hash.js"></script>
         <script defer src="js/localStorage.js"></script>
         <script defer src="js/language.js"></script>
         <script defer src="js/cookies.js"></script>
         <script defer src="js/floatingWindow.js"></script>
-        <script defer src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"> </script>
         <script defer src="js/crypto.js"></script>
         <script defer src="js/createAccount/fieldsAreValid.js"></script>
         <script defer src="js/createAccount/emailCode.js"></script>
@@ -53,7 +54,6 @@
             <div class="container">
                 <div id="mainMenu" class="openMenu">
                     <h1 class="text" txt="createAccount"></h1>
-                    <p>
                         <section>
                             <h2 class="text" txt="username"></h2>
                             <b><p id="usernameText"></p></b>
@@ -74,12 +74,10 @@
                             <button class="greenButton text" id="continueButton" txt="continue"></button>
                             <button class="greenButton text" id="cancelButton" txt="cancel"></button>
                         </section>
-                    </p>
                 </div>
 
                 <div id="emailCodeMenu" hidden>
                     <h1 class="text" txt="checkYourEmail"></h1>
-                    <p>
                         <section>
                             <span class="text" txt="codeWeSent"></span>
                             <b><span id="changeDataEmailSent">someone@email.com</span></b>
@@ -92,9 +90,7 @@
                         <section>
                             <button class="greenButton text" id="changeDataCancelCodeButton" txt="cancel"></button>
                         </section>
-                    </p>
                 </div>
-
             </div>
         </div>
 

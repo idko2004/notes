@@ -25,14 +25,15 @@
         <link rel='stylesheet' type='text/css' href='css/manageAccount.css'>
         <link rel="shorcut icon" type="image/svg" href="img/favicon.svg">
 
+        <script defer src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"> </script>
+
         <script>let titleTextIDLang = 'manageAccountNotes';</script>
         <script defer src="js/hash.js"></script>
         <script defer src="js/localStorage.js"></script>
         <script defer src="js/language.js"></script>
         <script defer src="js/cookies.js"></script>
         <script defer src="js/floatingWindow.js"></script>
-        <script defer src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"> </script>
         <script defer src="js/crypto.js"></script>
         <script defer src="js/manageAccount/manageAccount.js"></script>
         <script defer src="js/manageAccount/changeDataMenu.js"></script>
@@ -57,7 +58,6 @@
             <div class="container">
                 <div id="mainMenu" class="openMenu" hidden>
                     <h1 class="text" txt="manageAccount" id="manageAccountText"></h1>
-                    <p>
                         <section>
                             <button class="greenButton text" id="toChangeLanguageMenuButton" txt="changeLanguage2"></button>
                             <button class="greenButton text" id="toChangeColorTheme" txt="changeColorTheme"></button>
@@ -89,12 +89,10 @@
                         <section>
                             <button class='greenButton text' id="goBackToNotes" txt="saveAndExit"></button>
                         </section>
-                    </p>
                 </div>
 
                 <div id="changeLanguageMenu" hidden>
                     <h1 class="text" txt="changeLanguage"></h1>
-                    <p>
                         <section>
                             <button class="greenButton" id="changeLanguageButton_es">Español</button>
                             <button class="greenButton" id="changeLanguageButton_en">English</button>
@@ -102,12 +100,10 @@
                         <section>
                             <button class="greenButton text" id="changeLanguageButton_cancel" txt="cancel"></button>
                         </section>
-                    </p>
                 </div>
 
                 <div id="changeColorThemeMenu" hidden>
                     <h1 class="text" txt="changeColorTheme"></h1>
-                    <p>
                         <section>
                             <button class="greenButton text" id="changeColorTheme_light" txt="lightTheme"></button>
                             <button class="greenButton text" id="changeColorTheme_dark" txt="darkTheme"></button>
@@ -115,12 +111,10 @@
                         <section>
                             <button class="greenButton text" id="changeColorTheme_cancel" txt="cancel"></button>
                         </section>
-                    </p>
                 </div>
 
                 <div id="localCopyMenu" hidden>
                     <h1 class="text" txt="localCopySettings"></h1>
-                    <p>
                         <section>
                             <p class="text" txt="localCopyText1"></p>
                             <p class="text" txt="localCopyText2"></p>
@@ -137,12 +131,10 @@
                         <section>
                             <button class="greenButton text" id="localCopyCancelButton" txt="cancel"></button>
                         </section>
-                    </p>
                 </div>
 
                 <div id="changeDataMenu" hidden>
                     <h1 class="text" txt="modifyData"></h1>
-                    <p>
                         <section>
                             <h2 class="text" txt="username"></h2>
                             <p><input type="text" id="changeUsernameField" placeholder=""></p>
@@ -160,12 +152,10 @@
                             <button class="greenButton text" id="saveChangeDataMenu" txt="saveChanges"></button>
                             <button class="greenButton text" id="goBackChangeDataMenu" txt="cancel"></button>
                         </section>
-                    </p>
                 </div>
 
                 <div id="changeDataEmailCodeMenu" hidden>
                     <h1 class="text" txt="checkYourEmail"></h1>
-                    <p>
                         <section>
                             <span class="text" txt="codeWeSent"></span>
                             <b><span id="changeDataEmailSent"></span></b>
@@ -175,12 +165,10 @@
                             <p><input type="text" id="changeDataConfirmCode" placeholder="A1B2C" maxlength="5"></p>
                             <button class="greenButton text" id="changeDataConfirmCodeButton" txt="verify"></button>
                         </section>
-                    </p>
                 </div>
 
                 <div id="logOutInAllMenu" hidden>
                     <h1 class="text" txt="logOutInAll"></h1>
-                    <p>
                         <section>
                             <h2 class="text" txt="logOutAllQ"></h2>
                             <span class="text" txt="logOutAllQ2"></span>
@@ -191,12 +179,10 @@
                         <section>
                             <button class="greenButton text" id="logOutInAllCancelButton" txt="cancel"></button>
                         </section>
-                    </p>
                 </div>
 
                 <div id="deleteAccountMenu" hidden>
                     <h1 class="text" txt="deleteAccount"></h1>
-                    <p>
                         <section>
                             <h2 class="text" txt="doYouWantToDeleteYourAccount"></h2>
                             <p class="text" txt="deleteAccountText1"></p>
@@ -206,12 +192,10 @@
                         <section>
                             <button class="greenButton text" id="goBackDeleteAccountMenu" txt="cancel"></button>
                         </section>
-                    </p>
                 </div>
 
                 <div id="deleteAccountEmailCodeMenu" hidden>
                     <h1 class="text" txt="checkYourEmail"></h1>
-                    <p>
                         <section>
                             <span class="text" txt="deleteAccountText3"></span>
                             <b><span id="deleteAccountEmailSent">someone@email.com</span></b>
@@ -221,7 +205,6 @@
                             <p><input type="text" id="deleteAccountCodeInput" placeholder="A1B2C" maxlength="5"></p>
                             <button class="greenButton text" id="confirmDeleteAccount" txt="verify"></button>
                         </section>
-                    </p>
                 </div>
             </div>
         </div>

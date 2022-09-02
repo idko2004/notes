@@ -813,6 +813,11 @@ const allTexts =
     {
         es: 'Vuelve a elegir la opción "Crear cuenta" en la página principal.',
         en: 'Choose again the "Create account" option on the main page.'
+    },
+    reenter_manageAccount:
+    {
+        es: 'Vuelve a elegir la opción "Preferencias" en la página principal.',
+        en: 'Choose again the "Preferences" option on the main page.'
     }
 }
 

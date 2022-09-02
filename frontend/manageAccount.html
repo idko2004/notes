@@ -56,14 +56,14 @@
             </div>
             <div class="container">
                 <div id="mainMenu" class="openMenu" hidden>
-                    <h1 class="text" txt="manageAccount">Gestionar cuenta</h1>
+                    <h1 class="text" txt="manageAccount" id="manageAccountText">Gestionar cuenta</h1>
                     <p>
                         <section>
                             <button class="greenButton text" id="toChangeLanguageMenuButton" txt="changeLanguage2">Cambiar idioma (language)</button>
                             <button class="greenButton text" id="toChangeColorTheme" txt="changeColorTheme">Change color theme</button>
                             <button class="greenButton text" id="toLocalCopyMenuButton" txt="localCopySettings">Configuración de copias locales</button>
                         </section>
-                        <section>
+                        <section id="modifyUserDataSection">
                             <p>
                                 <span class="text" txt="username">Nombre de usuario</span>:<br>
                                 <b><span id='usernameSpace'></span></b>
@@ -78,7 +78,7 @@
                             </p>
                             <button class='greenButton text' id="toChangeDataMenuButton" txt="modifyThisData">Modificar estos datos</button>
                         </section>
-                        <section>
+                        <section id="logOutSection">
                             <button class='greenButton text' id="logOutInAllMenuButton" txt="logOutInAll">Cerrar sesión en todos los dispositivos</button>
                             <button class='greenButton text' id="deleteAccountMenuButton" txt="deleteAccount">Eliminar cuenta</button>
                         </section>

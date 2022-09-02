@@ -113,7 +113,10 @@ if([deviceID, idPassword].includes(null))
             text: getText('ok'),
             callback: function()
             {
-                location.href = 'index.html';
+                closeWindow(function()
+                {
+                    location.href = 'index.html';
+                })
             }
         }
     });

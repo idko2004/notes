@@ -12,6 +12,7 @@ const thingsChanged =
     colorTheme: undefined
 }
 
+let isLocalMode;
 let actualMenu;
 //  main
 //  changeData
@@ -50,110 +51,130 @@ async function start()
     theOtherSecretThing = getSpecificCookie('_pswrd');
     saveNotesLocally = getSpecificCookie('_localCopy');
 
-    if([theSecretThingThatNobodyHaveToKnow, saveNotesLocally, theOtherSecretThing].includes(null)
-    || [theSecretThingThatNobodyHaveToKnow, saveNotesLocally, theOtherSecretThing].includes(undefined)
-    || [theSecretThingThatNobodyHaveToKnow, saveNotesLocally, theOtherSecretThing].includes(''))
+    //Cargar el modo local
+    if(theSecretThingThatNobodyHaveToKnow === 'local')
     {
-        loadingScreen.hidden = true;
-        floatingWindow(
-        {
-            title: 'Vuelve a ingresar',
-            text: 'Vuelve a elegir la opción "Gestionar cuenta" en el menú',
-            button:
-            {
-                text: 'Aceptar',
-                callback: function()
-                {
-                    closeWindow(function()
-                    {
-                        location.href = 'index.html';
-                    })
-                }
-            }
-        });
-        return;
-    }
-    
-    //deleteCookie('_login');
-
-    //Comprobar que tenemos una clave válida y obtener el nombre de usuario
-    try
-    {
-        //const usernameCall = await axios.get(`${path}/getUsername`, {headers: {key: theSecretThingThatNobodyHaveToKnow}});
-        const usernameCall = await encryptHttpCall('/getUsername', {key: theSecretThingThatNobodyHaveToKnow}, theOtherSecretThing);
-        console.log(usernameCall);
-
-        if(usernameCall.data.error === 'invalidKey')
-        {
-            loadingScreen.hidden = true;
-            floatingWindow(
-            {
-                title: 'Clave no válida',
-                button:
-                {
-                    text: 'Aceptar',
-                    callback: function()
-                    {
-                        closeWindow(function()
-                        {
-                            location.href = 'index.html';
-                        })
-                    }
-                }
-            });
-            return;
-        }
-        else if(usernameCall.data.decrypt.username === undefined)
-        {
-            loadingScreen.hidden = true;
-            floatingWindow(
-            {
-                title: 'Error',
-                text: `${usernameCall.data.error}`,
-                button:
-                {
-                    text: 'Aceptar',
-                    callback: function()
-                    {
-                        closeWindow(function()
-                        {
-                            location.href = 'index.html';
-                        })
-                    }
-                }
-            });
-            return;
-        }
-
-        username = usernameCall.data.decrypt.username;
-        email = usernameCall.data.decrypt.email;
-        passwordLength = usernameCall.data.decrypt.passwordLength;
-        updateUserData();
+        isLocalMode = true;
         mainMenu.hidden = false;
         loadingScreen.hidden = true;
         mainScreen.hidden = false;
         actualMenu = 'main';
+
+        //Ocultar menuses que no tienen que estar
+        document.getElementById('modifyUserDataSection').hidden = true;
+        document.getElementById('logOutSection').hidden = true;
+
+        document.getElementById('toLocalCopyMenuButton').hidden = true;
+
+        document.getElementById('manageAccountText').innerText = getText('preferences');
     }
-    catch
+    //Cargar el modo online
+    else
     {
-        loadingScreen.hidden = true;
-        floatingWindow(
+        isLocalMode = false;
+
+        if([theSecretThingThatNobodyHaveToKnow, saveNotesLocally, theOtherSecretThing].includes(null)
+        || [theSecretThingThatNobodyHaveToKnow, saveNotesLocally, theOtherSecretThing].includes(undefined)
+        || [theSecretThingThatNobodyHaveToKnow, saveNotesLocally, theOtherSecretThing].includes(''))
         {
-            title: 'Vaya...',
-            text: 'Parece que el servidor se ha caído, prueba a intentar de nuevo dentro de un rato.',
-            button:
+            loadingScreen.hidden = true;
+            floatingWindow(
             {
-                text: 'Aceptar',
-                callback: function()
+                title: getText('reenter'),
+                text: getText('reenter_manageAccount'),
+                button:
                 {
-                    closeWindow(function()
+                    text: getText('ok'),
+                    callback: function()
                     {
-                        location.href = 'index.html';
-                    })
+                        closeWindow(function()
+                        {
+                            location.href = 'index.html';
+                        })
+                    }
                 }
+            });
+            return;
+        }
+
+        //Comprobar que tenemos una clave válida y obtener el nombre de usuario
+        try
+        {
+            const usernameCall = await encryptHttpCall('/getUsername', {key: theSecretThingThatNobodyHaveToKnow}, theOtherSecretThing);
+            console.log(usernameCall);
+
+            if(usernameCall.data.error === 'invalidKey')
+            {
+                loadingScreen.hidden = true;
+                floatingWindow(
+                {
+                    title: 'Clave no válida',
+                    button:
+                    {
+                        text: 'Aceptar',
+                        callback: function()
+                        {
+                            closeWindow(function()
+                            {
+                                location.href = 'index.html';
+                            })
+                        }
+                    }
+                });
+                return;
             }
-        });
-        return;
+            else if(usernameCall.data.decrypt.username === undefined)
+            {
+                loadingScreen.hidden = true;
+                floatingWindow(
+                {
+                    title: 'Error',
+                    text: `${usernameCall.data.error}`,
+                    button:
+                    {
+                        text: 'Aceptar',
+                        callback: function()
+                        {
+                            closeWindow(function()
+                            {
+                                location.href = 'index.html';
+                            })
+                        }
+                    }
+                });
+                return;
+            }
+
+            username = usernameCall.data.decrypt.username;
+            email = usernameCall.data.decrypt.email;
+            passwordLength = usernameCall.data.decrypt.passwordLength;
+            updateUserData();
+            mainMenu.hidden = false;
+            loadingScreen.hidden = true;
+            mainScreen.hidden = false;
+            actualMenu = 'main';
+        }
+        catch
+        {
+            loadingScreen.hidden = true;
+            floatingWindow(
+            {
+                title: 'Vaya...',
+                text: 'Parece que el servidor se ha caído, prueba a intentar de nuevo dentro de un rato.',
+                button:
+                {
+                    text: 'Aceptar',
+                    callback: function()
+                    {
+                        closeWindow(function()
+                        {
+                            location.href = 'index.html';
+                        })
+                    }
+                }
+            });
+            return;
+        }
     }
 }
 

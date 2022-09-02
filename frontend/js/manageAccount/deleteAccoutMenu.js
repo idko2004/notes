@@ -6,7 +6,7 @@ function updateDeleteAccountPlaceholders()
 
 document.getElementById('goBackDeleteAccountMenu').addEventListener('click', function()
 {
-    if(actualMenu !== 'deleteAccount') return;
+    if(actualMenu !== 'deleteAccount' || isLocalMode) return;
 
     let endAnimationCallback = function(e)
     {
@@ -30,7 +30,7 @@ document.getElementById('goBackDeleteAccountMenu').addEventListener('click', fun
 
 document.getElementById('deleteAccountButton').addEventListener('click', async function()
 {
-    if(actualMenu !== 'deleteAccount') return;
+    if(actualMenu !== 'deleteAccount' || isLocalMode) return;
 
     let endAnimationCallback = function(e)
     {
@@ -135,7 +135,7 @@ document.getElementById('deleteAccountButton').addEventListener('click', async f
 
 document.getElementById('confirmDeleteAccount').addEventListener('click', async function()
 {
-    if(actualMenu !== 'deleteAccountEmailCode') return;
+    if(actualMenu !== 'deleteAccountEmailCode' || isLocalMode) return;
 
     let code = document.getElementById('deleteAccountCodeInput').value.trim().toUpperCase();
     console.log(code);

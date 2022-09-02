@@ -1,6 +1,6 @@
 document.getElementById('logOutInAllOkButton').addEventListener('click', async function()
 {
-    if(actualMenu !== 'logOutInAll') return;
+    if(actualMenu !== 'logOutInAll' || isLocalMode) return;
 
     actualMenu = 'ventana';
     floatingWindow({title: getText('logginOut')});
@@ -60,7 +60,7 @@ document.getElementById('logOutInAllOkButton').addEventListener('click', async f
 
 document.getElementById('logOutInAllCancelButton').addEventListener('click', function()
 {
-    if(actualMenu !== 'logOutInAll') return;
+    if(actualMenu !== 'logOutInAll' || isLocalMode) return;
 
     let endAnimationCallback = function(e)
     {

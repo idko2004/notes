@@ -192,7 +192,7 @@ function updateUserData()
 
 document.getElementById('toChangeDataMenuButton').addEventListener('click', function()
 {
-    if(actualMenu !== 'main') return;
+    if(actualMenu !== 'main' || isLocalMode) return;
 
     let endAnimationCallback = function(e)
     {
@@ -272,7 +272,7 @@ document.getElementById('toChangeColorTheme').addEventListener('click', function
 
 document.getElementById('toLocalCopyMenuButton').addEventListener('click', function()
 {
-    if(actualMenu !== 'main') return;
+    if(actualMenu !== 'main' || isLocalMode) return;
 
     let endAnimationCallback = function(e)
     {
@@ -300,7 +300,7 @@ document.getElementById('toLocalCopyMenuButton').addEventListener('click', funct
 
 document.getElementById('logOutInAllMenuButton').addEventListener('click', function()
 {
-    if(actualMenu !== 'main') return;
+    if(actualMenu !== 'main' || isLocalMode) return;
 
     let endAnimationCallback = function(e)
     {
@@ -325,7 +325,7 @@ document.getElementById('logOutInAllMenuButton').addEventListener('click', funct
 
 document.getElementById('deleteAccountMenuButton').addEventListener('click', function()
 {
-    if(actualMenu !== 'main') return;
+    if(actualMenu !== 'main' || isLocalMode) return;
 
     let endAnimationCallback = function(e)
     {

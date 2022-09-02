@@ -15,7 +15,7 @@ function updateDataMenuPlaceholders()
 
 document.getElementById('goBackChangeDataMenu').addEventListener('click', function()
 {
-    if(actualMenu !== 'changeData') return;
+    if(actualMenu !== 'changeData' || isLocalMode) return;
 
     let endAnimationCallback = function(e)
     {
@@ -46,7 +46,7 @@ document.getElementById('goBackChangeDataMenu').addEventListener('click', functi
 
 document.getElementById('saveChangeDataMenu').addEventListener('click', function()
 {
-    if(actualMenu !== 'changeData') return;
+    if(actualMenu !== 'changeData' || isLocalMode) return;
 
     let somethingChanged = false;
 
@@ -219,6 +219,8 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', function
                 {
                     closeWindow(async function()
                     {
+                        if(isLocalMode) return;
+
                         let endAnimationCallback = function(e)
                         {
                             if(e.animationName !== 'closeMenuAnimation') return;
@@ -378,7 +380,7 @@ changeDataConfirmCodeField.addEventListener('keyup', function(e)
 
 async function changeDataComprobeCode()
 {
-    if(actualMenu !== 'changeDataEmailCode') return;
+    if(actualMenu !== 'changeDataEmailCode' || isLocalMode) return;
 
     const code = changeDataConfirmCodeField.value;
 

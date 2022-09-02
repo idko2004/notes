@@ -17,7 +17,7 @@ function updateLocalCopyEnabledText()
 
 document.getElementById('localCopyChangeButton').addEventListener('click', function()
 {
-    if(actualMenu !== 'localCopy') return;
+    if(actualMenu !== 'localCopy' || isLocalMode) return;
 
     let endAnimationCallback = function(e)
     {
@@ -52,7 +52,7 @@ document.getElementById('localCopyChangeButton').addEventListener('click', funct
 
 document.getElementById('localCopyCancelButton').addEventListener('click', function()
 {
-    if(actualMenu !== 'localCopy') return;
+    if(actualMenu !== 'localCopy' || isLocalMode) return;
 
     let endAnimationCallback = function(e)
     {

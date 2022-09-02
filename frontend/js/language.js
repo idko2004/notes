@@ -818,6 +818,11 @@ const allTexts =
     {
         es: 'Vuelve a elegir la opción "Preferencias" en la página principal.',
         en: 'Choose again the "Preferences" option on the main page.'
+    },
+    deleteConfigurationData:
+    {
+        es: 'Borrar datos de configuración',
+        en: 'Delete configuration data'
     }
 }
 
@@ -831,7 +836,7 @@ function getText(textID, replaceArray)
     if(txtObj === undefined)
     {
         console.error('Error al obtener textos:', textID, actualLanguage);
-        return undefined;
+        return textID;
     }
     
     let text = txtObj[actualLanguage];

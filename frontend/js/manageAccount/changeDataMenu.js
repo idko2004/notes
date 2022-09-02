@@ -245,7 +245,6 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', function
                         //Hacer la llamada al servidor para actualizar a los nuevos datos, generar un código y enviar el email
                         try
                         {
-                            //const response = await axios.post(`${path}/createAccountEmailCode`,{email: newEmail, password: newPassword, username: newUsername, operation: 'updateAccount', oldemail: email});
                             const response = await encryptHttpCall('/createAccountEmailCode',
                             {
                                 encrypt:
@@ -400,12 +399,10 @@ async function changeDataComprobeCode()
     }
 
     actualMenu = 'changeDataComprobingCode';
-    //floatingWindow({title: getText('waitAMoment')});
     document.getElementById('changeDataConfirmCodeButton').innerText = getText('waitAMoment');
 
     try
     {
-        //const response = await axios.post(`${path}/updateAccountData`,{code, key:theSecretThingThatNobodyHaveToKnow});
         const response = await encryptHttpCall('/updateAccountData',
         {
             encrypt:

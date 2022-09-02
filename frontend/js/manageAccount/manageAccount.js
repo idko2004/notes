@@ -108,10 +108,11 @@ async function start()
                 loadingScreen.hidden = true;
                 floatingWindow(
                 {
-                    title: 'Clave no válida',
+                    title: getText('reenter'),
+                    text: getText('reenter_manageAccount'),
                     button:
                     {
-                        text: 'Aceptar',
+                        text: getText('ok'),
                         callback: function()
                         {
                             closeWindow(function()
@@ -128,11 +129,11 @@ async function start()
                 loadingScreen.hidden = true;
                 floatingWindow(
                 {
-                    title: 'Error',
-                    text: `${usernameCall.data.error}`,
+                    title: getText('somethingWentWrong'),
+                    text: `${getText('errorCode')}: ${usernameCall.data.error}`,
                     button:
                     {
-                        text: 'Aceptar',
+                        text: getText('ok'),
                         callback: function()
                         {
                             closeWindow(function()
@@ -159,11 +160,11 @@ async function start()
             loadingScreen.hidden = true;
             floatingWindow(
             {
-                title: 'Vaya...',
-                text: 'Parece que el servidor se ha caído, prueba a intentar de nuevo dentro de un rato.',
+                title: getText('ups'),
+                text: getText('serverDown'),
                 button:
                 {
-                    text: 'Aceptar',
+                    text: getText('ok'),
                     callback: function()
                     {
                         closeWindow(function()

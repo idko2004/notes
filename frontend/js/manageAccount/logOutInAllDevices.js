@@ -1,59 +1,55 @@
-document.getElementById('logOutInAllOkButton').addEventListener('click', async function()
+document.getElementById('logOutInAllOkButton').addEventListener('click', async function(e)
 {
     if(actualMenu !== 'logOutInAll' || isLocalMode) return;
 
     actualMenu = 'ventana';
-    floatingWindow({title: getText('logginOut')});
+    e.target.innerText = getText('logginOut');
 
     try
     {
         const response = await axios.post(`${path}/logoutalldevices`, {key: theSecretThingThatNobodyHaveToKnow});
-        closeWindow(function()
+        if(response.data.ok && response.data.error === undefined)
         {
-            if(response.data.ok && response.data.error === undefined)
-            {
-                //Ha salido bien
-                location.href = 'index.html#logout'
-            }
-            else
-            {
-                //floating window con error code
-                floatingWindow(
-                {
-                    title: getText('somethingWentWrong'),
-                    text: `${getText('errorCode')}:${response.data.error}`,
-                    button:
-                    {
-                        text: getText('ok'),
-                        callback: function()
-                        {
-                            actualMenu = 'logOutInAll';
-                            closeWindow();
-                        }
-                    }
-                });
-            }
-        });
-    }
-    catch
-    {
-        //Server caído
-        closeWindow(function()
+            //Ha salido bien
+            location.href = 'index.html#logout'
+        }
+        else
         {
+            //floating window con error code
             floatingWindow(
             {
-                title: getText('ups'),
-                text: getText('serverDown'),
+                title: getText('somethingWentWrong'),
+                text: `${getText('errorCode')}:${response.data.error}`,
                 button:
                 {
                     text: getText('ok'),
                     callback: function()
                     {
                         actualMenu = 'logOutInAll';
+                        e.target.innerText = getText('logOutInAll');
                         closeWindow();
                     }
                 }
             });
+        }
+    }
+    catch
+    {
+        //Server caído
+        floatingWindow(
+        {
+            title: getText('ups'),
+            text: getText('serverDown'),
+            button:
+            {
+                text: getText('ok'),
+                callback: function()
+                {
+                    actualMenu = 'logOutInAll';
+                    e.target.innerText = getText('logOutInAll');
+                    closeWindow();
+                }
+            }
         });
     }
 });

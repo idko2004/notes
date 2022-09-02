@@ -52,55 +52,55 @@
 
         <div id='mainScreen' hidden>
             <div id='mainScreenNotesBigName'>
-                <b class="text" txt="noteAppName">Notas</b>
+                <b class="text" txt="noteAppName"></b>
             </div>
             <div class="container">
                 <div id="mainMenu" class="openMenu" hidden>
-                    <h1 class="text" txt="manageAccount" id="manageAccountText">Gestionar cuenta</h1>
+                    <h1 class="text" txt="manageAccount" id="manageAccountText"></h1>
                     <p>
                         <section>
-                            <button class="greenButton text" id="toChangeLanguageMenuButton" txt="changeLanguage2">Cambiar idioma (language)</button>
-                            <button class="greenButton text" id="toChangeColorTheme" txt="changeColorTheme">Change color theme</button>
-                            <button class="greenButton text" id="toLocalCopyMenuButton" txt="localCopySettings">Configuración de copias locales</button>
+                            <button class="greenButton text" id="toChangeLanguageMenuButton" txt="changeLanguage2"></button>
+                            <button class="greenButton text" id="toChangeColorTheme" txt="changeColorTheme"></button>
+                            <button class="greenButton text" id="toLocalCopyMenuButton" txt="localCopySettings"></button>
                         </section>
                         <section>
-                            <button class="greenButton text" txt="deleteConfigurationData">Borrar datos de configuración</button>
-                            <button class="greenButton text" txt="menu_eraseAll">Borrar todos los datos</button>
+                            <button class="greenButton text" txt="deleteConfigurationData"></button>
+                            <button class="greenButton text" txt="menu_eraseAll"></button>
                         </section>
                         <section id="modifyUserDataSection">
                             <p>
-                                <span class="text" txt="username">Nombre de usuario</span>:<br>
+                                <span class="text" txt="username"></span>:<br>
                                 <b><span id='usernameSpace'></span></b>
                             </p>
                             <p>
-                                <span class="text" txt="email">Correo electrónico</span>:<br>
+                                <span class="text" txt="email"></span>:<br>
                                 <b><span id="emailSpace"></span></b>
                             </p>
                             <p>
-                                <span class="text" txt="password">Contraseña</span>:<br>
+                                <span class="text" txt="password"></span>:<br>
                                 <b><span id="passwordSpace"></span></b>
                             </p>
-                            <button class='greenButton text' id="toChangeDataMenuButton" txt="modifyThisData">Modificar estos datos</button>
+                            <button class='greenButton text' id="toChangeDataMenuButton" txt="modifyThisData"></button>
                         </section>
                         <section id="logOutSection">
-                            <button class='greenButton text' id="logOutInAllMenuButton" txt="logOutInAll">Cerrar sesión en todos los dispositivos</button>
-                            <button class='greenButton text' id="deleteAccountMenuButton" txt="deleteAccount">Eliminar cuenta</button>
+                            <button class='greenButton text' id="logOutInAllMenuButton" txt="logOutInAll"></button>
+                            <button class='greenButton text' id="deleteAccountMenuButton" txt="deleteAccount"></button>
                         </section>
                         <section>
-                            <button class='greenButton text' id="goBackToNotes" txt="saveAndExit">Volver</button>
+                            <button class='greenButton text' id="goBackToNotes" txt="saveAndExit"></button>
                         </section>
                     </p>
                 </div>
 
                 <div id="changeLanguageMenu" hidden>
-                    <h1 class="text" txt="changeLanguage">Cambiar idioma</h1>
+                    <h1 class="text" txt="changeLanguage"></h1>
                     <p>
                         <section>
                             <button class="greenButton" id="changeLanguageButton_es">Español</button>
                             <button class="greenButton" id="changeLanguageButton_en">English</button>
                         </section>
                         <section>
-                            <button class="greenButton text" id="changeLanguageButton_cancel" txt="cancel">Cancelar</button>
+                            <button class="greenButton text" id="changeLanguageButton_cancel" txt="cancel"></button>
                         </section>
                     </p>
                 </div>
@@ -119,21 +119,13 @@
                 </div>
 
                 <div id="localCopyMenu" hidden>
-                    <h1 class="text" txt="localCopySettings">Configuración de copias locales</h1>
+                    <h1 class="text" txt="localCopySettings"></h1>
                     <p>
                         <section>
-                            <p class="text" txt="localCopyText1">
-                                Cuando las copias locales están activadas, se guarda una copia de tus notas que puede ser vista en el modo local. Así, en el caso de que los servidores dejen de estar disponibles, o el dispositivo no disponga de internet, las notas puedan seguir siendo guardadas.
-                            </p>
-                            <p class="text" txt="localCopyText2">
-                                Sin embargo, esto implica que tus notas pueden ser visibles incluso al cerrar sesión mediante el modo local.
-                            </p>
-                            <p class="text" txt="localCopyText3">
-                                Al desactivar las copias locales ya no se guardarán tus notas en el modo local.
-                            </p>
-                            <p class="text" txt="localCopyText4">
-                                Si quieres mantener las copias locales, pero no quieres que tus notas sean accesibles al cerrar sesión, puedes borrar todas las notas en el modo local luego de haber cerrado la sesión de tu cuenta.
-                            </p>
+                            <p class="text" txt="localCopyText1"></p>
+                            <p class="text" txt="localCopyText2"></p>
+                            <p class="text" txt="localCopyText3"></p>
+                            <p class="text" txt="localCopyText4"></p>
                         </section>
                         <section>
                             <p>
@@ -143,95 +135,91 @@
                             <button class="greenButton" id="localCopyChangeButton"></button>
                         </section>
                         <section>
-                            <button class="greenButton text" id="localCopyCancelButton" txt="cancel">Cancelar</button>
+                            <button class="greenButton text" id="localCopyCancelButton" txt="cancel"></button>
                         </section>
                     </p>
                 </div>
 
                 <div id="changeDataMenu" hidden>
-                    <h1 class="text" txt="modifyData">Modificar datos</h1>
+                    <h1 class="text" txt="modifyData"></h1>
                     <p>
                         <section>
-                            <h2 class="text" txt="username">Nombre de usuario</h2>
+                            <h2 class="text" txt="username"></h2>
                             <p><input type="text" id="changeUsernameField" placeholder=""></p>
                         </section>
                         <section>
-                            <h2 class="text" txt="email">Correo electrónico</h2>
+                            <h2 class="text" txt="email"></h2>
                             <p><input type="text" id="changeEmailField" placeholder=""></p>
                         </section>
                         <section>
-                            <h2 class="text" txt="password">Contraseña</h2>
+                            <h2 class="text" txt="password"></h2>
                             <p><input type="password" id="changePasswordField" placeholder=""></p>
                             <p><input type="password" id="comprobePasswordField" placeholder="Comprueba la contraseña"></p>
                         </section>
                         <section>
-                            <button class="greenButton text" id="saveChangeDataMenu" txt="saveChanges">Guardar cambios</button>
-                            <button class="greenButton text" id="goBackChangeDataMenu" txt="cancel">Cancelar</button>
+                            <button class="greenButton text" id="saveChangeDataMenu" txt="saveChanges"></button>
+                            <button class="greenButton text" id="goBackChangeDataMenu" txt="cancel"></button>
                         </section>
                     </p>
                 </div>
 
                 <div id="changeDataEmailCodeMenu" hidden>
-                    <h1 class="text" txt="checkYourEmail">Revisa tu correo</h1>
+                    <h1 class="text" txt="checkYourEmail"></h1>
                     <p>
                         <section>
-                            <span class="text" txt="codeWeSent">Hemos enviado un código al correo</span>
-                            <b><span id="changeDataEmailSent">someone@email.com</span></b>
+                            <span class="text" txt="codeWeSent"></span>
+                            <b><span id="changeDataEmailSent"></span></b>
                         </section>
                         <section>
-                            <h2 class="text" txt="enterTheCode">Ingresa el código</h2>
+                            <h2 class="text" txt="enterTheCode"></h2>
                             <p><input type="text" id="changeDataConfirmCode" placeholder="A1B2C" maxlength="5"></p>
-                            <button class="greenButton text" id="changeDataConfirmCodeButton" txt="verify">Comprobar</button>
+                            <button class="greenButton text" id="changeDataConfirmCodeButton" txt="verify"></button>
                         </section>
                     </p>
                 </div>
 
                 <div id="logOutInAllMenu" hidden>
-                    <h1 class="text" txt="logOutInAll">Cerrar sesión en todos los dispositivos</h1>
+                    <h1 class="text" txt="logOutInAll"></h1>
                     <p>
                         <section>
-                            <h2 class="text" txt="logOutAllQ">¿Quieres cerrar sesión en todos tus dispositivos?</h2>
-                            <span class="text" txt="logOutAllQ2">Tendrás que volver a iniciar sesión en los dispositivos que quieras usar, incluido este.</span>
+                            <h2 class="text" txt="logOutAllQ"></h2>
+                            <span class="text" txt="logOutAllQ2"></span>
                             <p>
-                                <button class="greenButton text" id="logOutInAllOkButton" txt="logOutInAll">Cerrar sesión en todos los dispositivos</button>
+                                <button class="greenButton text" id="logOutInAllOkButton" txt="logOutInAll"></button>
                             </p>
                         </section>
                         <section>
-                            <button class="greenButton text" id="logOutInAllCancelButton" txt="cancel">Cancelar</button>
+                            <button class="greenButton text" id="logOutInAllCancelButton" txt="cancel"></button>
                         </section>
                     </p>
                 </div>
 
                 <div id="deleteAccountMenu" hidden>
-                    <h1>Borrar cuenta</h1>
+                    <h1 class="text" txt="deleteAccount"></h1>
                     <p>
                         <section>
-                            <h2>¿Quieres borrar tu cuenta?</h2>
-                            <p>
-                                Al borrar tu cuenta se borrarán todas tus notas y ya no podrás acceder a ellas de forma online.
-                            </p>
-                            <p>
-                                Todos los dispositivos en los que hayas iniciado sesión seguirán teniendo copias de las notas que hayas editado en ese dispositivo y pueden ser vistas en el modo local. De igual forma es recomendable descargar las notas que desee conservar.
-                            </p>
-                            <button class="greenButton" id="deleteAccountButton">Borrar la cuenta accountname</button>
+                            <h2 class="text" txt="doYouWantToDeleteYourAccount"></h2>
+                            <p class="text" txt="deleteAccountText1"></p>
+                            <p class="text" txt="deleteAccountText2"></p>
+                            <button class="greenButton" id="deleteAccountButton"></button>
                         </section>
                         <section>
-                            <button class="greenButton text" id="goBackDeleteAccountMenu" txt="cancel">Cancelar</button>
+                            <button class="greenButton text" id="goBackDeleteAccountMenu" txt="cancel"></button>
                         </section>
                     </p>
                 </div>
 
                 <div id="deleteAccountEmailCodeMenu" hidden>
-                    <h1 class="text" txt="checkYourEmail">Revisa tu correo</h1>
+                    <h1 class="text" txt="checkYourEmail"></h1>
                     <p>
                         <section>
-                            <span>Para confirmar el cierre de tu cuenta, ingresa el código que enviamos al correo electrónico </span>
+                            <span class="text" txt="deleteAccountText3"></span>
                             <b><span id="deleteAccountEmailSent">someone@email.com</span></b>
                         </section>
                         <section>
-                            <h2 class="text" txt="enterTheCode">Ingresa el código</h2>
+                            <h2 class="text" txt="enterTheCode"></h2>
                             <p><input type="text" id="deleteAccountCodeInput" placeholder="A1B2C" maxlength="5"></p>
-                            <button class="greenButton text" id="confirmDeleteAccount" txt="verify">Comprobar</button>
+                            <button class="greenButton text" id="confirmDeleteAccount" txt="verify"></button>
                         </section>
                     </p>
                 </div>

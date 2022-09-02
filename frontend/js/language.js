@@ -823,6 +823,26 @@ const allTexts =
     {
         es: 'Borrar datos de configuración',
         en: 'Delete configuration data'
+    },
+    doYouWantToDeleteYourAccount:
+    {
+        es: '¿Quieres borrar tu cuenta?',
+        en: 'Do you want to delete your account?'
+    },
+    deleteAccountText1:
+    {
+        es: 'Al borrar tu cuenta se borrarán todas tus notas y ya no podrás acceder a ellas de forma online.',
+        en: 'Deleting your account will delete all your notes and you will no longer be able to access them online.'
+    },
+    deleteAccountText2:
+    {
+        es: 'Todos los dispositivos en los que hayas iniciado sesión seguirán teniendo copias de las notas que hayas editado en ese dispositivo y pueden ser vistas en el modo local. De igual forma es recomendable descargar las notas que desee conservar.',
+        en: 'All devices on which you are logged in will still have copies of the notes you have edited on that device and can be viewed in local mode. It is also advisable to download any notes you wish to keep.'
+    },
+    deleteAccountText3:
+    {
+        es: 'Para confirmar el cierre de tu cuenta, ingresa el código que enviamos al correo electrónico ',
+        en: 'To confirm the closure of your account, please enter the code we sent to the email address '
     }
 }
 

@@ -166,7 +166,6 @@ document.getElementById('confirmDeleteAccount').addEventListener('click', async 
     try
     {
         console.log(code);
-        //const response = await axios.post(`${path}/deleteAccount`, {code, key: theSecretThingThatNobodyHaveToKnow});
         const response = await encryptHttpCall('/deleteAccount',
         {
             key: theSecretThingThatNobodyHaveToKnow,

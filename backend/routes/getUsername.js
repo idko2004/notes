@@ -39,6 +39,12 @@ module.exports = function(app)
             console.log(logID, 'invalidKey');
             return;
         }
+        if(keyData === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, obteniendo keyData');
+            return;
+        }
         
         //Buscar el email en la base de datos
         const email = keyData.email;
@@ -63,6 +69,12 @@ module.exports = function(app)
         {
             res.status(200).send({error: 'userNull'});
             console.log(logID, 'userNull');
+            return;
+        }
+        if(element === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, obteniendo usuario');
             return;
         }
 

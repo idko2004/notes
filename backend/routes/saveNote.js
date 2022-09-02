@@ -47,6 +47,12 @@ module.exports = function(app)
             console.log(logID, 'invalidKey');
             return;
         }
+        if(keyData === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, obteniendo keyData');
+            return;
+        }
 
         const email = keyData.email;
         if(email === undefined)
@@ -85,6 +91,12 @@ module.exports = function(app)
             console.log(logID, 'noteDontExist');
             return;
         }
+        if(note === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, obteniendo nota');
+            return;
+        }
 
         //Comprobamos si el usuario es dueño de esa nota
         if(note.owner !== email)
@@ -99,6 +111,12 @@ module.exports = function(app)
 
         //Guardamos la nota en la base de datos
         const result = await database.updateElement('notes', {id: noteID}, note);
+        if(result === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, guardando nota');
+            return;
+        }
 
         //Enviamos la señal de que la nota fue guardada
         res.status(200).send({result});

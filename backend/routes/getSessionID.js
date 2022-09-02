@@ -43,6 +43,12 @@ module.exports = function(app)
             console.log(logID, 'invalidPasswordCode');
             return;
         }
+        if(decryptPasswordElement === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, obteniendo clave para descifrar');
+            return;
+        }
 
         const decryptPassword = decryptPasswordElement.pswrd;
         if(decryptPassword === undefined)
@@ -73,6 +79,11 @@ module.exports = function(app)
         }
     
         const element = await database.getElement('users', {username});
+        if(element === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, obteniendo usuario');
+        }
         if(element !== null)
         {
             if(element.password === password)
@@ -90,6 +101,12 @@ module.exports = function(app)
         else
         {
             const element2 = await database.getElement('users', {email: username});
+            if(element2 === 'dbError')
+            {
+                res.status(200).send({error: 'dbError'});
+                console.log(logID, 'dbError, obteniendo usuario');
+                return;
+            }
             if(element2 !== null)
             {
                 if(element2.password === password)
@@ -120,6 +137,12 @@ module.exports = function(app)
                     let element = await database.getElement('sessionID', {key});
                     console.log(logID, 'tiene que dar null eventualmente:', element);
                     if(element === null) break;
+                    if(element === 'dbError')
+                    {
+                        res.status(200).send({error: 'dbError'});
+                        console.log(logID, 'dbError, generando key');
+                        return;
+                    }
                 }
             }
     
@@ -140,7 +163,13 @@ module.exports = function(app)
             }
 
             database.sessionIDList[key] = keyData;
-            database.createElement('sessionID', keyData);
+            const newSessionID = await database.createElement('sessionID', keyData);
+            if(newSessionID === 'dbError')
+            {
+                res.status(200).send({error: 'dbError'});
+                console.log(logID, 'dbError, guardando sessionID');
+                return;
+            }
 
             console.log(logID, 'the new password', newPassword);
             const keyEncrypted = crypto.encrypt(JSON.stringify({key: key, pswrd: newPassword}), decryptPassword);

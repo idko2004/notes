@@ -45,6 +45,12 @@ module.exports = function(app)
                 const codeExists = await database.getElement('sessionID', {code: deviceID});
                 console.log(logID, 'Eventualmente tiene que dar null:', codeExists);
                 if(codeExists === null) break;
+                if(codeExists === 'dbError')
+                {
+                    res.status(200).send({error: 'dbError'});
+                    console.log(logID, 'dbError, generando código');
+                    return;
+                }
             }
 
             //Generar una contraseña
@@ -66,7 +72,13 @@ module.exports = function(app)
             //TODO: que se puedan borrar estos objetos periódicamente
 
             //Guardar el objeto en la base de datos de sessionID
-            await database.createElement('sessionID', obj);
+            const savedCode = await database.createElement('sessionID', obj);
+            if(savedCode === 'dbError')
+            {
+                res.status(200).send({error: 'dbError'});
+                console.log(logID, 'dbError, guardando en sessionID');
+                return;
+            }
 
             //Responder al cliente con la contraseña
             res.status(200).send({secret: password, id: deviceID});
@@ -96,6 +108,12 @@ module.exports = function(app)
             //En caso de que se esté comprobando, el código debe existir en la base de datos
             const codeExists = await database.getElement('sessionID', {code});
             console.log(logID, codeExists);
+            if(codeExists === 'dbError')
+            {
+                res.status(200).send({error: 'dbError'});
+                console.log(logID, 'dbError, comprobando que el código siga existiendo');
+                return;
+            }
             if(codeExists !== null)
             {
                 res.status(200).send({stillValid: true});

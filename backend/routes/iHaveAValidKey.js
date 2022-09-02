@@ -39,6 +39,12 @@ module.exports = function(app)
             console.log(logID, 'you dont have a valid key');
             return;
         }
+        if(keyData === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, obteniendo keyData');
+            return;
+        }
         res.status(200).send({iHaveAValidKey: 'yesYouHave'});
         console.log(logID, 'yes you have a valid key');
     });

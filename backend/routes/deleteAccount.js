@@ -70,6 +70,13 @@ module.exports = function(app)
             console.log(logID, 'invalidKey');
             return;
         }
+        if(keyData === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, obteniendo keyData');
+            return;
+        }
+
         const email = keyData.email;
         if(email === undefined)
         {
@@ -79,8 +86,14 @@ module.exports = function(app)
         }
 
         //Limpiar anteriores operaciones de la base de datos
-        await database.deleteMultipleElements('emailCodes', {email});
-        await database.deleteMultipleElements('emailCodes', {oldEmail: email});
+        const deleteWithEmailQuery = await database.deleteMultipleElements('emailCodes', {email});
+        const deleteWithOldEmailQuery = await database.deleteMultipleElements('emailCodes', {oldEmail: email});
+        if(deleteWithEmailQuery === 'dbError' || deleteWithOldEmailQuery === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, borrando operaciones anteriores');
+            return;
+        }
 
         //Generar un código
         let code;
@@ -90,6 +103,11 @@ module.exports = function(app)
             let element = await database.getElement('emailCodes', {code});
             console.log(logID, 'tiene que dar null eventualmente:', element);
             if(element === null) break;
+            if(element === 'dbError')
+            {
+                res.status(200).send({error: 'dbError'});
+                console.log(logID, 'dbError, generando código');
+            }
         }
         console.log(logID, 'Expected code', code);
         
@@ -112,6 +130,12 @@ module.exports = function(app)
         //Guardar el objeto en la base de datos
         const dbCreateEmailCode = await database.createElement('emailCodes', newElement);
         console.log(logID, 'Código añadido a la base de datos', dbCreateEmailCode);
+        if(dbCreateEmailCode === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, añadiendo código a la base de datos');
+            return;
+        }
 
         //Cargar el email
         let mailContent = fs.readFileSync('emailPresets/deleteAccountEmail.html', 'utf-8');
@@ -192,6 +216,12 @@ module.exports = function(app)
             console.log(logID, 'invalidKey');
             return;
         }
+        if(keyData === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, obteniendo keyData');
+            return;
+        }
 
         let reqDecrypted = crypto.decrypt(reqEncrypted, keyData.pswrd);
         if(reqDecrypted === null)
@@ -228,6 +258,12 @@ module.exports = function(app)
             console.log(logID, 'invalidCode: no existe');
             return;
         }
+        if(emailCode === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, buscando código en la base de datos');
+            return;
+        }
 
         //Comprobar que la operación sea deleteAccount
         if(emailCode.operation !== 'deleteAccount')
@@ -258,11 +294,23 @@ module.exports = function(app)
         console.log(logID, 'Borrando emailCode');
         const deleteEmailCode = await database.deleteElement('emailCodes', {code});
         console.log(logID, 'deleteEmailCode', deleteEmailCode);
+        if(deleteEmailCode === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, borrando emailCode');
+            return;
+        }
 
         //Borrar los elementos de sessionID
         console.log(logID, 'Borrando SessionID');
         const deleteSessionID = await database.deleteMultipleElements('sessionID', {email});
         console.log(logID, 'deleteSessionID', deleteSessionID);
+        if(deleteSessionID === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, borrando sessionID');
+            return;
+        }
 
         //Restablecer la lista local de sessionID
         database.resetSessionIDList();
@@ -271,11 +319,22 @@ module.exports = function(app)
         console.log(logID, 'Borrando las notas');
         const deleteNotes = await database.deleteMultipleElements('notes', {owner: email});
         console.log(logID, 'deleteNotes', deleteNotes);
+        if(deleteNotes === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, borrando notas');
+            return;
+        }
 
         //Borrar el elemento del usuario en users
         console.log(logID, 'Borrando usuario');
         const deleteUser = await database.deleteElement('users', {email});
         console.log(logID, 'deleteUser', deleteUser);
+        if(deleteUser === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, borrando usuario');
+        }
 
         //Responder al cliente
         res.status(200).send({accountDeleted: true});

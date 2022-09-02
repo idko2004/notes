@@ -49,6 +49,13 @@ module.exports = function(app)
             console.log(logID, 'invalidKey');
             return;
         }
+        if(KeyData === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, loading keyData');
+            return;
+        }
+
         const email = KeyData.email;
         if(email === undefined)
         {
@@ -98,6 +105,13 @@ module.exports = function(app)
             console.log(logID, 'userNull');
             return;
         }
+        if(userInfo === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, obteniendo información del usuario');
+            return;
+        }
+
         if(userInfo.notesID === undefined)
         {
             res.status(200).send({error: 'idUndefined'});
@@ -124,6 +138,12 @@ module.exports = function(app)
 
             //Si no existe, salimos del bucle ya que el código es válido
             if(itAlredyExist === null) break;
+            if(itAlredyExist === 'dbError')
+            {
+                res.status(200).send({error: 'dbError'});
+                console.log(logID, 'dbError, generando noteID');
+                return;
+            }
         }
         console.log(logID, 'El código es único');
 
@@ -134,11 +154,23 @@ module.exports = function(app)
             owner: email,
             text: ''
         }
-        await database.createElement('notes', newNote);
+        const noteCreated = await database.createElement('notes', newNote);
+        if(noteCreated === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, creando nota');
+            return;
+        }
 
         //Actualizar el elemento de la base de datos de usuarios para incluir el noteID y el nombre de la nueva nota
         userInfo.notesID.push({id: noteID, name: noteName});
-        await database.updateElement('users', {email}, userInfo);
+        const userUpdated = await database.updateElement('users', {email}, userInfo);
+        if(userUpdated === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, actualizando usuario');
+            return;
+        }
 
         //Responder al cliente
         //ok    noteID

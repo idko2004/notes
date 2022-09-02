@@ -48,6 +48,13 @@ module.exports = function(app)
             console.log(logID, 'invalidKey');
             return;
         }
+        if(keyData === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, obteniendo keyData');
+            return;
+        }
+
         const email = keyData.email;
         if(email === undefined)
         {
@@ -82,6 +89,12 @@ module.exports = function(app)
             console.log(logID, 'noteNull');
             return;
         }
+        if(note === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, cargando nota');
+            return;
+        }
         console.log(logID, 'La nota existe');
 
         //Comprobamos si la nota es suya
@@ -96,6 +109,12 @@ module.exports = function(app)
         //Borramos la nota
         const deleted = await database.deleteElement('notes', {id: noteID});
         console.log(logID, 'Nota borrada', deleted);
+        if(deleted === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, borrando nota');
+            return;
+        }
 
         //Buscamos la nota en el perfil del usuario y lo borramos
         let userProfile = await database.getElement('users', {email});
@@ -103,6 +122,12 @@ module.exports = function(app)
         {
             res.status(200).send({error: 'cantFindUserProfile'});
             console.log(logID, 'cantFindUserProfile');
+            return;
+        }
+        if(userProfile === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, buscando perfil del usuario');
             return;
         }
 
@@ -125,6 +150,12 @@ module.exports = function(app)
         console.log(logID, userProfile);
         const userProfileSaved = await database.updateElement('users', {email}, userProfile);
         console.log(logID, 'Perfil actualizado', userProfileSaved);
+        if(userProfileSaved === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, actualizando el perfil del usuario');
+            return;
+        }
 
         //Respondemos al cliente
         res.status(200).send({deleted: true});

@@ -47,6 +47,13 @@ module.exports = function(app)
             console.log(logID, 'invalidKey');
             return;
         }
+        if(keyData === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, obteniendo keyData');
+            return;
+        }
+
         const email = keyData.email;
         if(email === undefined)
         {
@@ -78,6 +85,12 @@ module.exports = function(app)
         {
             res.status(200).send({error: 'noteDoesntExist'});
             console.log(logID, 'noteDoesntExist');
+            return;
+        }
+        if(theNote === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, obteniendo nota');
             return;
         }
 

@@ -8,68 +8,116 @@ let sessionIDList = {};
 
 async function getElement(collection, objQuery)
 {
-    console.log('\033[32m**Obteniendo elemento de la base de datos**\033[0m');
-    await mdbClient.connect();
-    const database = mdbClient.db('Notes');
-    const theCollection = database.collection(collection);
-    const element = await theCollection.findOne(objQuery);
-    console.log('\033[32m**Elemento obtenido**\033[0m');
-    return element;
+    try
+    {
+        console.log('\033[32m**Obteniendo elemento de la base de datos**\033[0m');
+        await mdbClient.connect();
+        const database = mdbClient.db('Notes');
+        const theCollection = database.collection(collection);
+        const element = await theCollection.findOne(objQuery);
+        console.log('\033[32m**Elemento obtenido**\033[0m');
+        return element;
+    }
+    catch
+    {
+        console.log('\033[41m**ERROR AL CONECTARSE A LA BASE DE DATOS**\033[0m');
+        return 'dbError';
+    }
 }
 
 async function createElement(collection, element)
 {
-    console.log('\033[32m**Creando elemento en la base de datos**\033[0m');
-    await mdbClient.connect();
-    const database = mdbClient.db('Notes');
-    const theCollection = database.collection(collection);
-    const result = await theCollection.insertOne(element);
-    console.log('\033[32m**Elemento creado en la base de datos**\033[0m', result);
-    return result;
+    try
+    {
+        console.log('\033[32m**Creando elemento en la base de datos**\033[0m');
+        await mdbClient.connect();
+        const database = mdbClient.db('Notes');
+        const theCollection = database.collection(collection);
+        const result = await theCollection.insertOne(element);
+        console.log('\033[32m**Elemento creado en la base de datos**\033[0m', result);
+        return result;
+    }
+    catch
+    {
+        console.log('\033[41m**ERROR AL CONECTARSE A LA BASE DE DATOS**\033[0m');
+        return 'dbError';
+    }
 }
 
 async function updateElement(collection, objQuery, newElement)
 {
-    console.log('\033[32m**Actualizando elementos en la base de datos**\033[0m', collection);
-    await mdbClient.connect();
-    const database = mdbClient.db('Notes');
-    const theCollection = database.collection(collection);
-    const result = await theCollection.findOneAndUpdate(objQuery, {$set: newElement});
-    console.log('\033[32m**Base de datos actualizada**\033[0m', collection, result.ok);
-    return result.ok;
+    try
+    {
+        console.log('\033[32m**Actualizando elementos en la base de datos**\033[0m', collection);
+        await mdbClient.connect();
+        const database = mdbClient.db('Notes');
+        const theCollection = database.collection(collection);
+        const result = await theCollection.findOneAndUpdate(objQuery, {$set: newElement});
+        console.log('\033[32m**Base de datos actualizada**\033[0m', collection, result.ok);
+        return result.ok;
+    }
+    catch
+    {
+        console.log('\033[41m**ERROR AL CONECTARSE A LA BASE DE DATOS**\033[0m');
+        return 'dbError';
+    }
 }
 
 async function updateMultipleElements(collection, objQuery, toReplace)
 {
-    console.log('\033[32m**Actualizando múltiples elementos en la base de datos**\033[0m');
-    await mdbClient.connect();
-    const database = mdbClient.db('Notes');
-    const theCollection = database.collection(collection);
-    const result = await theCollection.updateMany(objQuery, {$set: toReplace});
-    console.log('\033[32m**Múltiples elementos actualizados en la base de datos**\033[0m', result.modifiedCount);
-    return result.modifiedCount;
+    try
+    {
+        console.log('\033[32m**Actualizando múltiples elementos en la base de datos**\033[0m');
+        await mdbClient.connect();
+        const database = mdbClient.db('Notes');
+        const theCollection = database.collection(collection);
+        const result = await theCollection.updateMany(objQuery, {$set: toReplace});
+        console.log('\033[32m**Múltiples elementos actualizados en la base de datos**\033[0m', result.modifiedCount);
+        return result.modifiedCount;
+    }
+    catch
+    {
+        console.log('\033[41m**ERROR AL CONECTARSE A LA BASE DE DATOS**\033[0m');
+        return 'dbError';
+    }
 }
 
 async function deleteElement(collection, objQuery)
 {
-    console.log('\033[32m**Borrando elementos de la base de datos**\033[0m');
-    await mdbClient.connect();
-    const database = mdbClient.db('Notes');
-    const theCollection = database.collection(collection);
-    const result = await theCollection.deleteOne(objQuery);
-    console.log('\033[32m**Elemento borrado en la base de datos**\033[0m', result);
-    return result;
+    try
+    {
+        console.log('\033[32m**Borrando elementos de la base de datos**\033[0m');
+        await mdbClient.connect();
+        const database = mdbClient.db('Notes');
+        const theCollection = database.collection(collection);
+        const result = await theCollection.deleteOne(objQuery);
+        console.log('\033[32m**Elemento borrado en la base de datos**\033[0m', result);
+        return result;
+    }
+    catch
+    {
+        console.log('\033[41m**ERROR AL CONECTARSE A LA BASE DE DATOS**\033[0m');
+        return 'dbError';
+    }
 }
 
 async function deleteMultipleElements(collection, objQuery)
 {
-    console.log('\033[32m**Borrando múltiples elementos de la base de datos**\033[0m');
-    await mdbClient.connect();
-    const database = mdbClient.db('Notes');
-    const theCollection = database.collection(collection);
-    const result = await theCollection.deleteMany(objQuery);
-    console.log('\033[32m**Multiples elementos borrados de la base de datos**\033[0m', result);
-    return result;
+    try
+    {
+        console.log('\033[32m**Borrando múltiples elementos de la base de datos**\033[0m');
+        await mdbClient.connect();
+        const database = mdbClient.db('Notes');
+        const theCollection = database.collection(collection);
+        const result = await theCollection.deleteMany(objQuery);
+        console.log('\033[32m**Multiples elementos borrados de la base de datos**\033[0m', result);
+        return result;
+    }
+    catch
+    {
+        console.log('\033[41m**ERROR AL CONECTARSE A LA BASE DE DATOS**\033[0m');
+        return 'dbError';
+    }
 }
 
 async function getKeyData(key)
@@ -78,15 +126,23 @@ async function getKeyData(key)
     let cache = sessionIDList[key];
     if(cache === undefined || cache === null)
     {
-        console.log('\033[32m**Buscando usuario en la base de datos**\033[0m');
-        await mdbClient.connect();
-        const database = mdbClient.db('Notes');
-        const collection = database.collection('sessionID');
-        const element = await collection.findOne({key});
-        sessionIDList[key] = element;
-        console.log('\033[32mCargado desde la base de datos\033[0m', element);
-
-        cache = element;
+        try
+        {
+            console.log('\033[32m**Buscando usuario en la base de datos**\033[0m');
+            await mdbClient.connect();
+            const database = mdbClient.db('Notes');
+            const collection = database.collection('sessionID');
+            const element = await collection.findOne({key});
+            sessionIDList[key] = element;
+            console.log('\033[32mCargado desde la base de datos\033[0m', element);
+    
+            cache = element;
+        }
+        catch
+        {
+            console.log('\033[41m**ERROR AL CONECTARSE A LA BASE DE DATOS**\033[0m');
+            cache = 'dbError';
+        }
     }
     else console.log('\033[32mCargado desde caché\033[0m', cache);
 
@@ -104,7 +160,7 @@ function resetSessionIDList()
 //El nombre es un juego de palabras, ríanse.
 async function upDate(element)
 {
-    if(element === null) return;
+    if([null, undefined, '', 'dbError'].includes(element)) return;
     console.log('\033[1;32m//upDate//\033[0m');
     console.log('\033[1;32m//Fecha guardada//\033[0m',element.date.d, element.date.m, element.date.y);
 

@@ -76,6 +76,14 @@ module.exports = function(app)
                 console.log(logID, 'invalidKey');
                 return;
             }
+
+            if(keyData === 'dbError')
+            {
+                res.status(200).send({error: 'dbError'});
+                console.log(logID, 'dbError, cargando keyData');
+                return;
+            }
+
             pswrd = keyData.pswrd; //Obtenemos la contraseña para descifrar
             if(pswrd === undefined)
             {
@@ -92,6 +100,13 @@ module.exports = function(app)
             {
                 res.status(400).send({error: 'invalidPasswordCode'});
                 console.log(logID, 'invalidPasswordCode');
+                return;
+            }
+
+            if(decryptPasswordElement === 'dbError')
+            {
+                res.status(200).send({error: 'dbError'});
+                console.log(logID, 'dbError, cargando la clave para descifrar los datos');
                 return;
             }
 
@@ -248,12 +263,25 @@ module.exports = function(app)
                     console.log(logID, 'duplicatedEmail on updateAccount');
                     return;
                 }
+
+                if(newEmailAlredyExist === 'dbError')
+                {
+                    res.status(200).send({error: 'dbError'});
+                    console.log(logID, 'dbError, comprobando si el email no era duplicado');
+                    return;
+                }
             }
         }
 
         //Buscamos si este mismo usuario no ha hecho una request antes con los mismos datos
         const emailCodeAlredyExist = await database.getElement('emailCodes', {email: accountEmail});
         console.log(logID, 'emailCodeAlredyExist', emailCodeAlredyExist !== null)
+        if(emailCodeAlredyExist === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, comprobando si el código ya existía de antes');
+            return;
+        }
         if(emailCodeAlredyExist !== null)
         {
             if(emailCodeAlredyExist.email === accountEmail && emailCodeAlredyExist.password === accountPassword && emailCodeAlredyExist.username === accountUsername && emailCodeAlredyExist.operation === accountOperation)
@@ -274,6 +302,12 @@ module.exports = function(app)
             code = rand.generateKey(5).toUpperCase();
             let element = await database.getElement('emailCodes', {code});
             console.log(logID, 'tiene que dar null eventualmente:', element);
+            if(element === 'dbError')
+            {
+                res.status(200).send({error: 'dbError'});
+                console.log(logID, 'dbError, generando el código');
+                return;
+            }
             if(element === null) break;
         }
         console.log(logID, 'Expected code', code);
@@ -299,6 +333,12 @@ module.exports = function(app)
         console.log(logID, 'nuevo emailCode:', newElement);
         const dbCreateEmailCode = await database.createElement('emailCodes', newElement);
         console.log(logID, 'Código añadido a la base de datos', dbCreateEmailCode);
+        if(dbCreateEmailCode === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, guardando el código en la base de datos');
+            return;
+        }
 
         //Cargamos el html y lo modificamos para poner el código en él
         let mailContent;
@@ -394,6 +434,13 @@ module.exports = function(app)
             return;
         }
 
+        if(decryptPasswordElement === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, obteniendo la clave para descrifrar');
+            return;
+        }
+
         let pswrd = decryptPasswordElement.pswrd;
         if(pswrd === undefined)
         {
@@ -427,6 +474,12 @@ module.exports = function(app)
         //Verificamos si el código enviado al email existe
         const codeDB = await database.getElement('emailCodes', {code});
         console.log(logID, codeDB);
+        if(codeDB === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, verificando código');
+            return;
+        }
         if(codeDB === null || codeDB.operation !== 'newAccount')
         {
             res.status(200).send({error: 'invalidCode'});
@@ -446,9 +499,15 @@ module.exports = function(app)
 
         //Buscamos si no existe un mismo usuario con este correo electrónico
         const emailAlredyExist = await database.getElement('users', {email});
+        if(emailAlredyExist === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, buscando si el email es repetido');
+            return;
+        }
         if(emailAlredyExist !== null)
         {
-            res.status(500).send({error: 'duplicatedEmail'});
+            res.status(200).send({error: 'duplicatedEmail'});
             console.log(logID, 'duplicatedEmail');
             return;
         }
@@ -460,6 +519,12 @@ module.exports = function(app)
         }
         const saved = await database.createElement('users', newUser);
         console.log(logID, 'Usuario creado', saved);
+        if(saved === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, saving user');
+            return;
+        }
 
         //Borrar el elemento de emailCodes porque ya se ha usado
         database.deleteElement('emailCodes',{code});

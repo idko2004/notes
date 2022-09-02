@@ -48,6 +48,12 @@ module.exports = function(app)
             console.log(logID, 'invalidKey');
             return;
         }
+        if(keyData === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, obteniendo keyData');
+            return;
+        }
 
         const email = keyData.email;
         if(email === undefined)
@@ -101,6 +107,12 @@ module.exports = function(app)
             console.log(logID, 'invalidUser');
             return;
         }
+        if(user === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, obteniendo usuario');
+            return;
+        }
 
         //Verificamos que notesID exista
         if(user.notesID === undefined)
@@ -129,6 +141,12 @@ module.exports = function(app)
         //Cambiamos el nombre de la nota
         user.notesID[noteIndex].name = newName;
         const result = await database.updateElement('users', {email}, user);
+        if(result === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, cambiando nombre de la nota');
+            return;
+        }
 
         //Respondemos al cliente
         res.status(200).send({result});

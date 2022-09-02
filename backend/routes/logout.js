@@ -7,6 +7,14 @@ const rand = require('generate-key');
 
 module.exports = function(app)
 {
+    ///////////////////////////////////
+    // _                         _   //
+    //| | ___   __ _  ___  _   _| |_ //
+    //| |/ _ \ / _` |/ _ \| | | | __|//
+    //| | (_) | (_| | (_) | |_| | |_ //
+    //|_|\___/ \__, |\___/ \__,_|\__|//
+    //         |___/                 //
+    ///////////////////////////////////
     app.post('/logout', jsonParser, async function(req, res)
     {
         const logID = `(${rand.generateKey(3)})`;
@@ -39,16 +47,36 @@ module.exports = function(app)
             console.log(logID, 'invalidKey');
             return;
         }
+        if(keyData === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, obteniendo keyData');
+            return;
+        }
 
         //Borrar la la key
-        await database.deleteElement('sessionID', {key});
+        const keyDeleted = await database.deleteElement('sessionID', {key});
         delete database.sessionIDList[key];
+        if(keyDeleted === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, borrando la clave');
+            return;
+        }
 
         //Responder al cliente
         res.status(200).send({ok: true});
         console.log(logID, 'sesión cerrada');
     });
 
+    ///////////////////////////////////////////////////////////////////////////////////
+    // _                         _           _ _       _            _                //
+    //| | ___   __ _  ___  _   _| |_    __ _| | |   __| | _____   _(_) ___ ___  ___  //
+    //| |/ _ \ / _` |/ _ \| | | | __|  / _` | | |  / _` |/ _ \ \ / / |/ __/ _ \/ __| //
+    //| | (_) | (_| | (_) | |_| | |_  | (_| | | | | (_| |  __/\ V /| | (_|  __/\__ \ //
+    //|_|\___/ \__, |\___/ \__,_|\__|  \__,_|_|_|  \__,_|\___| \_/ |_|\___\___||___/ //
+    //         |___/                                                                 //
+    ///////////////////////////////////////////////////////////////////////////////////
     app.post('/logoutalldevices', jsonParser, async function(req, res)
     {
         const logID = `(${rand.generateKey(3)})`;
@@ -81,6 +109,13 @@ module.exports = function(app)
             console.log(logID, 'error - invalidKey');
             return;
         }
+        if(keyData === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, obteniendo keyData');
+            return;
+        }
+
         const email = keyData.email;
         if(email === undefined)
         {
@@ -91,7 +126,13 @@ module.exports = function(app)
 
         //Borrar todos los elementos en sessionID que tengan ese correo electrónico
         console.log(logID, 'Borrando todas las key');
-        await database.deleteMultipleElements('sessionID', {email});
+        const sessionIDDeleted = await database.deleteMultipleElements('sessionID', {email});
+        if(sessionIDDeleted === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, borrando sessionID');
+            return;
+        }
         database.resetSessionIDList();
         console.log(logID, 'Keys borradas');
 

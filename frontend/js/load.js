@@ -131,6 +131,96 @@ async function start()
 
 function elementsInHashAtStart()
 {
+    //Borrar todo
+    if(hashContains('deleteall'))
+    {
+        loadingScreen.hidden = true;
+        theActualThing = 'ventana';
+        floatingWindow(
+        {
+            title: '¿Borrar todos los datos?',
+            text: 'Se borrarán todos los datos locales, tus notas seguirán a salvo en tu cuenta, pero se borrarán sus copias locales. Tus configuraciones también serán borradas',
+            buttons:
+            [
+                {
+                    text: 'No borrar nada',
+                    primary: false,
+                    callback: function()
+                    {
+                        closeWindow(function()
+                        {
+                            hashDelete('deleteall');
+                            location.reload();
+                        });
+                    }
+                },
+                {
+                    text: 'Borrar todo',
+                    primary: true,
+                    callback: function()
+                    {
+                        closeWindow(function()
+                        {
+                            const allKeys = getKeyNames();
+                            for (let i = 0; i < allKeys.length; i++)
+                            {
+                                deleteKey(allKeys[i]);
+                            }
+                            hashDelete('deleteall');
+                            location.reload();
+                        });
+                    }
+                }
+            ]
+        });
+        return;
+    }
+
+    //Borrar configuración
+    if(hashContains('deleteconfig'))
+    {
+        loadingScreen.hidden = true;
+        theActualThing = 'ventana';
+        floatingWindow(
+        {
+            title: '¿Borrar configuraciones?',
+            text: 'Se borrarán todos los datos de configuración, tus notas se mantendrán a salvo.',
+            buttons:
+            [
+                {
+                    text: 'No borrar nada',
+                    primary: false,
+                    callback: function()
+                    {
+                        closeWindow(function()
+                        {
+                            hashDelete('deleteconfig');
+                            location.reload();
+                        });
+                    }
+                },
+                {
+                    text: 'Borrar configuraciones',
+                    primary: true,
+                    callback: function()
+                    {
+                        closeWindow(function()
+                        {
+                            const allKeys = getKeyNames();
+                            for(let i = 0; i < allKeys.length; i++)
+                            {
+                                if(allKeys[i].startsWith('_')) deleteKey(allKeys[i]);
+                            }
+                            hashDelete('deleteconfig');
+                            location.reload();
+                        })
+                    }
+                }
+            ]
+        });
+        return;
+    }
+
     //Tema
     const colorTheme = hashEquals('colortheme');
     if(colorTheme !== undefined)

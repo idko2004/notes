@@ -39,6 +39,7 @@
         <script defer src="js/manageAccount/changeDataMenu.js"></script>
         <script defer src="js/manageAccount/changeLanguage.js"></script>
         <script defer src="js/manageAccount/colorTheme.js"></script>
+        <script defer src="js/manageAccount/deleteLocalData.js"></script>
         <script defer src="js/manageAccount/localCopyMenu.js"></script>
         <script defer src="js/manageAccount/logOutInAllDevices.js"></script>
         <script defer src="js/manageAccount/deleteAccoutMenu.js"></script>
@@ -64,8 +65,8 @@
                             <button class="greenButton text" id="toLocalCopyMenuButton" txt="localCopySettings"></button>
                         </section>
                         <section>
-                            <button class="greenButton text" txt="deleteConfigurationData"></button>
-                            <button class="greenButton text" txt="menu_eraseAll"></button>
+                            <button class="greenButton text" id="toDeleteConfigurationButton" txt="deleteConfigurationData"></button>
+                            <button class="greenButton text" id="toDeleteAllButton" txt="menu_eraseAll"></button>
                         </section>
                         <section id="modifyUserDataSection">
                             <p>
@@ -131,6 +132,19 @@
                         <section>
                             <button class="greenButton text" id="localCopyCancelButton" txt="cancel"></button>
                         </section>
+                </div>
+
+                <div id="deleteConfigurationMenu" hidden>
+                    <h1>Borrar datos de configuración</h1>
+                    <section>
+                        <p>
+                            Se borrarán todos los datos de configuración, tus notas se mantendrán a salvo.
+                        </p>
+                        <button class="greenButton" id="deleteConfigurationConfirm">Borrar configuraciones</button>
+                    </section>
+                    <section>
+                        <button class="greenButton" id="deleteConfigurationCancel">Cancelar</button>
+                    </section>
                 </div>
 
                 <div id="changeDataMenu" hidden>

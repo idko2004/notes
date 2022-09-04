@@ -24,26 +24,40 @@ function hashEquals(element)
 
 function hashDelete(element)
 {
-    let h = location.hash;
+    let h = location.hash.replace('#', '');
+    let hSplit = h.split(';');
 
-    if(h.includes(`${element}=`))
+    //Borrar el elemento
+    for(let i = 0; i < hSplit.length; i++)
     {
-        const hSplit = h.split(';');
-        for(let i = 0; i < hSplit.length; i++)
+        if(hSplit[i].includes('='))
         {
-            const hSplitSplitted = hSplit[i].split('=');
-            if(hSplitSplitted[0] === element || hSplitSplitted[0] === `#${element}`)
+            let hSplitSplitted = hSplit[i].split('=');
+            if(hSplitSplitted[0] === element)
             {
-                if(h.includes(`;${hSplit[i]}`)) location.hash = h.replace(`;${hSplit[i]}`, '');
-                else if(h.includes(`#${hSplit[i]};`)) location.hash = h.replace(`${hSplit[i]};`, '');
-                else location.hash = h.replace(hSplit[i], '');
+                hSplit[i] = null;
+                break;
+            }
+        }
+        else
+        {
+            if(hSplit[i] === element)
+            {
+                hSplit[i] = null;
                 break;
             }
         }
     }
-    else if(h.includes(`;${element}`)) location.hash = h.replace(`;${element}`, '');
-    else if(h.includes(`#${element};`)) location.hash = h.replace(`${element};`, '');
-    else if(h.includes(element)) location.hash = h.replace(element, '');
+
+    //Reconstruir el hash
+    let newHash = '#';
+    for(let i = 0; i < hSplit.length; i++)
+    {
+        if(hSplit[i] !== null) newHash += `${hSplit[i]};`;
+    }
+
+    newHash = newHash.slice(0, -1);
+    location.hash = newHash;
 }
 
 function hashAdd(element)

@@ -88,7 +88,7 @@ textarea
     resize: none;
     color: var(--font-color);
     background-color: var(--bg-color);
-    caret-color: var(--green-hover);
+    caret-color: auto;
     transition: all ease 100ms;
 }
 

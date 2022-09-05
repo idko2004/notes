@@ -135,15 +135,24 @@
                 </div>
 
                 <div id="deleteConfigurationMenu" hidden>
-                    <h1>Borrar datos de configuración</h1>
+                    <h1 class="text" txt="deleteConfigurationData"></h1>
                     <section>
-                        <p>
-                            Se borrarán todos los datos de configuración, tus notas se mantendrán a salvo.
-                        </p>
-                        <button class="greenButton" id="deleteConfigurationConfirm">Borrar configuraciones</button>
+                        <p class="text" txt="deleteConfigText"></p>
+                        <button class="greenButton text" id="deleteConfigurationConfirm" txt="deleteConfigurationData"></button>
                     </section>
                     <section>
-                        <button class="greenButton" id="deleteConfigurationCancel">Cancelar</button>
+                        <button class="greenButton text" id="deleteConfigurationCancel" txt="cancel"></button>
+                    </section>
+                </div>
+
+                <div id="deleteAllMenu" hidden>
+                    <h1 class="text" txt="menu_eraseAllLocal_title"></h1>
+                    <section>
+                        <p class="text" txt="deleteAllText"></p>
+                        <button class="greenButton text" id="deleteAllConfirm" txt="menu_eraseAllLocal_btn2"></button>
+                    </section>
+                    <section>
+                        <button class="greenButton text" id="deleteAllCancel" txt="cancel"></button>
                     </section>
                 </div>
 

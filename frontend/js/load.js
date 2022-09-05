@@ -138,12 +138,12 @@ function elementsInHashAtStart()
         theActualThing = 'ventana';
         floatingWindow(
         {
-            title: '¿Borrar todos los datos?',
-            text: 'Se borrarán todos los datos locales, tus notas seguirán a salvo en tu cuenta, pero se borrarán sus copias locales. Tus configuraciones también serán borradas',
+            title: getText('menu_reallyEraseAll_title'),
+            text: getText('menu_eraseAllLocal_text'),
             buttons:
             [
                 {
-                    text: 'No borrar nada',
+                    text: getText('menu_reallyEraseAll_btn2'),
                     primary: false,
                     callback: function()
                     {
@@ -155,7 +155,7 @@ function elementsInHashAtStart()
                     }
                 },
                 {
-                    text: 'Borrar todo',
+                    text: getText('menu_reallyEraseAll_btn1'),
                     primary: true,
                     callback: function()
                     {
@@ -183,12 +183,12 @@ function elementsInHashAtStart()
         theActualThing = 'ventana';
         floatingWindow(
         {
-            title: '¿Borrar configuraciones?',
-            text: 'Se borrarán todos los datos de configuración, tus notas se mantendrán a salvo.',
+            title: getText('deleteConfigQuestion'),
+            text: getText('deleteConfigText'),
             buttons:
             [
                 {
-                    text: 'No borrar nada',
+                    text: getText('menu_eraseAllLocal_btn1'),
                     primary: false,
                     callback: function()
                     {
@@ -200,7 +200,7 @@ function elementsInHashAtStart()
                     }
                 },
                 {
-                    text: 'Borrar configuraciones',
+                    text: getText('deleteConfigurationData'),
                     primary: true,
                     callback: function()
                     {

@@ -217,12 +217,12 @@ const allTexts =
     menu_eraseAllLocal_title:
     {
         es: '¿Borrar todos los datos locales?',
-        en: "Erase all local data?"
+        en: "Delete all local data?"
     },
     menu_eraseAllLocal_text:
     {
-        es: 'Se borrarán todos los datos que se hayan guardado en este navegador en el modo local.',
-        en: "All data saved in the local mode in this browser will be erased."
+        es: 'Se borrarán todos los datos que se hayan guardado en este navegador',
+        en: "All data saved in this browser will be deleted."
     },
     menu_eraseAllLocal_btn1:
     {
@@ -231,18 +231,18 @@ const allTexts =
     },
     menu_eraseAllLocal_btn2:
     {
-        es: 'Borrar',
+        es: 'Borrar todo',
         en: 'Delete all'
     },
     menu_reallyEraseAll_title:
     {
         es: '¿De verdad vas a borrarlo todo?',
-        en: "Are you going to erase everything?"
+        en: "Are you going to delete everything?"
     },
     menu_reallyEraseAll_btn1:
     {
         es: '¡De verdad voy a borrarlo todo!',
-        en: "I'm going to erase everything!"
+        en: "I'm going to delete everything!"
     },
     menu_reallyEraseAll_btn2:
     {
@@ -843,6 +843,21 @@ const allTexts =
     {
         es: 'Para confirmar el cierre de tu cuenta, ingresa el código que enviamos al correo electrónico ',
         en: 'To confirm the closure of your account, please enter the code we sent to the email address '
+    },
+    deleteConfigText:
+    {
+        es: 'Se borrarán todos los datos de configuración, tus notas se mantendrán a salvo.',
+        en: 'All configuration data will be deleted, your notes will be kept safe.'
+    },
+    deleteAllText:
+    {
+        es: 'Se borrarán todos los datos locales, tus notas seguirán a salvo en tu cuenta, pero se borrarán sus copias locales. Tus configuraciones también serán borradas.',
+        en: 'All local data will be deleted, your notes will still be safe in your account, but their local copies will be deleted. Your settings will also be deleted.'
+    },
+    deleteConfigQuestion:
+    {
+        es: '¿Borrar configuraciones?',
+        en: 'Delete configuration data?'
     }
 }
 

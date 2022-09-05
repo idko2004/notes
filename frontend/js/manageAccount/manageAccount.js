@@ -25,6 +25,7 @@ let actualMenu;
 //  localCopy
 //  colorTheme
 //  deleteConfiguration
+//  deleteAllLocal
 //  ventana
 
 const loadingScreen = document.getElementById('loadingScreen');
@@ -40,6 +41,7 @@ const deleteAccountEmailCodeMenu = document.getElementById('deleteAccountEmailCo
 const localCopyMenu = document.getElementById('localCopyMenu');
 const colorThemeMenu = document.getElementById('changeColorThemeMenu');
 const deleteConfigurationMenu = document.getElementById('deleteConfigurationMenu');
+const deleteAllMenu = document.getElementById('deleteAllMenu');
 
 const emailSpace = document.getElementById('emailSpace');
 const usernameSpace = document.getElementById('usernameSpace');
@@ -328,7 +330,31 @@ document.getElementById('toDeleteConfigurationButton').addEventListener('click',
         mainMenu.removeEventListener('animationend', endAnimationCallback);
     }
 
-    updateLocalCopyEnabledText();
+    mainMenu.classList.remove('openMenu');
+    mainMenu.classList.add('closeMenu');
+
+    mainMenu.addEventListener('animationend', endAnimationCallback);
+});
+
+document.getElementById('toDeleteAllButton').addEventListener('click', function()
+{
+    if(actualMenu !== 'main') return;
+
+    let endAnimationCallback = function (e)
+    {
+        if(e.animationName !== 'closeMenuAnimation') return;
+
+        mainMenu.hidden = true;
+        deleteAllMenu.hidden = false;
+
+        deleteAllMenu.classList.remove('closeMenu');
+        deleteAllMenu.classList.add('openMenu');
+
+        actualMenu = 'deleteAllLocal';
+        window.scrollTo(0, 0);
+
+        mainMenu.removeEventListener('animationend', endAnimationCallback);
+    }
 
     mainMenu.classList.remove('openMenu');
     mainMenu.classList.add('closeMenu');

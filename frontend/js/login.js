@@ -136,6 +136,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
 
             checkLocalCopyValue();
             await loadNotesList();
+            spellcheckStatus();
             menuButtonText();
             resizeTwice();
             theActualThing = 'note';
@@ -256,6 +257,7 @@ document.getElementById('localModeButton').addEventListener('click',function()
     document.getElementById('loginScreen').hidden = true;
 
     document.getElementById('noteScreen').hidden = false;
+    spellcheckStatus();
     menuButtonText();
     resizeTwice();
     theActualThing = 'note';

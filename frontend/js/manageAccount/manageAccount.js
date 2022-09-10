@@ -5,11 +5,13 @@ let email;
 let passwordLength;
 let theSecretThingThatNobodyHaveToKnow;
 let saveNotesLocally;
+let spellcheckConfig;
 const thingsChanged =
 {
     lang: undefined,
     localCopy: undefined,
-    colorTheme: undefined
+    colorTheme: undefined,
+    spellcheck: undefined
 }
 
 let isLocalMode;
@@ -26,6 +28,7 @@ let actualMenu;
 //  colorTheme
 //  deleteConfiguration
 //  deleteAllLocal
+//  spellcheck
 //  ventana
 
 const loadingScreen = document.getElementById('loadingScreen');
@@ -42,6 +45,7 @@ const localCopyMenu = document.getElementById('localCopyMenu');
 const colorThemeMenu = document.getElementById('changeColorThemeMenu');
 const deleteConfigurationMenu = document.getElementById('deleteConfigurationMenu');
 const deleteAllMenu = document.getElementById('deleteAllMenu');
+const spellcheckMenu = document.getElementById('spellcheckMenu');
 
 const emailSpace = document.getElementById('emailSpace');
 const usernameSpace = document.getElementById('usernameSpace');
@@ -54,6 +58,7 @@ async function start()
     theSecretThingThatNobodyHaveToKnow = getSpecificCookie('_login');
     theOtherSecretThing = getSpecificCookie('_pswrd');
     saveNotesLocally = getSpecificCookie('_localCopy');
+    spellcheckConfig = getSpecificCookie('_spellcheck');
 
     //Cargar el modo local
     if(theSecretThingThatNobodyHaveToKnow === 'local')
@@ -199,7 +204,8 @@ function deleteManageAccountRelatedCookies()
 {
     deleteCookie('_login');
     deleteCookie('_pswrd');
-    deleteCookie('-localcopy');
+    deleteCookie('_localcopy');
+    deleteCookie('_spellcheck');
 }
 
 document.getElementById('toChangeDataMenuButton').addEventListener('click', function()
@@ -336,6 +342,34 @@ document.getElementById('toDeleteConfigurationButton').addEventListener('click',
     mainMenu.addEventListener('animationend', endAnimationCallback);
 });
 
+document.getElementById('toSpellcheckMenuButton').addEventListener('click', function()
+{
+    if(actualMenu !== 'main') return;
+
+    let endAnimationCallback = function (e)
+    {
+        if(e.animationName !== 'closeMenuAnimation') return;
+
+        mainMenu.hidden = true;
+        spellcheckMenu.hidden = false;
+
+        spellcheckMenu.classList.remove('closeMenu');
+        spellcheckMenu.classList.add('openMenu');
+
+        actualMenu = 'spellcheck';
+        window.scrollTo(0, 0);
+
+        mainMenu.removeEventListener('animationend', endAnimationCallback);
+    }
+
+    updateSpellcheckText();
+
+    mainMenu.classList.remove('openMenu');
+    mainMenu.classList.add('closeMenu');
+
+    mainMenu.addEventListener('animationend', endAnimationCallback);
+});
+
 document.getElementById('toDeleteAllButton').addEventListener('click', function()
 {
     if(actualMenu !== 'main') return;
@@ -443,6 +477,10 @@ document.getElementById('goBackToNotes').addEventListener('click', function()
         if(thingsChanged.colorTheme !== undefined)
         {
             str += `colortheme=${thingsChanged.colorTheme};`;
+        }
+        if(thingsChanged.spellcheck !== undefined)
+        {
+            str +=`spellcheck=${thingsChanged.spellcheck};`;
         }
 
         str = str.slice(0, -1);

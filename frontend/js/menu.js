@@ -146,6 +146,7 @@ menuOnlineManageAccount.addEventListener('click', async function()
     saveCookie('_login', theSecretThingThatNobodyHasToKnow);
     saveCookie('_pswrd', theOtherSecretThing);
     saveCookie('_localCopy', localCopy);
+    saveCookie('_spellcheck', getKey('_spellcheck'));
     location.href = `manageAccount.html#lang=${actualLanguage};colortheme=${colorTheme}`;
 });
 

@@ -35,7 +35,6 @@
         <script defer src="js/cookies.js"></script>
         <script defer src="js/floatingWindow.js"></script>
         <script defer src="js/crypto.js"></script>
-        <script defer src="js/manageAccount/manageAccount.js"></script>
         <script defer src="js/manageAccount/changeDataMenu.js"></script>
         <script defer src="js/manageAccount/changeLanguage.js"></script>
         <script defer src="js/manageAccount/colorTheme.js"></script>
@@ -43,6 +42,8 @@
         <script defer src="js/manageAccount/localCopyMenu.js"></script>
         <script defer src="js/manageAccount/logOutInAllDevices.js"></script>
         <script defer src="js/manageAccount/deleteAccoutMenu.js"></script>
+        <script defer src="js/manageAccount/spellcheckMenu.js"></script>
+        <script defer src="js/manageAccount/manageAccount.js"></script>
     </head>
     <body>
         <div id=loadingScreen>
@@ -63,6 +64,7 @@
                             <button class="greenButton text" id="toChangeLanguageMenuButton" txt="changeLanguage2"></button>
                             <button class="greenButton text" id="toChangeColorTheme" txt="changeColorTheme"></button>
                             <button class="greenButton text" id="toLocalCopyMenuButton" txt="localCopySettings"></button>
+                            <button class="greenButton" id="toSpellcheckMenuButton">Corrector ortográfico</button>
                         </section>
                         <section id="modifyUserDataSection">
                             <p>
@@ -132,6 +134,24 @@
                         <section>
                             <button class="greenButton text" id="localCopyCancelButton" txt="cancel"></button>
                         </section>
+                </div>
+
+                <div id="spellcheckMenu" hidden>
+                    <h1>Corrector ortográfico</h1>
+                    <section>
+                        <p>Activa o desactiva el corrector ortográfico al escribir notas. Esta función es gestionada por el navegador.</p>
+                    </section>
+                    <section>
+                        <p>
+                            El corrector ortográfico está: <b><span id="spellcheckText">Por defecto</span></b>
+                        </p>
+                        <button class="greenButton" id="spellcheckButton_enable">Activado</button>
+                        <button class="greenButton" id="spellcheckButton_disable">Desactivado</button>
+                        <button class="greenButton" id="spellcheckButton_default">Según la configuración del navegador</button>
+                    </section>
+                    <section>
+                        <button class="greenButton text" id="spellcheckButton_cancel" txt="cancel"></button>
+                    </section>
                 </div>
 
                 <div id="deleteConfigurationMenu" hidden>

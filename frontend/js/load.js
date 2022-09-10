@@ -19,9 +19,9 @@ async function start()
         loadingScreen.hidden = true;
 
         loadNotesList();
-        document.getElementById('noteScreen').hidden = false;
-
         menuButtonText();
+        spellcheckStatus();
+        document.getElementById('noteScreen').hidden = false;
         theActualThing = 'note';
     }
     //No hay datos guardados
@@ -31,16 +31,6 @@ async function start()
         loadingScreen.hidden = true;
         document.getElementById('noteScreen').hidden = true;
         document.getElementById('loginScreen').hidden = false;
-        /*floatingWindow(
-        {
-            title: 'Aún estamos en desarrollo',
-            text: 'Por el momento sólo está disponible el modo local.',
-            button:
-            {
-                text: getText('ok'),
-                callback: closeWindow
-            }
-        });*/
         theActualThing = 'login';
     }
     //Hay una clave guardada
@@ -60,6 +50,7 @@ async function start()
                 await loadNotesList();
                 menuButtonText();
                 resizeTwice();
+                spellcheckStatus();
                 theActualThing = 'note';
             }
             else
@@ -106,6 +97,7 @@ async function start()
                                 document.getElementById('noteScreen').hidden = false;
 
                                 menuButtonText();
+                                spellcheckStatus();
                                 resizeTwice();
                                 hashAdd('local');
                                 theActualThing = 'note';
@@ -249,6 +241,14 @@ function elementsInHashAtStart()
         console.log('Configuración de notas locales cambiada mediante hash');
     }
 
+    const hashSpellcheck = hashEquals('spellcheck');
+    if(hashSpellcheck !== undefined)
+    {
+        saveKey('_spellcheck', hashSpellcheck);
+        hashDelete('spellcheck');
+        console.log('Spellcheck cambiado mediante hash');
+    }
+
     //Cerrar sesión
     if(hashContains('logout'))
     {
@@ -267,4 +267,11 @@ function checkLocalCopyValue()
     if(localCopyKey === 'true') localCopy = true;
     else if(localCopyKey === 'false') localCopy = false;
     else localCopy = true;
+}
+
+function spellcheckStatus()
+{
+    let value = getKey('_spellcheck');
+    if(value === 'true') noteField.setAttribute('spellcheck', 'true');
+    else if(value === 'false') noteField.setAttribute('spellcheck', 'false');
 }

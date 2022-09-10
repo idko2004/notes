@@ -39,7 +39,8 @@ async function encryptHttpCall(route, body, password)
         console.error('not an object');
         return;
     }
-    console.log('password', password);
+    //console.log('password', password);
+    console.log(`calling to ${route}`);
     if(body.encrypt !== undefined)
     {
         if(password === undefined)
@@ -55,7 +56,6 @@ async function encryptHttpCall(route, body, password)
     console.log(body);
 
     const response = await axios.post(`${path}${route}`, body);
-    console.log(response);
 
     if(response.data.decrypt !== undefined)
     {
@@ -76,6 +76,7 @@ async function encryptHttpCall(route, body, password)
         }
     }
     else console.log('Nothing to decrypt');
+
     console.log(response.data);
     return response;
 }

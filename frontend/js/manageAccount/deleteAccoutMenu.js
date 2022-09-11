@@ -1,3 +1,13 @@
+document.getElementById('deleteAccountMenuButton').addEventListener('click', function()
+{
+    if(actualMenu !== 'main' || isLocalMode) return;
+
+    actualMenu = 'deleteAccount';
+    updateDeleteAccountPlaceholders();
+
+    animatedTransition(mainMenu, deleteAccountMenu);
+});
+
 function updateDeleteAccountPlaceholders()
 {
     document.getElementById('deleteAccountEmailSent').innerText = email;
@@ -8,48 +18,18 @@ document.getElementById('goBackDeleteAccountMenu').addEventListener('click', fun
 {
     if(actualMenu !== 'deleteAccount' || isLocalMode) return;
 
-    let endAnimationCallback = function(e)
-    {
-        if(e.animationName !== 'closeMenuAnimation') return;
+    actualMenu = 'main';
 
-        deleteAccountMenu.hidden = true;
-        mainMenu.hidden = false;
-
-        mainMenu.classList.remove('closeMenu');
-        mainMenu.classList.add('openMenu');
-
-        actualMenu = 'main';
-        window.scrollTo(0,0);
-        deleteAccountMenu.removeEventListener('animationend', endAnimationCallback);
-    }
-
-    deleteAccountMenu.classList.remove('openMenu');
-    deleteAccountMenu.classList.add('closeMenu');
-    deleteAccountMenu.addEventListener('animationend', endAnimationCallback);
+    animatedTransition(deleteAccountMenu, mainMenu);
 });
 
 document.getElementById('deleteAccountButton').addEventListener('click', async function()
 {
     if(actualMenu !== 'deleteAccount' || isLocalMode) return;
 
-    let endAnimationCallback = function(e)
-    {
-        if(e.animationName !== 'closeMenuAnimation') return;
+    actualMenu = 'deleteAccountEmailCode';
 
-        deleteAccountMenu.hidden = true;
-        deleteAccountEmailCodeMenu.hidden = false;
-
-        deleteAccountEmailCodeMenu.classList.remove('closeMenu');
-        deleteAccountEmailCodeMenu.classList.add('openMenu');
-
-        actualMenu = 'deleteAccountEmailCode';
-        window.scrollTo(0,0);
-        deleteAccountMenu.removeEventListener('animationend', endAnimationCallback);
-    }
-
-    deleteAccountMenu.classList.remove('openMenu');
-    deleteAccountMenu.classList.add('closeMenu');
-    deleteAccountMenu.addEventListener('animationend', endAnimationCallback);
+    animatedTransition(deleteAccountMenu, deleteAccountEmailCodeMenu);
 
     try
     {
@@ -70,24 +50,8 @@ document.getElementById('deleteAccountButton').addEventListener('click', async f
                     {
                         closeWindow(function()
                         {
-                            let endAnimationCallback = function(e)
-                            {
-                                if(e.animationName !== 'closeMenuAnimation') return;
-    
-                                deleteAccountEmailCodeMenu.hidden = true;
-                                deleteAccountMenu.hidden = false;
-    
-                                deleteAccountMenu.classList.remove('closeMenu');
-                                deleteAccountMenu.classList.add('openMenu');
-    
-                                window.scrollTo(0,0);
-                                actualMenu = 'deleteAccount';
-                                deleteAccountEmailCodeMenu.removeEventListener('animationend', endAnimationCallback);
-                            }
-    
-                            deleteAccountEmailCodeMenu.classList.remove('openMenu');
-                            deleteAccountEmailCodeMenu.classList.add('closeMenu');
-                            deleteAccountEmailCodeMenu.addEventListener('animationend', endAnimationCallback);
+                            actualMenu = 'deleteAccount';
+                            animatedTransition(deleteAccountEmailCodeMenu, deleteAccountMenu);
                         });
                     }
                 }
@@ -108,24 +72,8 @@ document.getElementById('deleteAccountButton').addEventListener('click', async f
                 {
                     closeWindow(function()
                     {
-                        let endAnimationCallback = function(e)
-                        {
-                            if(e.animationName !== 'closeMenuAnimation') return;
-
-                            deleteAccountEmailCodeMenu.hidden = true;
-                            deleteAccountMenu.hidden = false;
-
-                            deleteAccountMenu.classList.remove('closeMenu');
-                            deleteAccountMenu.classList.add('openMenu');
-
-                            window.scrollTo(0,0);
-                            actualMenu = 'deleteAccount';
-                            deleteAccountEmailCodeMenu.removeEventListener('animationend', endAnimationCallback);
-                        }
-
-                        deleteAccountEmailCodeMenu.classList.remove('openMenu');
-                        deleteAccountEmailCodeMenu.classList.add('closeMenu');
-                        deleteAccountEmailCodeMenu.addEventListener('animationend', endAnimationCallback);
+                        actualMenu = 'deleteAccount';
+                        animatedTransition(deleteAccountEmailCodeMenu, deleteAccountMenu);
                     });
                 }
             }

@@ -1,3 +1,12 @@
+document.getElementById('toLocalCopyMenuButton').addEventListener('click', function()
+{
+    if(actualMenu !== 'main' || isLocalMode) return;
+
+    actualMenu = 'localCopy';
+    updateLocalCopyEnabledText();
+
+    animatedTransition(mainMenu, localCopyMenu);
+});
 
 function updateLocalCopyEnabledText()
 {
@@ -19,21 +28,6 @@ document.getElementById('localCopyChangeButton').addEventListener('click', funct
 {
     if(actualMenu !== 'localCopy' || isLocalMode) return;
 
-    let endAnimationCallback = function(e)
-    {
-        if(e.animationName !== 'closeMenuAnimation') return;
-
-        localCopyMenu.hidden = true;
-        mainMenu.hidden = false;
-
-        mainMenu.classList.remove('closeMenu');
-        mainMenu.classList.add('openMenu');
-
-        actualMenu = 'main';
-        window.scrollTo(0,0);
-        localCopyMenu.removeEventListener('animationend', endAnimationCallback);
-    }
-
     if(saveNotesLocally === 'true')
     {
         saveNotesLocally = 'false';
@@ -45,31 +39,14 @@ document.getElementById('localCopyChangeButton').addEventListener('click', funct
         thingsChanged.localCopy = 'true';
     }
 
-    localCopyMenu.classList.remove('openMenu');
-    localCopyMenu.classList.add('closeMenu');
-    localCopyMenu.addEventListener('animationend', endAnimationCallback);
+    actualMenu = 'main';
+    animatedTransition(localCopyMenu, mainMenu);
 });
 
 document.getElementById('localCopyCancelButton').addEventListener('click', function()
 {
     if(actualMenu !== 'localCopy' || isLocalMode) return;
 
-    let endAnimationCallback = function(e)
-    {
-        if(e.animationName !== 'closeMenuAnimation') return;
-
-        localCopyMenu.hidden = true;
-        mainMenu.hidden = false;
-
-        mainMenu.classList.remove('closeMenu');
-        mainMenu.classList.add('openMenu');
-
-        actualMenu = 'main';
-        window.scrollTo(0,0);
-        localCopyMenu.removeEventListener('animationend', endAnimationCallback);
-    }
-
-    localCopyMenu.classList.remove('openMenu');
-    localCopyMenu.classList.add('closeMenu');
-    localCopyMenu.addEventListener('animationend', endAnimationCallback);
+    actualMenu = 'main';
+    animatedTransition(localCopyMenu, mainMenu);
 });

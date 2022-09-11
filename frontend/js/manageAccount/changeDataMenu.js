@@ -1,3 +1,13 @@
+document.getElementById('toChangeDataMenuButton').addEventListener('click', function()
+{
+    if(actualMenu !== 'main' || isLocalMode) return;
+
+    actualMenu = 'changeData';
+    updateDataMenuPlaceholders();
+
+    animatedTransition(mainMenu, changeDataMenu);
+});
+
 const changeUsernameField = document.getElementById('changeUsernameField');
 const changeEmailField = document.getElementById('changeEmailField');
 const changePasswordField = document.getElementById('changePasswordField');
@@ -17,31 +27,15 @@ document.getElementById('goBackChangeDataMenu').addEventListener('click', functi
 {
     if(actualMenu !== 'changeData' || isLocalMode) return;
 
-    let endAnimationCallback = function(e)
+    actualMenu = 'main';
+
+    animatedTransition(changeDataMenu, mainMenu, function()
     {
-        if(e.animationName !== 'closeMenuAnimation') return;
-
-        changeDataMenu.hidden = true;
-        mainMenu.hidden = false;
-
-        mainMenu.classList.remove('closeMenu');
-        mainMenu.classList.add('openMenu');
-    
-        actualMenu = 'main';
-        window.scrollTo(0,0);
-
         changeUsernameField.value = '';
         changeEmailField.value = '';
         changePasswordField.value = '';
         comprobePasswordField.value = '';
-
-        changeDataMenu.removeEventListener('animationend', endAnimationCallback);
-    }
-    
-    changeDataMenu.classList.remove('openMenu');
-    changeDataMenu.classList.add('closeMenu');
-
-    changeDataMenu.addEventListener('animationend', endAnimationCallback);
+    });
 });
 
 document.getElementById('saveChangeDataMenu').addEventListener('click', function()
@@ -221,27 +215,11 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', function
                     {
                         if(isLocalMode) return;
 
-                        let endAnimationCallback = function(e)
-                        {
-                            if(e.animationName !== 'closeMenuAnimation') return;
-
-                            changeDataMenu.hidden = true;
-                            changeDataEmailCodeMenu.hidden = false;
-
-                            changeDataEmailCodeMenu.classList.remove('closeMenu');
-                            changeDataEmailCodeMenu.classList.add('openMenu');
-
-                            actualMenu = 'changeDataEmailCode';
-
-                            changeDataMenu.removeEventListener('animationend', endAnimationCallback);
-                        }
+                        actualMenu = 'changeDataEmailCode';
                         document.getElementById('changeDataEmailSent').innerText = email;
 
-                        changeDataMenu.classList.remove('openMenu');
-                        changeDataMenu.classList.add('closeMenu');
-                    
-                        changeDataMenu.addEventListener('animationend', endAnimationCallback);
-    
+                        animatedTransition(changeDataMenu, changeDataEmailCodeMenu);
+
                         //Hacer la llamada al servidor para actualizar a los nuevos datos, generar un código y enviar el email
                         try
                         {
@@ -346,25 +324,8 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', function
 
 function changeDataEmailCodeMenuGoBackAnimation()
 {
-    let endAnimationCallback = function(e)
-    {
-        if(e.animationName !== 'closeMenuAnimation') return;
-
-        changeDataEmailCodeMenu.hidden = true;
-        changeDataMenu.hidden = false;
-
-        changeDataMenu.classList.remove('closeMenu');
-        changeDataMenu.classList.add('openMenu');
-
-        actualMenu = 'changeData';
-
-        changeDataEmailCodeMenu.removeEventListener('animationend', endAnimationCallback);
-    }
-
-    changeDataEmailCodeMenu.classList.remove('openMenu');
-    changeDataEmailCodeMenu.classList.add('closeMenu');
-
-    changeDataEmailCodeMenu.addEventListener('animationend', endAnimationCallback);
+    actualMenu = 'changeData';
+    animatedTransition(changeDataEmailCodeMenu, changeDataMenu);
 }
 
 //Botón de comprobar código

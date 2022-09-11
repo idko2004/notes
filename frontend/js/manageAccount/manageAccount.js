@@ -208,257 +208,40 @@ function deleteManageAccountRelatedCookies()
     deleteCookie('_spellcheck');
 }
 
-document.getElementById('toChangeDataMenuButton').addEventListener('click', function()
+function animatedTransition(elementToHide, elementToShow, callback)
 {
-    if(actualMenu !== 'main' || isLocalMode) return;
-
     let endAnimationCallback = function(e)
     {
-        if(e.animationName !== 'closeMenuAnimation') return;
+        if (e.animationName !== 'closeMenuAnimation') return;
 
-        mainMenu.hidden = true;
-        changeDataMenu.hidden = false;
+        elementToHide.hidden = true;
 
-        changeDataMenu.classList.remove('closeMenu');
-        changeDataMenu.classList.add('openMenu');
+        if(callback !== undefined && typeof callback === 'function') callback();
 
-        actualMenu = 'changeData';
-        window.scrollTo(0,0);
+        if(elementToShow !== undefined)
+        {
+            elementToShow.classList.remove('closeMenu');
+            elementToShow.classList.add('openMenu');
+            elementToShow.hidden = false;            
+        }
 
-        mainMenu.removeEventListener('animationend', endAnimationCallback);
-    }
-
-    updateDataMenuPlaceholders();
-
-    mainMenu.classList.remove('openMenu');
-    mainMenu.classList.add('closeMenu');
-
-    mainMenu.addEventListener('animationend', endAnimationCallback);
-});
-
-document.getElementById('toChangeLanguageMenuButton').addEventListener('click', function()
-{
-    if(actualMenu !== 'main') return;
-
-    let endAnimationCallback = function(e)
-    {
-        if(e.animationName !== 'closeMenuAnimation') return;
-
-        mainMenu.hidden = true;
-        changeLanguageMenu.hidden = false;
-
-        changeLanguageMenu.classList.remove('closeMenu');
-        changeLanguageMenu.classList.add('openMenu');
-
-        actualMenu = 'changeLanguage';
-        window.scrollTo(0,0);
-
-        mainMenu.removeEventListener('animationend', endAnimationCallback);
-    }
-
-    mainMenu.classList.remove('openMenu');
-    mainMenu.classList.add('closeMenu');
-
-    mainMenu.addEventListener('animationend', endAnimationCallback);
-});
-
-document.getElementById('toChangeColorTheme').addEventListener('click', function()
-{
-    if(actualMenu !== 'main') return;
-
-    let endAnimationCallback = function(e)
-    {
-        if(e.animationName !== 'closeMenuAnimation') return;
-
-        mainMenu.hidden = true;
-        colorThemeMenu.hidden = false;
-
-        colorThemeMenu.classList.remove('closeMenu');
-        colorThemeMenu.classList.add('openMenu');
-
-        actualMenu = 'colorTheme';
-        window.scrollTo(0,0);
-
-        mainMenu.removeEventListener('animationend', endAnimationCallback);
-    }
-
-    mainMenu.classList.remove('openMenu');
-    mainMenu.classList.add('closeMenu');
-
-    mainMenu.addEventListener('animationend', endAnimationCallback);
-});
-
-document.getElementById('toLocalCopyMenuButton').addEventListener('click', function()
-{
-    if(actualMenu !== 'main' || isLocalMode) return;
-
-    let endAnimationCallback = function(e)
-    {
-        if(e.animationName !== 'closeMenuAnimation') return;
-
-        mainMenu.hidden = true;
-        localCopyMenu.hidden = false;
-
-        localCopyMenu.classList.remove('closeMenu');
-        localCopyMenu.classList.add('openMenu');
-
-        actualMenu = 'localCopy';
-        window.scrollTo(0,0);
-
-        mainMenu.removeEventListener('animationend', endAnimationCallback);
-    }
-
-    updateLocalCopyEnabledText();
-
-    mainMenu.classList.remove('openMenu');
-    mainMenu.classList.add('closeMenu');
-
-    mainMenu.addEventListener('animationend', endAnimationCallback);
-});
-
-document.getElementById('toDeleteConfigurationButton').addEventListener('click', function()
-{
-    if(actualMenu !== 'main') return;
-
-    let endAnimationCallback = function (e)
-    {
-        if(e.animationName !== 'closeMenuAnimation') return;
-
-        mainMenu.hidden = true;
-        deleteConfigurationMenu.hidden = false;
-
-        deleteConfigurationMenu.classList.remove('closeMenu');
-        deleteConfigurationMenu.classList.add('openMenu');
-
-        actualMenu = 'deleteConfiguration';
         window.scrollTo(0, 0);
-
-        mainMenu.removeEventListener('animationend', endAnimationCallback);
+        elementToHide.removeEventListener('animationend', endAnimationCallback);
     }
 
-    mainMenu.classList.remove('openMenu');
-    mainMenu.classList.add('closeMenu');
+    elementToHide.classList.remove('openMenu');
+    elementToHide.classList.add('closeMenu');
 
-    mainMenu.addEventListener('animationend', endAnimationCallback);
-});
-
-document.getElementById('toSpellcheckMenuButton').addEventListener('click', function()
-{
-    if(actualMenu !== 'main') return;
-
-    let endAnimationCallback = function (e)
-    {
-        if(e.animationName !== 'closeMenuAnimation') return;
-
-        mainMenu.hidden = true;
-        spellcheckMenu.hidden = false;
-
-        spellcheckMenu.classList.remove('closeMenu');
-        spellcheckMenu.classList.add('openMenu');
-
-        actualMenu = 'spellcheck';
-        window.scrollTo(0, 0);
-
-        mainMenu.removeEventListener('animationend', endAnimationCallback);
-    }
-
-    updateSpellcheckText();
-
-    mainMenu.classList.remove('openMenu');
-    mainMenu.classList.add('closeMenu');
-
-    mainMenu.addEventListener('animationend', endAnimationCallback);
-});
-
-document.getElementById('toDeleteAllButton').addEventListener('click', function()
-{
-    if(actualMenu !== 'main') return;
-
-    let endAnimationCallback = function (e)
-    {
-        if(e.animationName !== 'closeMenuAnimation') return;
-
-        mainMenu.hidden = true;
-        deleteAllMenu.hidden = false;
-
-        deleteAllMenu.classList.remove('closeMenu');
-        deleteAllMenu.classList.add('openMenu');
-
-        actualMenu = 'deleteAllLocal';
-        window.scrollTo(0, 0);
-
-        mainMenu.removeEventListener('animationend', endAnimationCallback);
-    }
-
-    mainMenu.classList.remove('openMenu');
-    mainMenu.classList.add('closeMenu');
-
-    mainMenu.addEventListener('animationend', endAnimationCallback);
-});
-
-document.getElementById('logOutInAllMenuButton').addEventListener('click', function()
-{
-    if(actualMenu !== 'main' || isLocalMode) return;
-
-    let endAnimationCallback = function(e)
-    {
-        if(e.animationName !== 'closeMenuAnimation') return;
-        mainMenu.hidden = true;
-        logOutInAllMenu.hidden = false;
-
-        logOutInAllMenu.classList.remove('closeMenu');
-        logOutInAllMenu.classList.add('openMenu');
-
-        actualMenu = 'logOutInAll';
-        window.scrollTo(0,0);
-
-        mainMenu.removeEventListener('animationend', endAnimationCallback);
-    }
-
-    mainMenu.classList.remove('openMenu');
-    mainMenu.classList.add('closeMenu');
-
-    mainMenu.addEventListener('animationend', endAnimationCallback);
-});
-
-document.getElementById('deleteAccountMenuButton').addEventListener('click', function()
-{
-    if(actualMenu !== 'main' || isLocalMode) return;
-
-    let endAnimationCallback = function(e)
-    {
-        if(e.animationName !== 'closeMenuAnimation') return;
-
-        mainMenu.hidden = true;
-        deleteAccountMenu.hidden = false;
-
-        deleteAccountMenu.classList.remove('closeMenu');
-        deleteAccountMenu.classList.add('openMenu');
-        
-        actualMenu = 'deleteAccount';
-        window.scrollTo(0,0);
-
-        mainMenu.removeEventListener('animationend', endAnimationCallback);
-    }
-
-    updateDeleteAccountPlaceholders();
-
-    mainMenu.classList.remove('openMenu');
-    mainMenu.classList.add('closeMenu');
-
-    mainMenu.addEventListener('animationend', endAnimationCallback);
-});
+    elementToHide.addEventListener('animationend', endAnimationCallback);    
+}
 
 document.getElementById('goBackToNotes').addEventListener('click', function()
 {
     if(actualMenu !== 'main') return;
+    actualMenu = 'ventana';
 
-    let endAnimationCallback = function (e)
+    animatedTransition(mainMenu, undefined, function()
     {
-        if(e.animationName !== 'closeMenuAnimation') return;
-
-        mainMenu.hidden = true;
-        
         mainScreen.hidden = true;
         loadingScreen.hidden = false;
 
@@ -485,10 +268,5 @@ document.getElementById('goBackToNotes').addEventListener('click', function()
 
         str = str.slice(0, -1);
         location.href = str;
-    }
-
-    mainMenu.classList.remove('openMenu');
-    mainMenu.classList.add('closeMenu');
-
-    mainMenu.addEventListener('animationend', endAnimationCallback);
+    });
 });

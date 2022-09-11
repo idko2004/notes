@@ -1,3 +1,13 @@
+document.getElementById('toSpellcheckMenuButton').addEventListener('click', function()
+{
+    if(actualMenu !== 'main') return;
+
+    actualMenu = 'spellcheck';
+    updateSpellcheckText();
+
+    animatedTransition(mainMenu, spellcheckMenu);
+});
+
 function updateSpellcheckText()
 {
     let text;
@@ -17,103 +27,39 @@ document.getElementById('spellcheckButton_cancel').addEventListener('click', fun
 {
     if(actualMenu !== 'spellcheck') return;
 
-    let endAnimationCallback = function(e)
-    {
-        if(e.animationName !== 'closeMenuAnimation') return;
-
-        spellcheckMenu.hidden = true;
-        mainMenu.hidden = false;
-
-        mainMenu.classList.remove('closeMenu');
-        mainMenu.classList.add('openMenu');
-
-        actualMenu = 'main';
-        window.scrollTo(0, 0);
-        spellcheckMenu.removeEventListener('animationend', endAnimationCallback);
-    }
-
-    spellcheckMenu.classList.remove('openMenu');
-    spellcheckMenu.classList.add('closeMenu');
-    spellcheckMenu.addEventListener('animationend', endAnimationCallback);
+    actualMenu = 'main';
+    animatedTransition(spellcheckMenu, mainMenu);
 });
 
 document.getElementById('spellcheckButton_enable').addEventListener('click', function()
 {
     if(actualMenu !== 'spellcheck') return;
 
-    let endAnimationCallback = function(e)
-    {
-        if(e.animationName !== 'closeMenuAnimation') return;
-
-        spellcheckMenu.hidden = true;
-        mainMenu.hidden = false;
-
-        mainMenu.classList.remove('closeMenu');
-        mainMenu.classList.add('openMenu');
-
-        actualMenu = 'main';
-        window.scrollTo(0, 0);
-        spellcheckMenu.removeEventListener('animationend', endAnimationCallback);
-    }
-
     thingsChanged.spellcheck = 'true';
     spellcheckConfig = 'true';
+    actualMenu = 'main';
 
-    spellcheckMenu.classList.remove('openMenu');
-    spellcheckMenu.classList.add('closeMenu');
-    spellcheckMenu.addEventListener('animationend', endAnimationCallback);
+    animatedTransition(spellcheckMenu, mainMenu);
 });
 
 document.getElementById('spellcheckButton_disable').addEventListener('click', function()
 {
     if(actualMenu !== 'spellcheck') return;
 
-    let endAnimationCallback = function(e)
-    {
-        if(e.animationName !== 'closeMenuAnimation') return;
-
-        spellcheckMenu.hidden = true;
-        mainMenu.hidden = false;
-
-        mainMenu.classList.remove('closeMenu');
-        mainMenu.classList.add('openMenu');
-
-        actualMenu = 'main';
-        window.scrollTo(0, 0);
-        spellcheckMenu.removeEventListener('animationend', endAnimationCallback);
-    }
-
     thingsChanged.spellcheck = 'false';
     spellcheckConfig = 'false';
+    actualMenu = 'main';
 
-    spellcheckMenu.classList.remove('openMenu');
-    spellcheckMenu.classList.add('closeMenu');
-    spellcheckMenu.addEventListener('animationend', endAnimationCallback);
+    animatedTransition(spellcheckMenu, mainMenu);
 });
 
 document.getElementById('spellcheckButton_default').addEventListener('click', function()
 {
     if(actualMenu !== 'spellcheck') return;
 
-    let endAnimationCallback = function(e)
-    {
-        if(e.animationName !== 'closeMenuAnimation') return;
-
-        spellcheckMenu.hidden = true;
-        mainMenu.hidden = false;
-
-        mainMenu.classList.remove('closeMenu');
-        mainMenu.classList.add('openMenu');
-
-        actualMenu = 'main';
-        window.scrollTo(0, 0);
-        spellcheckMenu.removeEventListener('animationend', endAnimationCallback);
-    }
-
     thingsChanged.spellcheck = 'default';
     spellcheckConfig = 'default';
+    actualMenu = 'main';
 
-    spellcheckMenu.classList.remove('openMenu');
-    spellcheckMenu.classList.add('closeMenu');
-    spellcheckMenu.addEventListener('animationend', endAnimationCallback);
+    animatedTransition(spellcheckMenu, mainMenu);
 });

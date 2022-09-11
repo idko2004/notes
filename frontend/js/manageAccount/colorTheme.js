@@ -1,3 +1,12 @@
+document.getElementById('toChangeColorTheme').addEventListener('click', function()
+{
+    if(actualMenu !== 'main') return;
+
+    actualMenu = 'colorTheme';
+
+    animatedTransition(mainMenu, colorThemeMenu);
+});
+
 document.getElementById('changeColorTheme_cancel').addEventListener('click', colorTheme_goBack);
 
 document.getElementById('changeColorTheme_light').addEventListener('click', function()
@@ -46,22 +55,7 @@ function colorTheme_goBack()
 {
     if(actualMenu !== 'colorTheme') return;
 
-    let endAnimationCallback = function(e)
-    {
-        if(e.animationName !== 'closeMenuAnimation') return;
+    actualMenu = 'main';
 
-        colorThemeMenu.hidden = true;
-        mainMenu.hidden = false;
-
-        mainMenu.classList.remove('closeMenu');
-        mainMenu.classList.add('openMenu');
-
-        actualMenu = 'main';
-        window.scrollTo(0,0);
-        colorThemeMenu.removeEventListener('animationend', endAnimationCallback);
-    }
-
-    colorThemeMenu.classList.remove('openMenu');
-    colorThemeMenu.classList.add('closeMenu');
-    colorThemeMenu.addEventListener('animationend', endAnimationCallback);
+    animatedTransition(colorThemeMenu, mainMenu);
 }

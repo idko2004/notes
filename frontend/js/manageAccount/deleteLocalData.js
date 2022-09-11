@@ -1,85 +1,57 @@
+document.getElementById('toDeleteConfigurationButton').addEventListener('click', function()
+{
+    if(actualMenu !== 'main') return;
+
+    actualMenu = 'deleteConfiguration';
+
+    animatedTransition(mainMenu, deleteConfigurationMenu);
+});
+
 document.getElementById('deleteConfigurationCancel').addEventListener('click', function()
 {
     if(actualMenu !== 'deleteConfiguration') return;
 
-    let endAnimationCallback = function (e)
-    {
-        if(e.animationName !== 'closeMenuAnimation') return;
-
-        deleteConfigurationMenu.hidden = true;
-        mainMenu.hidden = false;
-
-        mainMenu.classList.remove('closeMenu');
-        mainMenu.classList.add('openMenu');
-
-        actualMenu = 'main';
-        window.scrollTo(0, 0);
-        deleteConfigurationMenu.removeEventListener('animationend', endAnimationCallback);
-    }
-
-    deleteConfigurationMenu.classList.remove('openMenu');
-    deleteConfigurationMenu.classList.add('closeMenu');
-    deleteConfigurationMenu.addEventListener('animationend', endAnimationCallback);
+    actualMenu = 'main';
+    animatedTransition(deleteConfigurationMenu, mainMenu);
 });
 
 document.getElementById('deleteConfigurationConfirm').addEventListener('click', function()
 {
     if(actualMenu !== 'deleteConfiguration') return;
 
-    let endAnimationCallback = function (e)
+    animatedTransition(deleteConfigurationMenu, undefined, function()
     {
-        if(e.animationName !== 'closeMenuAnimation') return;
-
-        deleteConfigurationMenu.hidden = true;
-
         deleteManageAccountRelatedCookies();
         location.href = 'index.html#deleteconfig';
-    }
+    });
+});
 
-    deleteConfigurationMenu.classList.remove('openMenu');
-    deleteConfigurationMenu.classList.add('closeMenu');
-    deleteConfigurationMenu.addEventListener('animationend', endAnimationCallback);
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+document.getElementById('toDeleteAllButton').addEventListener('click', function()
+{
+    if(actualMenu !== 'main') return;
+
+    actualMenu = 'deleteAllLocal';
+
+    animatedTransition(mainMenu, deleteAllMenu);
 });
 
 document.getElementById('deleteAllCancel').addEventListener('click', function()
 {
     if(actualMenu !== 'deleteAllLocal') return;
 
-    let endAnimationCallback = function (e)
-    {
-        if(e.animationName !== 'closeMenuAnimation') return;
+    actualMenu = 'main';
 
-        deleteAllMenu.hidden = true;
-        mainMenu.hidden = false;
-
-        mainMenu.classList.remove('closeMenu');
-        mainMenu.classList.add('openMenu');
-
-        actualMenu = 'main';
-        window.scrollTo(0, 0);
-        deleteAllMenu.removeEventListener('animationend', endAnimationCallback);
-    }
-
-    deleteAllMenu.classList.remove('openMenu');
-    deleteAllMenu.classList.add('closeMenu');
-    deleteAllMenu.addEventListener('animationend', endAnimationCallback);
+    animatedTransition(deleteAllMenu, mainMenu);
 });
 
 document.getElementById('deleteAllConfirm').addEventListener('click', function()
 {
     if(actualMenu !== 'deleteAllLocal') return;
 
-    let endAnimationCallback = function (e)
+    animatedTransition(deleteAllMenu, undefined, function()
     {
-        if(e.animationName !== 'closeMenuAnimation') return;
-
-        deleteAllMenu.hidden = true;
-
         deleteManageAccountRelatedCookies();
         location.href = 'index.html#deleteall';
-    }
-
-    deleteAllMenu.classList.remove('openMenu');
-    deleteAllMenu.classList.add('closeMenu');
-    deleteAllMenu.addEventListener('animationend', endAnimationCallback);
+    });
 });

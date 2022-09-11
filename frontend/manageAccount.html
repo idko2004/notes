@@ -64,7 +64,7 @@
                             <button class="greenButton text" id="toChangeLanguageMenuButton" txt="changeLanguage2"></button>
                             <button class="greenButton text" id="toChangeColorTheme" txt="changeColorTheme"></button>
                             <button class="greenButton text" id="toLocalCopyMenuButton" txt="localCopySettings"></button>
-                            <button class="greenButton" id="toSpellcheckMenuButton">Corrector ortográfico</button>
+                            <button class="greenButton text" id="toSpellcheckMenuButton" txt="spellcheck"></button>
                         </section>
                         <section id="modifyUserDataSection">
                             <p>
@@ -137,17 +137,17 @@
                 </div>
 
                 <div id="spellcheckMenu" hidden>
-                    <h1>Corrector ortográfico</h1>
+                    <h1 class="text" txt="spellcheck"></h1>
                     <section>
-                        <p>Activa o desactiva el corrector ortográfico al escribir notas. Esta función es gestionada por el navegador.</p>
+                        <p class="text" txt="spellcheckText"></p>
                     </section>
                     <section>
                         <p>
-                            El corrector ortográfico está: <b><span id="spellcheckText">Por defecto</span></b>
+                            <span class="text" txt="spellcheckIs"></span> <b><span id="spellcheckText"></span></b>
                         </p>
-                        <button class="greenButton" id="spellcheckButton_enable">Activado</button>
-                        <button class="greenButton" id="spellcheckButton_disable">Desactivado</button>
-                        <button class="greenButton" id="spellcheckButton_default">Según la configuración del navegador</button>
+                        <button class="greenButton text" id="spellcheckButton_enable" txt="enable"></button>
+                        <button class="greenButton text" id="spellcheckButton_disable" txt="disable"></button>
+                        <button class="greenButton text" id="spellcheckButton_default" txt="defaultConfiguration"></button>
                     </section>
                     <section>
                         <button class="greenButton text" id="spellcheckButton_cancel" txt="cancel"></button>

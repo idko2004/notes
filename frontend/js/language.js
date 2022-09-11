@@ -709,10 +709,30 @@ const allTexts =
         es: 'activadas',
         en: 'enabled'
     },
+    enabled2:
+    {
+        es: 'activada',
+        en: 'enabled'
+    },
+    enable:
+    {
+        es: 'Activar',
+        en: 'Enable'
+    },
     disabled:
     {
         es: 'desactivadas',
         en: 'disabled'
+    },
+    disabled2:
+    {
+        es: 'desactivada',
+        en: 'disabled'
+    },
+    disable:
+    {
+        es: 'Desactivar',
+        en: 'Disable'
     },
     disableLocalCopy:
     {
@@ -858,6 +878,31 @@ const allTexts =
     {
         es: '¿Borrar configuraciones?',
         en: 'Delete configuration data?'
+    },
+    spellcheck:
+    {
+        es: 'Corrector ortográfico',
+        en: 'Spellcheck'
+    },
+    spellcheckText:
+    {
+        es: 'Activa o desactiva el corrector ortográfico al escribir notas. Esta función es gestionada por el navegador.',
+        en: 'Enables or disables the spell checker when writing notes. This function is managed by the browser.'
+    },
+    spellcheckIs:
+    {
+        es: 'La corrección ortográfica está',
+        en: 'Spellcheck is'
+    },
+    configuredByBrowserDefaults:
+    {
+        es: 'configurada por los valores predeterminados del navegador',
+        en: 'configured by browser defaults'
+    },
+    defaultConfiguration:
+    {
+        es: 'Configuración por defecto',
+        en: 'Default configuration'
     }
 }
 

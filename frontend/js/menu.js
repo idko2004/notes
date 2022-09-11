@@ -268,10 +268,11 @@ menuExitLocalMode.addEventListener('click', function()
 function localManageAccount()
 {
     saveCookie('_login', 'local');
+    saveCookie('_spellcheck', getKey('_spellcheck'));
     location.href = `manageAccount.html#lang=${actualLanguage};colortheme=${colorTheme}`;
 }
 
-menuSettingsLocal.addEventListener('click', function()
+menuSettingsLocal.addEventListener('click', async function()
 {
     if (theActualThing !== 'menu') return;
     if (!isLocalMode) return;
@@ -280,7 +281,7 @@ menuSettingsLocal.addEventListener('click', function()
     floatingMenu.hidden = true;
     loadingScreen.hidden = false;
 
-    saveNote();
+    await saveNote();
 
     localManageAccount();
 })

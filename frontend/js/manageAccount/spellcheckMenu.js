@@ -5,9 +5,9 @@ function updateSpellcheckText()
     console.log('spellcheckConfig', spellcheckConfig);
     switch(spellcheckConfig)
     {
-        case 'true': text = getText('enabled'); break;
-        case 'false': text = getText('disabled'); break;
-        default: text = 'Por defecto'; break;
+        case 'true': text = getText('enabled2'); break;
+        case 'false': text = getText('disabled2'); break;
+        default: text = getText('configuredByBrowserDefaults'); break;
     }
 
     document.getElementById('spellcheckText').innerText = text;

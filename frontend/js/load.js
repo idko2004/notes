@@ -272,6 +272,6 @@ function checkLocalCopyValue()
 function spellcheckStatus()
 {
     let value = getKey('_spellcheck');
-    if(value === 'true') noteField.setAttribute('spellcheck', 'true');
-    else if(value === 'false') noteField.setAttribute('spellcheck', 'false');
+    if(value === 'true') textArea.setAttribute('spellcheck', 'true');
+    else if(value === 'false') textArea.setAttribute('spellcheck', 'false');
 }

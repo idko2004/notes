@@ -87,8 +87,16 @@ function createListButton(noteName, id)
         let id = undefined;
         if(e.target.attributes.noteID) id = e.target.attributes.noteID.value;
 
-        loadNote(e.target.textContent, id);
-        selectedNote(e);
+        if(id !== actualNoteID && e.target.textContent !== actualNoteName)
+        {
+            loadNote(e.target.textContent, id);
+            selectedNote(e);    
+        }
+        else
+        {
+            showTheNoteInSmallScreen(true);
+            setTimeout(function(){textArea.focus()}, 10);
+        }
     });
     noteInTheList.appendChild(noteListButton);
 

@@ -6,7 +6,7 @@ function resizeTwice()
 {
     resizeElements();
     setTimeout(resizeElements, 50);
-    setTimeout(resizeElements, 200);
+    //setTimeout(resizeElements, 200);
 }
 
 function resizeElements()
@@ -16,7 +16,7 @@ function resizeElements()
 
     function resizeTextArea()
     {
-        textArea.style.width = topBar.offsetWidth;
+        if(!textArea.hidden) textArea.style.width = topBar.offsetWidth;
     }
 
     function hideLeftBar()
@@ -28,6 +28,7 @@ function resizeElements()
             noteSection.hidden = false;
             leftToTheNoteNameButtons.hidden = true;
             showTheNote = true;
+            leftBar.classList.remove('leftBarEntireWidth');
         }
         else
         {
@@ -51,6 +52,7 @@ function resizeElements()
                 }
             }
             leftToTheNoteNameButtons.hidden = false;
+            leftBar.classList.add('leftBarEntireWidth');
         }
     }
 }
@@ -59,6 +61,7 @@ function resizeElements()
 showNotesListButton.addEventListener('click', () =>
 {
     if(!canInteract) return;
+    if(theActualThing !== 'note') return;
 
     saveNote();
     showTheNoteInSmallScreen(false);

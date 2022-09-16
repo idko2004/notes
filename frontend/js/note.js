@@ -15,6 +15,7 @@ async function loadNote(name, id)
 
     textArea.value = '';
     textArea.disabled = true;
+    showTheNoteInSmallScreen(true);
 
     let noteContent = null;
     if(id === undefined)
@@ -152,7 +153,7 @@ async function loadNote(name, id)
                                 
                                     setTimeout(function()
                                     {
-                                        noteField.focus();
+                                        textArea.focus();
                                         resizeTwice();
                                     }, 15);
                                 });
@@ -188,13 +189,11 @@ async function loadNote(name, id)
 
     theLastTextSave = noteContent;
 
-    showTheNoteInSmallScreen(true);
-
     theActualThing = 'note';
 
     setTimeout(function()
     {
-        noteField.focus();
+        textArea.focus();
         resizeTwice();
     }, 15);
 }

@@ -13,6 +13,11 @@ aside
     border-radius: 10px;
 }
 
+.leftBarEntireWidth
+{
+    width: 100%;
+}
+
 #newNote
 {
     float: right;

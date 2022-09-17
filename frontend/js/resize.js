@@ -16,7 +16,11 @@ function resizeElements()
 
     function resizeTextArea()
     {
-        if(!textArea.hidden) textArea.style.width = topBar.offsetWidth;
+        if(!noteSection.hidden)
+        {
+            console.log(noteSection.hidden, topBar.offsetWidth);
+            textArea.style.width = topBar.offsetWidth;
+        }
     }
 
     function hideLeftBar()

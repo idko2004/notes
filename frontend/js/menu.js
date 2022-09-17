@@ -62,26 +62,27 @@ function animationMenuOpen()
     floatingMenu.classList.add('openBg');
 }
 
-alert('En la consola dice donde te quedaste');
-console.error('Hay que prometer esto');
-
-function animationMenuClose(callback)
+async function animationMenuClose(callback)
 {
-    theMenu.classList.remove('openWinSlide');
-    theMenu.classList.add('closeWinSlide');
-
-    floatingMenu.classList.remove('openBg');
-    floatingMenu.classList.add('closeBg');
-
-    menuAnimationCallback = function(e)
+    return new Promise(function(resolve, reject)
     {
-        if(e.animationName !== 'closeWindowSlide') return;
-        floatingMenu.hidden = true;
-        theMenu.removeEventListener('animationend', menuAnimationCallback);
-        if(callback !== undefined && typeof callback === 'function') callback();
-    }
-
-    theMenu.addEventListener('animationend', menuAnimationCallback);
+        theMenu.classList.remove('openWinSlide');
+        theMenu.classList.add('closeWinSlide');
+    
+        floatingMenu.classList.remove('openBg');
+        floatingMenu.classList.add('closeBg');
+    
+        menuAnimationCallback = function(e)
+        {
+            if(e.animationName !== 'closeWindowSlide') return;
+            floatingMenu.hidden = true;
+            theMenu.removeEventListener('animationend', menuAnimationCallback);
+            if(callback !== undefined && typeof callback === 'function') callback();
+            resolve();
+        }
+    
+        theMenu.addEventListener('animationend', menuAnimationCallback);
+    });
 }
 
 menuButton.addEventListener('click', function()
@@ -109,7 +110,7 @@ menuOnlineLogOut.addEventListener('click', async function()
     deleteKey('_login');
 
     document.title = getText('logginOut');
-    animationMenuClose();
+    await animationMenuClose();
 
     try
     {
@@ -154,25 +155,23 @@ menuOnlineManageAccount.addEventListener('click', async function()
 });
 
 //Botón de salir del modo local
-menuExitLocalMode.addEventListener('click', function()
+menuExitLocalMode.addEventListener('click', async function()
 {
     if(theActualThing !== 'menu') return;
 
-    animationMenuClose(async function()
-    {
-        await saveNote();
+    await animationMenuClose();
+    await saveNote();
 
-        if(hashContains('local'))
-        {
-            hashDelete('local');
-            location.reload();
-            return;
-        }
-    
-        deleteKey('_login');
-    
+    if(hashContains('local'))
+    {
+        hashDelete('local');
         location.reload();
-    });
+        return;
+    }
+
+    deleteKey('_login');
+
+    location.reload();
 });
 
 //Botón de cambiar de idioma en modo local

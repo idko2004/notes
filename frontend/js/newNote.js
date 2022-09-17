@@ -23,14 +23,12 @@ newNote.addEventListener('click',function()
             {
                 text: getText('createNote'),
                 primary: true,
-                callback()
+                callback: async function()
                 {
                     const name = document.getElementById('inputInTheWindow').value;
-                    closeWindow(function()
-                    {
-                        theActualThing = 'note';
-                        createNewNote(name);
-                    });
+                    await closeWindow();
+                    theActualThing = 'note';
+                    createNewNote(name);
                 }
             }
         ]
@@ -224,12 +222,10 @@ function newNoteNameIsValid(name, openAWindow)
 
     return true;
 
-    function closeInvalidNameWindow()
+    async function closeInvalidNameWindow()
     {
-        closeWindow(function()
-        {
-            if(openAWindow === 'newNote') newNote.click();
-            else if(openAWindow === 'renameNote') document.getElementById('renameButton').click();
-        });
+        await closeWindow();
+        if(openAWindow === 'newNote') newNote.click();
+        else if(openAWindow === 'renameNote') document.getElementById('renameButton').click();
     }
 }

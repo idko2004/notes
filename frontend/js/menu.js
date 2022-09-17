@@ -62,6 +62,9 @@ function animationMenuOpen()
     floatingMenu.classList.add('openBg');
 }
 
+alert('En la consola dice donde te quedaste');
+console.error('Hay que prometer esto');
+
 function animationMenuClose(callback)
 {
     theMenu.classList.remove('openWinSlide');

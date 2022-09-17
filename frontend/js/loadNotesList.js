@@ -34,17 +34,20 @@ async function loadNotesList()
                     {
                         text: getText('lnl_eraseData'),
                         primary: false,
-                        callback: function()
+                        callback: async function()
                         {
+                            await closeWindow();
                             deleteKey('_login');
+                            deleteKey('_pswrd');
                             location.reload();
                         }
                     },
                     {
                         text: getText('reload'),
                         primary: true,
-                        callback: function()
+                        callback: async function()
                         {
+                            await closeWindow();
                             location.reload();
                         }
                     }
@@ -80,23 +83,27 @@ function createListButton(noteName, id)
 
     if(id !== undefined) noteListButton.setAttribute('noteID', id);
 
-    noteListButton.addEventListener('click',(e) =>
+    noteListButton.addEventListener('click', (e) =>
     {
         if(!canInteract) return;
         if(theActualThing !== 'note') return;
         let id = undefined;
         if(e.target.attributes.noteID) id = e.target.attributes.noteID.value;
 
-        if(id !== actualNoteID && e.target.textContent !== actualNoteName)
+        console.log(id, actualNoteID);
+        console.log(e.target.innerText, actualNoteName);
+        if((id !== actualNoteID || isLocalMode) && e.target.innerText !== actualNoteName)
         {
-            loadNote(e.target.textContent, id);
+            loadNote(e.target.innerText, id);
             selectedNote(e);    
         }
         else
         {
+            console.log('note alredy loaded');
             showTheNoteInSmallScreen(true);
             setTimeout(function(){textArea.focus()}, 10);
         }
+        console.log('clicking note button', e.target.innerText);
     });
     noteInTheList.appendChild(noteListButton);
 
@@ -127,18 +134,22 @@ function youDontHaveNotes()
     else dontNotes.hidden = true;
 }
 
-async function selectedNote(e, altNoteName)
+function selectedNote(e, altNoteName)
 {
     let noteInTheListArray = document.getElementsByClassName('noteInTheList');
 
-    for(let i = 0; i < noteInTheListArray.length; i++) noteInTheListArray[i].children[0].className = noteInTheListArray[i].children[0].className.replace(' noteSelected', '');
+    for(let i = 0; i < noteInTheListArray.length; i++) noteInTheListArray[i].children[0].classList.remove('noteSelected');
 
-    if(e !== undefined) e.target.className += ' noteSelected';
+    if(e !== undefined) e.target.classList.add('noteSelected');
     else
     {
         for(let i = 0; i < noteInTheListArray.length; i++)
         {
-            if(noteInTheListArray[i].children[0].innerText === altNoteName) noteInTheListArray[i].children[0].className += ' noteSelected';
+            if(noteInTheListArray[i].children[0].innerText === altNoteName)
+            {
+                noteInTheListArray[i].children[0].classList.add('noteSelected');
+                return;
+            }
         }
     }
 }

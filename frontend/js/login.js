@@ -69,8 +69,9 @@ document.getElementById('loginButton').addEventListener('click', async function(
                 {
                     text: getText('forgotPassword'),
                     primary: false,
-                    callback: function()
+                    callback: async function()
                     {
+                        await closeWindow();
                         location.href = 'forgotMyPassword.html';
                     }
                 },
@@ -95,16 +96,14 @@ document.getElementById('loginButton').addEventListener('click', async function(
         floatingWindow(
         {
             title: getText('somethingWentWrong'),
-            text: `${getText('login_error_text')}\n${getText('errorCode')}: codePassword(${codePassword === undefined}) or loginPassword(${loginPassword === undefined}) are undefined`,
+            text: `${getText('login_error_text')}\n${getText('errorCode')}: a thing (${codePassword === undefined}) or another thing (${loginPassword === undefined}) is undefined`,
             button:
             {
                 text: getText('ok'),
-                callback: function()
+                callback: async function()
                 {
-                    closeWindow(function()
-                    {
-                        location.reload();
-                    });
+                    await closeWindow();
+                    location.reload();
                 }
             }
         });
@@ -175,8 +174,9 @@ document.getElementById('loginButton').addEventListener('click', async function(
                 [
                     {
                         text: getText('createAccount'),
-                        callback: function()
+                        callback: async function()
                         {
+                            await closeWindow();
                             location.href = 'signup.html'
                         }
                     },
@@ -284,14 +284,8 @@ document.getElementById('loginSettings').addEventListener('click', function()
 });
 
 //Cargar el icono de configuración
-if(colorTheme === 'dark')
-{
-    document.getElementById('loginSettings').src = 'img/settings-dark.png';
-}
-else
-{
-    document.getElementById('loginSettings').src= 'img/settings.png';
-}
+if(colorTheme === 'dark') document.getElementById('loginSettings').src = 'img/settings-dark.png';
+else document.getElementById('loginSettings').src= 'img/settings.png';
 
 async function requestLoginPassword()
 {

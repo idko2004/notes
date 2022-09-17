@@ -149,35 +149,55 @@ function floatingWindow(elements)
     }
 }
 
-let animationEndEvent; //Para borrar el callback
-function closeWindow(callback)
+async function closeWindow(callback)
 {
-    theWindow.classList.remove('openWin');
-    theWindow.classList.add('closeWin');
-
-    floatWindow.classList.remove('openBg');
-    floatWindow.classList.add('closeBg');
-
-    animationEndEvent = async function(e)
+    return new Promise(function(resolve, reject)
     {
-        if(e.animationName !== 'closeWindow') return;
-        canInteract = true;
-        thereIsAWindows = false;
+        try
+        {
+            theWindow.classList.remove('openWin');
+            theWindow.classList.add('closeWin');
     
-        floatWindow.hidden = true;
-        windowTitle.innerText = '';
-        windowText.innerText = '';
-        windowInput.hidden = true;
-        windowButtons.innerHTML = '';
-        windowInput.children[0].value = '';
-        if(textInputCallback !== null) windowInput.children[0].removeEventListener('keypress', textInputCallback);
-        textInputCallback = null;
-
-        if(animationEndEvent !== undefined) theWindow.removeEventListener('animationend', animationEndEvent);
+            floatWindow.classList.remove('openBg');
+            floatWindow.classList.add('closeBg');
     
-        if(callback !== undefined && typeof callback === 'function') callback();
-    }
+            const animationEndEvent = function(e)
+            {
+                try
+                {
+                    if(e.animationName !== 'closeWindow') return;
+                    canInteract = true;
+                    thereIsAWindows = false;
+            
+                    floatWindow.hidden = true;
+                    windowTitle.innerText = '';
+                    windowText.innerText = '';
+                    windowInput.hidden = true;
+                    windowButtons.innerHTML = '';
+                    windowInput.children[0].value = '';
+                    if(textInputCallback !== null) windowInput.children[0].removeEventListener('keypress', textInputCallback);
+                    textInputCallback = null;
+        
+                    if(animationEndEvent !== undefined) theWindow.removeEventListener('animationend', animationEndEvent);
+            
+                    setTimeout(function()
+                    {
+                        if(callback !== undefined && typeof callback === 'function') callback();
+                        resolve();
+                    }, 10);    
+                }
+                catch
+                {
+                    reject();
+                }
+            }
+    
+            theWindow.addEventListener('animationend', animationEndEvent);    
+        }
+        catch
+        {
+            reject();
+        }
+    });
+};
 
-    theWindow.addEventListener('animationend', animationEndEvent);
-
-}

@@ -81,38 +81,34 @@ async function start()
                     {
                         text: getText('localMode'),
                         primary: false,
-                        callback: function()
+                        callback: async function()
                         {
-                            closeWindow(function()
-                            {
-                                console.log('Modo local');
-                                theSecretThingThatNobodyHasToKnow = 'local';
-                                theOtherSecretThing = undefined;
-                                isLocalMode = true;
+                            await closeWindow();
+                            console.log('Modo local');
+                            theSecretThingThatNobodyHasToKnow = 'local';
+                            theOtherSecretThing = undefined;
+                            isLocalMode = true;
 
-                                document.getElementById('loginScreen').hidden = true;
-                                loadingScreen.hidden = true;
+                            document.getElementById('loginScreen').hidden = true;
+                            loadingScreen.hidden = true;
 
-                                loadNotesList();
-                                document.getElementById('noteScreen').hidden = false;
+                            loadNotesList();
+                            document.getElementById('noteScreen').hidden = false;
 
-                                menuButtonText();
-                                spellcheckStatus();
-                                resizeTwice();
-                                hashAdd('local');
-                                theActualThing = 'note';
-                            });
+                            menuButtonText();
+                            spellcheckStatus();
+                            resizeTwice();
+                            hashAdd('local');
+                            theActualThing = 'note';
                         }
                     },
                     {
                         text: getText('tryAgain'),
                         primary: true,
-                        callback: function()
+                        callback: async function()
                         {
-                            closeWindow(function()
-                            {
-                                location.reload();
-                            })
+                            await closeWindow();
+                            location.reload();
                         }
                     }
                 ]
@@ -137,30 +133,26 @@ function elementsInHashAtStart()
                 {
                     text: getText('menu_reallyEraseAll_btn2'),
                     primary: false,
-                    callback: function()
+                    callback: async function()
                     {
-                        closeWindow(function()
-                        {
-                            hashDelete('deleteall');
-                            location.reload();
-                        });
+                        await closeWindow();
+                        hashDelete('deleteall');
+                        location.reload();
                     }
                 },
                 {
                     text: getText('menu_reallyEraseAll_btn1'),
                     primary: true,
-                    callback: function()
+                    callback: async function()
                     {
-                        closeWindow(function()
+                        await closeWindow();
+                        const allKeys = getKeyNames();
+                        for (let i = 0; i < allKeys.length; i++)
                         {
-                            const allKeys = getKeyNames();
-                            for (let i = 0; i < allKeys.length; i++)
-                            {
-                                deleteKey(allKeys[i]);
-                            }
-                            hashDelete('deleteall');
-                            location.reload();
-                        });
+                            deleteKey(allKeys[i]);
+                        }
+                        hashDelete('deleteall');
+                        location.reload();
                     }
                 }
             ]
@@ -182,30 +174,26 @@ function elementsInHashAtStart()
                 {
                     text: getText('menu_eraseAllLocal_btn1'),
                     primary: false,
-                    callback: function()
+                    callback: async function()
                     {
-                        closeWindow(function()
-                        {
-                            hashDelete('deleteconfig');
-                            location.reload();
-                        });
+                        await closeWindow();
+                        hashDelete('deleteconfig');
+                        location.reload();
                     }
                 },
                 {
                     text: getText('deleteConfigurationData'),
                     primary: true,
-                    callback: function()
+                    callback: async function()
                     {
-                        closeWindow(function()
+                        await closeWindow();
+                        const allKeys = getKeyNames();
+                        for(let i = 0; i < allKeys.length; i++)
                         {
-                            const allKeys = getKeyNames();
-                            for(let i = 0; i < allKeys.length; i++)
-                            {
-                                if(allKeys[i].startsWith('_')) deleteKey(allKeys[i]);
-                            }
-                            hashDelete('deleteconfig');
-                            location.reload();
-                        })
+                            if(allKeys[i].startsWith('_')) deleteKey(allKeys[i]);
+                        }
+                        hashDelete('deleteconfig');
+                        location.reload();
                     }
                 }
             ]

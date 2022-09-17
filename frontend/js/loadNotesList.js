@@ -90,8 +90,6 @@ function createListButton(noteName, id)
         let id = undefined;
         if(e.target.attributes.noteID) id = e.target.attributes.noteID.value;
 
-        console.log(id, actualNoteID);
-        console.log(e.target.innerText, actualNoteName);
         if((id !== actualNoteID || isLocalMode) && e.target.innerText !== actualNoteName)
         {
             loadNote(e.target.innerText, id);
@@ -99,11 +97,9 @@ function createListButton(noteName, id)
         }
         else
         {
-            console.log('note alredy loaded');
             showTheNoteInSmallScreen(true);
             setTimeout(function(){textArea.focus()}, 10);
         }
-        console.log('clicking note button', e.target.innerText);
     });
     noteInTheList.appendChild(noteListButton);
 

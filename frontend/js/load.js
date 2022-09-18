@@ -119,7 +119,7 @@ async function start()
 
 function elementsInHashAtStart()
 {
-    //Borrar todo
+    //////Borrar todo//////
     if(hashContains('deleteall'))
     {
         loadingScreen.hidden = true;
@@ -160,7 +160,7 @@ function elementsInHashAtStart()
         return;
     }
 
-    //Borrar configuración
+    //////Borrar configuración//////
     if(hashContains('deleteconfig'))
     {
         loadingScreen.hidden = true;
@@ -201,7 +201,7 @@ function elementsInHashAtStart()
         return;
     }
 
-    //Tema
+    //////Tema//////
     const colorTheme = hashEquals('colortheme');
     if(colorTheme !== undefined)
     {
@@ -211,7 +211,7 @@ function elementsInHashAtStart()
         return;
     }
 
-    //Idioma
+    //////Idioma//////
     const hashLang = hashEquals('lang');
     if(hashLang !== undefined)
     {
@@ -220,7 +220,7 @@ function elementsInHashAtStart()
         console.log('Idioma guardado mediante hash');
     }
 
-    //Copias de notas locales
+    //////Copias de notas locales//////
     const hashLocalCopy = hashEquals('localcopy');
     if(hashLocalCopy !== undefined)
     {
@@ -229,6 +229,7 @@ function elementsInHashAtStart()
         console.log('Configuración de notas locales cambiada mediante hash');
     }
 
+    //////spellcheck//////
     const hashSpellcheck = hashEquals('spellcheck');
     if(hashSpellcheck !== undefined)
     {
@@ -237,13 +238,43 @@ function elementsInHashAtStart()
         console.log('Spellcheck cambiado mediante hash');
     }
 
-    //Cerrar sesión
+    //////Cerrar sesión//////
     if(hashContains('logout'))
     {
-        deleteKey('_login');
-        theSecretThingThatNobodyHasToKnow = undefined;
-        hashDelete('logout');
-        console.log('Sesión cerrada mediante hash');
+        loadingScreen.hidden = true;
+        theActualThing = 'ventana';
+        floatingWindow(
+        {
+            title: getText('logOut'),
+            text: getText('askToLogOut'),
+            buttons:
+            [
+                {
+                    text: getText('keepSessionOpen'),
+                    primary: false,
+                    callback: async function()
+                    {
+                        await closeWindow();
+                        hashDelete('logout');
+                        start();
+                    }
+                },
+                {
+                    text: getText('logOut'),
+                    primary: true,
+                    callback: async function()
+                    {
+                        await closeWindow();
+                        deleteKey('_login');
+                        theSecretThingThatNobodyHasToKnow = undefined;
+                        hashDelete('logout');
+                        console.log('Sesión cerrada mediante hash');
+                        start();
+                    }
+                }
+            ]
+        });
+        return;
     }
 
     start();

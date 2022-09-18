@@ -903,6 +903,16 @@ const allTexts =
     {
         es: 'Configuración por defecto',
         en: 'Default configuration'
+    },
+    askToLogOut:
+    {
+        es: '¿Quieres cerrar tu sesión de notas?',
+        en: 'Do you want to close your notes session?'
+    },
+    keepSessionOpen:
+    {
+        es: 'Mantener la sesión abierta',
+        en: 'Keep session open'
     }
 }
 

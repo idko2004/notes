@@ -15,32 +15,30 @@ document.getElementById('changeLanguageButton_cancel').addEventListener('click',
     animatedTransition(changeLanguageMenu, mainMenu);
 });
 
-document.getElementById('changeLanguageButton_es').addEventListener('click', function()
+document.getElementById('changeLanguageButton_es').addEventListener('click', async function()
 {
     if(actualMenu !== 'changeLanguage') return;
 
     actualMenu = 'main';
 
-    animatedTransition(changeLanguageMenu, mainMenu, function()
-    {
-        thingsChanged.lang = 'es';
-        hashDelete('lang');
-        hashAdd('lang=es');
-        languageAtStart();
-    });
+    await animatedTransition(changeLanguageMenu, mainMenu);
+
+    thingsChanged.lang = 'es';
+    hashDelete('lang');
+    hashAdd('lang=es');
+    languageAtStart();
 });
 
-document.getElementById('changeLanguageButton_en').addEventListener('click', function()
+document.getElementById('changeLanguageButton_en').addEventListener('click', async function()
 {
     if(actualMenu !== 'changeLanguage') return;
 
     actualMenu = 'main';
 
-    animatedTransition(changeLanguageMenu, mainMenu, function()
-    {
-        thingsChanged.lang = 'en';
-        hashDelete('lang');
-        hashAdd('lang=en');
-        languageAtStart();
-    });
+    await animatedTransition(changeLanguageMenu, mainMenu);
+
+    thingsChanged.lang = 'en';
+    hashDelete('lang');
+    hashAdd('lang=en');
+    languageAtStart();
 });

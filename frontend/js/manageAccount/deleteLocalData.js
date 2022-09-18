@@ -15,15 +15,13 @@ document.getElementById('deleteConfigurationCancel').addEventListener('click', f
     animatedTransition(deleteConfigurationMenu, mainMenu);
 });
 
-document.getElementById('deleteConfigurationConfirm').addEventListener('click', function()
+document.getElementById('deleteConfigurationConfirm').addEventListener('click', async function()
 {
     if(actualMenu !== 'deleteConfiguration') return;
 
-    animatedTransition(deleteConfigurationMenu, undefined, function()
-    {
-        deleteManageAccountRelatedCookies();
-        location.href = 'index.html#deleteconfig';
-    });
+    await animatedTransition(deleteConfigurationMenu);
+    deleteManageAccountRelatedCookies();
+    location.href = 'index.html#deleteconfig';
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -45,13 +43,11 @@ document.getElementById('deleteAllCancel').addEventListener('click', function()
     animatedTransition(deleteAllMenu, mainMenu);
 });
 
-document.getElementById('deleteAllConfirm').addEventListener('click', function()
+document.getElementById('deleteAllConfirm').addEventListener('click', async function()
 {
     if(actualMenu !== 'deleteAllLocal') return;
 
-    animatedTransition(deleteAllMenu, undefined, function()
-    {
-        deleteManageAccountRelatedCookies();
-        location.href = 'index.html#deleteall';
-    });
+    await animatedTransition(deleteAllMenu);
+    deleteManageAccountRelatedCookies();
+    location.href = 'index.html#deleteall';
 });

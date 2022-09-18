@@ -46,13 +46,11 @@ document.getElementById('deleteAccountButton').addEventListener('click', async f
                 button:
                 {
                     text: getText('ok'),
-                    callback: function()
+                    callback: async function()
                     {
-                        closeWindow(function()
-                        {
-                            actualMenu = 'deleteAccount';
-                            animatedTransition(deleteAccountEmailCodeMenu, deleteAccountMenu);
-                        });
+                        await closeWindow();
+                        actualMenu = 'deleteAccount';
+                        animatedTransition(deleteAccountEmailCodeMenu, deleteAccountMenu);
                     }
                 }
             });
@@ -68,13 +66,11 @@ document.getElementById('deleteAccountButton').addEventListener('click', async f
             button:
             {
                 text: getText('ok'),
-                callback: function()
+                callback: async function()
                 {
-                    closeWindow(function()
-                    {
-                        actualMenu = 'deleteAccount';
-                        animatedTransition(deleteAccountEmailCodeMenu, deleteAccountMenu);
-                    });
+                    await closeWindow();
+                    actualMenu = 'deleteAccount';
+                    animatedTransition(deleteAccountEmailCodeMenu, deleteAccountMenu);
                 }
             }
         });
@@ -134,7 +130,6 @@ document.getElementById('confirmDeleteAccount').addEventListener('click', async 
                         text: getText('ok'),
                         callback: function()
                         {
-
                             actualMenu = 'deleteAccountEmailCode';
                             document.getElementById('deleteAccountCodeInput').value = '';
                             closeWindow();
@@ -172,8 +167,9 @@ document.getElementById('confirmDeleteAccount').addEventListener('click', async 
                 button:
                 {
                     text: getText('ok'),
-                    callback: function()
+                    callback: async function()
                     {
+                        await closeWindow();
                         location.href = 'index.html#logout';
                     }
                 }

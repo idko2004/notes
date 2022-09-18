@@ -23,22 +23,21 @@ function updateDataMenuPlaceholders()
     comprobePasswordField.placeholder = getText('confirmPassword');
 }
 
-document.getElementById('goBackChangeDataMenu').addEventListener('click', function()
+document.getElementById('goBackChangeDataMenu').addEventListener('click', async function()
 {
     if(actualMenu !== 'changeData' || isLocalMode) return;
 
     actualMenu = 'main';
 
-    animatedTransition(changeDataMenu, mainMenu, function()
-    {
-        changeUsernameField.value = '';
-        changeEmailField.value = '';
-        changePasswordField.value = '';
-        comprobePasswordField.value = '';
-    });
+    await animatedTransition(changeDataMenu, mainMenu);
+
+    changeUsernameField.value = '';
+    changeEmailField.value = '';
+    changePasswordField.value = '';
+    comprobePasswordField.value = '';
 });
 
-document.getElementById('saveChangeDataMenu').addEventListener('click', function()
+document.getElementById('saveChangeDataMenu').addEventListener('click', async function()
 {
     if(actualMenu !== 'changeData' || isLocalMode) return;
 
@@ -211,111 +210,113 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', function
                 primary: true,
                 callback: async function()
                 {
-                    closeWindow(async function()
+                    await closeWindow();
+
+                    if(isLocalMode) return;
+
+                    actualMenu = 'changeDataEmailCode';
+                    document.getElementById('changeDataEmailSent').innerText = email;
+
+                    animatedTransition(changeDataMenu, changeDataEmailCodeMenu);
+
+                    //Hacer la llamada al servidor para actualizar a los nuevos datos, generar un código y enviar el email
+                    try
                     {
-                        if(isLocalMode) return;
-
-                        actualMenu = 'changeDataEmailCode';
-                        document.getElementById('changeDataEmailSent').innerText = email;
-
-                        animatedTransition(changeDataMenu, changeDataEmailCodeMenu);
-
-                        //Hacer la llamada al servidor para actualizar a los nuevos datos, generar un código y enviar el email
-                        try
+                        const response = await encryptHttpCall('/createAccountEmailCode',
                         {
-                            const response = await encryptHttpCall('/createAccountEmailCode',
+                            encrypt:
                             {
-                                encrypt:
-                                {
-                                    email: newEmail,
-                                    password: newPassword,
-                                    username: newUsername,
-                                    operation: 'updateAccount',
-                                    oldemail: email
-                                },
-                                key: theSecretThingThatNobodyHaveToKnow
-                            }, theOtherSecretThing);
-                            console.log(response);
+                                email: newEmail,
+                                password: newPassword,
+                                username: newUsername,
+                                operation: 'updateAccount',
+                                oldemail: email
+                            },
+                            key: theSecretThingThatNobodyHaveToKnow
+                        }, theOtherSecretThing);
+                        console.log(response);
 
-                            if(!response.data.emailSent && response.data.error !== undefined)
+                        if(!response.data.emailSent && response.data.error !== undefined)
+                        {
+                            console.log(response.data.error);
+                            if(response.data.error === 'invalidFields')
                             {
-                                console.log(response.data.error);
-                                if(response.data.error === 'invalidFields')
+                                //Ventana que te haga volver atrás y que diga que los datos no son válidos
+                                actualMenu = 'ventana';
+                                floatingWindow(
                                 {
-                                    //Ventana que te haga volver atrás y que diga que los datos no son válidos
-                                    actualMenu = 'ventana';
-                                    floatingWindow(
+                                    title: getText('somethingWentWrong'),
+                                    text: getText('oneFieldInvalid'),
+                                    button:
                                     {
-                                        title: getText('somethingWentWrong'),
-                                        text: getText('oneFieldInvalid'),
-                                        button:
+                                        text: getText('back'),
+                                        callback: async function()
                                         {
-                                            text: getText('back'),
-                                            callback: function()
-                                            {
-                                                closeWindow(changeDataEmailCodeMenuGoBackAnimation);
-                                            }
+                                            await closeWindow();
+                                            changeDataEmailCodeMenuGoBackAnimation();
                                         }
-                                    });
-                                }
-                                else if(response.data.error === 'duplicatedEmail')
+                                    }
+                                });
+                            }
+                            else if(response.data.error === 'duplicatedEmail')
+                            {
+                                //Ventana que te haga volver atrás y que diga que ese email ya existe
+                                actualMenu = 'ventana';
+                                floatingWindow(
                                 {
-                                    //Ventana que te haga volver atrás y que diga que ese email ya existe
-                                    actualMenu = 'ventana';
-                                    floatingWindow(
+                                    title: getText('somethingWentWrong'),
+                                    text: getText('emailDuplicated'),
+                                    button:
                                     {
-                                        title: getText('somethingWentWrong'),
-                                        text: getText('emailDuplicated'),
-                                        button:
+                                        text: getText('back'),
+                                        callback: async function()
                                         {
-                                            text: getText('back'),
-                                            callback: function()
-                                            {
-                                                closeWindow(changeDataEmailCodeMenuGoBackAnimation);
-                                            }
+                                            await closeWindow();
+                                            changeDataEmailCodeMenuGoBackAnimation();
                                         }
-                                    });
-                                }
-                                else
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                //Ventana que te haga volver atrás y que muestre response.data.error
+                                actualMenu = 'ventana';
+                                floatingWindow(
                                 {
-                                    //Ventana que te haga volver atrás y que muestre response.data.error
-                                    actualMenu = 'ventana';
-                                    floatingWindow(
+                                    title: getText('somethingWentWrong'),
+                                    text: `${getText('errorCode')}: ${response.data.error}`,
+                                    button:
                                     {
-                                        title: getText('somethingWentWrong'),
-                                        text: `${getText('errorCode')}: ${response.data.error}`,
-                                        button:
+                                        text: getText('ok'),
+                                        callback: async function()
                                         {
-                                            text: getText('ok'),
-                                            callback: function()
-                                            {
-                                                closeWindow(changeDataEmailCodeMenuGoBackAnimation);
-                                            }
+                                            await closeWindow();
+                                            changeDataEmailCodeMenuGoBackAnimation();
                                         }
-                                    });
-                                }
-        
+                                    }
+                                });
                             }
                         }
-                        catch
+                    }
+                    catch
+                    {
+                        //Ventana que diga que se cayó el servidor
+                        actualMenu = 'ventana';
+                        floatingWindow(
                         {
-                            //Ventana que diga que se cayó el servidor
-                            actualMenu = 'ventana';
-                            floatingWindow(
+                            title: getText('ups'),
+                            text: getText('serverDown'),
+                            button:
                             {
-                                title: getText('ups'),
-                                text: getText('serverDown'),
-                                button:
+                                text: getText('ok'),
+                                callback: async function()
                                 {
-                                    text: getText('ok'),
-                                    callback: function()
-                                    {
-                                        closeWindow(changeDataEmailCodeMenuGoBackAnimation);
-                                    }
+                                    await closeWindow();
+                                    changeDataEmailCodeMenuGoBackAnimation();
                                 }
-                            });
-                        }
-                    });
+                            }
+                        });
+                    }
                 }
             }
         ]
@@ -383,8 +384,9 @@ async function changeDataComprobeCode()
                 button:
                 {
                     text: getText('backToHome'),
-                    callback: function()
+                    callback: async function()
                     {
+                        await closeWindow();
                         mainScreen.hidden = true;
                         loadingScreen.hidden = false;
                         saveCookie('_login', theSecretThingThatNobodyHaveToKnow);
@@ -449,10 +451,11 @@ async function changeDataComprobeCode()
                 button:
                 {
                     text: getText('ok'),
-                    callback: function()
+                    callback: async function()
                     {
                         document.getElementById('changeDataConfirmCodeButton').innerText = getText('verify');
-                        closeWindow(changeDataEmailCodeMenuGoBackAnimation);
+                        await closeWindow();
+                        changeDataEmailCodeMenuGoBackAnimation();
                     }
                 }
             });

@@ -22,9 +22,10 @@ document.getElementById('changeColorTheme_light').addEventListener('click', func
         button:
         {
             text: getText('ok'),
-            callback: function()
+            callback: async function()
             {
-                closeWindow(colorTheme_goBack)
+                await closeWindow();
+                colorTheme_goBack();
             }
         }
     });
@@ -43,9 +44,10 @@ document.getElementById('changeColorTheme_dark').addEventListener('click', funct
         button:
         {
             text: getText('ok'),
-            callback: function()
+            callback: async function()
             {
-                closeWindow(colorTheme_goBack)
+                await closeWindow();
+                colorTheme_goBack();
             }
         }
     });

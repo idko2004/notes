@@ -94,12 +94,10 @@ async function start()
                 button:
                 {
                     text: getText('ok'),
-                    callback: function()
+                    callback: async function()
                     {
-                        closeWindow(function()
-                        {
-                            location.href = 'index.html';
-                        })
+                        await closeWindow();
+                        location.href = 'index.html';
                     }
                 }
             });
@@ -122,12 +120,10 @@ async function start()
                     button:
                     {
                         text: getText('ok'),
-                        callback: function()
+                        callback: async function()
                         {
-                            closeWindow(function()
-                            {
-                                location.href = 'index.html';
-                            })
+                            await closeWindow();
+                            location.href = 'index.html';
                         }
                     }
                 });
@@ -143,12 +139,10 @@ async function start()
                     button:
                     {
                         text: getText('ok'),
-                        callback: function()
+                        callback: async function()
                         {
-                            closeWindow(function()
-                            {
-                                location.href = 'index.html';
-                            })
+                            await closeWindow();
+                            location.href = 'index.html';
                         }
                     }
                 });
@@ -174,12 +168,10 @@ async function start()
                 button:
                 {
                     text: getText('ok'),
-                    callback: function()
+                    callback: async function()
                     {
-                        closeWindow(function()
-                        {
-                            location.href = 'index.html';
-                        })
+                        await closeWindow();
+                        location.href = 'index.html';
                     }
                 }
             });
@@ -208,65 +200,68 @@ function deleteManageAccountRelatedCookies()
     deleteCookie('_spellcheck');
 }
 
-function animatedTransition(elementToHide, elementToShow, callback)
+async function animatedTransition(elementToHide, elementToShow, callback)
 {
-    let endAnimationCallback = function(e)
+    return new Promise(function(resolve, reject)
     {
-        if (e.animationName !== 'closeMenuAnimation') return;
-
-        elementToHide.hidden = true;
-
-        if(callback !== undefined && typeof callback === 'function') callback();
-
-        if(elementToShow !== undefined)
+        let endAnimationCallback = function(e)
         {
-            elementToShow.classList.remove('closeMenu');
-            elementToShow.classList.add('openMenu');
-            elementToShow.hidden = false;            
+            if (e.animationName !== 'closeMenuAnimation') return;
+    
+            elementToHide.hidden = true;
+    
+            if(callback !== undefined && typeof callback === 'function') callback();
+            resolve();
+    
+            if(elementToShow !== undefined)
+            {
+                elementToShow.classList.remove('closeMenu');
+                elementToShow.classList.add('openMenu');
+                elementToShow.hidden = false;
+            }
+    
+            window.scrollTo(0, 0);
+            elementToHide.removeEventListener('animationend', endAnimationCallback);
         }
-
-        window.scrollTo(0, 0);
-        elementToHide.removeEventListener('animationend', endAnimationCallback);
-    }
-
-    elementToHide.classList.remove('openMenu');
-    elementToHide.classList.add('closeMenu');
-
-    elementToHide.addEventListener('animationend', endAnimationCallback);    
+    
+        elementToHide.classList.remove('openMenu');
+        elementToHide.classList.add('closeMenu');
+    
+        elementToHide.addEventListener('animationend', endAnimationCallback);
+    });
 }
 
-document.getElementById('goBackToNotes').addEventListener('click', function()
+document.getElementById('goBackToNotes').addEventListener('click', async function()
 {
     if(actualMenu !== 'main') return;
     actualMenu = 'ventana';
 
-    animatedTransition(mainMenu, undefined, function()
+    await animatedTransition(mainMenu);
+
+    mainScreen.hidden = true;
+    loadingScreen.hidden = false;
+
+    deleteManageAccountRelatedCookies();
+
+    let str = 'index.html#';
+
+    if(thingsChanged.lang !== undefined)
     {
-        mainScreen.hidden = true;
-        loadingScreen.hidden = false;
+        str += `lang=${thingsChanged.lang};`;
+    }
+    if(thingsChanged.localCopy !== undefined)
+    {
+        str += `localcopy=${thingsChanged.localCopy};`;
+    }
+    if(thingsChanged.colorTheme !== undefined)
+    {
+        str += `colortheme=${thingsChanged.colorTheme};`;
+    }
+    if(thingsChanged.spellcheck !== undefined)
+    {
+        str +=`spellcheck=${thingsChanged.spellcheck};`;
+    }
 
-        deleteManageAccountRelatedCookies();
-
-        let str = 'index.html#';
-
-        if(thingsChanged.lang !== undefined)
-        {
-            str += `lang=${thingsChanged.lang};`;
-        }
-        if(thingsChanged.localCopy !== undefined)
-        {
-            str += `localcopy=${thingsChanged.localCopy};`;
-        }
-        if(thingsChanged.colorTheme !== undefined)
-        {
-            str += `colortheme=${thingsChanged.colorTheme};`;
-        }
-        if(thingsChanged.spellcheck !== undefined)
-        {
-            str +=`spellcheck=${thingsChanged.spellcheck};`;
-        }
-
-        str = str.slice(0, -1);
-        location.href = str;
-    });
+    str = str.slice(0, -1);
+    location.href = str;
 });

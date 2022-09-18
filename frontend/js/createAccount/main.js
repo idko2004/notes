@@ -111,12 +111,10 @@ if([deviceID, idPassword].includes(null))
         button:
         {
             text: getText('ok'),
-            callback: function()
+            callback: async function()
             {
-                closeWindow(function()
-                {
-                    location.href = 'index.html';
-                })
+                await closeWindow();
+                location.href = 'index.html';
             }
         }
     });

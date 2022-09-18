@@ -56,12 +56,10 @@ async function sendEmail()
                 button:
                 {
                     text: getText('ok'),
-                    callback: function()
+                    callback: async function()
                     {
-                        closeWindow(function()
-                        {
-                            location.reload();
-                        })
+                        await closeWindow();
+                        location.reload();
                     }
                 }
             });
@@ -96,9 +94,10 @@ async function sendEmail()
                 button:
                 {
                     text: getText('ok'),
-                    callback: function()
+                    callback: async function()
                     {
-                        closeWindow(emailCodeGoBackAnimation);
+                        await closeWindow();
+                        emailCodeGoBackAnimation();
                     }
                 }
             });
@@ -113,9 +112,10 @@ async function sendEmail()
                 button:
                 {
                     text: getText('ok'),
-                    callback: function()
+                    callback: async function()
                     {
-                        closeWindow(emailCodeGoBackAnimation);
+                        await closeWindow();
+                        emailCodeGoBackAnimation();
                     }
                 }
             });
@@ -130,9 +130,10 @@ async function sendEmail()
                 button:
                 {
                     text: getText('ok'),
-                    callback: function()
+                    callback: async function()
                     {
-                        closeWindow(emailCodeGoBackAnimation);
+                        await closeWindow();
+                        emailCodeGoBackAnimation();
                     }
                 }
             });
@@ -148,9 +149,10 @@ async function sendEmail()
             button:
             {
                 text: getText('ok'),
-                callback: function()
+                callback: async function()
                 {
-                    closeWindow(emailCodeGoBackAnimation);
+                    await closeWindow();
+                    emailCodeGoBackAnimation();
                 }
             }
         })
@@ -239,12 +241,10 @@ comprobeEmailCodeButton.addEventListener('click', async function()
                 button:
                 {
                     text: getText('ok'),
-                    callback: function()
+                    callback: async function()
                     {
-                        closeWindow(function()
-                        {
-                            location.href = 'index.html';
-                        });
+                        await closeWindow();
+                        location.href = 'index.html';
                     }
                 }
             });

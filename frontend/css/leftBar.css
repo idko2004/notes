@@ -7,10 +7,11 @@ aside
     width: 15vw;
     /*max-width: 20%;*/
     min-width: 17ch;
-    height: max-content;
+    /*height: max-content;*/
     margin: 0.5rem;
     padding: 0.5rem;
     border-radius: 10px;
+    /*overflow: scroll;*/
 }
 
 .leftBarEntireWidth
@@ -39,7 +40,8 @@ aside
 #notesList
 {
     padding: 0.5rem 0;
-    max-height: 80vh;
+    /*height: 90vh;*/
+    height: 100%;
     width: 100%;
     overflow: scroll;
 }

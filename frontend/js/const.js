@@ -7,6 +7,7 @@ const topBarButtons = document.getElementById('topBarButtons');
 const noteName = document.getElementById('noteName');
 const textArea = document.getElementById('noteField');
 const sayThings = document.getElementById('sayThings');
+const nav = document.getElementById('nav');
 
 const leftToTheNoteNameButtons = document.getElementById('leftToTheNoteNameButtons');
 const showNotesListButton = document.getElementById('showNotesListButton');

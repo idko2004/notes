@@ -89,7 +89,7 @@ textarea
     color: var(--font-color);
     background-color: var(--bg-color);
     caret-color: auto;
-    transition: all ease 100ms;
+    transition: border ease 100ms, color ease 100ms;
 }
 
 textarea:disabled

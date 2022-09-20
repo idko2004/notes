@@ -86,7 +86,9 @@ module.exports = function(app)
         }
         if(element !== null)
         {
-            if(element.password === password)
+            //if(element.password === password)
+            const passwordsMatch = await crypto.comparePassword(password, element.password)
+            if(passwordsMatch)
             {
                 linkKey(element.email);
                 return;
@@ -98,7 +100,7 @@ module.exports = function(app)
                 return;
             }
         }
-        else
+        else //Comprobar con el nombre de usuario
         {
             const element2 = await database.getElement('users', {email: username});
             if(element2 === 'dbError')
@@ -109,7 +111,8 @@ module.exports = function(app)
             }
             if(element2 !== null)
             {
-                if(element2.password === password)
+                const passwordsMatch2 = await crypto.comparePassword(password, element2.password);
+                if(passwordsMatch2)
                 {
                     linkKey(username);
                     return;

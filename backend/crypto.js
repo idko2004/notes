@@ -1,4 +1,5 @@
 const cryptojs = require('crypto-js');
+const bcrypt = require('bcrypt');
 
 function encrypt(input, password)
 {
@@ -31,8 +32,22 @@ function decrypt(input, password)
     }
 }
 
+async function hashPassword(plainPassword)
+{
+    const hash = await bcrypt.hash(plainPassword, 10);
+    return hash;
+}
+
+async function comparePassword(plainPassword, hashedPassword)
+{
+    const areTheSame = await bcrypt.compare(plainPassword, hashedPassword);
+    return areTheSame;
+}
+
 module.exports =
 {
     encrypt,
-    decrypt
+    decrypt,
+    hashPassword,
+    comparePassword
 };

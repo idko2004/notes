@@ -370,14 +370,15 @@ document.getElementById('deleteButton').addEventListener('click',() =>
                             theActualThing = 'ventana';
                             floatingWindow(
                             {
-                                title: 'Oh, no!',
-                                text: `${getText('somethingWentWrong')}\n${getText('errorCode')}: ${response.data.error}`,
+                                title: getText('somethingWentWrong'),
+                                text: `${getText('errorCode')}: ${response.data.error}`,
                                 button:
                                 {
                                     text: getText('ok'),
                                     callback: function()
                                     {
                                         theActualThing = 'note';
+                                        noteName.innerText = actualNoteName;
                                         closeWindow();
                                     }
                                 }

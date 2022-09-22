@@ -97,26 +97,7 @@ module.exports = function(app)
         }
         console.log(logID, 'La nota existe');
 
-        //Comprobamos si la nota es suya
-        if(note.owner !== email)
-        {
-            res.status(200).send({error: 'notTheOwner'});
-            console.log(logID, 'notTheOwner');
-            return;
-        }
-        console.log(logID, 'Es el dueño de la nota');
-
-        //Borramos la nota
-        const deleted = await database.deleteElement('notes', {id: noteID});
-        console.log(logID, 'Nota borrada', deleted);
-        if(deleted === 'dbError')
-        {
-            res.status(200).send({error: 'dbError'});
-            console.log(logID, 'dbError, borrando nota');
-            return;
-        }
-
-        //Buscamos la nota en el perfil del usuario y lo borramos
+        //Obtenemos el usuario
         let userProfile = await database.getElement('users', {email});
         if(userProfile === null)
         {
@@ -136,6 +117,34 @@ module.exports = function(app)
         {
             res.status(200).send({error: 'cantFindNotesID'});
             console.log(logID, 'cantFindNotesID');
+            return;
+        }
+
+        //Comprobamos si la nota es suya
+        let isTheOwner = false;
+        for(let i = 0; i < userProfile.notesID.length; i++)
+        {
+            if(userProfile.notesID[i].id === noteID)
+            {
+                isTheOwner = true;
+                break;
+            }
+        }
+
+        if(!isTheOwner)
+        {
+            res.status(200).send({error: 'noteDoesntExist'});
+            console.log(logID, 'noteDoesntExist, no es el dueño de la nota');
+            return;
+        }
+
+        //Borramos la nota
+        const deleted = await database.deleteElement('notes', {id: noteID});
+        console.log(logID, 'Nota borrada', deleted);
+        if(deleted === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, borrando nota');
             return;
         }
 

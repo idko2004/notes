@@ -80,7 +80,7 @@ module.exports = function(app)
 
         //Obtener el nombre de usuario
         const username = element.username;
-        const passwordLength = element.password.length;
+        const passwordLength = element.passwordLength;
 
         const encrypted = crypto.encrypt(JSON.stringify({username, email, passwordLength}), pswrd);
 

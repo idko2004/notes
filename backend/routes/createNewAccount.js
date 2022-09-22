@@ -138,7 +138,7 @@ module.exports = function(app)
 
         const accountEmail = reqDecrypted.email;
         let oldEmail = reqDecrypted.oldemail;
-        const accountPassword = reqDecrypted.password;
+        let accountPassword = reqDecrypted.password;
         const accountUsername = reqDecrypted.username;
         const accountOperation = reqDecrypted.operation;
 
@@ -233,6 +233,14 @@ module.exports = function(app)
             return;
         }
 
+        //Ciframos la contraseña si es que se ha enviado una
+        let accountPasswordLength;
+        if(accountPassword !== undefined)
+        {
+            accountPasswordLength = accountPassword.length;
+            accountPassword = await crypto.hashPassword(accountPassword);
+        }
+
         //Buscamos si no existe un mismo usuario con este correo electrónico
         const emailAlredyExist = await database.getElement('users', {email: oldEmail});
         if(accountOperation === 'newAccount' && emailAlredyExist !== null)
@@ -321,6 +329,7 @@ module.exports = function(app)
             email: accountEmail,
             oldEmail,
             password: accountPassword,
+            passwordLength: accountPasswordLength,
             username: accountUsername,
             date:
             {
@@ -489,8 +498,9 @@ module.exports = function(app)
 
         const email = codeDB.email;
         const password = codeDB.password;
+        const passwordLength = codeDB.passwordLength;
         const username = codeDB.username;
-        if(email === undefined || password === undefined || username === undefined)
+        if([email, password, passwordLength, username].includes(undefined))
         {
             res.status(500).send({error: 'invalidData'});
             console.log(logID, 'invalidData');
@@ -515,7 +525,7 @@ module.exports = function(app)
         //Creamos un nuevo elemento en la base de datos de usuarios con el nuevo usuario
         const newUser =
         {
-            email, username, password, notesID: []
+            email, username, password, passwordLength, notesID: []
         }
         const saved = await database.createElement('users', newUser);
         console.log(logID, 'Usuario creado', saved);
@@ -617,6 +627,7 @@ module.exports = function(app)
 
         const newUsername = codeDB.username;
         const newPassword = codeDB.password;
+        const newPasswordLength = codeDB.passwordLength;
         const newEmail = codeDB.email;
         const oldEmail = codeDB.oldEmail;
 
@@ -702,7 +713,11 @@ module.exports = function(app)
         let newUser = user;
         newUser.email = newEmail;
         newUser.username = newUsername;
-        if(!['', undefined, 'undefined', null, 'null'].includes(newPassword)) newUser.password = newPassword;
+        if(!['', undefined, 'undefined', null, 'null'].includes(newPassword))
+        {
+            newUser.password = newPassword;
+            newUser.passwordLength = newPasswordLength;
+        }
 
         console.log(logID, 'El usuario queda así:', newUser);
 

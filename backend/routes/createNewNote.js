@@ -118,6 +118,13 @@ module.exports = function(app)
             console.log(logID, 'idUndefined');
             return;
         }
+        if(userInfo.noteKey === undefined)
+        {
+            res.status(200).send({error: 'noteKeyUndefined'});
+            console.log(logID, 'noteKeyUndefined');
+            return;
+        }
+        const noteKey = userInfo.noteKey;
 
         for(let i = 0; i < userInfo.notesID.length; i++)
         {
@@ -147,12 +154,14 @@ module.exports = function(app)
         }
         console.log(logID, 'El código es único');
 
+        //Encriptar texto vacío porque parece que hay que encriptarlo
+        let note = crypto.encrypt('', noteKey);
+
         //Crear el elemento para la base de datos de notas
         const newNote =
         {
             id: noteID,
-            owner: email,
-            text: ''
+            note
         }
         const noteCreated = await database.createElement('notes', newNote);
         if(noteCreated === 'dbError')

@@ -8,6 +8,7 @@ const jsonParser = bodyParser.json();
 
 const fs = require('fs');
 const rand = require('generate-key');
+const generator = require('generate-password');
 
 const mailer = require('nodemailer');
 
@@ -522,10 +523,21 @@ module.exports = function(app)
             return;
         }
 
+        //Generamos una contraseña para cifrar las notas
+        const noteKey = generator.generate(
+        {
+            length: 20,
+            numbers: true,
+            symbols: true,
+            lowercase: true,
+            uppercase: true,
+            exclude: '"'
+        });
+
         //Creamos un nuevo elemento en la base de datos de usuarios con el nuevo usuario
         const newUser =
         {
-            email, username, password, passwordLength, notesID: []
+            email, username, password, passwordLength, noteKey, notesID: []
         }
         const saved = await database.createElement('users', newUser);
         console.log(logID, 'Usuario creado', saved);

@@ -98,16 +98,55 @@ module.exports = function(app)
             return;
         }
 
-        //Comprobamos si el usuario es dueño de esa nota
-        if(note.owner !== email)
+        //Obtenemos los datos del usuario
+        const user = await database.getElement('users', {email});
+        if(user === null)
         {
-            res.status(200).send({error: 'noteDontExist'});
-            console.log(logID, 'notTheOwner');
+            res.status(200).send({error: 'cantFindUser'});
+            console.log(logID, 'cantFindUser');
+            return;
+        }
+        if(user === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, obteniendo usuario');
+            return;
+        }
+        if(user.notesID === undefined)
+        {
+            res.status(200).send({error: 'whyNotesIDAreUndefinedWTF'});
+            console.log(logID, 'whyNotesIDAreUndefinedWTF');
+            return;
+        }
+        if(user.noteKey === undefined)
+        {
+            res.status(200).send({error: 'notesKeyUndefined'});
+            console.log(logID, 'notesKeyUndefined');
+            return;
+        }
+        const noteKey = user.noteKey;
+
+
+        //Comprobamos si el usuario es dueño de esa nota
+        let isTheOwner = false;
+        for(let i = 0; i < user.notesID.length; i++)
+        {
+            if(user.notesID[i].id === noteID)
+            {
+                isTheOwner = true;
+                break;
+            }
+        }
+
+        if(!isTheOwner)
+        {
+            res.status(200).send({error: 'noteDoesntExist'});
+            console.log(logID, 'noteDoesntExist, no es el dueño de la nota');
             return;
         }
 
-        //Reemplazamos la nota
-        note.text = noteContent;
+        //Encriptamos la nota
+        note.note = crypto.encrypt(noteContent, noteKey);
 
         //Guardamos la nota en la base de datos
         const result = await database.updateElement('notes', {id: noteID}, note);

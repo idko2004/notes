@@ -78,6 +78,52 @@ module.exports = function(app)
             return;
         }
 
+        //Obtener al usuario
+        const user = await database.getElement('users', {email});
+        if(user === null)
+        {
+            res.status(200).send({error: 'cantFindUser'});
+            console.log(logID, 'cantFindUser');
+            return;
+        }
+        if(user === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError, obteniendo usuario');
+            return;
+        }
+        if(user.notesID === undefined)
+        {
+            res.status(200).send({error: 'whyNotesIDAreUndefinedWTF'});
+            console.log(logID, 'whyNotesIDAreUndefinedWTF');
+            return;
+        }
+        if(user.noteKey === undefined)
+        {
+            res.status(200).send({error: 'notesKeyUndefined'});
+            console.log(logID, 'notesKeyUndefined');
+            return;
+        }
+        const noteKey = user.noteKey;
+
+        //Comprobar si el noteID es de este usuario
+        let isTheOwner = false;
+        for(let i = 0; i < user.notesID.length; i++)
+        {
+            if(user.notesID[i].id === targetNoteID)
+            {
+                isTheOwner = true;
+                break;
+            }
+        }
+
+        if(!isTheOwner)
+        {
+            res.status(200).send({error: 'noteDoesntExist'});
+            console.log(logID, 'noteDoesntExist, no es el dueño de la nota');
+            return;
+        }
+
         //Obtener la nota
         const theNote = await database.getElement('notes',{id: targetNoteID});
         console.log(logID, theNote);
@@ -93,18 +139,25 @@ module.exports = function(app)
             console.log(logID, 'dbError, obteniendo nota');
             return;
         }
-
-        //Comprobar si es el dueño de la nota
-        if(theNote.owner !== email)
+        if(theNote.note === undefined)
         {
-            res.status(200).send({error: 'notTheOwner'});
-            console.log(logID, 'notTheOwner');
+            res.status(200).send({error: 'noteUndefined'});
+            console.log(logID, 'noteUndefined');
+            return;
+        }
+
+        //Descifrar la nota
+        const noteContent = crypto.decrypt(theNote.note, noteKey);
+        if(noteContent === null)
+        {
+            res.status(200).send({error: 'cantObtainNote'});
+            console.log(logID, 'cantObtainNote');
             return;
         }
 
         //Enviar la nota
         //const theText = theNote.text;
-        const resEncrypted = crypto.encrypt(JSON.stringify({note: theNote.text}), keyData.pswrd);
+        const resEncrypted = crypto.encrypt(JSON.stringify({note: noteContent}), keyData.pswrd);
         res.status(200).send({decrypt: resEncrypted});
         console.log(logID, 'nota enviada');
     });

@@ -126,8 +126,16 @@ function youDontHaveNotes()
 {
     let howManyNotes = notesList.childElementCount;
 
-    if(howManyNotes <= 0) dontNotes.hidden = false;
-    else dontNotes.hidden = true;
+    if(howManyNotes <= 0)
+    {
+        dontNotes.hidden = false;
+        notesList.hidden = true;
+    }
+    else
+    {
+        dontNotes.hidden = true;
+        notesList.hidden = false;
+    }
 }
 
 function selectedNote(e, altNoteName)

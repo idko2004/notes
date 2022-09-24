@@ -59,7 +59,7 @@ function resizeElements()
             const buttonPadding = parseFloat(window.getComputedStyle(newNote).getPropertyValue('padding'));
 
             //Cambiar el tamaño de notesList (el elemento dentro de leftbar que contiene la lista de notas)
-            notesList.style.height = leftBarHeight - ((leftBarPadding * 2) + buttonHeight + (buttonPadding * 2));
+            notesList.style.maxHeight = leftBarHeight - ((leftBarPadding * 2) + buttonHeight + (buttonPadding * 2));
         }
     }
 

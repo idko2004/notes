@@ -121,11 +121,14 @@ document.getElementById('loginButton').addEventListener('click', async function(
         {
             console.log('Clave obtenida');
             console.log('la nueva contraseña', response.data.decrypt.pswrd);
+
             isLocalMode = false;
             theSecretThingThatNobodyHasToKnow = response.data.decrypt.key;
             theOtherSecretThing = response.data.decrypt.pswrd;
+
             saveKey('_login', theSecretThingThatNobodyHasToKnow);
             saveKey('_pswrd', theOtherSecretThing);
+            
             codePassword = undefined;
             loginPassword = undefined;
 

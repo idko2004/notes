@@ -231,6 +231,29 @@ async function animatedTransition(elementToHide, elementToShow, callback)
     });
 }
 
+function getElementByMenuName(menuName)
+{
+    let menuList =
+    {
+        main: mainMenu,
+        changeData: changeDataMenu,
+        changeDataEmailCode: changeDataEmailCodeMenu,
+        changeDataComprobingCode: changeDataEmailCodeMenu,
+        changeLanguage: changeLanguageMenu,
+        logOutInAll: logOutInAllMenu,
+        deleteAccount: deleteAccountMenu,
+        deleteAccountEmailCode: deleteAccountEmailCodeMenu,
+        localCopy: localCopyMenu,
+        colorTheme: colorThemeMenu,
+        deleteConfiguration: deleteConfigurationMenu,
+        deleteAllLocal: deleteAllMenu,
+        spellcheck: spellcheckMenu,
+        ventana: undefined
+    }
+
+    return menuList[menuName];
+}
+
 document.getElementById('goBackToNotes').addEventListener('click', async function()
 {
     if(actualMenu !== 'main') return;

@@ -200,7 +200,7 @@ let theLastTextSave = '';
 let serverDownAdvertisement = false; //Para que no salga el mensaje cada vez cuando el server está caído.
 async function saveNote()
 {
-    if(theActualThing !== 'note') return;
+    if(!['note', 'loading'].includes(theActualThing)) return;
 
     let name = actualNoteName;
     if(name === undefined) return null;
@@ -214,6 +214,7 @@ async function saveNote()
     {
         saveKey(name, value);
         theLastTextSave = value;
+        console.log('Nota guardada en modo local');
         return true;
     }
     else

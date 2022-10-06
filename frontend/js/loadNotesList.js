@@ -83,19 +83,20 @@ function createListButton(noteName, id)
 
     if(id !== undefined) noteListButton.setAttribute('noteID', id);
 
-    noteListButton.addEventListener('click', (e) =>
+    noteListButton.addEventListener('click', async function(e)
     {
         if(!canInteract) return;
         if(theActualThing !== 'note') return;
+
         let id = undefined;
         if(e.target.attributes.noteID) id = e.target.attributes.noteID.value;
 
-        if((id !== actualNoteID || isLocalMode) && e.target.innerText !== actualNoteName)
+        if((id !== actualNoteID || (isLocalMode || actualNoteIsLocal)) && e.target.innerText !== actualNoteName)
         {
             loadNote(e.target.innerText, id);
-            selectedNote(e);    
+            selectedNote(e);
         }
-        else
+        else //Si es la misma nota que ya estaba cargada
         {
             showTheNoteInSmallScreen(true);
             setTimeout(function(){textArea.focus()}, 10);

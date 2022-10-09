@@ -65,3 +65,35 @@ function hashAdd(element)
     if(location.hash === '#' || location.hash === '') location.hash = element;
     else location.hash += `;${element}`;
 }
+
+function hashReplaceValue(element, newValue)
+{
+    let h = location.hash.replace('#', '');
+    let hSplit = h.split(';');
+
+    //Encontrar el elemento de la misma forma que con hashDelete pero en vez de borrar reemplazando el valor
+    let found = false;
+    for(let i = 0; i < hSplit.length; i++)
+    {
+        let hSplitSplitted = hSplit[i].split('=');
+        if(hSplitSplitted[0] === element)
+        {
+            hSplit[i] = `${element}=${newValue}`;
+            found = true;
+            break;
+        }
+    }
+
+    //En caso de que el elemento no exista, se añade
+    if(!found) hSplit.push(`${element}=${newValue}`);
+
+    //Reconstruir el hash
+    let newHash = '#';
+    for(let i = 0; i < hSplit.length; i++)
+    {
+        newHash += `${hSplit[i]};`;
+    }
+
+    newHash = newHash.slice(0, -1);
+    location.hash = newHash;
+}

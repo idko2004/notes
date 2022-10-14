@@ -68,6 +68,7 @@ async function start()
         loadingScreen.hidden = true;
         mainScreen.hidden = false;
         actualMenu = 'main';
+        changeHashMenu('main');
 
         //Ocultar menuses que no tienen que estar
         document.getElementById('modifyUserDataSection').hidden = true;
@@ -157,6 +158,7 @@ async function start()
             loadingScreen.hidden = true;
             mainScreen.hidden = false;
             actualMenu = 'main';
+            changeHashMenu('main');
         }
         catch
         {
@@ -254,7 +256,9 @@ function getElementByMenuName(menuName)
     return menuList[menuName];
 }
 
-document.getElementById('goBackToNotes').addEventListener('click', async function()
+document.getElementById('goBackToNotes').addEventListener('click', backToIndex);
+
+async function backToIndex()
 {
     if(actualMenu !== 'main') return;
     actualMenu = 'ventana';
@@ -287,4 +291,4 @@ document.getElementById('goBackToNotes').addEventListener('click', async functio
 
     str = str.slice(0, -1);
     location.href = str;
-});
+}

@@ -1,3 +1,44 @@
+
+function changeHashMenu(menuName)
+{
+    hashReplaceValue('menu', menuName);
+}
+
+window.onhashchange = function()
+{
+    const menu = hashEquals('menu');
+    if(menu === undefined) //Volver al index porque no hay menu
+    {
+        alert('Go back to index');
+        backToIndex();
+    }
+    else if(menu !== actualMenu) //El menu no ha sido cambiado dentro de la pagina
+    {
+        //Moverse hacia ese menu si es que esta permitido.
+        console.log('Menu en hash', menu);
+
+        const bannedMenus =
+        [
+            
+        ];
+
+        const bannedLocalMenus =
+        [
+            
+        ];
+
+        if(!bannedMenus.includes(menu) && (!isLocalMode || !bannedLocalMenus.includes(menu))) //El menu es permitido
+        {
+            const currentMenu = getElementByMenuName(actualMenu);
+            const targetMenu = getElementByMenuName(menu);
+            
+            actualMenu = menu;
+            animatedTransition(currentMenu, targetMenu);
+        }
+    }
+}
+
+/*
 // Esto funciona más o menos, pero creo que no lo voy a incluir debido a las complicaciones que va a traer,
 // Además, tampoco es que sea necesario, creo que voy a poner un botón normal y ya.
 // Esto servía para que la página vaya al menú anterior si le dabas a ir hacia atrás en el navegador,
@@ -65,3 +106,4 @@ function navButtonsChangeMenu(menuName)
     animatedTransition(currentMenu, targetMenu);
     actualMenu = menuName;
 }
+*/

@@ -3,6 +3,7 @@ document.getElementById('toChangeColorTheme').addEventListener('click', function
     if(actualMenu !== 'main') return;
 
     actualMenu = 'colorTheme';
+    changeHashMenu('colorTheme');
 
     animatedTransition(mainMenu, colorThemeMenu);
 });
@@ -58,6 +59,7 @@ function colorTheme_goBack()
     if(actualMenu !== 'colorTheme') return;
 
     actualMenu = 'main';
+    changeHashMenu('main');
 
     animatedTransition(colorThemeMenu, mainMenu);
 }

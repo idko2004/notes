@@ -54,6 +54,28 @@ document.getElementById('changeColorTheme_dark').addEventListener('click', funct
     });
 });
 
+document.getElementById('changeColorTheme_krad').addEventListener('click', function()
+{
+    if(actualMenu !== 'colorTheme') return;
+
+    thingsChanged.colorTheme = 'krad';
+
+    floatingWindow(
+    {
+        title: getText('kradThemeWillBeApplied'),
+        text: getText('saveToApplyTheme'),
+        button:
+        {
+            text: getText('ok'),
+            callback: async function()
+            {
+                await closeWindow();
+                colorTheme_goBack();
+            }
+        }
+    });
+});
+
 function colorTheme_goBack()
 {
     if(actualMenu !== 'colorTheme') return;

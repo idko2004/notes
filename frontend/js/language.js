@@ -913,6 +913,16 @@ const allTexts =
     {
         es: 'Mantener la sesión abierta',
         en: 'Keep session open'
+    },
+    kradTheme:
+    {
+        es: 'Tema oscuro invertido',
+        en: 'Dark theme inverted'
+    },
+    kradThemeWillBeApplied:
+    {
+        es: 'Se aplicará el tema oscuro invertido',
+        en: 'Dark theme inverted will be applied'
     }
 }
 

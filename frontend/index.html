@@ -10,14 +10,13 @@
         <!--Cargar los css dependiendo de si está en modo oscuro o no-->
         <script>
             let colorTheme = localStorage.getItem('_theme');
-            if(colorTheme === 'dark') loadDarkCss(true);
-            else loadDarkCss(false);
-
-            function loadDarkCss(dark)
+            switch(colorTheme)
             {
-                if(dark) document.write(`<link rel='stylesheet type='text/css' href='css/style-dark.css'>`);
-                else document.write(`<link rel='stylesheet type='text/css' href='css/style.css'>`);
+                case 'dark': document.write(`<link rel='stylesheet type='text/css' href='css/style-dark.css'>`); break;
+                case 'krad': document.write(`<link rel='stylesheet type='text/css' href='css/style-krad.css'>`); break;
+                default: document.write(`<link rel='stylesheet type='text/css' href='css/style.css'>`); break;
             }
+
         </script>
 
         <link rel='stylesheet' type='text/css' href='css/load.css'>

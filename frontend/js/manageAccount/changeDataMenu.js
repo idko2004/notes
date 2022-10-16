@@ -3,6 +3,8 @@ document.getElementById('toChangeDataMenuButton').addEventListener('click', func
     if(actualMenu !== 'main' || isLocalMode) return;
 
     actualMenu = 'changeData';
+    changeHashMenu('changeData');
+
     updateDataMenuPlaceholders();
 
     animatedTransition(mainMenu, changeDataMenu);
@@ -28,6 +30,7 @@ document.getElementById('goBackChangeDataMenu').addEventListener('click', async 
     if(actualMenu !== 'changeData' || isLocalMode) return;
 
     actualMenu = 'main';
+    changeHashMenu('main');
 
     await animatedTransition(changeDataMenu, mainMenu);
 
@@ -215,6 +218,7 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', async fu
                     if(isLocalMode) return;
 
                     actualMenu = 'changeDataEmailCode';
+                    changeHashMenu('changeDataEmailCode');
                     document.getElementById('changeDataEmailSent').innerText = email;
 
                     animatedTransition(changeDataMenu, changeDataEmailCodeMenu);
@@ -326,6 +330,7 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', async fu
 function changeDataEmailCodeMenuGoBackAnimation()
 {
     actualMenu = 'changeData';
+    changeHashMenu('changeData');
     animatedTransition(changeDataEmailCodeMenu, changeDataMenu);
 }
 

@@ -3,6 +3,7 @@ document.getElementById('toLocalCopyMenuButton').addEventListener('click', funct
     if(actualMenu !== 'main' || isLocalMode) return;
 
     actualMenu = 'localCopy';
+    changeHashMenu('localCopy');
     updateLocalCopyEnabledText();
 
     animatedTransition(mainMenu, localCopyMenu);
@@ -40,6 +41,7 @@ document.getElementById('localCopyChangeButton').addEventListener('click', funct
     }
 
     actualMenu = 'main';
+    changeHashMenu('main');
     animatedTransition(localCopyMenu, mainMenu);
 });
 
@@ -48,5 +50,6 @@ document.getElementById('localCopyCancelButton').addEventListener('click', funct
     if(actualMenu !== 'localCopy' || isLocalMode) return;
 
     actualMenu = 'main';
+    changeHashMenu('main');
     animatedTransition(localCopyMenu, mainMenu);
 });

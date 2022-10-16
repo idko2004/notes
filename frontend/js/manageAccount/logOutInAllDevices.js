@@ -3,6 +3,7 @@ document.getElementById('logOutInAllMenuButton').addEventListener('click', funct
     if(actualMenu !== 'main' || isLocalMode) return;
 
     actualMenu = 'logOutInAll';
+    changeHashMenu('logOutInAll');
 
     animatedTransition(mainMenu, logOutInAllMenu);
 });
@@ -68,5 +69,6 @@ document.getElementById('logOutInAllCancelButton').addEventListener('click', fun
     if(actualMenu !== 'logOutInAll' || isLocalMode) return;
 
     actualMenu = 'main';
+    changeHashMenu('main');
     animatedTransition(logOutInAllMenu, mainMenu);
 });

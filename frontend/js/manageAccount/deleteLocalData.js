@@ -3,6 +3,7 @@ document.getElementById('toDeleteConfigurationButton').addEventListener('click',
     if(actualMenu !== 'main') return;
 
     actualMenu = 'deleteConfiguration';
+    changeHashMenu('deleteConfiguration');
 
     animatedTransition(mainMenu, deleteConfigurationMenu);
 });
@@ -12,6 +13,7 @@ document.getElementById('deleteConfigurationCancel').addEventListener('click', f
     if(actualMenu !== 'deleteConfiguration') return;
 
     actualMenu = 'main';
+    changeHashMenu('main');
     animatedTransition(deleteConfigurationMenu, mainMenu);
 });
 
@@ -30,6 +32,7 @@ document.getElementById('toDeleteAllButton').addEventListener('click', function(
     if(actualMenu !== 'main') return;
 
     actualMenu = 'deleteAllLocal';
+    changeHashMenu('deleteAllLocal');
 
     animatedTransition(mainMenu, deleteAllMenu);
 });
@@ -39,6 +42,7 @@ document.getElementById('deleteAllCancel').addEventListener('click', function()
     if(actualMenu !== 'deleteAllLocal') return;
 
     actualMenu = 'main';
+    changeHashMenu('main');
 
     animatedTransition(deleteAllMenu, mainMenu);
 });

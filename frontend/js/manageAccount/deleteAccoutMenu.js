@@ -3,6 +3,7 @@ document.getElementById('deleteAccountMenuButton').addEventListener('click', fun
     if(actualMenu !== 'main' || isLocalMode) return;
 
     actualMenu = 'deleteAccount';
+    changeHashMenu('deleteAccount');
     updateDeleteAccountPlaceholders();
 
     animatedTransition(mainMenu, deleteAccountMenu);
@@ -19,6 +20,7 @@ document.getElementById('goBackDeleteAccountMenu').addEventListener('click', fun
     if(actualMenu !== 'deleteAccount' || isLocalMode) return;
 
     actualMenu = 'main';
+    changeHashMenu('main');
 
     animatedTransition(deleteAccountMenu, mainMenu);
 });
@@ -28,6 +30,7 @@ document.getElementById('deleteAccountButton').addEventListener('click', async f
     if(actualMenu !== 'deleteAccount' || isLocalMode) return;
 
     actualMenu = 'deleteAccountEmailCode';
+    changeHashMenu('deleteAccountEmailCode');
 
     animatedTransition(deleteAccountMenu, deleteAccountEmailCodeMenu);
 
@@ -50,6 +53,7 @@ document.getElementById('deleteAccountButton').addEventListener('click', async f
                     {
                         await closeWindow();
                         actualMenu = 'deleteAccount';
+                        changeHashMenu('deleteAccount');
                         animatedTransition(deleteAccountEmailCodeMenu, deleteAccountMenu);
                     }
                 }
@@ -70,6 +74,7 @@ document.getElementById('deleteAccountButton').addEventListener('click', async f
                 {
                     await closeWindow();
                     actualMenu = 'deleteAccount';
+                    changeHashMenu('deleteAccount');
                     animatedTransition(deleteAccountEmailCodeMenu, deleteAccountMenu);
                 }
             }

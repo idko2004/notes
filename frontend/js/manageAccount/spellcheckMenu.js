@@ -3,6 +3,7 @@ document.getElementById('toSpellcheckMenuButton').addEventListener('click', func
     if(actualMenu !== 'main') return;
 
     actualMenu = 'spellcheck';
+    changeHashMenu('spellcheck');
     updateSpellcheckText();
 
     animatedTransition(mainMenu, spellcheckMenu);
@@ -28,6 +29,7 @@ document.getElementById('spellcheckButton_cancel').addEventListener('click', fun
     if(actualMenu !== 'spellcheck') return;
 
     actualMenu = 'main';
+    changeHashMenu('main');
     animatedTransition(spellcheckMenu, mainMenu);
 });
 
@@ -38,6 +40,7 @@ document.getElementById('spellcheckButton_enable').addEventListener('click', fun
     thingsChanged.spellcheck = 'true';
     spellcheckConfig = 'true';
     actualMenu = 'main';
+    changeHashMenu('main');
 
     animatedTransition(spellcheckMenu, mainMenu);
 });
@@ -49,6 +52,7 @@ document.getElementById('spellcheckButton_disable').addEventListener('click', fu
     thingsChanged.spellcheck = 'false';
     spellcheckConfig = 'false';
     actualMenu = 'main';
+    changeHashMenu('main');
 
     animatedTransition(spellcheckMenu, mainMenu);
 });
@@ -60,6 +64,7 @@ document.getElementById('spellcheckButton_default').addEventListener('click', fu
     thingsChanged.spellcheck = 'default';
     spellcheckConfig = 'default';
     actualMenu = 'main';
+    changeHashMenu('main');
 
     animatedTransition(spellcheckMenu, mainMenu);
 });

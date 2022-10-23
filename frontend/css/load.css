@@ -37,3 +37,201 @@
 {
     font-size: 2rem;
 }
+
+#loadingDotsContainer
+{
+    margin: 1.5rem;
+}
+
+.loadingDot
+{
+    background-color: white;
+    height: 1.2rem;
+    width: 1.2rem;
+    margin: 0.2rem;
+    border-radius: 100%;
+    line-height: normal;
+    display: inline-block;
+    vertical-align: middle;
+    align-items: center;
+}
+
+.loadDot1
+{
+    animation: dot1Animation 700ms linear infinite;
+}
+
+.loadDot2
+{
+    animation: dot2Animation 700ms linear infinite;
+}
+
+.loadDot3
+{
+    animation: dot3Animation 700ms linear infinite;
+}
+/*
+@keyframes dot1Animation
+{
+    0%
+    {
+        opacity: 0;
+    }
+    7%
+    {
+        opacity: 0;
+    }
+    14%
+    {
+        opacity: 1;
+    }
+    49%
+    {
+        opacity: 1;
+    }
+    56%
+    {
+        opacity: 1;
+    }
+    63%
+    {
+        opacity: 0;
+    }
+    100%
+    {
+        opacity: 0;
+    }
+}
+
+@keyframes dot2Animation
+{
+    0%
+    {
+        opacity: 0;
+    }
+    21%
+    {
+        opacity: 0;
+    }
+    28%
+    {
+        opacity: 1;
+    }
+    49%
+    {
+        opacity: 1;
+    }
+    70%
+    {
+        opacity: 1;
+    }
+    77%
+    {
+        opacity: 0;
+    }
+    100%
+    {
+        opacity: 0;
+    }
+}
+
+@keyframes dot3Animation
+{
+    0%
+    {
+        opacity: 0;
+    }
+    35%
+    {
+        opacity: 0;
+    }
+    42%
+    {
+        opacity: 1;
+    }
+    49%
+    {
+        opacity: 1;
+    }
+    84%
+    {
+        opacity: 1;
+    }
+    91%
+    {
+        opacity: 0;
+    }
+    100%
+    {
+        opacity: 0;
+    }
+}
+*/
+
+@keyframes dot1Animation
+{
+    0%
+    {
+        opacity: 0;
+    }
+    16%
+    {
+        opacity: 1;
+    }
+    64%
+    {
+        opacity: 0;
+    }
+    100%
+    {
+        opacity: 0;
+    }
+}
+
+@keyframes dot2Animation
+{
+    0%
+    {
+        opacity: 0;
+    }
+    16%
+    {
+        opacity: 0;
+    }
+    32%
+    {
+        opacity: 1;
+    }
+    80%
+    {
+        opacity: 0;
+    }
+    100%
+    {
+        opacity: 0;
+    }
+}
+
+@keyframes dot3Animation
+{
+    0%
+    {
+        opacity: 0;
+    }
+    32%
+    {
+        opacity: 0;
+    }
+    48%
+    {
+        opacity: 1;
+    }
+    96%
+    {
+        opacity: 0;
+    }
+    100%
+    {
+        opacity: 0;
+    }
+}

@@ -56,25 +56,22 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', async fu
 
         //no esté vacío
     if(newUsername === '') newUsername = username;
-    else
+        //No sea demasiado largo
+    else if(newUsername.length > 45)
     {
-        //no tenga más de 30 caracteres
-        if(newUsername.length > 30)
+        floatingWindow(
         {
-            floatingWindow(
+            title: getText('username'),
+            text: getText('usernameTooLong'),
+            button:
             {
-                title: getText('username'),
-                text: getText('usernameTooLong'),
-                button:
-                {
-                    text: getText('ok'),
-                    callback: closeWindow
-                }
-            });
-            return;
-        }
-        somethingChanged = true;
+                text: getText('ok'),
+                callback: closeWindow
+            }
+        });
+        return;
     }
+    else if(newUsername !== username) somethingChanged = true; //Si el nombre de usuario no es el mismo
 
     //Comprobar el nuevo correo electrónico
     if(newEmail === '') newEmail = email;

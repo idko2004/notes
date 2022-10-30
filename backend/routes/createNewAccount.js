@@ -219,7 +219,7 @@ module.exports = function(app)
         accountEmail.lenght > 320 ||
         passwordLength < 8 ||
         passwordLength > 20 ||
-        accountUsername.lenght > 30)
+        accountUsername.lenght > 45)
         {
             res.status(200).send({error: 'invalidFields'});
             console.log(logID, 'invalidFields');
@@ -230,7 +230,7 @@ module.exports = function(app)
             console.log(logID, 'accountEmail.length < 320', accountEmail.length < 320);
             console.log(logID, 'passwordLength >= 8', passwordLength >= 8);
             console.log(logID, 'passwordLength <= 20', passwordLength <= 20);
-            console.log(logID, 'accountUsername <= 30', accountUsername.length <= 30);
+            console.log(logID, 'accountUsername <= 45', accountUsername.length <= 45);
             return;
         }
 

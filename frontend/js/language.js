@@ -923,7 +923,12 @@ const allTexts =
     {
         es: 'Se aplicará el tema oscuro invertido',
         en: 'Dark theme inverted will be applied'
-    }
+    },
+    usernameDuplicated:
+    {
+        es: 'Ya existe una cuenta con este nombre de usuario.\n\n(Prueba añadiendo un número o algo).',
+        en: 'An account with this username already exists.\n\n(Try adding a number or something).'
+    },
 }
 
 languageAtStart();

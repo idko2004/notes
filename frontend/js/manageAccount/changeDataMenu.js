@@ -281,6 +281,25 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', async fu
                                     }
                                 });
                             }
+                            else if(response.data.error === 'duplicatedUsername')
+                            {
+                                //Ventana que te haga volver atrás y que diga que el nombre de usuario ya existe
+                                actualMenu = 'ventana';
+                                floatingWindow(
+                                {
+                                    title: getText('somethingWentWrong'),
+                                    text: getText('usernameDuplicated'),
+                                    button:
+                                    {
+                                        text: getText('back'),
+                                        callback: async function()
+                                        {
+                                            await closeWindow();
+                                            changeDataEmailCodeMenuGoBackAnimation();
+                                        }
+                                    }
+                                });
+                            }
                             else
                             {
                                 //Ventana que te haga volver atrás y que muestre response.data.error

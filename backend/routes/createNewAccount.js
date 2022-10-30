@@ -282,6 +282,21 @@ module.exports = function(app)
             }
         }
 
+        //Comprobar que el nombre de usuario sea único
+        const usernameAlredyExist = await database.getElement('users', {username: accountUsername});
+        if(usernameAlredyExist !== null)
+        {
+            //Comprobamos si el nombre de usuario pertenece a este mismo email, si es así quiere decir que no se ha cambiado, por lo que sigue siendo válido. Si el email asociado al nombre de usuario es distinto a este email, quiere decir que el nombre de usuario está repetido.
+            if(usernameAlredyExist.email !== accountEmail)
+            {
+                res.status(200).send({error: 'duplicatedUsername'});
+                console.log(logID, 'El combre de usuario ya existe y no pertenece a esta cuenta');
+                return;
+            }
+            else console.log(logID, 'El nombre de usuario parece único (Los emails coinciden)');
+        }
+        else console.log(logID, 'El nombre de usuario parece único (No se encontró nada)');
+
         //Buscamos si este mismo usuario no ha hecho una request antes con los mismos datos
         const emailCodeAlredyExist = await database.getElement('emailCodes', {email: accountEmail});
         console.log(logID, 'emailCodeAlredyExist', emailCodeAlredyExist !== null)

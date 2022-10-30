@@ -107,8 +107,26 @@ async function sendEmail()
             actualMenu = 'ventana';
             floatingWindow(
             {
-                title: getText('somethingWentWront'),
+                title: getText('somethingWentWrong'),
                 text: getText('emailDuplicated'),
+                button:
+                {
+                    text: getText('ok'),
+                    callback: async function()
+                    {
+                        await closeWindow();
+                        emailCodeGoBackAnimation();
+                    }
+                }
+            });
+        }
+        else if(response.data.error === 'duplicatedUsername')
+        {
+            actualMenu = 'ventana';
+            floatingWindow(
+            {
+                title: getText('somethingWentWrong'),
+                text: getText('usernameDuplicated'),
                 button:
                 {
                     text: getText('ok'),

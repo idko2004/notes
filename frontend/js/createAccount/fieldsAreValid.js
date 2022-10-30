@@ -19,7 +19,7 @@ function fieldsAreValid(username, email, password, comprobePassword)
             usernameText(getText('newNote_tooLongName_title'));
             return false;
         }
-        else username = value.trim();
+        else username = username.trim();
         return true;
     }
 

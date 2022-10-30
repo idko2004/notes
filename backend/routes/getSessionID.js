@@ -67,6 +67,7 @@ module.exports = function(app)
             return;
         }
         decrypted = JSON.parse(decrypted);
+        console.log(decrypted);
         
         const username = decrypted.username;
         const password = decrypted.password;
@@ -87,6 +88,7 @@ module.exports = function(app)
         if(element !== null)
         {
             //if(element.password === password)
+            console.log('Comparando contraseñas', password, element.password);
             const passwordsMatch = await crypto.comparePassword(password, element.password)
             if(passwordsMatch)
             {
@@ -111,6 +113,7 @@ module.exports = function(app)
             }
             if(element2 !== null)
             {
+                console.log('Comparando contraseñas', password, element2.password);
                 const passwordsMatch2 = await crypto.comparePassword(password, element2.password);
                 if(passwordsMatch2)
                 {

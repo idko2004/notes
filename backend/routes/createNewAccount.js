@@ -237,11 +237,13 @@ module.exports = function(app)
         //Ciframos la contraseña si es que se ha enviado una
         let accountPasswordLength;
         console.log('Contraseña', accountPassword);
-        if(accountPassword !== undefined)
+        if(!['', undefined, 'undefined', null, 'null'].includes(accountPassword))
         {
+            console.log('La contraseña ha sido cifrada');
             accountPasswordLength = accountPassword.length;
             accountPassword = await crypto.hashPassword(accountPassword);
         }
+        else console.log('Dejando la contraseña vacía, las llamadas encargadas de actualizar los datos deberán dejar la contraseña anterior.');
 
         //Buscamos si no existe un mismo usuario con este correo electrónico
         const emailAlredyExist = await database.getElement('users', {email: oldEmail});
@@ -756,10 +758,6 @@ module.exports = function(app)
         //Borramos el elemento de la base de datos de códigos
         console.log(logID, 'Borrando código de email');
         await database.deleteElement('emailCodes', {code});
-
-        //Cambiar la propiedad de todas las notas
-        console.log(logID, 'Actualizando notas');
-        await database.updateMultipleElements('notes', {owner: oldEmail}, {owner: newEmail});
 
         //Cambiar el correo electrónico de todas las llaves
         console.log(logID, 'Actualizando llaves');

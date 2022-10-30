@@ -236,6 +236,7 @@ module.exports = function(app)
 
         //Ciframos la contraseña si es que se ha enviado una
         let accountPasswordLength;
+        console.log('Contraseña', accountPassword);
         if(accountPassword !== undefined)
         {
             accountPasswordLength = accountPassword.length;

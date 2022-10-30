@@ -40,7 +40,9 @@ async function hashPassword(plainPassword)
 
 async function comparePassword(plainPassword, hashedPassword)
 {
+    console.log(`await bcrypt.compare('${plainPassword}', '${hashedPassword}'`);
     const areTheSame = await bcrypt.compare(plainPassword, hashedPassword);
+    console.log(areTheSame);
     return areTheSame;
 }
 

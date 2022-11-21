@@ -1,4 +1,4 @@
-const database = require('../database');
+const database = require('../utils/database');
 const rand = require('generate-key');
 
 const bodyParser = require('body-parser');

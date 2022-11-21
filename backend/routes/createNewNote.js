@@ -3,8 +3,8 @@ const jsonParser = bodyParser.json();
 
 const rand = require('generate-key');
 
-const database = require('../database');
-const crypto = require('../crypto');
+const database = require('../utils/database');
+const crypto = require('../utils/crypto');
 
 module.exports = function(app)
 {

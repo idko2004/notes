@@ -1,7 +1,7 @@
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
-const database = require('../database');
+const database = require('../utils/database');
 
 const rand = require('generate-key');
 

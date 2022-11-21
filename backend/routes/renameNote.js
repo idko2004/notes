@@ -1,8 +1,8 @@
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
-const database = require('../database');
-const crypto = require('../crypto');
+const database = require('../utils/database');
+const crypto = require('../utils/crypto');
 
 const rand = require('generate-key');
 

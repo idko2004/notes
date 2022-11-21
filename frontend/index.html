@@ -66,23 +66,26 @@
             <img id="loginSettings">
             <div>
                 <h1><span class="text" txt="login"></span></h1>
-                <section id="usernameLoginSection">
-                    <span class="text" txt="username"></span><br>
-                    <input type='text' id='usernameField'>
+                <section id="emailLoginSection">
+                    <span class="text" txt="email"></span><br>
+                    <input type='text' id='emailField'>
+                    <div>
+                        <button class='loginScreenButton1 text' id='loginButton' txt="login"></button>
+                    </div>
                 </section>
-                <section id="passwordLoginSection">
-                    <span class="text" txt="password"></span><br>
-                    <input type='password' id='passwordField'><br>
-                    <small>
-                        <i>
-                            <a class="text" txt="forgotPassword"></a>
-                        </i>
-                    </small>
+                <section id="loadLoginSection">
+                    <div>
+                        <div class="loadingDot loadDot1"></div>
+                        <div class="loadingDot loadDot2"></div>
+                        <div class="loadingDot loadDot3"></div>
+                    </div>
                 </section>
-                <section id="loginButtonSection">
-                    <button class='loginScreenButton1' id='loginButton'>
-                        <span class="text" txt="login"></span>
-                    </button>
+                <section id="emailCodeLoginSection">
+                    <span>Introduce the code we sent to your email</span><br>
+                    <input type="text" id="emailCodeLoginField"><br>
+                    <div>
+                        <button class="loginScreenButton1 text" id="sendCodeLoginButton" txt="login"></button>
+                    </div>
                 </section>
                 <section id="reloadLoginSection" hidden>
                     <div class="text" txt="unableToLogIn"></div>

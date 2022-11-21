@@ -1,9 +1,147 @@
 let canClick_login = true;
+let currentLoginSection;
 
 let codePassword;
 let loginPassword;
 
-document.getElementById('loginButton').addEventListener('click', async function(e)
+const emailLoginSection = document.getElementById('emailLoginSection');
+const loadLoginSection = document.getElementById('loadLoginSection');
+const emailCodeLoginSection = document.getElementById('emailCodeLoginSection');
+const reloadLoginSection = document.getElementById('reloadLoginSection');
+
+showLoginSection('email');
+
+function showLoginSection(section)
+{
+    switch(section)
+    {
+        case 'email':
+            emailLoginSection.hidden = false;
+
+            loadLoginSection.hidden = true;
+            emailCodeLoginSection.hidden = true;
+            reloadLoginSection.hidden = true;
+            
+            currentLoginSection = 'email';
+        break;
+
+        case 'load':
+            loadLoginSection.hidden = false;
+
+            emailLoginSection.hidden = true;
+            emailCodeLoginSection.hidden = true;
+            reloadLoginSection.hidden = true;
+
+            currentLoginSection = 'load';
+        break;
+
+        case 'code':
+            emailCodeLoginSection.hidden = false;
+
+            emailLoginSection.hidden = true;
+            loadLoginSection.hidden = true;
+            reloadLoginSection.hidden = true;
+
+            currentLoginSection = 'code';
+        break;
+
+        case 'reload':
+            reloadLoginSection.hidden = false;
+
+            emailLoginSection.hidden = true;
+            loadLoginSection.hidden = true;
+            emailCodeLoginSection.hidden = true;
+
+            currentLoginSection = 'reload';
+        break;
+    }
+}
+
+
+document.getElementById('loginButton').addEventListener('click', async function()
+{
+    if(theActualThing !== 'login') return;
+    if(currentLoginSection !== 'email') return;
+
+    showLoginSection('load');
+
+    const email = document.getElementById('emailField').value.trim();
+
+    //Comprobar que todos los campos estén completos
+    if(email === '')
+    {
+        theActualThing = 'ventana';
+        floatingWindow(
+        {
+            title: getText('login_email_title'),
+            text: getText('login_email_text'),
+            button:
+            {
+                text: getText('ok'),
+                callback: function()
+                {
+                    theActualThing = 'login';
+                    showLoginSection('email');
+                    closeWindow();
+                }
+            }
+        });
+        return;
+    }
+
+    if([codePassword, loginPassword].includes(undefined))
+    {
+        floatingWindow(
+        {
+            title: getText('somethingWentWrong'),
+            text: `${getText('login_error_text')}\n${getText('errorCode')}: a thing (${codePassword === undefined}) or another thing (${loginPassword === undefined}) is undefined`,
+            button:
+            {
+                text: getText('ok'),
+                callback: async function()
+                {
+                    await closeWindow();
+                    location.reload();
+                }
+            }
+        });
+    }
+
+    try
+    {
+        const response = await encryptHttpCall('/login',
+        {
+            code: codePassword,
+            encrypt:
+            {
+                email
+            }
+        }, loginPassword);
+
+        console.log(response);
+    }
+    catch(err)
+    {
+        console.log(err);
+        floatingWindow(
+        {
+            title: getText('somethingWentWrong'),
+            text: `${getText('login_error_text')}\nerror code: ${err.message}`,
+            button:
+            {
+                text: getText('ok'),
+                callback: function()
+                {
+                    theActualThing = 'login';
+                    showLoginSection('email');
+                    closeWindow();
+                }
+            }
+        });
+    }
+});
+
+/*document.getElementById('loginButton').addEventListener('click', async function(e)
 {
     if(theActualThing !== 'login') return;
     if(!canClick_login) return;
@@ -11,17 +149,16 @@ document.getElementById('loginButton').addEventListener('click', async function(
 
     e.target.innerText = getText('logginIn');
 
-    const username = document.getElementById('usernameField').value.trim();
-    const password = document.getElementById('passwordField').value;
+    const email = document.getElementById('emailField').value.trim();
 
     //Comprobar que todos los campos estén completos
-    if(username === '' && password === '')
+    if(email === '')
     {
         theActualThing = 'ventana';
         floatingWindow(
         {
-            title: getText('login_none_title'),
-            text: getText('login_none_text'),
+            title: getText('login_email_title'),
+            text: getText('login_email_text'),
             button:
             {
                 text: getText('ok'),
@@ -33,60 +170,6 @@ document.getElementById('loginButton').addEventListener('click', async function(
                     closeWindow();
                 }
             }
-        });
-        return;
-    }
-    else if(username === '')
-    {
-        theActualThing = 'ventana';
-        floatingWindow(
-        {
-            title: getText('login_username_title'),
-            text: getText('login_username_text'),
-            button:
-            {
-                text: getText('ok'),
-                callback: function()
-                {
-                    e.target.innerText = getText('login');
-                    canClick_login = true;
-                    theActualThing = 'login';
-                    closeWindow();
-                }
-            }
-        });
-        return;
-    }
-    else if(password === '')
-    {
-        theActualThing = 'ventana';
-        floatingWindow(
-        {
-            title: getText('login_password_title'),
-            text: getText('login_password_text'),
-            buttons:
-            [
-                {
-                    text: getText('forgotPassword'),
-                    primary: false,
-                    callback: async function()
-                    {
-                        await closeWindow();
-                        location.href = 'forgotMyPassword.html';
-                    }
-                },
-                {
-                    text: getText('ok'),
-                    primary: true,
-                    callback: function()
-                    {
-                        e.target.innerText = getText('login');
-                        canClick_login = true;
-                        theActualThing = 'login';
-                        closeWindow();
-                    }
-                }
-            ]
         });
         return;
     }
@@ -115,12 +198,11 @@ document.getElementById('loginButton').addEventListener('click', async function(
         //const response = await axios.get(`${path}/getSessionID`, {headers: {username, password}});
         console.log('loginPassword', loginPassword);
         console.log('http: iniciando sesión');
-        const response = await encryptHttpCall('/getSessionID',
+        const response = await encryptHttpCall('/login',
         {
             encrypt:
             {
-                username,
-                password
+                email
             },
             code: codePassword
         }, loginPassword);
@@ -151,27 +233,6 @@ document.getElementById('loginButton').addEventListener('click', async function(
             menuButtonText();
             resizeTwice();
             theActualThing = 'note';
-        }
-        else if(response.data.error === 'wrongPassword') //Contraseña incorrecta
-        {
-            console.log('Contraseña inválida');
-            e.target.innerText = getText('login');
-            theActualThing = 'ventana';
-            floatingWindow(
-            {
-                title: getText('login_wrongPassword_title'),
-                text: getText('login_wrongPassword_text'),
-                button:
-                {
-                    text: getText('ok'),
-                    callback: function()
-                    {
-                        canClick_login = true;
-                        theActualThing = 'login';
-                        closeWindow();
-                    }
-                }
-            });
         }
         else if(response.data.error === 'userDontExist') //Usuario incorrecto
         {
@@ -247,6 +308,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
         })
     }
 });
+*/
 
 document.getElementById('signUpButton').addEventListener('click', function()
 {
@@ -276,13 +338,7 @@ document.getElementById('localModeButton').addEventListener('click',function()
 });
 
 //Que cuando le das a enter pase al siguiente campo
-document.getElementById('usernameField').addEventListener('keydown', function(e)
-{
-    if(theActualThing !== 'login') return;
-    if(e.key === 'Enter') document.getElementById('passwordField').focus();
-})
-
-document.getElementById('passwordField').addEventListener('keydown', function(e)
+document.getElementById('emailField').addEventListener('keydown', function(e)
 {
     if(theActualThing !== 'login') return;
     if(e.key === 'Enter') document.getElementById('loginButton').click();
@@ -386,16 +442,11 @@ async function requestLoginPassword()
     function hideLoginFields()
     {
         console.log('Escondiendo botones de iniciar sesión debido a que no se pudo conectar con el servidor');
-        document.getElementById('usernameLoginSection').hidden = true;
-        document.getElementById('passwordLoginSection').hidden = true;
-        document.getElementById('loginButtonSection').hidden = true;
-        document.getElementById('signUpButton').hidden = true;
-
-        document.getElementById('reloadLoginSection').hidden = false;
-        
-        document.getElementById('reloadLoginButton').addEventListener('click', function()
-        {
-            location.reload();
-        });
+        showLoginSection('reload');
     }
 }
+
+document.getElementById('reloadLoginButton').addEventListener('click', function()
+{
+    location.reload();
+});

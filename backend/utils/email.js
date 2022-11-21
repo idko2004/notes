@@ -1,4 +1,6 @@
 // falta hacer y eso
+if(process.env.NODE_ENV !== 'production') require('dotenv').config();
+
 const mailer = require('nodemailer');
 
 const transporter = mailer.createTransport(
@@ -33,8 +35,9 @@ function sendEmail(whoToSend, emailName, emailHtmlContent)
             subject: emailName,
             html: emailHtmlContent
         }
+        console.log(mailOptions);
     
-        transporter.sendMail(mailOptions, function()
+        transporter.sendMail(mailOptions, function(error)
         {
             if(error)
             {
@@ -43,10 +46,11 @@ function sendEmail(whoToSend, emailName, emailHtmlContent)
             }
             else
             {
-                console.log(logID, '//Email mandado', emailName);
+                console.log('//Email mandado', emailName);
                 resolve();
             }
         });
+
     });
 }
 

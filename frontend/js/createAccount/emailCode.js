@@ -1,6 +1,6 @@
 function updateWeSentAnEmail()
 {
-    document.getElementById('changeDataEmailSent').innerText = account.email;
+    document.getElementById('changeDataEmailSent').innerText = email;
 }
 
 document.getElementById('changeDataCancelCodeButton').addEventListener('click', function()
@@ -11,11 +11,7 @@ document.getElementById('changeDataCancelCodeButton').addEventListener('click', 
 
 function emailCodeGoBackAnimation()
 {
-    usernameField.value = '';
     emailField.value = '';
-    passwordField.value = '';
-    comprobePasswordField.value = '';
-    updateUsernamePlaceholder();
 
     let endAnimationCallback = function(e)
     {
@@ -42,43 +38,36 @@ function emailCodeGoBackAnimation()
 //Solicitar el email
 async function sendEmail()
 {
-    let a = [null, undefined, ''];
-    for(let i = 0; i < a.length; i++)
+    if([null, undefined, ''].includes(email))
     {
-        if([account.email, account.username, account.password].includes(a[i]))
+        actualMenu = 'ventana';
+        console.log('datos inválidos');
+        floatingWindow(
         {
-            actualMenu = 'ventana';
-            console.log('datos inválidos');
-            floatingWindow(
+            title: ':(',
+            text: getText('oneFieldInvalid'),
+            button:
             {
-                title: ':(',
-                text: getText('oneFieldInvalid'),
-                button:
+                text: getText('ok'),
+                callback: async function()
                 {
-                    text: getText('ok'),
-                    callback: async function()
-                    {
-                        await closeWindow();
-                        location.reload();
-                    }
+                    await closeWindow();
+                    location.reload();
                 }
-            });
-            return;
-        }
+            }
+        });
+        return;
     }
 
     try
     {
         console.log('http: solicitando código por email');
-        const response = await encryptHttpCall('/createAccountEmailCode',
+        const response = await encryptHttpCall('/newAccount',
         {
-            id: deviceID,
+            deviceID,
             encrypt:
             {
-                email: account.email,
-                username: account.username,
-                operation: 'newAccount',
-                password: account.password
+                email
             }
         }, idPassword);
         
@@ -204,7 +193,8 @@ comprobeEmailCodeButton.addEventListener('click', async function()
             id: deviceID,
             encrypt:
             {
-                code
+                emailCode: code,
+                email
             }
         }, idPassword);
 

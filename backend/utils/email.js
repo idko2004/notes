@@ -13,19 +13,19 @@ const transporter = mailer.createTransport(
 
 function sendEmail(whoToSend, emailName, emailHtmlContent)
 {
-    if([whoToSend, emailName, emailHtmlContent].includes(undefined))
-    {
-        console.log('sendEmail: FALTAN ARGUMENTOS');
-        return;
-    }
-    if(typeof whoToSend !== 'string' && typeof emailName !== 'string' && typeof emailHtmlContent !== 'string')
-    {
-        console.log('sendEmail, SE ESPERABAN STRINGS');
-        return;
-    }
-
     return new Promise(function(resolve, reject)
     {
+        if([whoToSend, emailName, emailHtmlContent].includes(undefined))
+        {
+            console.log('sendEmail: FALTAN ARGUMENTOS');
+            reject();
+        }
+        if(typeof whoToSend !== 'string' && typeof emailName !== 'string' && typeof emailHtmlContent !== 'string')
+        {
+            console.log('sendEmail, SE ESPERABAN STRINGS');
+            reject();
+        }
+
         const mailOptions =
         {
             from: process.env.EMAIL_USER,

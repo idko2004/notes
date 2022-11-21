@@ -1,11 +1,6 @@
 const path = 'http://localhost:8888';
 
-let account =
-{
-    username: undefined,
-    email: undefined,
-    password: undefined
-}
+let email;
 
 let actualMenu;
 //main
@@ -15,10 +10,7 @@ let actualMenu;
 const mainMenu = document.getElementById('mainMenu');
 const emailCodeMenu = document.getElementById('emailCodeMenu');
 
-const usernameField = document.getElementById('usernameField');
 const emailField = document.getElementById('emailField');
-const passwordField = document.getElementById('passwordField');
-const comprobePasswordField = document.getElementById('comprobePasswordField');
 const continueButton = document.getElementById('continueButton');
 
 //Asignar funcionamiento a los botones
@@ -46,29 +38,15 @@ continueButton.addEventListener('click', function()
     if(actualMenu !== 'main') return;
 
     //Limpiar los campos de errores
-    usernameText();
     emailText();
-    passwordText();
 
     //Obtener los valores
-    const usernameFieldValue = usernameField.value;
     const emailFieldValue = emailField.value;
-    const passwordFieldValue = passwordField.value;
-    const comprobePasswordFieldValue = comprobePasswordField.value;
 
     //Comprobar si son válidos
-    if(!fieldsAreValid(usernameFieldValue, emailFieldValue, passwordFieldValue, comprobePasswordFieldValue)) return;
+    if(!fieldsAreValid(emailFieldValue)) return;
 
-    account.email = emailFieldValue.trim();
-    account.password = passwordFieldValue;
-
-    account.username = usernameFieldValue.trim();
-    if(account.username === '')
-    {
-        let emailName = account.email.split('@')[0];
-        emailName = emailName[0].toUpperCase() + emailName.slice(1);
-        account.username = emailName;
-    }
+    email = emailFieldValue.trim();
 
     updateWeSentAnEmail();
     sendEmail();
@@ -127,41 +105,9 @@ else
     actualMenu = 'main';
 }
 
-//Pasar de un campo a otro pulsando enter
-usernameField.addEventListener('keypress', function(e)
-{
-    if(e.key === 'Return' || e.key === 'Enter') emailField.focus();
-});
-
 emailField.addEventListener('keypress', function(e)
-{
-    if(e.key === 'Return' || e.key === 'Enter') passwordField.focus();
-});
-
-passwordField.addEventListener('keypress', function(e)
-{
-    if(e.key === 'Return' || e.key === 'Enter') comprobePasswordField.focus();
-});
-
-comprobePasswordField.addEventListener('keypress', function(e)
 {
     if(e.key === 'Return' || e.key === 'Enter') continueButton.click();
 });
 
-//Placeholders
-emailField.addEventListener('keyup', updateUsernamePlaceholder);
-
-function updateUsernamePlaceholder()
-{
-    let placeholder = emailField.value.split('@')[0];
-    if(placeholder.trim() === '') placeholder = 'Adam Smith';
-    else
-    {
-        placeholder = placeholder[0].toUpperCase() + placeholder.slice(1);
-    }
-    usernameField.placeholder = placeholder;
-}
-
 emailField.placeholder = getText('emailExample');
-passwordField.placeholder = getText('hyperSecurePassword');
-comprobePasswordField.placeholder = getText('typeItAgain');

@@ -24,7 +24,7 @@ module.exports = function(app)
 
         /* Ver que tenemos los datos necesarios
         {
-            code (identificador de cifrado)
+            deviceID (identificador de cifrado)
             encrypt:
             {
                 emailCode,

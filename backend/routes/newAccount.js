@@ -173,6 +173,7 @@ module.exports = function(app)
 
         // Cargar el email
         let emailFile;
+        console.log('cargando archivo html');
         try
         {
             emailFile = await fs.promises.readFile('emailPresets/signUpMail.html', 'utf-8');
@@ -183,6 +184,7 @@ module.exports = function(app)
             res.status(200).send({error: 'serverError'});
             return;
         }
+        console.log('archivo cargado');
 
 
 
@@ -192,7 +194,9 @@ module.exports = function(app)
 
 
         // Enviar el email
+        console.log('Enviando email');
         await emailUtil.sendEmail(email, 'Notas | Crear cuenta', emailFile);
+        console.log('Email enviado');
 
 
 

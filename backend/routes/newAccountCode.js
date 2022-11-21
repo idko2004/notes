@@ -15,7 +15,7 @@ const generator = require('generate-password');
 
 module.exports = function(app)
 {
-    app.post('/newAccountCode', bodyParser, async function(req, res)
+    app.post('/newAccountCode', jsonParser, async function(req, res)
     {
         const logID = `(${rand.generateKey(3)})`;
         console.log(logID, '------------------------------------------------');
@@ -182,5 +182,6 @@ module.exports = function(app)
 
         // Responder al usuario que la operación ha salido exitosa
         res.status(200).send({accountCreated: true});
+        console.log(logID, 'cuenta creada!');
     });
 }

@@ -35,7 +35,6 @@ function sendEmail(whoToSend, emailName, emailHtmlContent)
             subject: emailName,
             html: emailHtmlContent
         }
-        console.log(mailOptions);
     
         transporter.sendMail(mailOptions, function(error)
         {

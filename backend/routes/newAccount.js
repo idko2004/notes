@@ -134,6 +134,7 @@ module.exports = function(app)
         while(true)
         {
             emailCode = rand.generateKey(5);
+            emailCode = emailCode.toUpperCase();
             const codeInDB = await database.getElement('emailCodes', {code: emailCode});
             console.log(logID, 'Tiene que dar null eventualmente', codeInDB);
             if(codeInDB === 'dbError')

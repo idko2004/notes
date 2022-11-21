@@ -188,9 +188,9 @@ comprobeEmailCodeButton.addEventListener('click', async function()
     try
     {
         console.log('http: comprobando si el código es correcto');
-        const response = await encryptHttpCall('/createNewAccount',
+        const response = await encryptHttpCall('/newAccountCode',
         {
-            id: deviceID,
+            deviceID,
             encrypt:
             {
                 emailCode: code,

@@ -1,7 +1,5 @@
 // Esto reemplaza createNewAccount.js
 
-if(process.env.NODE_ENV !== 'production') require('dotenv').config();
-
 const database = require('../utils/database');
 const crypto = require('../utils/crypto');
 const emailUtil = require('../utils/email');

@@ -111,7 +111,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
     {
         const response = await encryptHttpCall('/login',
         {
-            code: codePassword,
+            deviceID: codePassword,
             encrypt:
             {
                 email

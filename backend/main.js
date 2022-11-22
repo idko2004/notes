@@ -16,8 +16,10 @@ app.use(cors());
 
 require('./routes/note')(app);
 require('./routes/getNotesID')(app);
-require('./routes/getUsername')(app);
-require('./routes/getSessionID')(app);
+//require('./routes/getUsername')(app);
+//require('./routes/getSessionID')(app);
+require('./routes/login')(app);
+require('./routes/loginCode')(app);
 //require('./routes/createNewAccount')(app);
 require('./routes/newAccountCode.js')(app);
 require('./routes/newAccount')(app);

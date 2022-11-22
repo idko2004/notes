@@ -1,23 +1,21 @@
-// Esto reemplaza createNewAccount.js
-
+// Esto reemplaza a getSessionID
 const database = require('../utils/database');
 const crypto = require('../utils/crypto');
+const emailUtil = require('../utils/email');
 
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
 const fs = require('fs');
 const rand = require('generate-key');
-const generator = require('generate-password');
-
 
 module.exports = function(app)
 {
-    app.post('/newAccountCode', jsonParser, async function(req, res)
+    app.post('/login', jsonParser, async function(req, res)
     {
         const logID = `(${rand.generateKey(3)})`;
         console.log(logID, '------------------------------------------------');
-        console.log(logID, '\033[1;34m/newAccountCode\033[0m');
+        console.log(logID, '\033[1;34m/login\033[0m');
         console.log(logID, 'body', req.body);
 
         /* Ver que tenemos los datos necesarios
@@ -25,7 +23,6 @@ module.exports = function(app)
             deviceID (identificador de cifrado)
             encrypt:
             {
-                emailCode,
                 email
             }
         }
@@ -76,7 +73,7 @@ module.exports = function(app)
 
 
 
-        // Descrifrar encrypt
+        // Descifrar encrypt
         let reqDecrypted = crypto.decrypt(reqEncrypted, pswrd);
         console.log(reqDecrypted);
         if(reqDecrypted === null)
@@ -90,96 +87,104 @@ module.exports = function(app)
 
 
 
-        // Obtener el email y el código
-        let emailCode = reqDecrypted.emailCode;
+
+        // Obtener el email
         const email = reqDecrypted.email;
-        if([emailCode, email].includes(undefined))
+        if(email === undefined)
         {
             res.status(400).send({error: 'badRequest'});
-            console.log(logID, 'badRequest, email or emailCode dont exist');
-            return;
-        }
-        emailCode = emailCode.toUpperCase();
-
-
-
-        // Buscar el código en la base de datos
-        const codeInDB = await database.getElement('emailCodes');
-        if(codeInDB === null)
-        {
-            res.status(200).send({error: 'invalidCode'});
-            console.log(logID, 'el código no existe');
+            console.log(logID, 'badRequest, email dont exist');
             return;
         }
 
 
 
-        // Comprobar que el email pertenezca a ese código
-        const dbCode = codeInDB.code;
-        const dbEmail = codeInDB.email;
-        const dbOperation = codeInDB.operation;
-        if([dbCode, dbEmail, dbOperation].includes(undefined))
+
+        // Buscar email en la base de datos
+        const emailInDb = await database.getElement('users', {email});
+
+        if(emailInDb === null)
         {
-            res.status(200).send({error: 'strangeCode'});
-            console.log(logID, 'el código no contiene todos los elementos, por algún motivo');
-            return;
-        }
-        
-        if(dbEmail !== email)
-        {
-            res.status(200).send({error: 'invalidCode'});
-            console.log(logID, 'el código existe, pero no pertenece a este email');
+            res.status(200).send({error: 'userDontExist'});
+            console.log(logID, 'userDontExist');
             return;
         }
 
-
-
-        // Comprobar que el email sea único (no vaya a ser que se intente crear una cuenta dos veces)
-        const emailInDB = await database.getElement('users', {email});
-        if(emailInDB !== null)
+        if(emailInDb === 'dbError')
         {
-            res.status(200).send({error: 'duplicatedEmail'});
-            console.log(logID, 'este correo ya existe');
+            res.status(200).send({error: 'dbError'});
+            console.log(logID, 'dbError: buscando usuario por email');
             return;
         }
-        else console.log(logID, 'este correo es único');
 
 
 
 
-        // Generar una clave para cifrar las notas
-        const noteKey = generator.generate(
+        // Generar una clave
+        let code;
+        while(true)
         {
-            length: 20,
-            numbers: true,
-            symbols: true,
-            lowercase: true,
-            uppercase: true,
-            exclude: '"'
-        });
-    
-
-
-        // Crear un objeto para el nuevo usuario
-        const userID = rand.generateKey(7);
-        const newUser =
-        {
-            userID,
-            email,
-            noteKey,
-            notesID: []
+            code = rand.generateKey(5).toUpperCase();
+            const codeInDb = await database.getElement('emailCodes', {code});
+            console.log('Tiene que dar null eventualmente:', codeInDb);
+            if(codeInDB === 'dbError')
+            {
+                res.status(200).send({error: 'dbError'});
+                console.log(logID, 'dbError, buscando si emailCode existe en la base de datos');
+                return;
+            }
+            if(codeInDb === null) break;
         }
 
 
 
-        // Guardar el nuevo usuario en la base de datos
-        const saveUser = await database.createElement('users', newUser);
-        console.log(logID, saveUser);
+
+        // Crear un objeto para guardarlo en la base de datos
+        const emailCode =
+        {
+            code,
+            operation: 'login',
+            email
+        }
 
 
 
-        // Responder al usuario que la operación ha salido exitosa
-        res.status(200).send({accountCreated: true});
-        console.log(logID, 'cuenta creada!');
+
+        // Guardar el objeto en la base de datos
+        await database.createElement('emailCodes', emailCode);
+
+
+
+        // Cargar el email
+        let emailFile;
+        console.log('cargando archivo html');
+        try
+        {
+            emailFile = await fs.promises.readFile('emailPresets/login.html', 'utf-8');
+        }
+        catch(err)
+        {
+            console.log(logID, 'error al cargar email', err);
+            res.status(200).send({error: 'serverError'});
+            return;
+        }
+        console.log('archivo cargado');
+
+
+
+
+        // Añadir el código en el email
+        emailFile = emailFile.replace('{CODE_HERE}', email);
+
+
+
+        // Enviar el email
+        await emailUtil.sendEmail(email, 'Notas | Iniciar sesión', emailFile);
+
+
+
+        // Responder al usuario
+        res.status(200).send({emailSent: true});
     });
 }
+

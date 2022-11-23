@@ -1,8 +1,9 @@
-let canClick_login = true;
 let currentLoginSection;
 
 let codePassword;
 let loginPassword;
+
+let userEmail;
 
 const emailLoginSection = document.getElementById('emailLoginSection');
 const loadLoginSection = document.getElementById('loadLoginSection');
@@ -119,6 +120,85 @@ document.getElementById('loginButton').addEventListener('click', async function(
         }, loginPassword);
 
         console.log(response);
+
+        if(response.data.error === 'userDontExist')
+        {
+            // Usuario no existe
+            theActualThing = 'ventana';
+            floatingWindow(
+            {
+                title: getText('login_wrongUser_title'),
+                text: getText('login_wrongUser_text'),
+                buttons:
+                [
+                    {
+                        text: getText('createAccount'),
+                        callback: async function()
+                        {
+                            await closeWindow();
+                            location.href = 'signup.html'
+                        }
+                    },
+                    {
+                        text: getText('ok'),
+                        primary: true,
+                        callback: function()
+                        {
+                            theActualThing = 'login';
+                            showLoginSection('email');
+                            closeWindow();
+                        }
+                    }
+                ]
+            });
+        }
+        else if(response.data.error !== undefined)
+        {
+            // Algún error raro
+            console.log('error desconocido iniciando sesión');
+            theActualThing = 'ventana';
+            floatingWindow(
+            {
+                title: getText('somethingWentWrong'),
+                text: `${getText('login_error_text')}\nerror code: ${response.data.error}`,
+                button:
+                {
+                    text: getText('ok'),
+                    callback: function()
+                    {
+                        theActualThing = 'login';
+                        showLoginSection('email');
+                        closeWindow();
+                    }
+                }
+            });
+        }
+        else if(response.data.emailSent)
+        {
+            // Habilitar el campo para el código
+            showLoginSection('code');
+            userEmail = email;
+        }
+        else
+        {
+            // Algún error aún más raro
+            theActualThing = 'ventana';
+            floatingWindow(
+            {
+                title: getText('somethingWentWrong'),
+                text: `${getText('noErrorCode')}\n\n${response.data}`,
+                button:
+                {
+                    text: getText('ok'),
+                    callback: function()
+                    {
+                        theActualThing = 'login';
+                        showLoginSection('email');
+                        closeWindow();
+                    }
+                }
+            });
+        }
     }
     catch(err)
     {
@@ -134,6 +214,164 @@ document.getElementById('loginButton').addEventListener('click', async function(
                 {
                     theActualThing = 'login';
                     showLoginSection('email');
+                    closeWindow();
+                }
+            }
+        });
+    }
+});
+
+document.getElementById('sendCodeLoginButton').addEventListener('click', async function()
+{
+    if(theActualThing !== 'login') return;
+    if(currentLoginSection !== 'code') return;
+
+    showLoginSection('load');
+
+    code = document.getElementById('emailCodeLoginField').value;
+    code = code.toUpperCase().trim();
+
+    if(code.length !== 5)
+    {
+        theActualThing = 'ventana';
+        floatingWindow(
+        {
+            title: getText('introduceAValidCode'),
+            text: getText('introduceAValidCode2'),
+            button:
+            {
+                text: getText('ok'),
+                callback: function()
+                {
+                    theActualThing = 'login';
+                    showLoginSection('code');
+                    closeWindow();
+                }
+            }
+        });
+        return;
+    }
+
+    try
+    {
+        const response = await encryptHttpCall('/loginCode',
+        {
+            deviceID: codePassword,
+            encrypt:
+            {
+                code,
+                email: userEmail
+            }
+        }, loginPassword);
+        console.log(response);
+
+        if(response.data.error === 'invalidCode')
+        {
+            // Código no válido
+            theActualThing = 'ventana';
+            floatingWindow(
+            {
+                title: getText('introduceAValidCode'),
+                text: getText('introduceAValidCode2'),
+                button:
+                {
+                    text: getText('ok'),
+                    callback: function()
+                    {
+                        theActualThing = 'login';
+                        showLoginSection('code');
+                        closeWindow();
+                    }
+                }
+            });
+        }
+        else if(response.data.error !== undefined)
+        {
+            // Algún error raro
+            console.log('error desconocido iniciando sesión');
+            theActualThing = 'ventana';
+            floatingWindow(
+            {
+                title: getText('somethingWentWrong'),
+                text: `${getText('login_error_text')}\nerror code: ${response.data.error}`,
+                button:
+                {
+                    text: getText('ok'),
+                    callback: function()
+                    {
+                        theActualThing = 'login';
+                        showLoginSection('code');
+                        closeWindow();
+                    }
+                }
+            });
+        }
+        else if(response.data.decrypt.key !== undefined && response.data.decrypt.pswrd !== undefined)
+        {
+            // Se inició sesión correctamente
+            console.log('Clave obtenida');
+            console.log('la nueva contraseña', response.data.decrypt.pswrd);
+
+            isLocalMode = false;
+            theSecretThingThatNobodyHasToKnow = response.data.decrypt.key;
+            theOtherSecretThing = response.data.decrypt.pswrd;
+
+            saveKey('_login', theSecretThingThatNobodyHasToKnow);
+            saveKey('_pswrd', theOtherSecretThing);
+            saveKey('_email', userEmail);
+            
+            codePassword = undefined;
+            loginPassword = undefined;
+
+            document.getElementById('loginScreen').hidden = true;
+            showLoginSection('email');
+            loadingScreen.hidden = false;
+
+            checkLocalCopyValue();
+            await loadNotesList();
+            spellcheckStatus();
+            menuButtonText();
+            resizeTwice();
+            theActualThing = 'note';
+        }
+        else
+        {
+            // Algún error muy raro
+            theActualThing = 'ventana';
+            floatingWindow(
+            {
+                title: getText('somethingWentWrong'),
+                text: `${getText('noErrorCode')}\n\n${response.data}`,
+                button:
+                {
+                    text: getText('ok'),
+                    callback: function()
+                    {
+                        theActualThing = 'login';
+                        showLoginSection('email');
+                        closeWindow();
+                    }
+                }
+            });
+        }
+    }
+    catch(err)
+    {
+        console.log(err);
+        theActualThing = 'ventana';
+        floatingWindow(
+        {
+            title: getText('somethingWentWrong'),
+            text: `${getText('login_error_text')}\nerror code: ${err.message}`,
+            button:
+            {
+                text: getText('ok'),
+                callback: function()
+                {
+                    theActualThing = 'login';
+                    showLoginSection('code');
+                    loadingScreen.hidden = true;
+                    document.getElementById('loginScreen').hidden = false;
                     closeWindow();
                 }
             }

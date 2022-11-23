@@ -13,6 +13,11 @@ module.exports = function(app)
 {
     app.post('/loginCode', jsonParser, async function(req, res)
     {
+        const logID = `(${rand.generateKey(3)})`;
+        console.log(logID, '------------------------------------------------');
+        console.log(logID, '\033[1;34m/loginCode\033[0m');
+        console.log(logID, 'body', req.body);
+
         /* Ver que tenemos los datos necesarios
         {
             deviceID (identificador de cifrado)
@@ -183,7 +188,7 @@ module.exports = function(app)
 
 
         // Responder al usuario con el código para cifrado y su sessionID
-        res.status(200).send({resEncrypted});
+        res.status(200).send({decrypt: resEncrypted});
         console.log(logID, 'sesión iniciada');
     });
 }

@@ -123,7 +123,7 @@ module.exports = function(app)
         {
             code = rand.generateKey(5).toUpperCase();
             const codeInDb = await database.getElement('emailCodes', {code});
-            console.log('Tiene que dar null eventualmente:', codeInDb);
+            console.log(logID, 'Tiene que dar null eventualmente:', codeInDb);
             if(codeInDb === 'dbError')
             {
                 res.status(200).send({error: 'dbError'});
@@ -152,10 +152,10 @@ module.exports = function(app)
 
         // Cargar el email
         let emailFile;
-        console.log('cargando archivo html');
+        console.log(logID, 'cargando archivo html');
         try
         {
-            emailFile = await fs.promises.readFile('emailPresets/login.html', 'utf-8');
+            emailFile = await fs.promises.readFile('emailPresets/loginEmail.html', 'utf-8');
         }
         catch(err)
         {
@@ -163,12 +163,12 @@ module.exports = function(app)
             res.status(200).send({error: 'serverError'});
             return;
         }
-        console.log('archivo cargado');
+        console.log(logID, 'archivo cargado');
 
 
 
         // Añadir el código en el email
-        emailFile = emailFile.replace('{CODE_HERE}', email);
+        emailFile = emailFile.replace('{CODE_HERE}', code);
 
 
 

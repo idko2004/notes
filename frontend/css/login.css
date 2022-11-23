@@ -125,3 +125,8 @@
         transform: rotateZ(0deg);
     }
 }
+
+#loadLoginSection
+{
+    padding: 1.7rem 0;
+}

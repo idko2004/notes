@@ -28,6 +28,7 @@ async function menuButtonText()
     else
     {
         menuButton.innerText = getText('someoneAccount');
+        menuTitleText.innerText = getText('someoneAccount');
 
         menuExitLocalMode.hidden = true;
         menuSettingsLocal.hidden = true;
@@ -37,17 +38,12 @@ async function menuButtonText()
         menuOnlineChangeToLocal.hidden = false;
 
         //Obtener nombre de usuario
-        try
+        userEmail = getKey('_email');
+        if(userEmail !== null)
         {
-            console.log('http: obteniendo nombre de usuario');
-            const response = await encryptHttpCall('/getUsername', {key: theSecretThingThatNobodyHasToKnow}, theOtherSecretThing);
-            menuButton.innerText = response.data.decrypt.username;
-            menuTitleText.innerText = response.data.decrypt.username;
-        }
-        catch
-        {
-            menuButton.innerText = getText('someoneAccount');
-            menuTitleText.innerText = getText('someoneAccount');
+            const username = userEmail.split('@')[0];
+            menuButton.innerText = username;
+            menuTitleText.innerText = username;
         }
     }
 }
@@ -151,7 +147,8 @@ menuOnlineManageAccount.addEventListener('click', async function()
     saveCookie('_pswrd', theOtherSecretThing);
     saveCookie('_localCopy', localCopy);
     saveCookie('_spellcheck', getKey('_spellcheck'));
-    location.href = `manageAccount.html#lang=${actualLanguage};colortheme=${colorTheme}`;
+    saveCookie('_email', userEmail);
+    location.href = `manageAccount.html#lang=${actualLanguage};colortheme=${colorTheme};`;
 });
 
 //Botón de salir del modo local

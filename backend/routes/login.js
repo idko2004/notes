@@ -87,7 +87,6 @@ module.exports = function(app)
 
 
 
-
         // Obtener el email
         const email = reqDecrypted.email;
         if(email === undefined)
@@ -96,7 +95,6 @@ module.exports = function(app)
             console.log(logID, 'badRequest, email dont exist');
             return;
         }
-
 
 
 
@@ -119,7 +117,6 @@ module.exports = function(app)
 
 
 
-
         // Generar una clave
         let code;
         while(true)
@@ -127,7 +124,7 @@ module.exports = function(app)
             code = rand.generateKey(5).toUpperCase();
             const codeInDb = await database.getElement('emailCodes', {code});
             console.log('Tiene que dar null eventualmente:', codeInDb);
-            if(codeInDB === 'dbError')
+            if(codeInDb === 'dbError')
             {
                 res.status(200).send({error: 'dbError'});
                 console.log(logID, 'dbError, buscando si emailCode existe en la base de datos');
@@ -138,7 +135,6 @@ module.exports = function(app)
 
 
 
-
         // Crear un objeto para guardarlo en la base de datos
         const emailCode =
         {
@@ -146,7 +142,6 @@ module.exports = function(app)
             operation: 'login',
             email
         }
-
 
 
 
@@ -172,7 +167,6 @@ module.exports = function(app)
 
 
 
-
         // Añadir el código en el email
         emailFile = emailFile.replace('{CODE_HERE}', email);
 
@@ -185,6 +179,7 @@ module.exports = function(app)
 
         // Responder al usuario
         res.status(200).send({emailSent: true});
+        console.log(logID, 'código para iniciar sesión mandado');
     });
 }
 

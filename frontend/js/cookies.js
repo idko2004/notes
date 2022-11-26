@@ -38,3 +38,11 @@ function deleteCookie(name)
     console.log('cookie borrada',name);
     console.log(document.cookie);
 }
+
+function deleteAllCookies()
+{
+    getCookiesNames().forEach(function(e)
+    {
+        deleteCookie(e);
+    });
+}

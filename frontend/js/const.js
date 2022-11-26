@@ -29,7 +29,7 @@ let canInteract = true;
 
 let isLocalMode = true;
 let actualNoteIsLocal = false;
-let theSecretThingThatNobodyHasToKnow; //Ya sé que está mal escrito
+let theSecretThingThatNobodyHasToKnow;
 let localCopy;
 let actualNoteID;
 let actualNoteName;

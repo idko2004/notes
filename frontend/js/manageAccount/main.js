@@ -1,8 +1,6 @@
 const path = 'http://localhost:8888';
 
-let username;
 let email;
-let passwordLength;
 let theSecretThingThatNobodyHaveToKnow;
 let saveNotesLocally;
 let spellcheckConfig;
@@ -59,6 +57,8 @@ async function start()
     theOtherSecretThing = getSpecificCookie('_pswrd');
     saveNotesLocally = getSpecificCookie('_localCopy');
     spellcheckConfig = getSpecificCookie('_spellcheck');
+    email = getSpecificCookie('_email');
+
 
     //Cargar el modo local
     if(theSecretThingThatNobodyHaveToKnow === 'local')
@@ -83,9 +83,14 @@ async function start()
     {
         isLocalMode = false;
 
-        if([theSecretThingThatNobodyHaveToKnow, saveNotesLocally, theOtherSecretThing].includes(null)
-        || [theSecretThingThatNobodyHaveToKnow, saveNotesLocally, theOtherSecretThing].includes(undefined)
-        || [theSecretThingThatNobodyHaveToKnow, saveNotesLocally, theOtherSecretThing].includes(''))
+        console.log('theSecretThingThatNobodyHaveToKnow', theSecretThingThatNobodyHaveToKnow);
+        console.log('saveNotesLocally', saveNotesLocally);
+        console.log('theOtherSecretThing', theOtherSecretThing);
+        console.log('email', email);
+
+        if([theSecretThingThatNobodyHaveToKnow, saveNotesLocally, theOtherSecretThing, email].includes(null)
+        || [theSecretThingThatNobodyHaveToKnow, saveNotesLocally, theOtherSecretThing, email].includes(undefined)
+        || [theSecretThingThatNobodyHaveToKnow, saveNotesLocally, theOtherSecretThing, email].includes(''))
         {
             loadingScreen.hidden = true;
             floatingWindow(
@@ -105,101 +110,18 @@ async function start()
             return;
         }
 
-        //Comprobar que tenemos una clave válida y obtener el nombre de usuario
-        try
-        {
-            const usernameCall = await encryptHttpCall('/getUsername', {key: theSecretThingThatNobodyHaveToKnow}, theOtherSecretThing);
-            console.log(usernameCall);
-
-            if(usernameCall.data.error === 'invalidKey')
-            {
-                loadingScreen.hidden = true;
-                floatingWindow(
-                {
-                    title: getText('reenter'),
-                    text: getText('reenter_manageAccount'),
-                    button:
-                    {
-                        text: getText('ok'),
-                        callback: async function()
-                        {
-                            await closeWindow();
-                            location.href = 'index.html';
-                        }
-                    }
-                });
-                return;
-            }
-            else if(usernameCall.data.decrypt.username === undefined)
-            {
-                loadingScreen.hidden = true;
-                floatingWindow(
-                {
-                    title: getText('somethingWentWrong'),
-                    text: `${getText('errorCode')}: ${usernameCall.data.error}`,
-                    button:
-                    {
-                        text: getText('ok'),
-                        callback: async function()
-                        {
-                            await closeWindow();
-                            location.href = 'index.html';
-                        }
-                    }
-                });
-                return;
-            }
-
-            username = usernameCall.data.decrypt.username;
-            email = usernameCall.data.decrypt.email;
-            passwordLength = usernameCall.data.decrypt.passwordLength;
-            updateUserData();
-            mainMenu.hidden = false;
-            loadingScreen.hidden = true;
-            mainScreen.hidden = false;
-            actualMenu = 'main';
-            changeHashMenu('main');
-        }
-        catch
-        {
-            loadingScreen.hidden = true;
-            floatingWindow(
-            {
-                title: getText('ups'),
-                text: getText('serverDown'),
-                button:
-                {
-                    text: getText('ok'),
-                    callback: async function()
-                    {
-                        await closeWindow();
-                        location.href = 'index.html';
-                    }
-                }
-            });
-            return;
-        }
+        updateUserData();
+        mainMenu.hidden = false;
+        loadingScreen.hidden = true;
+        mainScreen.hidden = false;
+        actualMenu = 'main';
+        changeHashMenu('main');
     }
 }
 
 function updateUserData()
 {
-    usernameSpace.innerText = username;
     emailSpace.innerText = email;
-    let pswrd = '';
-    for(let i = 0; i < passwordLength; i++)
-    {
-        pswrd += '*';
-    }
-    passwordSpace.innerText = pswrd;
-}
-
-function deleteManageAccountRelatedCookies()
-{
-    deleteCookie('_login');
-    deleteCookie('_pswrd');
-    deleteCookie('_localcopy');
-    deleteCookie('_spellcheck');
 }
 
 async function animatedTransition(elementToHide, elementToShow, callback)
@@ -268,7 +190,7 @@ async function backToIndex()
     mainScreen.hidden = true;
     loadingScreen.hidden = false;
 
-    deleteManageAccountRelatedCookies();
+    deleteAllCookies();
 
     let str = 'index.html#';
 

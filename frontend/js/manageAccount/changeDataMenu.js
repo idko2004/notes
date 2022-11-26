@@ -10,19 +10,11 @@ document.getElementById('toChangeDataMenuButton').addEventListener('click', func
     animatedTransition(mainMenu, changeDataMenu);
 });
 
-const changeUsernameField = document.getElementById('changeUsernameField');
 const changeEmailField = document.getElementById('changeEmailField');
-const changePasswordField = document.getElementById('changePasswordField');
-const comprobePasswordField = document.getElementById('comprobePasswordField');
 
 function updateDataMenuPlaceholders()
 {
-    changeUsernameField.placeholder = username;
     changeEmailField.placeholder = email;
-    let pswrd = '';
-    for(let i = 0; i < passwordLength; i++) pswrd += '*';
-    changePasswordField.placeholder = pswrd;
-    comprobePasswordField.placeholder = getText('confirmPassword');
 }
 
 document.getElementById('goBackChangeDataMenu').addEventListener('click', async function()
@@ -34,10 +26,7 @@ document.getElementById('goBackChangeDataMenu').addEventListener('click', async 
 
     await animatedTransition(changeDataMenu, mainMenu);
 
-    changeUsernameField.value = '';
     changeEmailField.value = '';
-    changePasswordField.value = '';
-    comprobePasswordField.value = '';
 });
 
 document.getElementById('saveChangeDataMenu').addEventListener('click', async function()
@@ -46,136 +35,10 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', async fu
 
     let somethingChanged = false;
 
-    let newUsername = changeUsernameField.value;
     let newEmail = changeEmailField.value;
-    let newPassword = changePasswordField.value;
-    let newPasswordLength = newPassword.length;
-    let comprobePassword = comprobePasswordField.value;
-
-    //Comprobar el nuevo nombre de usuario
-
-        //no esté vacío
-    if(newUsername === '') newUsername = username;
-        //No sea demasiado largo
-    else if(newUsername.length > 45)
-    {
-        floatingWindow(
-        {
-            title: getText('username'),
-            text: getText('usernameTooLong'),
-            button:
-            {
-                text: getText('ok'),
-                callback: closeWindow
-            }
-        });
-        return;
-    }
-    else if(newUsername !== username) somethingChanged = true; //Si el nombre de usuario no es el mismo
 
     //Comprobar el nuevo correo electrónico
-    if(newEmail === '') newEmail = email;
-    else
-    {
-        const regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
-        if(!regex.test(newEmail))
-        {
-            floatingWindow(
-            {
-                title: getText('email'),
-                text: getText('invalidEmail'),
-                button:
-                {
-                    text: getText('ok'),
-                    callback: closeWindow
-                }
-            });
-            return;
-        }
-        somethingChanged = true;
-    }
-
-    //Comprobar las nuevas contraseñas
-    if(newPassword === '') newPasswordLength = passwordLength;
-    else
-    {
-        newPasswordLength = newPassword.length;
-
-        //Comprobar si la contraseña es lo suficientemente larga
-        if(newPasswordLength < 8)
-        {
-            floatingWindow(
-            {
-                title: getText('password'),
-                text: getText('tooShortPassword'),
-                button:
-                {
-                    text: getText('ok'),
-                    callback: closeWindow
-                }
-            });
-            return;
-        }
-
-        if(newPasswordLength > 20)
-        {
-            floatingWindow(
-            {
-                title: getText('password'),
-                text: getText('tooLongPassword'),
-                button:
-                {
-                    text: getText('ok'),
-                    callback: closeWindow
-                }
-            });
-            return;
-        }
-
-        //Comprobar si la contraseña tiene los caracteres adecuados
-        const capitalsRegex = new RegExp('[A-Z]+');
-        const notCapitalsRegex = new RegExp('[a-z]+');
-        const numbersRegex = new RegExp('[0-9]+');
-    
-        const containsCapitals = capitalsRegex.test(newPassword);
-        const containsNotCapitals = notCapitalsRegex.test(newPassword);
-        const containsNumbers = numbersRegex.test(newPassword);
-
-        if(!containsCapitals || !containsNotCapitals || !containsNumbers)
-        {
-            floatingWindow(
-            {
-                title: getText('password'),
-                text: getText('passwordMustContains'),
-                button:
-                {
-                    text: getText('ok'),
-                    callback: closeWindow
-                }
-            });
-            return;
-        }
-        
-        //Comprobar si las contraseñas coinciden
-        if(newPassword !== comprobePassword)
-        {
-            floatingWindow(
-            {
-                title: getText('password'),
-                text: getText('passwordsDontMatch'),
-                button:
-                {
-                    text: getText('ok'),
-                    callback: closeWindow
-                }
-            });
-            return;
-        }
-
-        somethingChanged = true;
-    }
-
-    if(!somethingChanged)
+    if(newEmail === '')
     {
         floatingWindow(
         {
@@ -190,14 +53,27 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', async fu
         return;
     }
 
-    //Mostrar los datos finales
-    let pswrd = '';
-    for(let i = 0; i < newPasswordLength; i++) pswrd += '*';
+    const regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+    if(!regex.test(newEmail))
+    {
+        floatingWindow(
+        {
+            title: getText('email'),
+            text: getText('invalidEmail'),
+            button:
+            {
+                text: getText('ok'),
+                callback: closeWindow
+            }
+        });
+        return;
+    }
+
 
     floatingWindow(
     {
         title: getText('itIsOk'),
-        text: `${getText('username')}:\n${newUsername}\n\n${getText('email')}:\n${newEmail}\n\n${getText('password')}:\n${pswrd}`,
+        text: `${getText('email')}:\n${newEmail}`,
         buttons:
         [
             {
@@ -223,6 +99,7 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', async fu
                     //Hacer la llamada al servidor para actualizar a los nuevos datos, generar un código y enviar el email
                     try
                     {
+                        /*
                         const response = await encryptHttpCall('/createAccountEmailCode',
                         {
                             encrypt:
@@ -317,6 +194,7 @@ document.getElementById('saveChangeDataMenu').addEventListener('click', async fu
                                 });
                             }
                         }
+                        */
                     }
                     catch
                     {

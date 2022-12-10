@@ -121,8 +121,8 @@ module.exports = function(app)
 
         // Generamos dos códigos
         console.log(logID, 'Generando códigos');
-        const code1 = await generateUniqueEmailCodes();
-        const code2 = await generateUniqueEmailCodes();
+        const code1 = await generateUniqueEmailCodes(logID);
+        const code2 = await generateUniqueEmailCodes(logID);
 
 
 
@@ -191,7 +191,7 @@ module.exports = function(app)
     });
 }
 
-async function generateUniqueEmailCodes()
+async function generateUniqueEmailCodes(logID)
 {
     let emailCode;
     while(true)

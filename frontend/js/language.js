@@ -102,7 +102,7 @@ const allTexts =
     ups:
     {
         es: 'Vaya...',
-        en: 'Ups...'
+        en: 'Woops...'
     },
     load_fail:
     {

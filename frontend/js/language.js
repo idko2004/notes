@@ -499,6 +499,11 @@ const allTexts =
         es: 'Introduce el código que enviamos a',
         en: 'Introduce the code we sent to'
     },
+    codesWeSent:
+    {
+        es: 'Introduce los códigos que enviamos a',
+        en: 'Introduce the codes we sent to'
+    },
     emailDuplicated:
     {
         es: 'Ya existe una cuenta con este correo.',
@@ -511,8 +516,8 @@ const allTexts =
     },
     introduceAValidCode2:
     {
-        es: 'El código que has introducido es incorrecto. Revisa si lo has escrito bien (no confundas el número 0 con la letra O)',
-        en: 'The code you have entered is incorrect. Check if you have written it correctly (do not confuse the number 0 with the letter O).'
+        es: 'Uno de los códigos que has introducido es incorrecto. Revisa si los has escrito bien (no confundas el número 0 con la letra O)',
+        en: 'One code you have entered is incorrect. Check if you have written them correctly (do not confuse the number 0 with the letter O).'
     },
     accountCreated:
     {
@@ -628,6 +633,11 @@ const allTexts =
     {
         es: 'Introduce el código',
         en: 'Enter the code'
+    },
+    enterTheCodes:
+    {
+        es: 'Introduce los códigos',
+        en: 'Enter the codes'
     },
     verify:
     {
@@ -929,6 +939,11 @@ const allTexts =
         es: 'Ya existe una cuenta con este nombre de usuario.\n\n(Prueba añadiendo un número o algo).',
         en: 'An account with this username already exists.\n\n(Try adding a number or something).'
     },
+    and:
+    {
+        es: 'y',
+        en: 'and'
+    }
 }
 
 languageAtStart();

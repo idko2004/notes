@@ -10,6 +10,8 @@ document.getElementById('toChangeDataMenuButton').addEventListener('click', func
     animatedTransition(mainMenu, changeDataMenu);
 });
 
+let newEmail;
+
 const changeEmailField = document.getElementById('changeEmailField');
 
 function updateDataMenuPlaceholders()
@@ -35,10 +37,10 @@ saveChangeDataButton.addEventListener('click', async function()
 {
     if(actualMenu !== 'changeData' || isLocalMode) return;
 
-    let newEmail = changeEmailField.value.trim();
+    let emailFieldValue = changeEmailField.value.trim();
 
     //Comprobar el nuevo correo electrónico
-    if(newEmail === '')
+    if(emailFieldValue === '')
     {
         floatingWindow(
         {
@@ -54,7 +56,7 @@ saveChangeDataButton.addEventListener('click', async function()
     }
 
     const regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
-    if(!regex.test(newEmail))
+    if(!regex.test(emailFieldValue))
     {
         floatingWindow(
         {
@@ -69,11 +71,10 @@ saveChangeDataButton.addEventListener('click', async function()
         return;
     }
 
-
     floatingWindow(
     {
         title: getText('itIsOk'),
-        text: `${getText('email')}:\n${newEmail}`,
+        text: `${getText('email')}:\n${emailFieldValue}`,
         buttons:
         [
             {
@@ -92,7 +93,10 @@ saveChangeDataButton.addEventListener('click', async function()
 
                     actualMenu = 'changeDataEmailCode';
                     changeHashMenu('changeDataEmailCode');
-                    document.getElementById('changeDataEmailSent').innerText = email;
+                    //document.getElementById('changeDataEmailSent').innerText = email;
+
+                    newEmail = emailFieldValue;
+                    updateEmailsCodesPlaceholders();
 
                     animatedTransition(changeDataMenu, changeDataEmailCodeMenu);
 
@@ -104,7 +108,7 @@ saveChangeDataButton.addEventListener('click', async function()
                             key: theSecretThingThatNobodyHaveToKnow,
                             encrypt:
                             {
-                                newEmail
+                                newEmail: emailFieldValue
                             }
                         }, theOtherSecretThing);
                         console.log(response);
@@ -242,7 +246,181 @@ async function changeDataComprobeCode()
 {
     if(actualMenu !== 'changeDataEmailCode' || isLocalMode) return;
 
-    const code = changeDataConfirmCodeField.value;
+    const code1 = document.getElementById('changeDataConfirmCode').value.trim();
+    const code2 = document.getElementById('changeDataConfirmCode2').value.trim();
+
+    if(code1.length !== 5 || code2.length !== 5)
+    {
+        floatingWindow(
+        {
+            title: getText('introduceAValidCode'),
+            text: getText('introduceAValidCode2'),
+            button:
+            {
+                text: getText('ok'),
+                callback: closeWindow
+            }
+        });
+        return;
+    }
+
+    if(newEmail === undefined || newEmail.trim() === '')
+    {
+        floatingWindow(
+        {
+            title: getText('somethingWentWrong'),
+            text: `${getText('errorCode')}: frontendNoNewEmail`,
+            button:
+            {
+                text: getText('ok'),
+                callback: closeWindow
+            }
+        });
+        return;
+    }
+
+    actualMenu = 'changeDataComprobingCode';
+    document.getElementById('changeDataConfirmCodeButton').innerText = getText('waitAMoment');
+
+    try
+    {
+        const response = await encryptHttpCall('/changeEmailCode',
+        {
+            key: theSecretThingThatNobodyHaveToKnow,
+            encrypt:
+            {
+                newEmail,
+                codeOld: code1,
+                codeNew: code2
+            }
+        }, theOtherSecretThing);
+        console.log(response);
+
+        if(response.data.error === 'invalidCode')
+        {
+            // Uno de los códigos no es válido
+            floatingWindow(
+            {
+                title: getText('introduceAValidCode'),
+                text: getText('introduceAValidCode2'),
+                button:
+                {
+                    text: getText('ok'),
+                    callback: function()
+                    {
+                        closeWindow();
+                        actualMenu = 'changeDataEmailCode';
+                    }
+                }
+            });
+            return;
+        }
+        else if(response.data.error === 'invalidEmail')
+        {
+            // De algún modo ya no se puede tener una cuenta con este email
+            floatingWindow(
+            {
+                title: getText('changeEmail'),
+                text: getText('emailDuplicated'),
+                button:
+                {
+                    text: getText('ok'),
+                    callback: function()
+                    {
+                        closeWindow();
+                        actualMenu = 'changeDataEmailCode';
+                    }
+                }
+            });
+        }
+        else if(response.data.error !== undefined)
+        {
+            // Otro error
+            floatingWindow(
+            {
+                title: getText('somethingWentWrong'),
+                text: `${getText('errorCode')}: ${response.data.error}`,
+                button:
+                {
+                    text: getText('ok'),
+                    callback: function()
+                    {
+                        closeWindow();
+                        actualMenu = 'changeDataEmailCode';
+                    }
+                }
+            });
+        }
+        else if(response.data.emailChanged)
+        {
+            // Todo salió bien, el email se cambió
+            floatingWindow(
+            {
+                title: getText('accountUpdated'),
+                button:
+                {
+                    text: getText('backToHome'),
+                    callback: async function()
+                    {
+                        await closeWindow();
+                        mainScreen.hidden = true;
+                        loadingScreen.hidden = false;
+
+                        document.getElementById('changeDataConfirmCode').value = '';
+                        document.getElementById('changeDataConfirmCode2').value = '';
+
+                        location.reload();
+                    }
+                }
+            });
+            return;
+        }
+        else
+        {
+            // Error desconocido
+            console.log('NO SÉ QUE PASÓ AAAAAAAAAAAA 2: WELCOME DESPAIR');
+            floatingWindow(
+            {
+                title: getText('somethingWentWrong'),
+                text: getText('noErrorCode'),
+                button:
+                {
+                    text: getText('ok'),
+                    callback: function()
+                    {
+                        closeWindow();
+                        actualMenu = 'changeDataEmailCode';
+                    }
+                }
+            });
+            return;
+        }
+    }
+    catch
+    {
+        //Ventana que diga que se cayó el servidor
+        actualMenu = 'ventana';
+        floatingWindow(
+        {
+            title: getText('ups'),
+            text: getText('serverDown'),
+            button:
+            {
+                text: getText('ok'),
+                callback: function()
+                {
+                    closeWindow();
+                    document.getElementById('changeDataConfirmCodeButton').innerText = getText('verify');
+                    actualMenu = 'changeDataEmailCode';
+                }
+            }
+        });
+    }
+
+    /*
+    if(actualMenu !== 'changeDataEmailCode' || isLocalMode) return;
+
+    const code = changeDataConfirmCodeField.value.trim();
 
     if(code.length !== 5)
     {
@@ -264,6 +442,11 @@ async function changeDataComprobeCode()
 
     try
     {
+        const response = await encryptHttpCall('/changeEmailCode',
+        {
+
+        }, theOtherSecretThing)
+        
         const response = await encryptHttpCall('/updateAccountData',
         {
             encrypt:
@@ -360,6 +543,7 @@ async function changeDataComprobeCode()
             });
             changeDataConfirmCodeField.value = '';
         }
+
     }
     catch
     {
@@ -383,6 +567,16 @@ async function changeDataComprobeCode()
 
         changeDataConfirmCodeField.value = '';
     }
+    */
+}
+
+function updateEmailsCodesPlaceholders()
+{
+    document.getElementById('changeDataEmailSent').innerText = email;
+    document.getElementById('changeDataEmailSent2').innerText = newEmail;
+
+    document.getElementById('changeDataConfirmCode').placeholder = email;
+    document.getElementById('changeDataConfirmCode2').placeholder = newEmail;
 }
 
 //Que cuando le des a enter cambie al siguiente campo

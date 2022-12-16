@@ -36,6 +36,8 @@ const saveChangeDataButton =  document.getElementById('saveChangeDataMenu');
 saveChangeDataButton.addEventListener('click', async function()
 {
     if(actualMenu !== 'changeData' || isLocalMode) return;
+    
+    actualMenu = 'ventana';
 
     let emailFieldValue = changeEmailField.value.trim();
 
@@ -49,7 +51,11 @@ saveChangeDataButton.addEventListener('click', async function()
             button:
             {
                 text: getText('ok'),
-                callback: closeWindow
+                callback: async function()
+                {
+                    await closeWindow();
+                    actualMenu = 'changeData';
+                }
             }
         });
         return;
@@ -65,7 +71,11 @@ saveChangeDataButton.addEventListener('click', async function()
             button:
             {
                 text: getText('ok'),
-                callback: closeWindow
+                callback: async function()
+                {
+                    await closeWindow();
+                    actualMenu = 'changeData';
+                }
             }
         });
         return;
@@ -80,7 +90,11 @@ saveChangeDataButton.addEventListener('click', async function()
             {
                 text: getText('cancelButWithNo'),
                 primary: false,
-                callback: closeWindow
+                callback: async function()
+                {
+                    await closeWindow();
+                    actualMenu = 'changeData';
+                }
             },
             {
                 text: getText('yesSaveTheseChanges'),
@@ -231,16 +245,6 @@ function changeDataEmailCodeMenuGoBackAnimation()
     changeHashMenu('changeData');
     animatedTransition(changeDataEmailCodeMenu, changeDataMenu);
 }
-
-//Botón de comprobar código
-document.getElementById('changeDataConfirmCodeButton').addEventListener('click', changeDataComprobeCode);
-
-const changeDataConfirmCodeField = document.getElementById('changeDataConfirmCode');
-changeDataConfirmCodeField.addEventListener('keyup', function(e)
-{
-    if(e.key === 'Enter') changeDataComprobeCode();
-    e.target.value = e.target.value.toUpperCase();
-});
 
 async function changeDataComprobeCode()
 {
@@ -584,4 +588,19 @@ function updateEmailsCodesPlaceholders()
 changeEmailField.addEventListener('keydown', function(e)
 {
     if(e.key === 'Enter') saveChangeDataButton.click();
+});
+
+//Botón de comprobar código
+document.getElementById('changeDataConfirmCodeButton').addEventListener('click', changeDataComprobeCode);
+
+document.getElementById('changeDataConfirmCode').addEventListener('keyup', function(e)
+{
+    if(e.key === 'Enter') document.getElementById('changeDataConfirmCode2').focus();
+    e.target.value = e.target.value.toUpperCase();
+});
+
+document.getElementById('changeDataConfirmCode2').addEventListener('keyup', function(e)
+{
+    if(e.key === 'Enter') changeDataComprobeCode();
+    e.target.value = e.target.value.toUpperCase();
 });

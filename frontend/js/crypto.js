@@ -34,6 +34,7 @@ function decrypt(input, password)
 
 async function encryptHttpCall(route, body, password)
 {
+    console.log('about to encrypt:', route, JSON.stringify(body));
     if(typeof body !== 'object')
     {
         console.error('not an object');

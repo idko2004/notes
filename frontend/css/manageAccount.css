@@ -51,6 +51,7 @@
     border: 2px solid var(--green-hover);
     color: white;
     transition: all ease 100ms;
+    word-wrap: break-word;
 }
 
 .greenButton:hover

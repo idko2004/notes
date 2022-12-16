@@ -12,7 +12,7 @@ document.getElementById('deleteAccountMenuButton').addEventListener('click', fun
 function updateDeleteAccountPlaceholders()
 {
     document.getElementById('deleteAccountEmailSent').innerText = email;
-    document.getElementById('deleteAccountButton').innerText = getText('deleteTheAccount',[username]);
+    document.getElementById('deleteAccountButton').innerText = getText('deleteTheAccount',[email]);
 }
 
 document.getElementById('goBackDeleteAccountMenu').addEventListener('click', function()

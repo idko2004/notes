@@ -24,21 +24,16 @@ const transporter = mailer.createTransport(
 
 module.exports = function(app)
 {
+
     /////////////////////////////////////////////////////////////////////
     //      _      _      _          _                             _   //
-    //  __| | ___| | ___| |_ ___   / \   ___ ___ ___  _   _ _ __ | |_  //
+    //   __| | ___| | ___| |_ ___   / \   ___ ___ ___  _   _ _ __ | |_ //
     //  / _` |/ _ \ |/ _ \ __/ _ \ / _ \ / __/ __/ _ \| | | | '_ \| __|//
     // | (_| |  __/ |  __/ ||  __// ___ \ (_| (_| (_) | |_| | | | | |_ //
     //  \__,_|\___|_|\___|\__\___/_/   \_\___\___\___/ \__,_|_| |_|\__|//
-    //                                                                 //
-    //   ____          _                                               //
-    //  / ___|___   __| | ___                                          //
-    // | |   / _ \ / _` |/ _ \                                         //
-    // | |__| (_) | (_| |  __/                                         //
-    //  \____\___/ \__,_|\___|                                         //
     /////////////////////////////////////////////////////////////////////
- 
-    app.post('/deleteAccountCode', jsonParser, async function(req, res)
+
+    app.post('/deleteAccount', jsonParser, async function(req, res)
     {
         const logID = `(${rand.generateKey(3)})`;
         console.log(logID, '------------------------------------------------');
@@ -168,15 +163,22 @@ module.exports = function(app)
         console.log(logID, 'email solicitado');
     });
 
+
     /////////////////////////////////////////////////////////////////////
     //      _      _      _          _                             _   //
-    //   __| | ___| | ___| |_ ___   / \   ___ ___ ___  _   _ _ __ | |_ //
+    //  __| | ___| | ___| |_ ___   / \   ___ ___ ___  _   _ _ __ | |_  //
     //  / _` |/ _ \ |/ _ \ __/ _ \ / _ \ / __/ __/ _ \| | | | '_ \| __|//
     // | (_| |  __/ |  __/ ||  __// ___ \ (_| (_| (_) | |_| | | | | |_ //
     //  \__,_|\___|_|\___|\__\___/_/   \_\___\___\___/ \__,_|_| |_|\__|//
+    //                                                                 //
+    //   ____          _                                               //
+    //  / ___|___   __| | ___                                          //
+    // | |   / _ \ / _` |/ _ \                                         //
+    // | |__| (_) | (_| |  __/                                         //
+    //  \____\___/ \__,_|\___|                                         //
     /////////////////////////////////////////////////////////////////////
 
-    app.post('/deleteAccount', jsonParser, async function(req, res)
+    app.post('/deleteAccountCode', jsonParser, async function(req, res)
     {
         const logID = `(${rand.generateKey(3)})`;
         console.log(logID, '------------------------------------------------');
@@ -224,7 +226,9 @@ module.exports = function(app)
         }
 
         let reqDecrypted = crypto.decrypt(reqEncrypted, keyData.pswrd);
-        if(reqDecrypted === null)
+        console.log('pswrd', keyData.pswrd);
+        console.log('reqDecrypted', reqDecrypted);
+        if(reqDecrypted === null || reqDecrypted === '')
         {
             res.status(200).send({error: 'failToObtainData'});
             console.log(logID, 'failToObtainData: cant decrypt');

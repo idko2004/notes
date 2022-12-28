@@ -36,7 +36,7 @@ document.getElementById('deleteAccountButton').addEventListener('click', async f
 
     try
     {
-        const response = await axios.post(`${path}/deleteAccountCode`, {key: theSecretThingThatNobodyHaveToKnow});
+        const response = await axios.post(`${path}/deleteAccount`, {key: theSecretThingThatNobodyHaveToKnow});
         console.log(response);
 
         if(response.data.error !== undefined)
@@ -115,7 +115,7 @@ document.getElementById('confirmDeleteAccount').addEventListener('click', async 
     try
     {
         console.log(code);
-        const response = await encryptHttpCall('/deleteAccount',
+        const response = await encryptHttpCall('/deleteAccountCode',
         {
             key: theSecretThingThatNobodyHaveToKnow,
             encrypt: {code}

@@ -156,13 +156,25 @@ module.exports = function(app)
 
         // Cambiar el email en la base de datos del usuario
         console.log(logID, 'Reemplazando email del usuario');
-        const userUpdated = await database.updateElement('users', {email: codeInDb.email});
+        const userUpdated = await database.updateElement('users', {email: codeInDb.email}, {email: newEmail});
         console.log(userUpdated);
+        if(userUpdated === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log('dbError: Reemplazando el email del usuario');
+            return;
+        }
 
         // Cambiar el email asociado a los sessionID
         console.log(logID, 'Reemplazando email en sessionID');
-        const sessionIdUpdated = await database.updateMultipleElements('sessionID', {email: codeInDb.email});
+        const sessionIdUpdated = await database.updateMultipleElements('sessionID', {email: codeInDb.email}, {email: newEmail});
         console.log(sessionIdUpdated);
+        if(sessionIdUpdated === 'dbError')
+        {
+            res.status(200).send({error: 'dbError'});
+            console.log('dbError: Reemplazando email en sessionID');
+            return;
+        }
 
         // Responder al cliente
         res.status(200).send({emailChanged: true});

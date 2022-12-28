@@ -18,9 +18,9 @@ async function getElement(collection, objQuery)
         console.log('\033[32m**Elemento obtenido**\033[0m');
         return element;
     }
-    catch
+    catch(err)
     {
-        console.log('\033[41m**ERROR AL CONECTARSE A LA BASE DE DATOS**\033[0m');
+        console.log('\033[41m**ERROR AL CONECTARSE A LA BASE DE DATOS**\033[0m', err);
         return 'dbError';
     }
 }
@@ -37,9 +37,9 @@ async function createElement(collection, element)
         console.log('\033[32m**Elemento creado en la base de datos**\033[0m', result);
         return result;
     }
-    catch
+    catch(err)
     {
-        console.log('\033[41m**ERROR AL CONECTARSE A LA BASE DE DATOS**\033[0m');
+        console.log('\033[41m**ERROR AL CONECTARSE A LA BASE DE DATOS**\033[0m', err);
         return 'dbError';
     }
 }
@@ -53,12 +53,12 @@ async function updateElement(collection, objQuery, newElement)
         const database = mdbClient.db('Notes');
         const theCollection = database.collection(collection);
         const result = await theCollection.findOneAndUpdate(objQuery, {$set: newElement});
-        console.log('\033[32m**Base de datos actualizada**\033[0m', collection, result.ok);
+        console.log('\033[32m**Base de datos actualizada**\033[0m', collection, result);
         return result.ok;
     }
-    catch
+    catch(err)
     {
-        console.log('\033[41m**ERROR AL CONECTARSE A LA BASE DE DATOS**\033[0m');
+        console.log('\033[41m**ERROR AL CONECTARSE A LA BASE DE DATOS**\033[0m', err);
         return 'dbError';
     }
 }
@@ -75,9 +75,9 @@ async function updateMultipleElements(collection, objQuery, toReplace)
         console.log('\033[32m**Múltiples elementos actualizados en la base de datos**\033[0m', result.modifiedCount);
         return result.modifiedCount;
     }
-    catch
+    catch(err)
     {
-        console.log('\033[41m**ERROR AL CONECTARSE A LA BASE DE DATOS**\033[0m');
+        console.log('\033[41m**ERROR AL CONECTARSE A LA BASE DE DATOS**\033[0m', err);
         return 'dbError';
     }
 }
@@ -94,9 +94,9 @@ async function deleteElement(collection, objQuery)
         console.log('\033[32m**Elemento borrado en la base de datos**\033[0m', result);
         return result;
     }
-    catch
+    catch(err)
     {
-        console.log('\033[41m**ERROR AL CONECTARSE A LA BASE DE DATOS**\033[0m');
+        console.log('\033[41m**ERROR AL CONECTARSE A LA BASE DE DATOS**\033[0m', err);
         return 'dbError';
     }
 }
@@ -113,9 +113,9 @@ async function deleteMultipleElements(collection, objQuery)
         console.log('\033[32m**Multiples elementos borrados de la base de datos**\033[0m', result);
         return result;
     }
-    catch
+    catch(err)
     {
-        console.log('\033[41m**ERROR AL CONECTARSE A LA BASE DE DATOS**\033[0m');
+        console.log('\033[41m**ERROR AL CONECTARSE A LA BASE DE DATOS**\033[0m', err);
         return 'dbError';
     }
 }
@@ -138,9 +138,9 @@ async function getKeyData(key)
     
             cache = element;
         }
-        catch
+        catch(err)
         {
-            console.log('\033[41m**ERROR AL CONECTARSE A LA BASE DE DATOS**\033[0m');
+            console.log('\033[41m**ERROR AL CONECTARSE A LA BASE DE DATOS**\033[0m', err);
             cache = 'dbError';
         }
     }

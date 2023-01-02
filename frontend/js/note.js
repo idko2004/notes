@@ -581,6 +581,7 @@ updateBarButtonsHoverText();
 
 function updateButtonsImg()
 {
+    return;
     if(['dark', 'krad'].includes(colorTheme))
     {
         document.getElementById('menuImg').src = 'img/menu-dark.png';

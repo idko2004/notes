@@ -181,6 +181,8 @@
     padding: 0 0 0.7rem 0;
     color: white;
     word-wrap: break-word;
+    font-family: var(--rubik);
+    font-weight: 700;
 }
 
 #windowText
@@ -190,6 +192,8 @@
     word-wrap: break-word;
     line-height: 1.5rem;
     color: white;
+    font-family: var(--rubik);
+    font-weight: 400;
 }
 
 #windowInput
@@ -207,6 +211,8 @@
     background-color: var(--green-hover);
     color: white;
     font-size: 1rem;
+    font-family: var(--rubik);
+    font-weight: 400;
 }
 
 #windowInput input:focus,
@@ -226,6 +232,8 @@
     margin: 0.3rem;
     padding: 0.5rem;
     font-size: 1rem;
+    font-family: var(--rubik);
+    font-weight: 400;
 }
 
 .windowButtonPrincipal
@@ -272,6 +280,8 @@
     font-size: 1rem;
     font-family: var(--rubik);
     transition: all ease 100ms;
+    font-family: var(--rubik);
+    font-weight: 400;
 }
 
 #menuButtons
@@ -292,6 +302,8 @@
     border: 2px solid var(--green-hover);
     border-radius: 10px;
     transition: all ease 100ms;
+    font-family: var(--rubik);
+    font-weight: 400;
 }
 
 #menuButtons button:hover,

@@ -590,8 +590,8 @@ document.getElementById('loginSettings').addEventListener('click', function()
 });
 
 //Cargar el icono de configuración
-if(colorTheme === 'dark') document.getElementById('loginSettings').src = 'img/settings-dark.png';
-else document.getElementById('loginSettings').src= 'img/settings.png';
+if(colorTheme === 'dark') document.getElementById('loginSettings').src = 'img/settings-dark.svg';
+else document.getElementById('loginSettings').src= 'img/settings.svg';
 
 async function requestLoginPassword()
 {

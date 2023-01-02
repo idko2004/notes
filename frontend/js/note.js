@@ -581,22 +581,21 @@ updateBarButtonsHoverText();
 
 function updateButtonsImg()
 {
-    return;
     if(['dark', 'krad'].includes(colorTheme))
     {
-        document.getElementById('menuImg').src = 'img/menu-dark.png';
-        document.getElementById('renameImg').src = 'img/rename-dark.png';
-        document.getElementById('downloadImg').src = 'img/download-dark.png';
-        document.getElementById('saveImg').src= 'img/save-dark.png';
-        document.getElementById('deleteImg').src = 'img/delete-dark.png';
+        document.getElementById('menuImg').src = 'img/hamburger-dark.svg';
+        document.getElementById('renameImg').src = 'img/pencil-dark.svg';
+        document.getElementById('downloadImg').src = 'img/download-dark.svg';
+        document.getElementById('saveImg').src= 'img/upload-dark.svg';
+        document.getElementById('deleteImg').src = 'img/delete-dark.svg';
     }
     else
     {
-        document.getElementById('menuImg').src = 'img/menu.png';
-        document.getElementById('renameImg').src = 'img/rename.png';
-        document.getElementById('downloadImg').src = 'img/download.png';
-        document.getElementById('saveImg').src= 'img/save.png';
-        document.getElementById('deleteImg').src = 'img/delete.png';
+        document.getElementById('menuImg').src = 'img/hamburger.svg';
+        document.getElementById('renameImg').src = 'img/pencil.svg';
+        document.getElementById('downloadImg').src = 'img/download.svg';
+        document.getElementById('saveImg').src= 'img/upload.svg';
+        document.getElementById('deleteImg').src = 'img/delete.svg';
     }
 }
 

@@ -22,12 +22,29 @@ aside
 #newNote
 {
     float: right;
+    height: 1.3rem;
+    padding: 0 0.3rem;
+    border-radius: 10px;
+}
+
+#newNote:hover
+{
+    background-color: var(--green);
+    cursor: pointer;
+    transition: all ease 100ms;
+    outline: none;
+}
+
+/*
+#newNote
+{
+    float: right;
     background-color: var(--green);
     color: white;
     border: 0;
     border-radius: 10px;
     padding: 0.3rem;
-    /*width: 3ch;*/
+    width: 3ch;
     transition: all ease 100ms;
 }
 
@@ -36,6 +53,7 @@ aside
     background-color: var(--green-hover);
     transition: all ease 100ms;
 }
+*/
 
 #notesList
 {

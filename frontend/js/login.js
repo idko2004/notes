@@ -589,10 +589,6 @@ document.getElementById('loginSettings').addEventListener('click', function()
     localManageAccount();
 });
 
-//Cargar el icono de configuración
-if(colorTheme === 'dark') document.getElementById('loginSettings').src = 'img/settings-dark.svg';
-else document.getElementById('loginSettings').src= 'img/settings.svg';
-
 async function requestLoginPassword()
 {
     try

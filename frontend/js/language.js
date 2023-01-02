@@ -943,6 +943,11 @@ const allTexts =
     {
         es: 'y',
         en: 'and'
+    },
+    showNotesList:
+    {
+        es: 'Mostrar lista de notas',
+        en: 'Show notes list'
     }
 }
 

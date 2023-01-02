@@ -43,6 +43,7 @@
         <script defer src='js/note.js'></script>
         <script defer src='js/text.js'></script>
         <script defer src='js/menu.js'></script>
+        <script defer src='js/changeIconsAndTexts.js'></script>
         <script defer src='js/load.js'></script>
         <script defer src='js/cookies.js'></script>
 
@@ -112,9 +113,10 @@
                 <aside id='leftBar'>
                     <div id='leftBarTitle'>
                         <b><span class="text" txt="yourNotes"></span></b>
-                        <button id='newNote'>
+                        <img id="newNote">
+                        <!--button id='newNote'>
                             <span class="text" txt="create"></span>
-                        </button>
+                        </button-->
                     </div>
                     <div id='youDontHaveNotes'>
                         <span class="text" txt="youDontHaveNotes"></span>
@@ -125,17 +127,17 @@
                     <section id='topBar'>
                         <div id='topBarText'>
                             <span id='leftToTheNoteNameButtons'>
-                                <button class='bg-green' id='showNotesListButton'><img id='menuImg' src='img/hamburger.svg'></button>
+                                <button class='bg-green' id='showNotesListButton'><img id='menuImg'></button>
                             </span>
                             <b id='noteName'>
                                 <span class="text" txt="clickANote"></span>
                             </b>
                             <span id='sayThings'></span>
                             <span id='topBarButtons' hidden>
-                                <button class='bg-green' id='renameButton' alt='Renombrar nota' title='Renombrar nota'><img id='renameImg' src='img/pencil.svg'></button>
-                                <button class='bg-green' id='downloadButton' alt='Descargar nota' title='Descargar nota'><img id='downloadImg' src='img/download.svg'></button>
-                                <button class='bg-green' id='saveButton' alt='Guardar nota' title='Guardar nota'><img id='saveImg' src='img/upload.svg'></button>
-                                <button class='bg-red' id='deleteButton' alt='Borrar nota' title='Borrar nota'><img id='deleteImg' src='img/delete.svg'></button>
+                                <button class='bg-green' id='renameButton' alt='Renombrar nota'><img id='renameImg'></button>
+                                <button class='bg-green' id='downloadButton' alt='Descargar nota'><img id='downloadImg' ></button>
+                                <button class='bg-green' id='saveButton' alt='Guardar nota'><img id='saveImg'></button>
+                                <button class='bg-red' id='deleteButton' alt='Borrar nota'><img id='deleteImg'></button>
                             </span>
                         </div>
                     </section>

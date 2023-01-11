@@ -57,8 +57,6 @@ async function start()
     theOtherSecretThing = getSpecificCookie('_pswrd');
     saveNotesLocally = getSpecificCookie('_localCopy');
     spellcheckConfig = getSpecificCookie('_spellcheck');
-    email = getSpecificCookie('_email');
-
 
     //Cargar el modo local
     if(theSecretThingThatNobodyHaveToKnow === 'local')
@@ -88,9 +86,9 @@ async function start()
         console.log('theOtherSecretThing', theOtherSecretThing);
         console.log('email', email);
 
-        if([theSecretThingThatNobodyHaveToKnow, saveNotesLocally, theOtherSecretThing, email].includes(null)
-        || [theSecretThingThatNobodyHaveToKnow, saveNotesLocally, theOtherSecretThing, email].includes(undefined)
-        || [theSecretThingThatNobodyHaveToKnow, saveNotesLocally, theOtherSecretThing, email].includes(''))
+        if([theSecretThingThatNobodyHaveToKnow, saveNotesLocally, theOtherSecretThing].includes(null)
+        || [theSecretThingThatNobodyHaveToKnow, saveNotesLocally, theOtherSecretThing].includes(undefined)
+        || [theSecretThingThatNobodyHaveToKnow, saveNotesLocally, theOtherSecretThing].includes(''))
         {
             loadingScreen.hidden = true;
             floatingWindow(
@@ -110,7 +108,25 @@ async function start()
             return;
         }
 
-        updateUserData();
+        if(!await updateUserData())
+        {
+            loadingScreen.hidden = true;
+            floatingWindow(
+            {
+                title: getText('somethingWentWrong'),
+                text: getText('reenter_manageAccount'),
+                button:
+                {
+                    text: getText('ok'),
+                    callback: async function()
+                    {
+                        await closeWindow();
+                        location.href = 'index.html';
+                    }
+                }
+            });
+            return;
+        }
         mainMenu.hidden = false;
         loadingScreen.hidden = true;
         mainScreen.hidden = false;
@@ -119,9 +135,32 @@ async function start()
     }
 }
 
-function updateUserData()
+async function updateUserData()
 {
-    emailSpace.innerText = email;
+    try
+    {
+        const response = await encryptHttpCall('/getUserEmail',
+        {
+            key: theSecretThingThatNobodyHaveToKnow
+        }, theOtherSecretThing);
+
+        if(response.data.decrypt.email !== undefined)
+        {
+            email = response.data.decrypt.email;
+            emailSpace.innerText = email;
+            return true;
+        }
+        else
+        {
+            console.log('No se obtuvo el email', response.data.error);
+            return false;
+        }
+    }
+    catch(err)
+    {
+        console.log('Catch updateUserData', err);
+        return false;
+    }
 }
 
 async function animatedTransition(elementToHide, elementToShow, callback)

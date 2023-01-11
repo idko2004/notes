@@ -57,6 +57,7 @@ async function encryptHttpCall(route, body, password)
     console.log('body', body);
 
     const response = await axios.post(`${path}${route}`, body);
+    console.log('raw data response', response.data);
 
     if(response.data.decrypt !== undefined)
     {

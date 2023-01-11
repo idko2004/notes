@@ -34,6 +34,7 @@ require('./routes/pingpong')(app);
 require('./routes/generateLoginPassword')(app);
 require('./routes/changeEmail')(app);
 require('./routes/changeEmailCode')(app);
+require('./routes/getUserEmail')(app);
 
 app.get('*', function(req, res)
 {

@@ -37,13 +37,24 @@ async function menuButtonText()
         menuOnlineManageAccount.hidden = false;
         menuOnlineChangeToLocal.hidden = false;
 
-        //Obtener nombre de usuario
-        userEmail = getKey('_email');
-        if(userEmail !== null)
+        //Obtener email
+        try
         {
-            const username = userEmail.split('@')[0];
-            menuButton.innerText = username;
-            menuTitleText.innerText = username;
+            const response = await encryptHttpCall('/getUserEmail',
+            {
+                key: theSecretThingThatNobodyHasToKnow
+            }, theOtherSecretThing);
+
+            if(response.data.decrypt.email !== undefined)
+            {
+                const username = response.data.decrypt.email.split('@')[0];
+                menuButton.innerText = username;
+                menuTitleText.innerText = username;
+            }
+        }
+        catch(err)
+        {
+            console.log('No se pudo obtener el email', err);
         }
     }
 }
@@ -147,7 +158,6 @@ menuOnlineManageAccount.addEventListener('click', async function()
     saveCookie('_pswrd', theOtherSecretThing);
     saveCookie('_localCopy', localCopy);
     saveCookie('_spellcheck', getKey('_spellcheck'));
-    saveCookie('_email', userEmail);
     location.href = `manageAccount.html#lang=${actualLanguage};colortheme=${colorTheme};`;
 });
 

@@ -130,3 +130,8 @@
 {
     padding: 1.7rem 0;
 }
+
+#loadLoginSection .loadingDot
+{
+    background-color: var(--green);
+}

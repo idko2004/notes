@@ -141,7 +141,7 @@ async function getKeyData(key)
         catch(err)
         {
             console.log('\033[41m**ERROR AL CONECTARSE A LA BASE DE DATOS**\033[0m', err);
-            cache = 'dbError';
+            return 'dbError';
         }
     }
     else console.log('\033[32mCargado desde caché\033[0m', cache);

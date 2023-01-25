@@ -617,6 +617,7 @@ async function requestLoginPassword()
                         callback: closeWindow
                     }
                 });
+                hideLoginFields();
             }
             else if(!response.data.stillValid) await requestNewDeviceID();
             else

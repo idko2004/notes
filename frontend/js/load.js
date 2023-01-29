@@ -68,14 +68,17 @@ async function start()
                 theActualThing = 'login';
             }
         }
-        catch
+        catch(err)
         {
             loadingScreen.hidden = true;
             theActualThing = 'ventana';
+
+            console.log(err);
+
             floatingWindow(
             {
                 title: getText('ups'),
-                text: getText('load_fail'),
+                text: `${getText('load_fail')}\n\n${getText('errorCode')}: ${err.message}`,
                 buttons:
                 [
                     {

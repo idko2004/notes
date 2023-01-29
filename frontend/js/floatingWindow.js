@@ -41,7 +41,7 @@ function floatingWindow(elements)
 {
     if(thereIsAWindows)
     {
-        console.error('Ya hay una ventana abierta y se intenta abrir otra.');
+        console.error('Ya hay una ventana abierta y se intenta abrir otra.', elements);
         alert(getText('errorAlert'));
         return;
     }
@@ -83,7 +83,7 @@ function floatingWindow(elements)
         if(elements.input === true)
         {
             windowInput.hidden = false;
-            setTimeout(function(){windowInput.children[0].focus();},10);
+            setTimeout(function(){windowInput.children[0].focus()},10);
 
             //Añadir el callback del botón principal al input para que, al presionar enter, realice la misma acción.
             if(elements.button !== undefined)

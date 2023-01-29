@@ -16,51 +16,77 @@ async function loadNotesList()
     }
     else
     {
-        let loginKey = theSecretThingThatNobodyHasToKnow;
-        console.log(loginKey);
-        console.log('http: obteniendo ids de las notas');
-        const response = await encryptHttpCall('/getNotesID', {key: loginKey}, theOtherSecretThing);
-        console.log(response);
-        if(response.data.error !== undefined)
+        try
+        {
+            let loginKey = theSecretThingThatNobodyHasToKnow;
+            console.log(loginKey);
+            console.log('http: obteniendo ids de las notas');
+            const response = await encryptHttpCall('/getNotesID', {key: loginKey}, theOtherSecretThing);
+            console.log(response);
+            if(response.data.error !== undefined)
+            {
+                //Ha ocurrido un error
+                loadingScreen.hidden = true;
+                floatingWindow(
+                {
+                    title: getText('somethingWentWrong'),
+                    text: `${getText('errorCode')}: ${response.data.error}`,
+                    buttons:
+                    [
+                        {
+                            text: getText('lnl_eraseData'),
+                            primary: false,
+                            callback: async function()
+                            {
+                                await closeWindow();
+                                deleteKey('_login');
+                                deleteKey('_pswrd');
+                                location.reload();
+                            }
+                        },
+                        {
+                            text: getText('reload'),
+                            primary: true,
+                            callback: async function()
+                            {
+                                await closeWindow();
+                                location.reload();
+                            }
+                        }
+                    ]
+                });
+                return;
+            }
+
+
+            const notesArray = response.data.decrypt.notesID;
+            for(let i = 0; i < notesArray.length; i++)
+            {
+                let name = notesArray[i].name;
+                let id = notesArray[i].id;
+                createListButton(name,id);
+            }
+    
+        }
+        catch(err)
         {
             //Ha ocurrido un error
             loadingScreen.hidden = true;
             floatingWindow(
             {
-                title: getText('somethingWentWrong'),
-                text: `${getText('errorCode')}: ${response.data.error}`,
-                buttons:
-                [
+                title: getText('ups'),
+                text: `${getText('somethingWentWrong')}\n\n${getText('errorCode')}: ${err.message}`,
+                button:
+                {
+                    text: getText('reload'),
+                    callback: async function()
                     {
-                        text: getText('lnl_eraseData'),
-                        primary: false,
-                        callback: async function()
-                        {
-                            await closeWindow();
-                            deleteKey('_login');
-                            deleteKey('_pswrd');
-                            location.reload();
-                        }
-                    },
-                    {
-                        text: getText('reload'),
-                        primary: true,
-                        callback: async function()
-                        {
-                            await closeWindow();
-                            location.reload();
-                        }
+                        await closeWindow();
+                        location.reload();
                     }
-                ]
+                }
             });
             return;
-        }
-        const notesArray = response.data.decrypt.notesID;
-        for(let i = 0; i < notesArray.length; i++)
-        {
-            let name = notesArray[i].name;
-            let id = notesArray[i].id;
-            createListButton(name,id);
         }
     }
     

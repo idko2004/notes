@@ -143,12 +143,12 @@ async function createNewNote(name)
             noteName.innerText = getText('somethingWentWrong');
         }
     }
-    catch
+    catch(err)
     {
         floatingWindow(
         {
             title: getText('ups'),
-            text: getText('serverDown'),
+            text: `${getText('somethingWentWrong')}\n\n${getText('errorCode')}: ${err.message}`,
             button:
             {
                 text: getText('ok'),

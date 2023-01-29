@@ -87,8 +87,9 @@ async function loadNote(name, id)
                 return;
             }
         }
-        catch
+        catch(err)
         {
+            console.log(err);
             noteName.innerText = getText('loadNoteFailed');
             actualNoteID = undefined;
             actualNoteName = undefined;
@@ -104,7 +105,7 @@ async function loadNote(name, id)
                 floatingWindow(
                 {
                     title: getText('ups'),
-                    text: getText('serverDown'),
+                    text: `${getText('somethingWentWrong')}\n\n${getText('errorCode')}: ${err.message}`,
                     button:
                     {
                         text: getText('ok'),
@@ -248,14 +249,15 @@ async function saveNote()
                 return false;
             }
         }
-        catch
+        catch(err)
         {
             console.log('El servidor se ha caido así que no se puede guardar la nota.');
+            console.log(err);
             if(serverDownAdvertisement) return false;
             if(!thereIsAWindows) floatingWindow(
             {
                 title: getText('ups'),
-                text: getText('serverDown'),
+                text: `${getText('somethingWentWrong')}\n\n${getText('errorCode')}: ${err.message}`,
                 button:
                 {
                     text: getText('ok'),
@@ -386,13 +388,13 @@ document.getElementById('deleteButton').addEventListener('click',() =>
                             });
                         }
                     }
-                    catch
+                    catch(err)
                     {
                         theActualThing = 'ventana';
                         floatingWindow(
                         {
                             title: getText('ups'),
-                            text: getText('serverDown'),
+                            text: `${getText('somethingWentWrong')}\n\n${getText('errorCode')}: ${err.message}`,
                             button:
                             {
                                 text: getText('ok'),
@@ -511,12 +513,12 @@ document.getElementById('renameButton').addEventListener('click', function()
 
                             renameNoteLocally();
                         }
-                        catch
+                        catch(err)
                         {
                             floatingWindow(
                             {
                                 title: getText('ups'),
-                                text: getText('serverDown'),
+                                text: `${getText('somethingWentWrong')}\n\n${getText('errorCode')}: ${err.message}`,
                                 button:
                                 {
                                     text: getText('ok'),

@@ -106,8 +106,8 @@ const allTexts =
     },
     load_fail:
     {
-        es: 'Parece que nuestro servidor se ha caído.\nPuedes recargar la página para ver si ha vuelto, o usar el modo local, solo ten en cuenta que tus notas no se subirán a la nube.\n\n(Por el momento estamos usando un hosting gratuido, por lo que el servidor puede no estar disponible por un tiempo).',
-        en: 'Looks like our server went down.\nYou can reload to look if it works again, or use the local mode, just be aware your notes are not going to be saved in the cloud.\n\n(At the moment we are using a free hosting, so it may be down for a while.)'
+        es: 'Parece que algo salió mal.\nPuedes recargar la página para ver si vuelve a funcionar, o usar el modo local, solo ten en cuenta que tus notas no se subirán a la nube.\n\n(Por el momento estamos usando un hosting gratuido, por lo que el servidor puede no estar disponible por un tiempo).',
+        en: 'Looks like something went wrong.\nYou can reload to look if it works again, or use the local mode, just be aware your notes are not going to be saved in the cloud.\n\n(At the moment we are using a free hosting, so it may be down for a while.)'
     },
     tryAgain:
     {

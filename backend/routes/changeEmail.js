@@ -12,182 +12,192 @@ module.exports = function(app)
 {
     app.post('/changeEmail', jsonParser, async function(req, res)
     {
+
         const logID = `(${rand.generateKey(3)})`;
-        console.log(logID, '------------------------------------------------');
-        console.log(logID, '\033[1;34m/changeEmail\033[0m');
-        console.log(logID, 'body', req.body);
 
-        /* Ver si tenemos los datos necesarios
-            {
-                key,
-                encrypt:
-                {
-                    newEmail
-                }
-            }
-        */
-
-        if(Object.keys(req.body).length === 0)
-        {
-            res.status(400).send({error: 'badRequest'});
-            console.log(logID, 'badRequest: no body');
-            return;
-        }
-    
-        const reqEncrypted = req.body.encrypt;
-        if(reqEncrypted === undefined)
-        {
-            res.status(400).send({error: 'badRequest'});
-            console.log(logID, 'badRequest: no encrypted');
-            return;
-        }
-    
-        const key = req.body.key;
-        if(key === undefined)
-        {
-            res.status(400).send({error: 'badRequest'});
-            console.log(logID, 'badRequest: no key');
-            return;
-        }
-
-
-
-        //Obtenemos key del usuario
-        const KeyData = await database.getKeyData(key);
-        console.log(KeyData);
-        if(KeyData === null)
-        {
-            res.status(200).send({error: 'invalidKey'});
-            console.log(logID, 'invalidKey');
-            return;
-        }
-        if(KeyData === 'dbError')
-        {
-            res.status(200).send({error: 'dbError'});
-            console.log(logID, 'dbError, loading keyData');
-            return;
-        }
-        
-        const email = KeyData.email;
-        if(email === undefined)
-        {
-            res.status(200).send({error: 'emailNull'});
-            console.log(logID, 'emailNull');
-            return;
-        }
-
-
-
-        // Desciframos encrypt
-        let reqDecrypted = crypto.decrypt(reqEncrypted, KeyData.pswrd);
-        if(reqDecrypted === null)
-        {
-            res.status(200).send({error: 'failToObtainData'});
-            console.log(logID, 'failToObtainData: cant decrypt');
-            return;
-        }
-        reqDecrypted = JSON.parse(reqDecrypted);
-        console.log(logID, reqDecrypted);
-
-        const newEmail = reqDecrypted.newEmail;
-
-
-
-        // Comprobamos que el nuevo email sea válido
-        const emailRegex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
-        const emailIsValid = emailRegex.test(newEmail);
-
-        if(!emailIsValid)
-        {
-            res.status(200).send({error: 'invalidEmail'});
-            console.log(logID, 'el email no es válido');
-            return;
-        }
-        else console.log(logID, 'el email es válido');
-
-
-
-        // Comprobar que el nuevo correo no esté en uso por otra cuenta
-        const emailInDB = await database.getElement('users', {email: newEmail});
-        if(emailInDB !== null)
-        {
-            res.status(200).send({error: 'duplicatedEmail'});
-            console.log(logID, 'este correo ya existe');
-            return;
-        }
-        else console.log(logID, 'este correo es único');
-
-
-
-        // Generamos dos códigos
-        console.log(logID, 'Generando códigos');
-        const code1 = await generateUniqueEmailCodes(logID);
-        const code2 = await generateUniqueEmailCodes(logID);
-
-
-
-        // Creamos el objeto para guardarlo en la base de datos
-        const emailCode =
-        {
-            code: code1,
-            code2,
-            email,
-            newEmail
-        }
-
-        let createDbResult = await database.createElement('emailCodes', emailCode);
-
-        if(createDbResult === 'dbError')
-        {
-            res.status(200).send({error: 'dbError'});
-            console.log(logID, 'dbError: creando emailCode');
-            return;
-        }
-
-
-
-        // Cargamos el correo electrónico
-        let emailHtmlFile;
         try
         {
-            emailHtmlFile = await fs.promises.readFile('emailPresets/changeEmail.html', 'utf-8');
+            console.log(logID, '------------------------------------------------');
+            console.log(logID, '\033[1;34m/changeEmail\033[0m');
+            console.log(logID, 'body', req.body);
+    
+            /* Ver si tenemos los datos necesarios
+                {
+                    key,
+                    encrypt:
+                    {
+                        newEmail
+                    }
+                }
+            */
+    
+            if(Object.keys(req.body).length === 0)
+            {
+                res.status(400).send({error: 'badRequest'});
+                console.log(logID, 'badRequest: no body');
+                return;
+            }
+        
+            const reqEncrypted = req.body.encrypt;
+            if(reqEncrypted === undefined)
+            {
+                res.status(400).send({error: 'badRequest'});
+                console.log(logID, 'badRequest: no encrypted');
+                return;
+            }
+        
+            const key = req.body.key;
+            if(key === undefined)
+            {
+                res.status(400).send({error: 'badRequest'});
+                console.log(logID, 'badRequest: no key');
+                return;
+            }
+    
+    
+    
+            //Obtenemos key del usuario
+            const KeyData = await database.getKeyData(key);
+            console.log(KeyData);
+            if(KeyData === null)
+            {
+                res.status(200).send({error: 'invalidKey'});
+                console.log(logID, 'invalidKey');
+                return;
+            }
+            if(KeyData === 'dbError')
+            {
+                res.status(200).send({error: 'dbError'});
+                console.log(logID, 'dbError, loading keyData');
+                return;
+            }
+            
+            const email = KeyData.email;
+            if(email === undefined)
+            {
+                res.status(200).send({error: 'emailNull'});
+                console.log(logID, 'emailNull');
+                return;
+            }
+    
+    
+    
+            // Desciframos encrypt
+            let reqDecrypted = crypto.decrypt(reqEncrypted, KeyData.pswrd);
+            if(reqDecrypted === null)
+            {
+                res.status(200).send({error: 'failToObtainData'});
+                console.log(logID, 'failToObtainData: cant decrypt');
+                return;
+            }
+            reqDecrypted = JSON.parse(reqDecrypted);
+            console.log(logID, reqDecrypted);
+    
+            const newEmail = reqDecrypted.newEmail;
+    
+    
+    
+            // Comprobamos que el nuevo email sea válido
+            const emailRegex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+            const emailIsValid = emailRegex.test(newEmail);
+    
+            if(!emailIsValid)
+            {
+                res.status(200).send({error: 'invalidEmail'});
+                console.log(logID, 'el email no es válido');
+                return;
+            }
+            else console.log(logID, 'el email es válido');
+    
+    
+    
+            // Comprobar que el nuevo correo no esté en uso por otra cuenta
+            const emailInDB = await database.getElement('users', {email: newEmail});
+            if(emailInDB !== null)
+            {
+                res.status(200).send({error: 'duplicatedEmail'});
+                console.log(logID, 'este correo ya existe');
+                return;
+            }
+            else console.log(logID, 'este correo es único');
+    
+    
+    
+            // Generamos dos códigos
+            console.log(logID, 'Generando códigos');
+            const code1 = await generateUniqueEmailCodes(logID);
+            const code2 = await generateUniqueEmailCodes(logID);
+    
+    
+    
+            // Creamos el objeto para guardarlo en la base de datos
+            const emailCode =
+            {
+                code: code1,
+                code2,
+                email,
+                newEmail
+            }
+    
+            let createDbResult = await database.createElement('emailCodes', emailCode);
+    
+            if(createDbResult === 'dbError')
+            {
+                res.status(200).send({error: 'dbError'});
+                console.log(logID, 'dbError: creando emailCode');
+                return;
+            }
+    
+    
+    
+            // Cargamos el correo electrónico
+            let emailHtmlFile;
+            try
+            {
+                emailHtmlFile = await fs.promises.readFile('emailPresets/changeEmail.html', 'utf-8');
+            }
+            catch(err)
+            {
+                res.status(200).send({error: 'serverError'});
+                console.log(logID, 'no se pudo cargar el archivo', err);
+                return;
+            }
+    
+    
+    
+            // Guardamos dos variantes en variables distintas
+            let emailHtml1 = emailHtmlFile;
+            let emailHtml2 = emailHtmlFile;
+    
+    
+    
+            // Reemplazamos el código en ambos correos
+            emailHtml1 = emailHtml1.replace('{CODE_HERE}', code1);
+            emailHtml1 = emailHtml1.replace('{NUMBER_HERE}', 1);
+    
+            emailHtml2 = emailHtml2.replace('{CODE_HERE}', code2);
+            emailHtml2 = emailHtml2.replace('{NUMBER_HERE}', 2);
+    
+    
+    
+            // Enviamos el correo electrónico a ambos emails (el actual y el nuevo)
+            await Promise.allSettled(
+            [
+                emailUtil.sendEmail(email, 'Cambiar correo electrónico | Notas', emailHtml1),
+                emailUtil.sendEmail(newEmail, 'Cambiar correo electrónico | Notas', emailHtml2)
+            ]);
+    
+    
+    
+            // Respondemos al cliente
+            res.status(200).send({emailSent: true});
+            console.log(logID, 'emails enviados');    
         }
         catch(err)
         {
-            res.status(200).send({error: 'serverError'});
-            console.log(logID, 'no se pudo cargar el archivo', err);
-            return;
+            res.status(500).send({error: 'serverCrashed'});
+            console.log(logID, '\033[41m ALGO SALIÓ MAL \033[0m', err);
         }
-
-
-
-        // Guardamos dos variantes en variables distintas
-        let emailHtml1 = emailHtmlFile;
-        let emailHtml2 = emailHtmlFile;
-
-
-
-        // Reemplazamos el código en ambos correos
-        emailHtml1 = emailHtml1.replace('{CODE_HERE}', code1);
-        emailHtml1 = emailHtml1.replace('{NUMBER_HERE}', 1);
-
-        emailHtml2 = emailHtml2.replace('{CODE_HERE}', code2);
-        emailHtml2 = emailHtml2.replace('{NUMBER_HERE}', 2);
-
-
-
-        // Enviamos el correo electrónico a ambos emails (el actual y el nuevo)
-        await Promise.allSettled(
-        [
-            emailUtil.sendEmail(email, 'Cambiar correo electrónico | Notas', emailHtml1),
-            emailUtil.sendEmail(newEmail, 'Cambiar correo electrónico | Notas', emailHtml2)
-        ]);
-
-
-
-        // Respondemos al cliente
-        res.status(200).send({emailSent: true});
-        console.log(logID, 'emails enviados');
     });
 }
 

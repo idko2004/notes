@@ -82,3 +82,27 @@ async function encryptHttpCall(route, body, password)
     console.log('response', response.data);
     return response;
 }
+
+// Esta función debe usarse para cargar los valores de deviceID y theOtherSecretThing
+function loadDeviceIdAndPswrd()
+{
+    if(deviceID !== undefined || theOtherSecretThing !== undefined)
+    {
+        console.log('Se ha solicitado cargar deviceID y pswrd, pero ya estaban cargados');
+        return true;
+    }
+
+    const id = getKey('_id');
+    const pswrd = getKey('_pswrd');
+
+    if([undefined, null, '', 'undefined', 'null'].includes(id)
+    || [undefined, null, '', 'undefined', 'null'].includes(pswrd))
+    {
+        return false;
+    }
+    
+    deviceID = id;
+    theOtherSecretThing = pswrd;
+
+    return true;
+}

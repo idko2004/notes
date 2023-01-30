@@ -30,6 +30,7 @@ let canInteract = true;
 let isLocalMode = true;
 let actualNoteIsLocal = false;
 let theSecretThingThatNobodyHasToKnow;
+let deviceID;
 let localCopy;
 let actualNoteID;
 let actualNoteName;

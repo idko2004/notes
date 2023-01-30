@@ -95,7 +95,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
         floatingWindow(
         {
             title: getText('somethingWentWrong'),
-            text: `${getText('login_error_text')}\n${getText('errorCode')}: a thing (${codePassword === undefined}) or another thing (${loginPassword === undefined}) is undefined`,
+            text: `${getText('login_error_text')}\n${getText('errorCode')}: a thing (${codePassword === undefined}) or another thing (${loginPassword === undefined}) may be undefined`,
             button:
             {
                 text: getText('ok'),
@@ -206,7 +206,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
         floatingWindow(
         {
             title: getText('somethingWentWrong'),
-            text: `${getText('login_error_text')}\nerror code: ${err.message}`,
+            text: `${getText('login_error_text')}\n${getText('errorCode')}: ${err.message}`,
             button:
             {
                 text: getText('ok'),
@@ -256,13 +256,13 @@ document.getElementById('sendCodeLoginButton').addEventListener('click', async f
     {
         const response = await encryptHttpCall('/loginCode',
         {
-            deviceID: codePassword,
+            deviceID,
             encrypt:
             {
                 code,
                 email: userEmail
             }
-        }, loginPassword);
+        }, theOtherSecretThing);
         console.log(response);
 
         if(response.data.error === 'invalidCode')
@@ -314,14 +314,8 @@ document.getElementById('sendCodeLoginButton').addEventListener('click', async f
 
             isLocalMode = false;
             theSecretThingThatNobodyHasToKnow = response.data.decrypt.key;
-            theOtherSecretThing = response.data.decrypt.pswrd;
 
             saveKey('_login', theSecretThingThatNobodyHasToKnow);
-            saveKey('_pswrd', theOtherSecretThing);
-            saveKey('_email', userEmail);
-            
-            codePassword = undefined;
-            loginPassword = undefined;
 
             document.getElementById('loginScreen').hidden = true;
             showLoginSection('email');
@@ -424,16 +418,17 @@ async function requestLoginPassword()
 {
     try
     {
-        let deviceID = getKey('_id');
-        let pswrd = getKey('_pswrd2');
-
         //Requerir un nuevo deviceID
-        if([undefined, null, '', 'undefined', 'null'].includes(deviceID) || [undefined, null, '', 'undefined', 'null'].includes(pswrd)) await requestNewDeviceID();
+        if(!loadDeviceIdAndPswrd()) await requestNewDeviceID();
+
         //Ya tenemos un código y queremos comprobar que sigue válido
         else
         {
             console.log('http: comprobando si la clave de inicio de sesión sigue siendo válida');
-            const response = await axios.post(`${path}/generateLoginPassword`, {code: deviceID});
+            const response = await axios.post(`${path}/generateLoginPassword`,
+            {
+                code: deviceID
+            });
             console.log(response);
 
             if(response.data.stillValid === undefined)
@@ -451,21 +446,17 @@ async function requestLoginPassword()
                 hideLoginFields();
             }
             else if(!response.data.stillValid) await requestNewDeviceID();
-            else
-            {
-                console.log('al parecer sigue siendo válida');
-                loginPassword = pswrd;
-                codePassword = deviceID;
-            }
+            else console.log('al parecer sigue siendo válida');
         }
     }
-    catch
+    catch(err)
     {
+        console.log(err);
         hideLoginFields();
         floatingWindow(
         {
             title: getText('ups'),
-            text: getText('serverDown'),
+            text: `${getText('somethingWentWrong')}\n\n${getText('errorCode')}: ${err.message}`,
             button:
             {
                 text: getText('ok'),
@@ -476,32 +467,53 @@ async function requestLoginPassword()
 
     async function requestNewDeviceID()
     {
-        console.log('http: requiriendo una nueva clave de inicio de sesión');
-        const response = await axios.post(`${path}/generateLoginPassword`, {code: 'requesting'});
-        console.log(response);
-        console.log('contraseña', response.data.secret);
-        console.log('id', response.data.id);
-
-        if(response.data.error !== undefined || response.data.secret === undefined || response.data.id === undefined)
+        try
         {
+            console.log('http: requiriendo una nueva clave de inicio de sesión');
+            const response = await axios.post(`${path}/generateLoginPassword`,
+            {
+                code: 'requesting'
+            });
+            console.log(response);
+            console.log('contraseña', response.data.secret);
+            console.log('id', response.data.id);
+    
+            if(response.data.error !== undefined || response.data.secret === undefined || response.data.id === undefined)
+            {
+                floatingWindow(
+                {
+                    title: getText('somethingWentWrong'),
+                    text: `${getText('errorCode')}: ${response.data.error}`,
+                    button:
+                    {
+                        text: getText('ok'),
+                        callback: closeWindow
+                    }
+                });
+            }
+            else
+            {
+                theOtherSecretThing = response.data.secret;
+                deviceID = response.data.id;
+                saveKey('_id', deviceID);
+                saveKey('_pswrd', theOtherSecretThing);
+                console.log('Secret key obtained');
+            }
+        }
+        catch(err)
+        {
+            console.log(err);
+            hideLoginFields();
             floatingWindow(
             {
-                title: getText('somethingWentWrong'),
-                text: `${getText('errorCode')}: ${response.data.error}`,
+                title: getText('ups'),
+                text: `${getText('somethingWentWrong')}\n\n${getText('errorCode')}: ${err.message}`,
                 button:
                 {
                     text: getText('ok'),
                     callback: closeWindow
                 }
             });
-        }
-        else
-        {
-            loginPassword = response.data.secret;
-            codePassword = response.data.id;
-            saveKey('_id', codePassword);
-            saveKey('_pswrd2', loginPassword);
-            console.log('Secret key obtained');
         }
     }
 

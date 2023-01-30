@@ -3,10 +3,9 @@ elementsInHashAtStart();
 
 async function start()
 {
-    theSecretThingThatNobodyHasToKnow = getKey('_login');
+    loadDeviceIdAndPswrd();
+    
     let login = theSecretThingThatNobodyHasToKnow;
-
-    theOtherSecretThing = getKey('_pswrd');
 
     //Forzar modo local | modo local activo
     if(hashContains('local') || login === 'local')

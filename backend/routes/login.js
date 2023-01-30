@@ -2,6 +2,7 @@
 const database = require('../utils/database');
 const crypto = require('../utils/crypto');
 const emailUtil = require('../utils/email');
+const bodyDecrypter = require('../utils/bodyDecrypter');
 
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
@@ -31,6 +32,16 @@ module.exports = function(app)
                 }
             }
             */
+            const body = await bodyDecrypter.getBody(req.body, res, logID);
+
+            if(body === null)
+            {
+                console.log(logID, 'Algo salió mal obteniendo body');
+                return;
+            }
+
+            const reqDecrypted = body.encrypt;
+/*
             if(Object.keys(req.body) === 0)
             {
                 res.status(400).send({error: 'badRequest'});
@@ -88,9 +99,8 @@ module.exports = function(app)
             }
             reqDecrypted = JSON.parse(reqDecrypted);
             console.log(reqDecrypted);
-    
-    
-    
+*/
+
             // Obtener el email
             const email = reqDecrypted.email;
             if(email === undefined)

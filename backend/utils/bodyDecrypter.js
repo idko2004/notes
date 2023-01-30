@@ -16,6 +16,17 @@ const database = require('./database');
 
 async function getBody(body, res, logID)
 {
+    if(res === undefined)
+    {
+        console.log('bodyDecrypter.getBody: RES IS UNDEFINED');
+        return null;
+    }
+    if(logID === undefined)
+    {
+        console.log('bodyDecrypter.getBody: logID is undefined');
+        return null;
+    }
+
     if(Object.keys(body) === 0)
     {
         res.status(400).send({error: 'badRequest'});
@@ -41,7 +52,7 @@ async function getBody(body, res, logID)
 
     if(deviceIdElement === null)
     {
-        res.status(400).send({error: 'invalidPasswordCode'});
+        res.status(200).send({error: 'invalidPasswordCode'});
         console.log(logID, 'invalidPasswordCode');
         return null;
     }
@@ -58,7 +69,7 @@ async function getBody(body, res, logID)
     const pswrd = deviceIdElement.pswrd;
     if(pswrd === undefined)
     {
-        res.status(400).send({error: 'pswrdUndefined'});
+        res.status(200).send({error: 'pswrdUndefined'});
         console.log(logID, 'pswrdUndefined');
         return null;
     }
@@ -69,14 +80,26 @@ async function getBody(body, res, logID)
     console.log(reqDecrypted);
     if(reqDecrypted === null)
     {
-        res.status(500).send({error: 'failToObtainData'});
+        res.status(200).send({error: 'failedToObtainData'});
         console.log(logID, 'failToObtainData: cant decrypt');
         return null;
     }
-    reqDecrypted = JSON.parse(reqDecrypted);
-    console.log(reqDecrypted);
 
-    return reqDecrypted;
+    try
+    {
+        reqDecrypted = JSON.parse(reqDecrypted);
+    }
+    catch(err)
+    {
+        res.status(200).send({error: 'failedToObtainData'});
+        console.log(logID, 'JSON.parse HA FALLADO', err);
+        return null;
+    }
+
+    body.encrypt = reqDecrypted;
+    console.log(body);
+
+    return body;
 }
 
 module.exports =

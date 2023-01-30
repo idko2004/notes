@@ -78,7 +78,7 @@ async function getBody(body, res, logID)
     // Descifrar encrypt
     let reqDecrypted = crypto.decrypt(body.encrypt, pswrd);
     console.log(reqDecrypted);
-    if(reqDecrypted === null)
+    if(reqDecrypted === '' || reqDecrypted === null || reqDecrypted === undefined)
     {
         res.status(200).send({error: 'failedToObtainData'});
         console.log(logID, 'failToObtainData: cant decrypt');
@@ -87,7 +87,9 @@ async function getBody(body, res, logID)
 
     try
     {
+        console.log('raw decrypted:', reqDecrypted);
         reqDecrypted = JSON.parse(reqDecrypted);
+        console.log('parsed:', reqDecrypted);
     }
     catch(err)
     {

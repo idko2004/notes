@@ -1,5 +1,7 @@
 const database = require('../utils/database');
+
 const rand = require('generate-key');
+const generator = require('generate-password');
 
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
@@ -33,7 +35,7 @@ module.exports = function(app)
                 console.log(logID, 'badRequest: no code');
                 return;
             }
-    
+
             //Comprobar que el código recibido sea válido
     
             //Requiriendo código
@@ -44,7 +46,7 @@ module.exports = function(app)
     
                 while(true)
                 {
-                    deviceID = '_' + Math.random().toString().split('.')[1];
+                    deviceID = '_' + rand.generateKey(12);
     
                     const codeExists = await database.getElement('sessionID', {code: deviceID});
                     console.log(logID, 'Eventualmente tiene que dar null:', codeExists);
@@ -58,8 +60,17 @@ module.exports = function(app)
                 }
     
                 //Generar una contraseña
-                const password = rand.generateKey(30);
-    
+                const password = generator.generate(
+                {
+                    length: 30,
+                    numbers: true,
+                    symbols: true,
+                    lowercase: true,
+                    uppercase: true,
+                    exclude: '"='
+                });
+
+
                 //Crear el objeto que contienen la contraseña y el código
                 const dateCreated = new Date();
                 const obj =
@@ -100,18 +111,11 @@ module.exports = function(app)
                     console.log(logID, 'invalidCode');
                     return;
                 }
-                let codeNumbers = code.replace('_', '');
-                codeNumbers = parseInt(codeNumbers);
-                if(isNaN(codeNumbers))
-                {
-                    res.status(400).send({error: 'invalidCode'});
-                    console.log(logID, 'invalidCode');
-                    return;
-                }
-            
+
                 //En caso de que se esté comprobando, el código debe existir en la base de datos
                 const codeExists = await database.getElement('sessionID', {code});
                 console.log(logID, codeExists);
+
                 if(codeExists === 'dbError')
                 {
                     res.status(200).send({error: 'dbError'});

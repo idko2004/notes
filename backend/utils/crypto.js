@@ -1,5 +1,6 @@
 const cryptojs = require('crypto-js');
 const bcrypt = require('bcrypt');
+const colors = require('colors');
 
 function encrypt(input, password)
 {
@@ -23,6 +24,7 @@ function decrypt(input, password)
     try
     {
         const decrypted = cryptojs.AES.decrypt(input, password).toString(cryptojs.enc.Utf8);
+        if(decrypted === '') console.log(colors.red('ES POSIBLE QUE EL RESULTADO DE DESCIFRAR SEA INCORRECTO'));
         return decrypted;
     }
     catch

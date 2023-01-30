@@ -23,6 +23,10 @@ function decrypt(input, password)
     try
     {
         const result = CryptoJS.AES.decrypt(input, password).toString(CryptoJS.enc.Utf8);
+        if(result === '')
+        {
+            console.log('ES POSIBLE QUE EL RESULTADO DE DESCIFRAR SEA INCORRECTO');
+        }
         return result;
     }
     catch

@@ -45,3 +45,48 @@ Si los valores existen devuelve `true`, asigna `_id` a la variable `deviceID` y 
 Si los valores no existen sólo devuelve `false`.
 
 Esta función sólo debería ser llamada una vez por cada html, y las variables `deviceID` y `theOtherSecretThing` asignadas a través de esta función, excepto cuando se vaya a asignar una nueva clave porque la que estaba guardada no es válida o no había clave guardada.
+
+## Iniciar sesión
+### `/login`
+#### Lo que debería enviarse
+```
+await encryptHttpCall('/login',
+{
+    deviceID,
+    encrypt:
+    {
+        email
+    }
+}, theOtherSecretThing);
+```
+
+#### Lo que debería recibirse
+```
+{
+    emailSent: true
+}
+```
+
+### `/loginCode`
+#### Lo que debería enviarse
+```
+await encryptHttpCall('/loginCode',
+{
+    deviceID,
+    encrypt:
+    {
+        code,
+        email
+    }
+}, theOtherSecretThing
+```
+
+#### Lo que debería recibirse
+```
+{
+    decrypt:
+    {
+        key
+    }
+}
+```

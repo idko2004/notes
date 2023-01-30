@@ -90,6 +90,7 @@ document.getElementById('loginButton').addEventListener('click', async function(
         return;
     }
 
+    /*
     if([codePassword, loginPassword].includes(undefined))
     {
         floatingWindow(
@@ -107,17 +108,18 @@ document.getElementById('loginButton').addEventListener('click', async function(
             }
         });
     }
+    */
 
     try
     {
         const response = await encryptHttpCall('/login',
         {
-            deviceID: codePassword,
+            deviceID,
             encrypt:
             {
                 email
             }
-        }, loginPassword);
+        }, theOtherSecretThing);
 
         console.log(response);
 

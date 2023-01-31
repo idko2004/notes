@@ -101,6 +101,9 @@ async function getBody(body, res, logID)
     body.encrypt = reqDecrypted;
     console.log(body);
 
+    //Añadir esto por si se quiere usar después, así se puede acceder desde el body nomás
+    body.pswrd = pswrd;
+
     return body;
 }
 

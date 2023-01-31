@@ -308,11 +308,10 @@ document.getElementById('sendCodeLoginButton').addEventListener('click', async f
                 }
             });
         }
-        else if(response.data.decrypt.key !== undefined && response.data.decrypt.pswrd !== undefined)
+        else if(response.data.decrypt.key !== undefined)
         {
             // Se inició sesión correctamente
             console.log('Clave obtenida');
-            console.log('la nueva contraseña', response.data.decrypt.pswrd);
 
             isLocalMode = false;
             theSecretThingThatNobodyHasToKnow = response.data.decrypt.key;

@@ -1,7 +1,7 @@
 // Esto reemplaza a getSessionID
 const database = require('../utils/database');
 const crypto = require('../utils/crypto');
-const emailUtil = require('../utils/email');
+const bodyDecrypter = require('../utils/bodyDecrypter');
 
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
@@ -22,6 +22,14 @@ module.exports = function(app)
             console.log(logID, '\033[1;34m/loginCode\033[0m');
             console.log(logID, 'body', req.body);
     
+            const body = await bodyDecrypter.getBody(req.body, res, logID);
+            if(body === null)
+            {
+                console.log(logID, 'Algo salió mal obteniendo body');
+                return;
+            }
+            
+            const reqDecrypted = body.encrypt;
             /* Ver que tenemos los datos necesarios
             {
                 deviceID (identificador de cifrado)
@@ -32,7 +40,7 @@ module.exports = function(app)
                 }
             }
             */
-    
+            /*
             if(Object.keys(req.body) === 0)
             {
                 res.status(400).send({error: 'badRequest'});
@@ -90,6 +98,7 @@ module.exports = function(app)
             }
             reqDecrypted = JSON.parse(reqDecrypted);
             console.log(reqDecrypted);
+            */
     
     
     
@@ -131,7 +140,7 @@ module.exports = function(app)
             }
     
     
-    
+            /*
             // Generar una contraseña para cifrar las llamadas
             const newPassword = generator.generate(
             {
@@ -142,7 +151,7 @@ module.exports = function(app)
                 uppercase: true,
                 exclude: '"='
             });
-    
+            */
     
     
             // Generar una clave para sessionID
@@ -159,7 +168,7 @@ module.exports = function(app)
             const sessionID =
             {
                 key,
-                pswrd: newPassword,
+                //pswrd: newPassword,
                 email,
                 date:
                 {
@@ -179,10 +188,10 @@ module.exports = function(app)
             // Cifrar las respuestas al cliente
             const answer =
             {
-                key,
-                pswrd: newPassword
+                key
+                //pswrd: newPassword
             }
-            const resEncrypted = await crypto.encrypt(JSON.stringify(answer), pswrd);
+            const resEncrypted = await crypto.encrypt(JSON.stringify(answer), body.pswrd);
     
     
     

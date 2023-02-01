@@ -41,56 +41,6 @@ module.exports = function(app)
 
             const reqDecrypted = body.encrypt;
 
-            /*
-            //Esta ruta recibe datos sin encriptar
-            //Comprobar el userID para identificar al usuario y obtener sus notesID.
-            if(Object.keys(req.body).length === 0)
-            {
-                res.status(400).send({error: 'badRequest'});
-                console.log(logID, 'BadRequest: no body');
-                return;
-            }
-    
-            const key = req.body.key;
-            if(key === undefined)
-            {
-                res.status(400).send({error: 'badRequest'});
-                console.log(logID, 'badRequest, no key');
-                return;
-            }
-    
-            const keyData = await database.getKeyData(key);
-            if(keyData === null)
-            {
-                res.status(200).send({error: 'invalidKey'});
-                console.log(logID, 'invalidKey');
-                return;
-            }
-            if(keyData === 'dbError')
-            {
-                res.status(200).send({error: 'dbError'});
-                console.log(logID, 'dbError, obteniendo keyData');
-                return;
-            }
-        
-            //Obtener usuario
-            const email = keyData.email;
-            if(email === undefined)
-            {
-                res.status(200).send({error: 'emailUndefined'});
-                console.log(logID, 'emailUndefined');
-                return;
-            }
-    
-            //Obtener contraseña para cifrar los datos
-            const pswrd = keyData.pswrd;
-            console.log(logID, 'password', pswrd);
-            if(pswrd === undefined)
-            {
-                res.status(200).send({error: 'cantGetPassword'});
-                console.log(logID, 'cantGetPassword');
-            }
-            */
             const key = reqDecrypted.key;
             if(key === undefined)
             {

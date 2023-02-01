@@ -1,5 +1,6 @@
 const database = require('../utils/database');
 const crypto = require('../utils/crypto');
+const bodyDecrypter = require('../utils/bodyDecrypter');
 
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
@@ -19,6 +20,28 @@ module.exports = function(app)
             console.log(logID, '\033[1;34m/getNotesID\033[0m');
             console.log(logID, 'body',req.body);
 
+            /*
+            /getNotesID
+            {
+                deviceID,
+                encrypt:
+                {
+                    key
+                }
+            }
+            */
+
+            const body = await bodyDecrypter.getBody(req.body, res, logID);
+
+            if(body === null)
+            {
+                console.log(logID, 'Algo salió mal obteniendo body');
+                return;
+            }
+
+            const reqDecrypted = body.encrypt;
+
+            /*
             //Esta ruta recibe datos sin encriptar
             //Comprobar el userID para identificar al usuario y obtener sus notesID.
             if(Object.keys(req.body).length === 0)
@@ -67,7 +90,31 @@ module.exports = function(app)
                 res.status(200).send({error: 'cantGetPassword'});
                 console.log(logID, 'cantGetPassword');
             }
-    
+            */
+            const key = reqDecrypted.key;
+            if(key === undefined)
+            {
+                res.status(200).send({error: 'badRequest'});
+                console.log(logID, 'badRequest: theres no key');
+                return;
+            }
+
+            const keyElement = await database.getElement('sessionID', {key});
+            if(keyElement === null)
+            {
+                res.status(200).send({error: 'invalidKey'});
+                console.log(logID, 'invalidKey');
+                return;
+            }
+
+            const email = keyElement.email;
+            if(email === undefined)
+            {
+                res.status(200).send({error: 'invalidKey'});
+                console.log(logID, 'esta key no contiene un email por algún motivo');
+                return;
+            }
+
             const userElement = await database.getElement('users', {email});
             if(userElement === null)
             {
@@ -84,7 +131,7 @@ module.exports = function(app)
     
             //Obtener notesID y cifrar
             const notesID = JSON.stringify({notesID: userElement.notesID});
-            const notesIdEncrypted = crypto.encrypt(notesID, pswrd);
+            const notesIdEncrypted = crypto.encrypt(notesID, body.pswrd);
     
             res.status(200).send({decrypt: notesIdEncrypted});
             console.log(logID, 'notesID enviadas');

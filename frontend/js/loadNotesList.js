@@ -18,10 +18,16 @@ async function loadNotesList()
     {
         try
         {
-            let loginKey = theSecretThingThatNobodyHasToKnow;
-            console.log(loginKey);
             console.log('http: obteniendo ids de las notas');
-            const response = await encryptHttpCall('/getNotesID', {key: loginKey}, theOtherSecretThing);
+            const response = await encryptHttpCall('/getNotesID',
+            {
+                deviceID,
+                encrypt:
+                {
+                    key: theSecretThingThatNobodyHasToKnow
+                }
+            }, theOtherSecretThing);
+
             console.log(response);
             if(response.data.error !== undefined)
             {
@@ -66,7 +72,7 @@ async function loadNotesList()
                 let id = notesArray[i].id;
                 createListButton(name,id);
             }
-    
+
         }
         catch(err)
         {

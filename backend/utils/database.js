@@ -10,7 +10,7 @@ async function getElement(collection, objQuery)
 {
     try
     {
-        console.log('\033[32m**Obteniendo elemento de la base de datos**\033[0m');
+        console.log('\033[32m**Obteniendo elemento de la base de datos**\033[0m', collection);
         await mdbClient.connect();
         const database = mdbClient.db('Notes');
         const theCollection = database.collection(collection);
@@ -29,7 +29,7 @@ async function createElement(collection, element)
 {
     try
     {
-        console.log('\033[32m**Creando elemento en la base de datos**\033[0m');
+        console.log('\033[32m**Creando elemento en la base de datos**\033[0m', collection);
         await mdbClient.connect();
         const database = mdbClient.db('Notes');
         const theCollection = database.collection(collection);
@@ -67,7 +67,7 @@ async function updateMultipleElements(collection, objQuery, toReplace)
 {
     try
     {
-        console.log('\033[32m**Actualizando múltiples elementos en la base de datos**\033[0m');
+        console.log('\033[32m**Actualizando múltiples elementos en la base de datos**\033[0m', collection);
         await mdbClient.connect();
         const database = mdbClient.db('Notes');
         const theCollection = database.collection(collection);
@@ -86,7 +86,7 @@ async function deleteElement(collection, objQuery)
 {
     try
     {
-        console.log('\033[32m**Borrando elementos de la base de datos**\033[0m');
+        console.log('\033[32m**Borrando elementos de la base de datos**\033[0m', collection);
         await mdbClient.connect();
         const database = mdbClient.db('Notes');
         const theCollection = database.collection(collection);
@@ -105,7 +105,7 @@ async function deleteMultipleElements(collection, objQuery)
 {
     try
     {
-        console.log('\033[32m**Borrando múltiples elementos de la base de datos**\033[0m');
+        console.log('\033[32m**Borrando múltiples elementos de la base de datos**\033[0m', collection);
         await mdbClient.connect();
         const database = mdbClient.db('Notes');
         const theCollection = database.collection(collection);

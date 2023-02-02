@@ -42,7 +42,11 @@ async function menuButtonText()
         {
             const response = await encryptHttpCall('/getUserEmail',
             {
-                key: theSecretThingThatNobodyHasToKnow
+                deviceID,
+                encrypt:
+                {
+                    key: theSecretThingThatNobodyHasToKnow
+                }
             }, theOtherSecretThing);
 
             if(response.data.decrypt.email !== undefined)

@@ -1,5 +1,6 @@
 const database = require('../utils/database');
 const crypto = require('../utils/crypto');
+const bodyDecrypter = require('../utils/bodyDecrypter');
 
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
@@ -21,10 +22,59 @@ module.exports = function(app)
     
             /* Ver si tenemos los datos necesarios
                 {
-                    key
+                    deviceID,
+                    encrypt:
+                    {
+                        key
+                    }
                 }
             */
+
+            const body = await bodyDecrypter.getBody(req.body, res, logID);
+            if(body === null)
+            {
+                console.log(logID, 'Algo salió mal obteniendo body');
+                return;
+            }
+
+            const reqDecrypted = body.encrypt;
+
+            const key = reqDecrypted.key;
+            if(key === undefined)
+            {
+                res.status(400).send({error: 'badRequest'});
+                console.log(logID, 'badRequest: no hay key');
+                return;
+            }
+
+
+            const keyData = await database.getKeyData(key);
+            if(keyData === null)
+            {
+                res.status(200).send({error: 'invalidKey'});
+                console.log(logID, 'invalidKey: no se pudo encontrar la key');
+                return;
+            }
+            if(keyData === 'dbError')
+            {
+                res.status(200).send({error: 'dbError'});
+                console.log(logID, 'dbError: buscando key en la base de datos');
+                return;
+            }
+
+            const email = keyData.email;
+            if(email === undefined)
+            {
+                res.status(200).send({error: 'serverError'});
+                console.log(logID, 'la clave no tiene asignada un email por algún motivo');
+                return;
+            }
+
+            const resEncrypted = crypto.encrypt(JSON.stringify({email}), body.pswrd);
+
+            res.status(200).send({decrypt: resEncrypted});
     
+            /*
             if(Object.keys(req.body).length === 0)
             {
                 res.status(400).send({error: 'badRequest'});
@@ -75,6 +125,7 @@ module.exports = function(app)
             const responseEncrypted = crypto.encrypt(JSON.stringify({email}), encryptPswrd);
     
             res.status(200).send({decrypt: responseEncrypted});
+            */
         }
         catch(err)
         {

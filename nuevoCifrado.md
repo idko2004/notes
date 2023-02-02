@@ -40,11 +40,17 @@ await encryptHttpCall('/note',
 ## `loadDeviceIDAndPassword()`
 Ahora hay una función llamada `loadDeviceIDAndPassword()` en `frontend/js/crypto.js`.
 
-Esta función sirve para comprobar si existen los valores `_id` y `_pswrd` en `localStorage`.
-Si los valores existen devuelve `true`, asigna `_id` a la variable `deviceID` y `_pswrd` a `theOtherSecretThing`.
-Si los valores no existen sólo devuelve `false`.
+Esta función sirve para comprobar si existen los valores `_id`, `_pswrd` y `_login` en `localStorage`.
+Si los valores `_id` y `_pswrd` existen devuelve `true`, si no devuelve `false`.
 
-Esta función sólo debería ser llamada una vez por cada html, y las variables `deviceID` y `theOtherSecretThing` asignadas a través de esta función, excepto cuando se vaya a asignar una nueva clave porque la que estaba guardada no es válida o no había clave guardada.
+También asigna los siguientes valores a las variables:
+- `theSecretThingThatNobodyHasToKnow = _login`
+- `deviceID = _id`
+- `theOtherSecretThing = _pswrd`
+
+`dep: (Esta función sólo debería ser llamada una vez por cada html, y las variables deviceID y theOtherSecretThing asignadas a través de esta función, excepto cuando se vaya a asignar una nueva clave porque la que estaba guardada no es válida o no había clave guardada.)`
+
+Creo que esta función podría usarse en otros html, pero debido a que las otras páginas no usan la variable `theSecretThingThatNobodyHasToKnow`, si no que usan `theSecretThingThatNobodyHaveToKnow` (porque se me da bien la coherencia y el inglés), no funcionarían, debería de, o unificar el nombre de las variables, o poner una copia de la función en los otros html.
 
 ## Iniciar sesión
 ### `/login`

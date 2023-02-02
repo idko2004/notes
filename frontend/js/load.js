@@ -3,14 +3,14 @@ elementsInHashAtStart();
 
 async function start()
 {
-    loadDeviceIdAndPswrd();
-    
-    let login = theSecretThingThatNobodyHasToKnow;
+    loadIdPswrdAndLogin();
+
+    console.log('load: login', theSecretThingThatNobodyHasToKnow);
+    console.log('load: theOtherSecretThing', theOtherSecretThing);
 
     //Forzar modo local | modo local activo
-    if(hashContains('local') || login === 'local')
+    if(hashContains('local') || theSecretThingThatNobodyHasToKnow === 'local')
     {
-        theSecretThingThatNobodyHasToKnow = 'local';
         console.log('Forzar modo local');
         isLocalMode = true;
 
@@ -24,7 +24,8 @@ async function start()
         theActualThing = 'note';
     }
     //No hay datos guardados
-    else if([null, undefined, 'undefined', ''].includes(login) || [null, undefined, 'undefined', ''].includes(theOtherSecretThing))
+    else if([null, undefined, 'undefined', ''].includes(theSecretThingThatNobodyHasToKnow)
+    || [null, undefined, 'undefined', ''].includes(theOtherSecretThing))
     {
         await requestLoginPassword();
         loadingScreen.hidden = true;
@@ -45,7 +46,7 @@ async function start()
                 deviceID,
                 encrypt:
                 {
-                    key: login
+                    key: theSecretThingThatNobodyHasToKnow
                 }
             });
 
@@ -64,7 +65,6 @@ async function start()
                 //No tenemos una clave válida
                 console.log('No tenemos una clave válida');
                 deleteKey('_login');
-                deleteKey('_pswrd');
                 theSecretThingThatNobodyHasToKnow = undefined;
                 theOtherSecretThing = undefined;
                 await requestLoginPassword();
@@ -96,6 +96,7 @@ async function start()
                             console.log('Modo local');
                             theSecretThingThatNobodyHasToKnow = 'local';
                             theOtherSecretThing = undefined;
+                            deviceID = undefined;
                             isLocalMode = true;
 
                             document.getElementById('loginScreen').hidden = true;

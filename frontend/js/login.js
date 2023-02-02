@@ -420,7 +420,8 @@ async function requestLoginPassword()
     try
     {
         //Requerir un nuevo deviceID
-        if(!loadDeviceIdAndPswrd()) await requestNewDeviceID();
+        //if(!loadIdPswrdAndLogin()) await requestNewDeviceID();
+        if(theOtherSecretThing === undefined || deviceID === undefined) await requestNewDeviceID();
 
         //Ya tenemos un código y queremos comprobar que sigue válido
         else

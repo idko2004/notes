@@ -1,4 +1,5 @@
 const database = require('../utils/database');
+const bodyDecrypter = require('../utils/bodyDecrypter');
 
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
@@ -7,7 +8,7 @@ const rand = require('generate-key');
 
 module.exports = function(app)
 {
-    app.post('/iHaveAValidKey', jsonParser, async function(req, res)
+    app.post('/validKey', jsonParser, async function(req, res)
     {
 
         const logID = `(${rand.generateKey(3)})`;
@@ -15,23 +16,34 @@ module.exports = function(app)
         try
         {
             console.log(logID, '------------------------------------------------');
-            console.log(logID, '\033[1;34m/iHaveAValidKey\033[0m');
+            console.log(logID, '\033[1;34m/validKey\033[0m');
             console.log(logID, 'body',req.body);
-    
-            //Vemos si tienemos los datos necesarios
-            if(Object.keys(req.body).length === 0)
+
+            /*
+            /validKey
             {
-                res.status(400).send({error: 'badRequest'});
-                console.log(logID, 'BadRequest: no body');
+                deviceID,
+                encrypt:
+                {
+                    key
+                }
+            }
+            */
+
+            const body = await bodyDecrypter.getBody(req.body, res, logID);
+            if(body === null)
+            {
+                console.log(logID, 'Algo salió mal obteniendo body');
                 return;
             }
-    
-            const key = req.body.key;
-    
+
+            const reqDecrypted = body.encrypt;
+
+            const key = reqDecrypted.key;
             if(key === undefined)
             {
-                res.status.send(200).send({iHaveAValidKey: 'noYouDont'});
-                console.log(logID, 'you dont have a valid key, you dont even have a key');
+                res.status.send(200).send({validKey: false});
+                console.log(logID, 'validKey:false, no hay llave');
                 return;
             }
     
@@ -39,8 +51,8 @@ module.exports = function(app)
     
             if(keyData === null)
             {
-                res.status(200).send({iHaveAValidKey: 'noYouDont'});
-                console.log(logID, 'you dont have a valid key');
+                res.status(200).send({validKey: false});
+                console.log(logID, 'validKey:false, no se pudo encontrar la llave');
                 return;
             }
             if(keyData === 'dbError')
@@ -49,8 +61,9 @@ module.exports = function(app)
                 console.log(logID, 'dbError, obteniendo keyData');
                 return;
             }
-            res.status(200).send({iHaveAValidKey: 'yesYouHave'});
-            console.log(logID, 'yes you have a valid key');
+
+            res.status(200).send({validKey: true});
+            console.log(logID, 'validKey:true');
         }
         catch(err)
         {

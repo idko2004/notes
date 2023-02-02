@@ -35,7 +35,7 @@ require('./routes/loginCode')(app);
 require('./routes/newAccountCode.js')(app);
 require('./routes/newAccount')(app);
 require('./routes/deleteAccount')(app);
-require('./routes/iHaveAValidKey')(app);
+require('./routes/validKey')(app);
 require('./routes/saveNote')(app);
 require('./routes/createNewNote')(app);
 require('./routes/deleteNote')(app);

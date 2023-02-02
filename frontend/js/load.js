@@ -40,11 +40,18 @@ async function start()
         try
         {
             console.log('http: comprobando si tenemos una clave válida');
-            const response = await axios.post(`${path}/iHaveAValidKey`, {key: login});
-
-            if(response.data.iHaveAValidKey === 'yesYouHave')
+            const response = await axios.post(`${path}/validKey`,
             {
-                console.log('Sí, tenemos una clave válida');
+                deviceID,
+                encrypt:
+                {
+                    key: login
+                }
+            });
+
+            if(response.data.validKey)
+            {
+                console.log('Tenemos una clave válida');
                 checkLocalCopyValue();
                 await loadNotesList();
                 menuButtonText();
@@ -55,7 +62,7 @@ async function start()
             else
             {
                 //No tenemos una clave válida
-                console.log('No, no tenemos una clave válida');
+                console.log('No tenemos una clave válida');
                 deleteKey('_login');
                 deleteKey('_pswrd');
                 theSecretThingThatNobodyHasToKnow = undefined;

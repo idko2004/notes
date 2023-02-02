@@ -98,9 +98,9 @@ function loadIdPswrdAndLogin()
         return true;
     }
 
-    const id = getKey('_id');
-    const pswrd = getKey('_pswrd');
-    const login = getKey('_login');
+    let id = getKey('_id');
+    let pswrd = getKey('_pswrd');
+    let login = getKey('_login');
 
     console.log('id saved:', id);
     console.log('pswrd saved', pswrd);

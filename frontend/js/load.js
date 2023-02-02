@@ -41,14 +41,14 @@ async function start()
         try
         {
             console.log('http: comprobando si tenemos una clave válida');
-            const response = await axios.post(`${path}/validKey`,
+            const response = await encryptHttpCall('/validKey',
             {
                 deviceID,
                 encrypt:
                 {
                     key: theSecretThingThatNobodyHasToKnow
                 }
-            });
+            }, theOtherSecretThing);
 
             if(response.data.validKey)
             {

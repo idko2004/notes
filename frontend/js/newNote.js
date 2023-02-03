@@ -71,11 +71,12 @@ async function createNewNote(name)
         console.log('http: creando nota');
         const response = await encryptHttpCall('/createNewNote',
         {
+            deviceID,
             encrypt:
             {
-                notename: name,
+                key: theSecretThingThatNobodyHasToKnow,
+                notename: name
             },
-            key: theSecretThingThatNobodyHasToKnow
         }, theOtherSecretThing);
 
         if(response.data.error === 'invalidName')
@@ -190,7 +191,7 @@ function newNoteNameIsValid(name, openAWindow)
         });
         return false;
     }
-    if(name.length > 30)
+    if(name.length > 40)
     {
         floatingWindow
         ({

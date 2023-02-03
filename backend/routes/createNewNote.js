@@ -5,6 +5,7 @@ const rand = require('generate-key');
 
 const database = require('../utils/database');
 const crypto = require('../utils/crypto');
+const bodyDecrypter = require('../utils/bodyDecrypter');
 
 module.exports = function(app)
 {
@@ -18,7 +19,26 @@ module.exports = function(app)
             console.log(logID, '------------------------------------------------');
             console.log(logID, '\033[1;34m/createNewNote\033[0m');
             console.log(logID, 'body',req.body);
-    
+            /*
+            {
+                deviceID,
+                encrypt:
+                {
+                    key,
+                    notename
+                }
+            }
+            */
+
+            const body = await bodyDecrypter.getBody(req.body, res, logID);
+            if(body === null)
+            {
+                console.log(logID, 'Algo salió mal obteniendo body');
+                return;
+            }
+
+            const reqDecrypted = body.encrypt;
+            /*
             //Verificamos si se tienen todos los requerimientos
             //key   noteName
             if(Object.keys(req.body).length === 0)
@@ -77,7 +97,16 @@ module.exports = function(app)
             }
             reqDecrypted = JSON.parse(reqDecrypted);
             console.log(logID, reqDecrypted);
-    
+            */
+
+            const key = reqDecrypted.key;
+            if(key === undefined)
+            {
+                res.status(200).send({error: 'badRequest'});
+                console.log(logID, 'badRequest: no key');
+                return;
+            }
+
             let noteName = reqDecrypted.notename;
             if(noteName === undefined)
             {
@@ -86,7 +115,9 @@ module.exports = function(app)
                 return;
             }
             noteName = noteName.trim();
-    
+
+
+
             //Verificamos si la nota tiene un nombre válido
             function invalidName()
             {
@@ -99,8 +130,38 @@ module.exports = function(app)
             ///No empezar por _
             if(noteName.startsWith('_')) return invalidName();
             //Pasar de 30 caracteres
-            if(noteName.length > 30) return invalidName();
-            
+            if(noteName.length > 40) return invalidName();
+
+
+
+            //Obtenemos keyData
+            const keyData = await database.getKeyData(key);
+            if(keyData === null)
+            {
+                res.status(200).send({error: 'invalidKey'});
+                console.log(logID, 'invalidKey');
+                return;
+            }
+            if(keyData === 'dbError')
+            {
+                res.status(200).send({error: 'dbError'});
+                console.log(logID, 'dbError, obteniendo keyData');
+                return;
+            }
+
+
+
+            //Obteniendo el email mediante keyData
+            const email = keyData.email;
+            if(email === undefined)
+            {
+                res.status(200).send({error: 'invalidKey'});
+                console.log(logID, 'invalidKey: la clave no tiene email por algún motivo');
+                return;
+            }
+
+
+
             //Verificamos si la nota no tiene un nombre repetido para el usuario.
             const userInfo = await database.getElement('users', {email});
             if(userInfo === null)
@@ -115,7 +176,7 @@ module.exports = function(app)
                 console.log(logID, 'dbError, obteniendo información del usuario');
                 return;
             }
-    
+
             if(userInfo.notesID === undefined)
             {
                 res.status(200).send({error: 'idUndefined'});
@@ -129,12 +190,14 @@ module.exports = function(app)
                 return;
             }
             const noteKey = userInfo.noteKey;
-    
+
             for(let i = 0; i < userInfo.notesID.length; i++)
             {
                 if(userInfo.notesID[i].name === noteName) return invalidName();
             }
-    
+
+
+
             //Generamos un código para el noteID y verificamos que no está repetido.
             let noteID = '';
             while(true)
@@ -157,10 +220,14 @@ module.exports = function(app)
                 }
             }
             console.log(logID, 'El código es único');
-    
+
+
+
             //Encriptar texto vacío porque parece que hay que encriptarlo
             let note = crypto.encrypt('', noteKey);
-    
+
+
+
             //Crear el elemento para la base de datos de notas
             const newNote =
             {
@@ -174,7 +241,9 @@ module.exports = function(app)
                 console.log(logID, 'dbError, creando nota');
                 return;
             }
-    
+
+
+
             //Actualizar el elemento de la base de datos de usuarios para incluir el noteID y el nombre de la nueva nota
             userInfo.notesID.push({id: noteID, name: noteName});
             const userUpdated = await database.updateElement('users', {email}, userInfo);
@@ -184,10 +253,12 @@ module.exports = function(app)
                 console.log(logID, 'dbError, actualizando usuario');
                 return;
             }
-    
+
+
+
             //Responder al cliente
             //ok    noteID
-            const decrypt = crypto.encrypt(JSON.stringify({noteid: noteID}), KeyData.pswrd);
+            const decrypt = crypto.encrypt(JSON.stringify({noteid: noteID}), body.pswrd);
             res.status(200).send({ok: true, decrypt});
             console.log(logID, 'nota creada');
         }

@@ -238,10 +238,12 @@ async function saveNote()
             console.log('http: guardando nota');
             const response = await encryptHttpCall('/saveNote',
             {
-                key: theSecretThingThatNobodyHasToKnow,
+                deviceID,
                 encrypt:
                 {
-                    noteID, noteContent: value
+                    key: theSecretThingThatNobodyHasToKnow,
+                    noteID,
+                    noteContent: value
                 }
             }, theOtherSecretThing);
 

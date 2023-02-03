@@ -30,8 +30,17 @@ async function loadNote(name, id)
         {
             //Cargar la nota
             console.log('http: cargando nota');
-            const response = await encryptHttpCall('/note', {encrypt: {noteid: id}, key: theSecretThingThatNobodyHasToKnow}, theOtherSecretThing);
+            const response = await encryptHttpCall('/note',
+            {
+                deviceID,
+                encrypt:
+                {
+                    noteid: id,
+                    key: theSecretThingThatNobodyHasToKnow
+                }
+            }, theOtherSecretThing);
             console.log(response);
+
             if(response.data.error !== undefined) //Ocurre un error
             {
                 noteName.innerText = getText('loadNoteFailed');

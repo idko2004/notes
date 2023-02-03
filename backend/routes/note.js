@@ -1,5 +1,6 @@
 const database = require("../utils/database");
 const crypto = require('../utils/crypto');
+const bodyDecrypter = require('../utils/bodyDecrypter');
 
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
@@ -18,7 +19,26 @@ module.exports = function(app)
             console.log(logID, '------------------------------------------------');
             console.log(logID, '\033[1;34m/note\033[0m');
             console.log(logID, 'body',req.body);
-    
+            /*
+            {
+                deviceID,
+                encrypt:
+                {
+                    key,
+                    noteid
+                }
+            }
+            */
+
+            const body = await bodyDecrypter.getBody(req.body, res, logID);
+            if(body === null)
+            {
+                console.log(logID, 'Algo salió mal obteniendo body');
+                return;
+            }
+
+            const reqDecrypted = body.encrypt;
+            /*
             //Vemos si tienemos los datos necesarios
             if(Object.keys(req.body).length === 0)
             {
@@ -74,6 +94,17 @@ module.exports = function(app)
             }
             reqDecrypted = JSON.parse(reqDecrypted);
             console.log(logID, reqDecrypted);
+            */
+
+            //Comprobar si tenemos los datos necesarios
+            const key = reqDecrypted.key;
+            if(key === undefined)
+            {
+                res.status(400).send({error: 'badRequest'});
+                console.log(logID, 'badRequest: no key');
+                return;
+            }
+
             const targetNoteID = reqDecrypted.noteid;
             if(targetNoteID === undefined)
             {
@@ -81,7 +112,36 @@ module.exports = function(app)
                 console.log(logID, 'badRequest, no target note id');
                 return;
             }
-    
+
+
+
+            //Obtener el correo del usuario a partir de la clave
+            const keyData = await database.getKeyData(key);
+            if(keyData === null)
+            {
+                res.status(200).send({error: 'invalidKey'});
+                console.log(logID, 'invalidKey');
+                return;
+            }
+            if(keyData === 'dbError')
+            {
+                res.status(200).send({error: 'dbError'});
+                console.log(logID, 'dbError, buscando keyData');
+                return;
+            }
+
+
+            //Obtener el email
+            const email = keyData.email;
+            if(email === undefined)
+            {
+                res.status(200).send({error: 'invalidKey'});
+                console.log(logID, 'invalidKey, por algún motivo no tiene email');
+                return;
+            }
+
+
+
             //Obtener al usuario
             const user = await database.getElement('users', {email});
             if(user === null)
@@ -109,7 +169,9 @@ module.exports = function(app)
                 return;
             }
             const noteKey = user.noteKey;
-    
+
+
+
             //Comprobar si el noteID es de este usuario
             let isTheOwner = false;
             for(let i = 0; i < user.notesID.length; i++)
@@ -127,7 +189,9 @@ module.exports = function(app)
                 console.log(logID, 'noteDoesntExist, no es el dueño de la nota');
                 return;
             }
-    
+
+
+
             //Obtener la nota
             const theNote = await database.getElement('notes',{id: targetNoteID});
             console.log(logID, theNote);
@@ -149,7 +213,9 @@ module.exports = function(app)
                 console.log(logID, 'noteUndefined');
                 return;
             }
-    
+
+
+
             //Descifrar la nota
             const noteContent = crypto.decrypt(theNote.note, noteKey);
             if(noteContent === null)
@@ -158,10 +224,12 @@ module.exports = function(app)
                 console.log(logID, 'cantObtainNote');
                 return;
             }
-    
+
+
+
             //Enviar la nota
             //const theText = theNote.text;
-            const resEncrypted = crypto.encrypt(JSON.stringify({note: noteContent}), keyData.pswrd);
+            const resEncrypted = crypto.encrypt(JSON.stringify({note: noteContent}), body.pswrd);
             res.status(200).send({decrypt: resEncrypted});
             console.log(logID, 'nota enviada');
         }

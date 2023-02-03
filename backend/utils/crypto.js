@@ -24,7 +24,7 @@ function decrypt(input, password)
     try
     {
         const decrypted = cryptojs.AES.decrypt(input, password).toString(cryptojs.enc.Utf8);
-        if(decrypted === '') console.log(colors.red('ES POSIBLE QUE EL RESULTADO DE DESCIFRAR SEA INCORRECTO'));
+        if(decrypted === '') console.log(colors.red('ES POSIBLE QUE EL RESULTADO DE DESCIFRAR SEA INCORRECTO, (o que sea una nota vacía)'));
         return decrypted;
     }
     catch

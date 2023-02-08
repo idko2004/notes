@@ -3,6 +3,7 @@ const jsonParser = bodyParser.json();
 
 const database = require('../utils/database');
 const crypto = require('../utils/crypto');
+const bodyDecrypter = require('../utils/bodyDecrypter');
 
 const rand = require('generate-key');
 
@@ -18,7 +19,28 @@ module.exports = function(app)
             console.log(logID, '------------------------------------------------');
             console.log(logID, '\033[1;34m/renameNote\033[0m');
             console.log(logID, 'body',req.body);
+            /*
+            {
+                deviceID,
+                encrypt:
+                {
+                    newname,
+                    noteid,
+                    key
+                }
+            }
+            */
     
+            const body = await bodyDecrypter.getBody(req.body, res, logID);
+            if(body === null)
+            {
+                console.log(logID, 'Algo salió mal obteniendo body');
+                return;
+            }
+
+            const reqDecrypted = body.encrypt;
+
+            /*
             //Verificamos si tenemos los datos necesarios
             //key   noteID   newname
             if(Object.keys(req.body).length === 0)
@@ -76,18 +98,23 @@ module.exports = function(app)
             }
             reqDecrypted = JSON.parse(reqDecrypted);
             console.log(logID, reqDecrypted);
-    
+            */
+
+
+            const key = reqDecrypted.key;
             const noteID = reqDecrypted.noteid;
             let newName = reqDecrypted.newname;
     
-            if(noteID === undefined || newName === undefined)
+            if([key, noteID, newName].includes(undefined))
             {
                 res.status(400).send({error: 'badRequest'});
-                console.log(logID, 'badRequest: no noteid or newname');
+                console.log(logID, 'badRequest: no noteid, newname or key');
                 return;
             }
             newName = newName.trim();
-    
+
+
+
             //Verificamos si es un nombre válido
             function invalidName()
             {
@@ -102,7 +129,34 @@ module.exports = function(app)
                 if(newName.startsWith('_')) return invalidName();
                 //Pasar de 30 caracteres
                 if(newName.length > 30) return invalidName();
+
+
+
+            // Obtenemos la información de la key
+            const keyData = await database.getKeyData(key);
+            if(keyData === null)
+            {
+                res.status(200).send({error: 'invalidKey'});
+                console.log(logID, 'invalidKey');
+                return;
+            }
+            if(keyData === 'dbError')
+            {
+                res.status(200).send({error: 'dbError'});
+                console.log(logID, 'dbError, obteniendo keyData');
+                return;
+            }
     
+            const email = keyData.email;
+            if(email === undefined)
+            {
+                res.status(200).send({error: 'emailUndefined'});
+                console.log(logID, 'emailUndefined');
+                return;
+            }
+
+
+
             //Obtenemos el perfil del usuario
             const user = await database.getElement('users', {email});
             if(user === null)
@@ -117,7 +171,9 @@ module.exports = function(app)
                 console.log(logID, 'dbError, obteniendo usuario');
                 return;
             }
-    
+
+
+
             //Verificamos que notesID exista
             if(user.notesID === undefined)
             {
@@ -125,7 +181,9 @@ module.exports = function(app)
                 console.log(logID, 'idUndefined');
                 return;
             }
-    
+
+
+
             //Verificamos que no tenga otra nota que se llame igual y obtenemos la posición de la nota que queremos renombrar
             let noteIndex = -1;
             for(let i = 0; i < user.notesID.length; i++)
@@ -133,7 +191,9 @@ module.exports = function(app)
                 if(user.notesID[i].name === newName) return invalidName();
                 if(user.notesID[i].id === noteID) noteIndex = i;
             }
-    
+
+
+
             //Verificamos si es el dueño de la nota
             if(noteIndex === -1)
             {
@@ -141,7 +201,9 @@ module.exports = function(app)
                 console.log(logID, 'notTheOwner');
                 return;
             }
-    
+
+
+
             //Cambiamos el nombre de la nota
             user.notesID[noteIndex].name = newName;
             const result = await database.updateElement('users', {email}, user);
@@ -151,7 +213,9 @@ module.exports = function(app)
                 console.log(logID, 'dbError, cambiando nombre de la nota');
                 return;
             }
-    
+
+
+
             //Respondemos al cliente
             res.status(200).send({result});
             console.log(logID, 'nota renombrada');

@@ -485,12 +485,13 @@ document.getElementById('renameButton').addEventListener('click', function()
                             console.log('http: renombrando nota');
                             const response = await encryptHttpCall('/renameNote',
                             {
+                                deviceID,
                                 encrypt:
                                 {
                                     noteid: actualNoteID,
-                                    newname: value
+                                    newname: value,
+                                    key: theSecretThingThatNobodyHasToKnow
                                 },
-                                key: theSecretThingThatNobodyHasToKnow
                             }, theOtherSecretThing);
 
                             if(response.data.error === 'invalidName')

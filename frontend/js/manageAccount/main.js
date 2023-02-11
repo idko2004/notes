@@ -1,7 +1,8 @@
 const path = 'http://localhost:8888';
 
 let email;
-let theSecretThingThatNobodyHaveToKnow;
+let theSecretThingThatNobodyHasToKnow;
+let deviceID;
 let saveNotesLocally;
 let spellcheckConfig;
 const thingsChanged =
@@ -55,6 +56,7 @@ async function start()
 {
     theSecretThingThatNobodyHaveToKnow = getSpecificCookie('_login');
     theOtherSecretThing = getSpecificCookie('_pswrd');
+    deviceID = getSpecificCookie('_id');
     saveNotesLocally = getSpecificCookie('_localCopy');
     spellcheckConfig = getSpecificCookie('_spellcheck');
 
@@ -84,11 +86,10 @@ async function start()
         console.log('theSecretThingThatNobodyHaveToKnow', theSecretThingThatNobodyHaveToKnow);
         console.log('saveNotesLocally', saveNotesLocally);
         console.log('theOtherSecretThing', theOtherSecretThing);
-        console.log('email', email);
 
-        if([theSecretThingThatNobodyHaveToKnow, saveNotesLocally, theOtherSecretThing].includes(null)
-        || [theSecretThingThatNobodyHaveToKnow, saveNotesLocally, theOtherSecretThing].includes(undefined)
-        || [theSecretThingThatNobodyHaveToKnow, saveNotesLocally, theOtherSecretThing].includes(''))
+        if([theSecretThingThatNobodyHaveToKnow, saveNotesLocally, theOtherSecretThing, deviceID].includes(null)
+        || [theSecretThingThatNobodyHaveToKnow, saveNotesLocally, theOtherSecretThing, deviceID].includes(undefined)
+        || [theSecretThingThatNobodyHaveToKnow, saveNotesLocally, theOtherSecretThing, deviceID].includes(''))
         {
             loadingScreen.hidden = true;
             floatingWindow(
@@ -141,7 +142,11 @@ async function updateUserData()
     {
         const response = await encryptHttpCall('/getUserEmail',
         {
-            key: theSecretThingThatNobodyHaveToKnow
+            deviceID,
+            encrypt:
+            {
+                key: theSecretThingThatNobodyHaveToKnow
+            }
         }, theOtherSecretThing);
 
         if(response.data.decrypt.email !== undefined)

@@ -160,6 +160,7 @@ menuOnlineManageAccount.addEventListener('click', async function()
     await saveNote();
     saveCookie('_login', theSecretThingThatNobodyHasToKnow);
     saveCookie('_pswrd', theOtherSecretThing);
+    saveCookie('_id', deviceID);
     saveCookie('_localCopy', localCopy);
     saveCookie('_spellcheck', getKey('_spellcheck'));
     location.href = `manageAccount.html#lang=${actualLanguage};colortheme=${colorTheme};`;

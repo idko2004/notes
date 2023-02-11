@@ -22,7 +22,7 @@ document.getElementById('deleteConfigurationConfirm').addEventListener('click', 
     if(actualMenu !== 'deleteConfiguration') return;
 
     await animatedTransition(deleteConfigurationMenu);
-    deleteManageAccountRelatedCookies();
+    deleteAllCookies();
     location.href = 'index.html#deleteconfig';
 });
 
@@ -52,6 +52,6 @@ document.getElementById('deleteAllConfirm').addEventListener('click', async func
     if(actualMenu !== 'deleteAllLocal') return;
 
     await animatedTransition(deleteAllMenu);
-    deleteManageAccountRelatedCookies();
+    deleteAllCookies();
     location.href = 'index.html#deleteall';
 });

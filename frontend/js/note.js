@@ -356,11 +356,12 @@ document.getElementById('deleteButton').addEventListener('click',() =>
                         console.log('http: borrando nota');
                         const response = await encryptHttpCall('/deleteNote',
                         {
+                            deviceID,
                             encrypt:
                             {
-                                noteid: actualNoteID
-                            },
-                            key: theSecretThingThatNobodyHasToKnow
+                                noteid: actualNoteID,
+                                key: theSecretThingThatNobodyHasToKnow
+                            }
                         }, theOtherSecretThing);
 
                         if(response.data.error === undefined)

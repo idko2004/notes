@@ -3,6 +3,7 @@ const jsonParser = bodyParser.json();
 
 const database = require('../utils/database');
 const crypto = require('../utils/crypto');
+const bodyDecrypter = require('../utils/bodyDecrypter');
 
 const rand = require('generate-key');
 
@@ -18,7 +19,27 @@ module.exports = function(app)
             console.log(logID, '------------------------------------------------');
             console.log(logID, '\033[1;34m/deleteNote\033[0m');
             console.log(logID, 'body',req.body);
-    
+            /*
+            {
+                deviceID,
+                encrypt:
+                {
+                    key,
+                    noteid
+                }
+            }
+            */
+
+            const body = await bodyDecrypter.getBody(req.body, res, logID);
+            if(body === null)
+            {
+                console.log(logID, 'Algo salió mal obteniendo body');
+                return;
+            }
+
+            const reqDecrypted = body.encrypt;
+
+            /*
             //Comprobamos si tenemos todos los datos necesarios
             //key   noteID
             if(Object.keys(req.body).length === 0)
@@ -76,15 +97,18 @@ module.exports = function(app)
             }
             reqDecrypted = JSON.parse(reqDecrypted);
             console.log(logID, reqDecrypted);
-    
+            */
+            const key = reqDecrypted.key;
             const noteID = reqDecrypted.noteid;
-            if(noteID === undefined)
+            if([key, noteID].includes(undefined))
             {
                 res.status(400).send({error: 'badRequest'});
-                console.log(logID, 'badRequest: no noteid');
+                console.log(logID, 'badRequest: no noteid or key');
                 return;
             }
-    
+
+
+
             //Buscamos la nota en la base de datos de notas
             const note = await database.getElement('notes', {id: noteID});
             if(note === null)
@@ -100,7 +124,34 @@ module.exports = function(app)
                 return;
             }
             console.log(logID, 'La nota existe');
+
+
+
+            //Obtenemos el email del usuario en base a la key
+            const keyData = await database.getKeyData(key);
+            if(keyData === null)
+            {
+                res.status(200).send({error: 'invalidKey'});
+                console.log(logID, 'invalidKey');
+                return;
+            }
+            if(keyData === 'dbError')
+            {
+                res.status(200).send({error: 'dbError'});
+                console.log(logID, 'dbError, obteniendo keyData');
+                return;
+            }
     
+            const email = keyData.email;
+            if(email === undefined)
+            {
+                res.status(200).send({error: 'emailUndefined'});
+                console.log(logID, 'emailUndefined');
+                return;
+            }
+
+
+
             //Obtenemos el usuario
             let userProfile = await database.getElement('users', {email});
             if(userProfile === null)
@@ -115,7 +166,9 @@ module.exports = function(app)
                 console.log(logID, 'dbError, buscando perfil del usuario');
                 return;
             }
-    
+
+
+
             let notesList = userProfile.notesID;
             if(notesList === undefined)
             {
@@ -123,6 +176,8 @@ module.exports = function(app)
                 console.log(logID, 'cantFindNotesID');
                 return;
             }
+
+
     
             //Comprobamos si la nota es suya
             let isTheOwner = false;
@@ -141,7 +196,9 @@ module.exports = function(app)
                 console.log(logID, 'noteDoesntExist, no es el dueño de la nota');
                 return;
             }
-    
+
+
+
             //Borramos la nota
             const deleted = await database.deleteElement('notes', {id: noteID});
             console.log(logID, 'Nota borrada', deleted);
@@ -151,7 +208,9 @@ module.exports = function(app)
                 console.log(logID, 'dbError, borrando nota');
                 return;
             }
-    
+
+
+
             //Creamos una nueva lista, y ponemos los elementos que sean distintos a la nota que queremos borrar.
             let newNotesList = [];
             for(let i = 0; i < notesList.length; i++)
@@ -169,7 +228,9 @@ module.exports = function(app)
                 console.log(logID, 'dbError, actualizando el perfil del usuario');
                 return;
             }
-    
+
+
+
             //Respondemos al cliente
             res.status(200).send({deleted: true});
             console.log(logID, 'nota borrada');

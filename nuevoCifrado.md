@@ -96,3 +96,35 @@ await encryptHttpCall('/loginCode',
     }
 }
 ```
+
+## `bodyDecrypter.getBody(body, res, logID)`
+Esta es una nueva utilidad en `backend/utils/bodyDecrypter.js` que sirve para obtener y descifrar el contenido del body en una llamada http.
+
+Para usarlo el body de la llamada http debe tener el siguiente formato:
+```
+{
+    deviceID,
+    encrypt: //Debe estar cifrado
+    {
+        something
+    }
+}
+```
+
+Y obtiene el siguiente resultado:
+```
+{
+    deviceID,
+    encrypt:
+    {
+        something, but decrypted
+    },
+    pswrd //contraseña de cifrado
+}
+```
+
+Se utiliza al principio de cada ruta para poder obtener los datos del body sin tener que repetir todo el código (como estaba hecho antes).
+Los parámetros necesarios son:
+- `body`, que es directamente el objeto body, en express vendría siendo `req.body`
+- `res`, el parámetro que entrega express para poder responder al cliente, se usa para responder en caso de errores.
+- `logID`, el identificador que va en todos los `console.log()`.

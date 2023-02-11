@@ -187,7 +187,7 @@ module.exports = function(app)
     
     
             // Enviar el email
-            await emailUtil.sendEmail(email, 'Notas | Iniciar sesión', emailFile);
+            emailUtil.sendEmail(email, 'Notas | Iniciar sesión', emailFile);
     
     
     

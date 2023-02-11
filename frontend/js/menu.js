@@ -163,7 +163,7 @@ menuOnlineManageAccount.addEventListener('click', async function()
     saveCookie('_id', deviceID);
     saveCookie('_localCopy', localCopy);
     saveCookie('_spellcheck', getKey('_spellcheck'));
-    location.href = `manageAccount.html#lang=${actualLanguage};colortheme=${colorTheme};`;
+    location.href = `manageAccount.html#lang=${actualLanguage};colortheme=${colorTheme}`;
 });
 
 //Botón de salir del modo local

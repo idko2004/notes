@@ -77,7 +77,7 @@ async function getBody(body, res, logID)
 
     // Descifrar encrypt
     let reqDecrypted = crypto.decrypt(body.encrypt, pswrd);
-    console.log(reqDecrypted);
+    console.log(logID, reqDecrypted);
     if(reqDecrypted === '' || reqDecrypted === null || reqDecrypted === undefined)
     {
         res.status(200).send({error: 'failedToObtainData'});
@@ -87,9 +87,9 @@ async function getBody(body, res, logID)
 
     try
     {
-        console.log('raw decrypted:', reqDecrypted);
+        console.log(logID, 'raw decrypted:', reqDecrypted);
         reqDecrypted = JSON.parse(reqDecrypted);
-        console.log('parsed:', reqDecrypted);
+        console.log(logID, 'parsed:', reqDecrypted);
     }
     catch(err)
     {
@@ -99,7 +99,7 @@ async function getBody(body, res, logID)
     }
 
     body.encrypt = reqDecrypted;
-    console.log(body);
+    console.log(logID, body);
 
     //Añadir esto por si se quiere usar después, así se puede acceder desde el body nomás
     body.pswrd = pswrd;

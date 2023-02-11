@@ -67,7 +67,7 @@ module.exports = function(app)
                     symbols: true,
                     lowercase: true,
                     uppercase: true,
-                    exclude: '"='
+                    exclude: '"=;'
                 });
 
 

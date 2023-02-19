@@ -119,9 +119,10 @@ saveChangeDataButton.addEventListener('click', async function()
                     {
                         const response = await encryptHttpCall('/changeEmail',
                         {
-                            key: theSecretThingThatNobodyHaveToKnow,
+                            deviceID,
                             encrypt:
                             {
+                                key: theSecretThingThatNobodyHaveToKnow,
                                 newEmail: emailFieldValue
                             }
                         }, theOtherSecretThing);
@@ -290,9 +291,10 @@ async function changeDataComprobeCode()
     {
         const response = await encryptHttpCall('/changeEmailCode',
         {
-            key: theSecretThingThatNobodyHaveToKnow,
+            deviceID,
             encrypt:
             {
+                key: theSecretThingThatNobodyHaveToKnow,
                 newEmail,
                 codeOld: code1,
                 codeNew: code2

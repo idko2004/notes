@@ -1,6 +1,6 @@
 const database = require('../utils/database');
 const crypto = require('../utils/crypto');
-const emailUtil = require('../utils/email');
+const bodyDecrypter = require('../utils/bodyDecrypter');
 
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
@@ -23,15 +23,27 @@ module.exports = function(app)
     
             /* Verificar si tenemos los datos necesarios
             {
-                key,
+                deviceID,
                 encrypt:
                 {
+                    key,
                     newEmail,
                     codeOld,
                     codeNew
                 }
             }
             */
+
+            const body = await bodyDecrypter.getBody(req.body, res, logID);
+            if(body === null)
+            {
+                console.log(logID, 'Algo salió mal obteniendo body');
+                return;
+            }
+
+            const reqDecrypted = body.encrypt;
+
+            /*
             if(Object.keys(req.body).length === 0)
             {
                 res.status(400).send({error: 'badRequest'});
@@ -93,12 +105,14 @@ module.exports = function(app)
             }
             reqDecrypted = JSON.parse(reqDecrypted);
             console.log(logID, reqDecrypted);
-    
+            */
+
+            const key = reqDecrypted.key;
             const newEmail = reqDecrypted.newEmail;
             let codeOld = reqDecrypted.codeOld;
             let codeNew = reqDecrypted.codeNew;
-    
-            if([newEmail, codeOld, codeNew] === undefined)
+
+            if([newEmail, codeOld, codeNew, key].includes(undefined))
             {
                 res.status(200).send({error: 'badRequest'});
                 console.log(logID, 'badRequest, faltan datos');
@@ -106,9 +120,34 @@ module.exports = function(app)
             }
             codeOld = codeOld.trim().toUpperCase();
             codeNew = codeNew.trim().toUpperCase();
-    
-    
-    
+
+
+
+            //Obtenemos key del usuario
+            const keyData = await database.getKeyData(key);
+            if(keyData === null)
+            {
+                res.status(200).send({error: 'invalidKey'});
+                console.log(logID, 'invalidKey');
+                return;
+            }
+            if(keyData === 'dbError')
+            {
+                res.status(200).send({error: 'dbError'});
+                console.log(logID, 'dbError, loading keyData');
+                return;
+            }
+
+            const email = keyData.email;
+            if(email === undefined)
+            {
+                res.status(200).send({error: 'emailNull'});
+                console.log(logID, 'emailNull');
+                return;
+            }
+
+
+
             // Buscar los códigos
             const codeInDb = await database.getElement('emailCodes', {code: codeOld});
             if(codeInDb === null)
@@ -123,9 +162,9 @@ module.exports = function(app)
                 console.log(logID, 'dbError, buscando el código');
                 return;
             }
-    
-    
-    
+
+
+
             // Verificar que ambos códigos pertenecen al mismo documento y que el nuevo correo electrónico también coincida con el guardado en el documento.
             if((codeInDb.code !== codeOld)
             || (codeInDb.code2 !== codeNew)
@@ -138,9 +177,9 @@ module.exports = function(app)
                 console.log(codeInDb.newEmail, newEmail);
                 return;
             }
-    
-    
-    
+
+
+
             // Verificar que no exista ninguna cuenta con el nuevo correo electrónico (no vaya a ser que se creó una en el tiempo que nos tardamos en introducir el código)
             const newEmailInDb = await database.getElement('users', {email: newEmail});
             if(newEmailInDb !== null)
@@ -155,9 +194,9 @@ module.exports = function(app)
                 console.log(logID, 'dbError, viendo si el nuevo email no dejó de estar disponible mágicamente.');
                 return;
             }
-    
-    
-    
+
+
+
             // Cambiar el email en la base de datos del usuario
             console.log(logID, 'Reemplazando email del usuario');
             const userUpdated = await database.updateElement('users', {email: codeInDb.email}, {email: newEmail});
@@ -168,7 +207,9 @@ module.exports = function(app)
                 console.log('dbError: Reemplazando el email del usuario');
                 return;
             }
-    
+
+
+
             // Cambiar el email asociado a los sessionID
             console.log(logID, 'Reemplazando email en sessionID');
             const sessionIdUpdated = await database.updateMultipleElements('sessionID', {email: codeInDb.email}, {email: newEmail});
@@ -179,7 +220,15 @@ module.exports = function(app)
                 console.log('dbError: Reemplazando email en sessionID');
                 return;
             }
-    
+            database.resetSessionIDList();
+
+
+
+            //Borrar el código enviado por email de la base de datos
+            database.deleteElement('emailCodes', {code: codeOld});
+
+
+
             // Responder al cliente
             res.status(200).send({emailChanged: true});
             console.log(logID, 'email cambiado');

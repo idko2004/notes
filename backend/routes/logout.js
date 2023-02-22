@@ -2,6 +2,7 @@ const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
 const database = require('../utils/database');
+const bodyDecrypter = require('../utils/bodyDecrypter');
 
 const rand = require('generate-key');
 
@@ -25,7 +26,26 @@ module.exports = function(app)
             console.log(logID, '------------------------------------------------');
             console.log(logID, '\033[1;34m/logout\033[0m');
             console.log(logID, 'body',req.body);
-    
+            /*
+            {
+                deviceID,
+                encrypt:
+                {
+                    key
+                }
+            }
+            */
+
+            const body = await bodyDecrypter.getBody(req.body, res, logID);
+            if(body === null)
+            {
+                console.log(logID, 'Algo salió mal obteniendo body');
+                return;
+            }
+
+            const reqDecrypted = body.encrypt;
+
+            /*
             //Comprobamos si tenemos las cosas
             if(Object.keys(req.body).length === 0)
             {
@@ -36,6 +56,15 @@ module.exports = function(app)
     
             const key = req.body.key;
     
+            if(key === undefined)
+            {
+                res.status(400).send({error: 'badRequest'});
+                console.log(logID, 'badRequest: no key');
+                return;
+            }
+            */
+
+            const key = reqDecrypted.key;
             if(key === undefined)
             {
                 res.status(400).send({error: 'badRequest'});

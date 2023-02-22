@@ -123,14 +123,26 @@ menuOnlineLogOut.addEventListener('click', async function()
     document.title = getText('logginOut');
     await animationMenuClose();
 
+    document.getElementById('noteScreen').hidden = true;
+    loadingScreen.hidden = false;
+
     try
     {
         console.log('http: cerrando sesión');
-        const response = await axios.post(`${path}/logout`, {key: theSecretThingThatNobodyHasToKnow});
+        const response = await encryptHttpCall('/logout',
+        {
+            deviceID,
+            encrypt:
+            {
+                key: theSecretThingThatNobodyHasToKnow
+            }
+        }, theOtherSecretThing);
+
         if(response.data.ok) console.log('Sesión cerrada');
     }
-    catch
+    catch(err)
     {
+        console.log('error cerrando sesión', err);
         location.reload();
         return;
     }
@@ -153,8 +165,8 @@ menuOnlineManageAccount.addEventListener('click', async function()
     if(theActualThing !== 'menu') return;
     if(isLocalMode) return;
 
+    await animationMenuClose();
     document.getElementById('noteScreen').hidden = true;
-    floatingMenu.hidden = true;
     loadingScreen.hidden = false;
 
     await saveNote();

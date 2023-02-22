@@ -17,7 +17,15 @@ document.getElementById('logOutInAllOkButton').addEventListener('click', async f
 
     try
     {
-        const response = await axios.post(`${path}/logoutalldevices`, {key: theSecretThingThatNobodyHaveToKnow});
+        const response = await encryptHttpCall(`/logoutalldevices`,
+        {
+            deviceID,
+            encrypt:
+            {
+                key: theSecretThingThatNobodyHaveToKnow
+            }
+        }, theOtherSecretThing);
+
         if(response.data.ok && response.data.error === undefined)
         {
             //Ha salido bien

@@ -128,7 +128,26 @@ module.exports = function(app)
             console.log(logID, 'body',req.body);
     
             //Comprobar si tenemos los datos necesarios
-            //  key
+            /*
+            {
+                deviceID,
+                encrypt:
+                {
+                    key
+                }
+            }
+            */
+
+            const body = await bodyDecrypter.getBody(req.body, res, logID);
+            if(body === null)
+            {
+                console.log(logID, 'Algo salió mal obteniendo body');
+                return;
+            }
+
+            const reqDecrypted = body.encrypt;
+
+            /*
             if(Object.keys(req.body).length === 0)
             {
                 res.status(400).send({error: 'badRequest'});
@@ -141,6 +160,15 @@ module.exports = function(app)
             {
                 res.status(400).send({error: 'badRequest'});
                 console.log(logID, 'badRequest - no key');
+                return;
+            }
+            */
+
+            const key = reqDecrypted.key;
+            if(key === undefined)
+            {
+                res.status(400).send({error: 'badRequest'});
+                console.log(logID, 'badRequest: no key');
                 return;
             }
     

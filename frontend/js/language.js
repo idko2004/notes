@@ -327,7 +327,7 @@ const allTexts =
     noErrorCode:
     {
         es: 'Ha ocurrido un error desconocido. Ni siquiera existe un código de error para esto.',
-        en: 'An unknown error has occurred. It does not even have an error code'
+        en: 'An unknown error has occurred. It does not even have an error code.'
     },
     saved:
     {

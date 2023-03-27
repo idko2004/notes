@@ -36,7 +36,15 @@ document.getElementById('deleteAccountButton').addEventListener('click', async f
 
     try
     {
-        const response = await axios.post(`${path}/deleteAccount`, {key: theSecretThingThatNobodyHaveToKnow});
+        //const response = await axios.post(`${path}/deleteAccount`, {key: theSecretThingThatNobodyHaveToKnow});
+        const response = await encryptHttpCall('/deleteAccount',
+        {
+            deviceID,
+            encrypt:
+            {
+                key: theSecretThingThatNobodyHaveToKnow
+            }
+        }, theOtherSecretThing);
         console.log(response);
 
         if(response.data.error !== undefined)
@@ -117,9 +125,14 @@ document.getElementById('confirmDeleteAccount').addEventListener('click', async 
         console.log(code);
         const response = await encryptHttpCall('/deleteAccountCode',
         {
-            key: theSecretThingThatNobodyHaveToKnow,
-            encrypt: {code}
+            deviceID,
+            encrypt:
+            {
+                key: theSecretThingThatNobodyHaveToKnow,
+                code
+            }
         }, theOtherSecretThing);
+        console.log(response);
 
         document.getElementById('confirmDeleteAccount').innerText = getText('verify');
         if(response.data.error !== undefined)
@@ -180,15 +193,32 @@ document.getElementById('confirmDeleteAccount').addEventListener('click', async 
                 }
             });
         }
+        else
+        {
+            floatingWindow(
+            {
+                title: getText('somethingWentWrong'),
+                text: `${getText('noErrorCode')}\n\n${response.data}`,
+                button:
+                {
+                    text: getText('ok'),
+                    callback: function()
+                    {
+                        actualMenu = 'deleteAccountEmailCode';
+                        closeWindow();
+                    }
+                }
+            });
+        }
     }
-    catch
+    catch(err)
     {
         actualMenu = 'ventana';
         document.getElementById('confirmDeleteAccount').innerText = getText('verify');
         floatingWindow(
         {
             title: getText('ups'),
-            text: getText('serverDown'),
+            text: `${getText('somethingWentWrong')}\n\n${getText('errorCode')}: ${err.message}`,
             button:
             {
                 text: getText('ok'),

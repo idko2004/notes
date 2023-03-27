@@ -1,15 +1,14 @@
-// DEBERÍA DE ACTUALIZARSE
-
-if(process.env.NODE_ENV !== 'production') require('dotenv').config();
-
 const database = require('../utils/database');
-const crypto = require('../utils/crypto');
+const body = require('../utils/bodyDecrypter');
 
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
-const fs = require('fs');
 const rand = require('generate-key');
+
+/*
+
+const fs = require('fs');
 
 const mailer = require('nodemailer');
 
@@ -22,7 +21,7 @@ const transporter = mailer.createTransport(
         pass: process.env.EMAIL_PASSWORD
     }
 });
-
+*/
 
 module.exports = function(app)
 {
@@ -178,16 +177,16 @@ module.exports = function(app)
 
     /////////////////////////////////////////////////////////////////////
     //      _      _      _          _                             _   //
-    //  __| | ___| | ___| |_ ___   / \   ___ ___ ___  _   _ _ __ | |_  //
+    //   __| | ___| | ___| |_ ___   / \   ___ ___ ___  _   _ _ __ | |_ //
     //  / _` |/ _ \ |/ _ \ __/ _ \ / _ \ / __/ __/ _ \| | | | '_ \| __|//
     // | (_| |  __/ |  __/ ||  __// ___ \ (_| (_| (_) | |_| | | | | |_ //
-    //  \__,_|\___|_|\___|\__\___/_/   \_\___\___\___/ \__,_|_| |_|\__|//
+    // \__,_|\___|_|\___|\__\___/_/   \_\___\___\___/ \__,_|_| |_|\__| //
     //                                                                 //
     //   ____          _                                               //
     //  / ___|___   __| | ___                                          //
     // | |   / _ \ / _` |/ _ \                                         //
     // | |__| (_) | (_| |  __/                                         //
-    //  \____\___/ \__,_|\___|                                         //
+    // \____\___/ \__,_|\___|                                          //
     /////////////////////////////////////////////////////////////////////
 
     app.post('/deleteAccountCode', jsonParser, async function(req, res)

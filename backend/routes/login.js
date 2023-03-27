@@ -1,6 +1,5 @@
 // Esto reemplaza a getSessionID
 const database = require('../utils/database');
-const crypto = require('../utils/crypto');
 const emailUtil = require('../utils/email');
 const bodyDecrypter = require('../utils/bodyDecrypter');
 

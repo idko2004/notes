@@ -377,8 +377,8 @@ document.getElementById('sendCodeLoginButton').addEventListener('click', async f
 document.getElementById('signUpButton').addEventListener('click', function()
 {
     if(theActualThing !== 'login') return;
-    saveCookie('_id', codePassword);
-    saveCookie('_idPswrd', loginPassword);
+    saveCookie('_id', deviceID);
+    saveCookie('_pswrd', theOtherSecretThing);
     location.href=`createAccount.html#lang=${actualLanguage};colortheme=${colorTheme}`;
 });
 

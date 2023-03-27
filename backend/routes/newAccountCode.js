@@ -108,7 +108,7 @@ module.exports = function(app)
     
     
             // Buscar el código en la base de datos
-            const codeInDB = await database.getElement('emailCodes');
+            const codeInDB = await database.getElement('emailCodes', {code: emailCode});
             if(codeInDB === null)
             {
                 res.status(200).send({error: 'invalidCode'});
@@ -133,6 +133,7 @@ module.exports = function(app)
             {
                 res.status(200).send({error: 'invalidCode'});
                 console.log(logID, 'el código existe, pero no pertenece a este email');
+                console.log(dbEmail, email);
                 return;
             }
     

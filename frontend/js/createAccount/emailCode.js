@@ -69,7 +69,7 @@ async function sendEmail()
             {
                 email
             }
-        }, idPassword);
+        }, theOtherSecretThing);
         
         console.log(response);
 
@@ -196,7 +196,7 @@ comprobeEmailCodeButton.addEventListener('click', async function()
                 emailCode: code,
                 email
             }
-        }, idPassword);
+        }, theOtherSecretThing);
 
         console.log(response);
 
@@ -209,7 +209,7 @@ comprobeEmailCodeButton.addEventListener('click', async function()
                 text: getText('introduceAValidCode2'),
                 button:
                 {
-                    text: 'ok',
+                    text: getText('ok'),
                     callback: function()
                     {
                         actualMenu = 'email';
@@ -240,8 +240,7 @@ comprobeEmailCodeButton.addEventListener('click', async function()
         {
             //Cuenta creada
             actualMenu = 'ventana';
-            deleteCookie('_id');
-            deleteCookie('_idPswrd');
+            deleteAllCookies();
             floatingWindow(
             {
                 title: getText('accountCreated'),

@@ -482,6 +482,7 @@ async function requestLoginPassword()
     
             if(response.data.error !== undefined || response.data.secret === undefined || response.data.id === undefined)
             {
+                hideLoginFields();
                 floatingWindow(
                 {
                     title: getText('somethingWentWrong'),

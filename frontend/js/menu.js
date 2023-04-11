@@ -150,10 +150,16 @@ menuOnlineLogOut.addEventListener('click', async function()
 });
 
 //Botón de cambiar a modo local
-menuOnlineChangeToLocal.addEventListener('click', function()
+menuOnlineChangeToLocal.addEventListener('click', async function()
 {
     if(theActualThing !== 'menu') return;
     if(isLocalMode) return;
+
+    await animationMenuClose();
+    document.getElementById('noteScreen').hidden = true;
+    loadingScreen.hidden = false;
+
+    await saveNote();
     localCopy = undefined;
     hashAdd('local');
     location.reload();

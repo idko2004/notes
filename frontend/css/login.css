@@ -63,6 +63,19 @@
     transition: all ease 100ms;
 }
 
+#loginScreen input::-moz-selection
+{ /* Code for Firefox */
+    color: var(--green);
+    background: white;
+}
+
+#loginScreen input::selection
+{
+    color: var(--green);
+    background: white;
+}
+
+
 .loginScreenButton1
 {
     background-color: var(--green);

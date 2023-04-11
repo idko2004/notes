@@ -374,6 +374,11 @@ document.getElementById('sendCodeLoginButton').addEventListener('click', async f
     }
 });
 
+document.getElementById('emailCodeLoginField').addEventListener('keyup', function(e)
+{
+    e.target.value = e.target.value.toUpperCase();
+});
+
 document.getElementById('signUpButton').addEventListener('click', function()
 {
     if(theActualThing !== 'login') return;

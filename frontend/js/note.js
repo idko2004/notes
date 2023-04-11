@@ -379,6 +379,9 @@ document.getElementById('deleteButton').addEventListener('click',() =>
                             deleteListButton(name);
                             youDontHaveNotes();
                             theActualThing = 'note';
+
+                            showTheNote = false;
+                            resizeElements();
                         }
                         else
                         {

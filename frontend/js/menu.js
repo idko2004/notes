@@ -15,7 +15,7 @@ async function menuButtonText()
 {
     if(isLocalMode)
     {
-        menuButton.innerText = getText('localMode');
+        menuButton.innerText = `${getText('localMode')} ⚙`;
         menuTitleText.innerText = getText('localMode');
 
         menuExitLocalMode.hidden = false;
@@ -27,7 +27,7 @@ async function menuButtonText()
     }
     else
     {
-        menuButton.innerText = getText('someoneAccount');
+        menuButton.innerText = `${getText('someoneAccount')} ⚙`;
         menuTitleText.innerText = getText('someoneAccount');
 
         menuExitLocalMode.hidden = true;
@@ -52,7 +52,7 @@ async function menuButtonText()
             if(response.data.decrypt.email !== undefined)
             {
                 const username = response.data.decrypt.email.split('@')[0];
-                menuButton.innerText = username;
+                menuButton.innerText = `${username} ⚙`;
                 menuTitleText.innerText = username;
             }
         }

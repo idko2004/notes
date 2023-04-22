@@ -9,7 +9,7 @@ html
     --green-win-bg: rgba(71, 155, 91, 0.35);
     --bg-color: #FFF;
     --font-color: #000;
-    --gray: #eeeeee;
+    --gray: #eee;
     --rubik: 'Rubik', sans-serif;
 }
 
@@ -90,4 +90,11 @@ input::selection
 .justified
 {
     text-align: justify;
+}
+
+.imgSpacer
+{
+    width: 0.4ch;
+    height: 0.4ch;
+    display: inline;
 }

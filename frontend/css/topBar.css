@@ -33,3 +33,11 @@ nav
     background-color: var(--green-hover);
     transition: all ease 100ms;
 }
+
+nav img
+{
+    height: 1rem;
+    margin: 0;
+    padding: 0;
+    float: right;
+}

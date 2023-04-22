@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg11"
+   sodipodi:docname="pencil-green.svg"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs15" />
+  <sodipodi:namedview
+     id="namedview13"
+     pagecolor="#ffffff"
+     bordercolor="#999999"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="23.5"
+     inkscape:cx="9.212766"
+     inkscape:cy="12.042553"
+     inkscape:window-width="1352"
+     inkscape:window-height="736"
+     inkscape:window-x="4"
+     inkscape:window-y="28"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg11" />
+  <title
+     id="title2">18.Pencil</title>
+  <g
+     id="_18.Pencil"
+     data-name="18.Pencil"
+     style="fill:#53b56a;fill-opacity:1">
+    <path
+       d="M12,24A12,12,0,1,1,24,12,12.013,12.013,0,0,1,12,24ZM12,2A10,10,0,1,0,22,12,10.011,10.011,0,0,0,12,2Z"
+       id="path4"
+       style="fill:#53b56a;fill-opacity:1" />
+    <path
+       d="M11.242,18H7V13.757l8.071-8.07,4.242,4.242ZM9,16h1.414l6.071-6.071L15.071,8.515,9,14.585Z"
+       id="path6"
+       style="fill:#53b56a;fill-opacity:1" />
+    <rect
+       x="12.414"
+       y="9.586"
+       width="2"
+       height="4"
+       transform="translate(-4.264 12.877) rotate(-44.995)"
+       id="rect8"
+       style="fill:#53b56a;fill-opacity:1" />
+  </g>
+  <metadata
+     id="metadata869">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>18.Pencil</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>

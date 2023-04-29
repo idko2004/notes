@@ -160,6 +160,7 @@ function resetSessionIDList()
 //El nombre es un juego de palabras, ríanse.
 async function upDate(element)
 {
+    return;
     if([null, undefined, '', 'dbError'].includes(element)) return;
     console.log('\033[1;32m//upDate//\033[0m');
     console.log('\033[1;32m//Fecha guardada//\033[0m',element.date.d, element.date.m, element.date.y);
@@ -212,5 +213,6 @@ module.exports =
     deleteMultipleElements,
     getKeyData,
     sessionIDList,
-    resetSessionIDList
+    resetSessionIDList,
+    mdbClient
 };

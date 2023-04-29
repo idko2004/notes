@@ -72,17 +72,20 @@ module.exports = function(app)
 
 
                 //Crear el objeto que contienen la contraseña y el código
-                const dateCreated = new Date();
+                //const dateCreated = new Date();
                 const obj =
                 {
                     code: deviceID,
                     pswrd: password,
+                    date: new Date()
+                    /*
                     date:
                     {
                         d: dateCreated.getUTCDate(),
                         m: dateCreated.getUTCMonth() + 1,
                         y: dateCreated.getUTCFullYear()
                     }
+                    */
                 }
                 //TODO: que se puedan borrar estos objetos periódicamente
     

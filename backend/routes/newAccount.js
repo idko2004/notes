@@ -171,7 +171,8 @@ module.exports = function(app)
             {
                 code: emailCode,
                 operation: 'newAccount',
-                email
+                email,
+                date: new Date()
             }
     
     

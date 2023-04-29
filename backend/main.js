@@ -68,3 +68,10 @@ app.listen(PORT, function()
 {
     console.log('Servidor inciado en el puerto', PORT);
 });
+
+// Después de un minuto de iniciar el server, decidir si borrar o no elementos temporales de la base de datos
+setTimeout(function()
+{
+    require('./utils/cleanTmp').decideToCleanTmpDocs();
+}, 60_000);
+

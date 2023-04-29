@@ -153,7 +153,8 @@ module.exports = function(app)
             {
                 code,
                 operation: 'login',
-                email
+                email,
+                date: new Date()
             }
     
     

@@ -142,8 +142,8 @@ module.exports = function(app)
             // Decidir el idioma del título
             let emailTitles =
             {
-                es: "Notas | Iniciar sesión",
-                en: "Notes | Log in"
+                es: "Iniciar sesión | Notas",
+                en: "Log in | Notes"
             }
 
 

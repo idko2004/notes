@@ -1,3 +1,4 @@
+console.log(`Hoy es ${new Date().toUTCString()} en UTC`);
 
 if(process.env.NODE_ENV !== 'production')
 {

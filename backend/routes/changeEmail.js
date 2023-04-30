@@ -184,7 +184,8 @@ module.exports = function(app)
                 code: code1,
                 code2,
                 email,
-                newEmail
+                newEmail,
+                date: new Date()
             }
 
             let createDbResult = await database.createElement('emailCodes', emailCode);

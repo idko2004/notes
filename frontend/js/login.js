@@ -117,7 +117,8 @@ document.getElementById('loginButton').addEventListener('click', async function(
             deviceID,
             encrypt:
             {
-                email
+                email,
+                lang: actualLanguage
             }
         }, theOtherSecretThing);
 

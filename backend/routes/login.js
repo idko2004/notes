@@ -26,7 +26,8 @@ module.exports = function(app)
                 deviceID (identificador de cifrado)
                 encrypt:
                 {
-                    email
+                    email,
+                    lang
                 }
             }
             */
@@ -40,6 +41,16 @@ module.exports = function(app)
 
             const reqDecrypted = body.encrypt;
 
+
+
+            // Ver si el idioma está disponible
+            const lang = reqDecrypted.lang;
+            if(!['es', 'en'].includes(lang))
+            {
+                res.status(200).send({error: 'languageNotSupported'});
+                console.log(logID, 'language not supported');
+                return;
+            }
 
 
             // Obtener el email
@@ -111,7 +122,7 @@ module.exports = function(app)
             console.log(logID, 'cargando archivo html');
             try
             {
-                emailFile = await fs.promises.readFile('emailPresets/loginEmail.html', 'utf-8');
+                emailFile = await fs.promises.readFile(`emailPresets/loginEmail-${lang}.html`, 'utf-8');
             }
             catch(err)
             {
@@ -128,8 +139,17 @@ module.exports = function(app)
 
 
 
+            // Decidir el idioma del título
+            let titleLanguage =
+            {
+                es: "Notas | Iniciar sesión",
+                en: "Notes | Log in"
+            }
+
+
+
             // Enviar el email
-            emailUtil.sendEmail(email, 'Notas | Iniciar sesión', emailFile);
+            emailUtil.sendEmail(email, titleLanguage[lang], emailFile);
 
 
 

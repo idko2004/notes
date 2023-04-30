@@ -48,6 +48,8 @@ module.exports = function(app)
             }
 
 
+
+            // Obtener los datos de la clave
             const keyData = await database.getKeyData(key);
             if(keyData === null)
             {
@@ -62,6 +64,9 @@ module.exports = function(app)
                 return;
             }
 
+
+
+            // Obtener el email
             const email = keyData.email;
             if(email === undefined)
             {
@@ -73,59 +78,6 @@ module.exports = function(app)
             const resEncrypted = crypto.encrypt(JSON.stringify({email}), body.pswrd);
 
             res.status(200).send({decrypt: resEncrypted});
-    
-            /*
-            if(Object.keys(req.body).length === 0)
-            {
-                res.status(400).send({error: 'badRequest'});
-                console.log(logID, 'badRequest: no body');
-                return;
-            }
-    
-            const key = req.body.key;
-            if(key === undefined)
-            {
-                res.status(400).send({error: 'badRequest'});
-                console.log(logID, 'badRequest: no key');
-                return;
-            }
-    
-            //Obtenemos key del usuario
-            const KeyData = await database.getKeyData(key);
-            console.log(KeyData);
-            if(KeyData === null)
-            {
-                res.status(200).send({error: 'invalidKey'});
-                console.log(logID, 'invalidKey');
-                return;
-            }
-            if(KeyData === 'dbError')
-            {
-                res.status(200).send({error: 'dbError'});
-                console.log(logID, 'dbError, loading keyData');
-                return;
-            }
-    
-            const email = KeyData.email;
-            if(email === undefined)
-            {
-                res.status(200).send({error: 'emailNull'});
-                console.log(logID, 'emailNull');
-                return;
-            }
-    
-            const encryptPswrd = KeyData.pswrd;
-            if([undefined, '', null].includes(encryptPswrd))
-            {
-                res.status(200).send({error: 'serverError'});
-                console.log(logID, 'la key no tenía asociada una contraseña de cifrado');
-                return;
-            }
-    
-            const responseEncrypted = crypto.encrypt(JSON.stringify({email}), encryptPswrd);
-    
-            res.status(200).send({decrypt: responseEncrypted});
-            */
         }
         catch(err)
         {

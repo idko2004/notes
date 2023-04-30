@@ -38,66 +38,8 @@ module.exports = function(app)
             }
 
             const reqDecrypted = body.encrypt;
-            /*
-            //Verificamos si se tienen todos los requerimientos
-            //key   noteName
-            if(Object.keys(req.body).length === 0)
-            {
-                res.status(400).send({error: 'badRequest'});
-                console.log(logID, 'badRequest: no body');
-                return;
-            }
-    
-            const reqEncrypted = req.body.encrypt;
-            if(reqEncrypted === undefined)
-            {
-                res.status(400).send({error: 'badRequest'});
-                console.log(logID, 'badRequest: no encrypted');
-                return;
-            }
-    
-            const key = req.body.key;
-            if(key === undefined)
-            {
-                res.status(400).send({error: 'badRequest'});
-                console.log(logID, 'badRequest: no key');
-                return;
-            }
-    
-            //Obtenemos key del usuario
-            const KeyData = await database.getKeyData(key);
-            console.log(KeyData);
-            if(KeyData === null)
-            {
-                res.status(200).send({error: 'invalidKey'});
-                console.log(logID, 'invalidKey');
-                return;
-            }
-            if(KeyData === 'dbError')
-            {
-                res.status(200).send({error: 'dbError'});
-                console.log(logID, 'dbError, loading keyData');
-                return;
-            }
-    
-            const email = KeyData.email;
-            if(email === undefined)
-            {
-                res.status(200).send({error: 'emailNull'});
-                console.log(logID, 'emailNull');
-                return;
-            }
-    
-            let reqDecrypted = crypto.decrypt(reqEncrypted, KeyData.pswrd);
-            if(reqDecrypted === null)
-            {
-                res.status(200).send({error: 'failToObtainData'});
-                console.log(logID, 'failToObtainData: cant decrypt');
-                return;
-            }
-            reqDecrypted = JSON.parse(reqDecrypted);
-            console.log(logID, reqDecrypted);
-            */
+
+
 
             const key = reqDecrypted.key;
             if(key === undefined)

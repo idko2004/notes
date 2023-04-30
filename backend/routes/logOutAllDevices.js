@@ -8,7 +8,7 @@ const rand = require('generate-key');
 
 module.exports = function(app)
 {
-    app.post('/logout', jsonParser, async function(req, res)
+    app.post('/logoutalldevices', jsonParser, async function(req, res)
     {
 
         const logID = `(${rand.generateKey(3)})`;
@@ -16,8 +16,10 @@ module.exports = function(app)
         try
         {
             console.log(logID, '------------------------------------------------');
-            console.log(logID, '\033[1;34m/logout\033[0m');
+            console.log(logID, '\033[1;34m/logoutalldevices\033[0m');
             console.log(logID, 'body',req.body);
+    
+            //Comprobar si tenemos los datos necesarios
             /*
             {
                 deviceID,
@@ -47,12 +49,12 @@ module.exports = function(app)
 
 
 
-            //Obtener la key
+            //Obtener el correo electrónico
             const keyData = await database.getKeyData(key);
             if(keyData === null)
             {
                 res.status(200).send({error: 'invalidKey'});
-                console.log(logID, 'invalidKey');
+                console.log(logID, 'error - invalidKey');
                 return;
             }
             if(keyData === 'dbError')
@@ -62,21 +64,33 @@ module.exports = function(app)
                 return;
             }
 
-
-
-            //Borrar la la key
-            const keyDeleted = await database.deleteElement('sessionID', {key});
-            delete database.sessionIDList[key];
-            if(keyDeleted === 'dbError')
+            const email = keyData.email;
+            if(email === undefined)
             {
-                res.status(200).send({error: 'dbError'});
-                console.log(logID, 'dbError, borrando la clave');
+                res.status(500).send({error: 'invalidKey'});
+                console.log(logID, 'error - somehow the key has no email');
                 return;
             }
 
+
+
+            //Borrar todos los elementos en sessionID que tengan ese correo electrónico
+            console.log(logID, 'Borrando todas las key');
+            const sessionIDDeleted = await database.deleteMultipleElements('sessionID', {email});
+            if(sessionIDDeleted === 'dbError')
+            {
+                res.status(200).send({error: 'dbError'});
+                console.log(logID, 'dbError, borrando sessionID');
+                return;
+            }
+            database.resetSessionIDList();
+            console.log(logID, 'Keys borradas');
+
+
+
             //Responder al cliente
             res.status(200).send({ok: true});
-            console.log(logID, 'sesión cerrada');
+            console.log(logID, 'todas las sesiones cerradas');
         }
         catch(err)
         {

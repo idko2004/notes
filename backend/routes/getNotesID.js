@@ -49,6 +49,9 @@ module.exports = function(app)
                 return;
             }
 
+
+
+            // Obtener los datos de la clave
             const keyElement = await database.getElement('sessionID', {key});
             if(keyElement === null)
             {
@@ -57,6 +60,9 @@ module.exports = function(app)
                 return;
             }
 
+
+
+            // Obtener el email
             const email = keyElement.email;
             if(email === undefined)
             {
@@ -65,6 +71,9 @@ module.exports = function(app)
                 return;
             }
 
+
+
+            // Obtener los datos del usuario
             const userElement = await database.getElement('users', {email});
             if(userElement === null)
             {
@@ -78,11 +87,15 @@ module.exports = function(app)
                 console.log(logID, 'dbError, obteniendo usuario');
                 return;
             }
-    
+
+
+
             //Obtener notesID y cifrar
             const notesID = JSON.stringify({notesID: userElement.notesID});
             const notesIdEncrypted = crypto.encrypt(notesID, body.pswrd);
-    
+
+
+
             res.status(200).send({decrypt: notesIdEncrypted});
             console.log(logID, 'notesID enviadas');
         }

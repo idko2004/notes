@@ -38,58 +38,7 @@ module.exports = function(app)
 
             const reqDecrypted = body.encrypt;
 
-            /*
-            if(Object.keys(req.body).length === 0)
-            {
-                res.status(400).send({error: 'badRequest'});
-                console.log(logID, 'badRequest: no body');
-                return;
-            }
-    
-            //Revisar si tenemos todos los datos
-            //code   key
-            const reqEncrypted = req.body.encrypt;
-            if(reqEncrypted === undefined)
-            {
-                res.status(400).send({error: 'notEncrypted'});
-                console.log(logID, 'notEncrypted');
-                return;
-            }
-    
-            let key = req.body.key;
-            if(key === undefined)
-            {
-                res.status(400).send({error: 'badRequest'});
-                console.log(logID, 'badRequest: no key');
-                return;
-            }
-    
-            //Comprobar que la clave sea válida
-            const keyData = await database.getKeyData(key);
-            if(keyData === null)
-            {
-                res.status(200).send({error: 'invalidKey'});
-                console.log(logID, 'invalidKey');
-                return;
-            }
-            if(keyData === 'dbError')
-            {
-                res.status(200).send({error: 'dbError'});
-                console.log(logID, 'dbError, obteniendo keyData');
-                return;
-            }
-    
-            let reqDecrypted = crypto.decrypt(reqEncrypted, keyData.pswrd);
-            console.log('pswrd', keyData.pswrd);
-            console.log('reqDecrypted', reqDecrypted);
-            if(reqDecrypted === null || reqDecrypted === '')
-            {
-                res.status(200).send({error: 'failToObtainData'});
-                console.log(logID, 'failToObtainData: cant decrypt');
-                return;
-            }
-            reqDecrypted = JSON.parse(reqDecrypted);
-            */
+
 
             let code = reqDecrypted.code;
             if(code === undefined)

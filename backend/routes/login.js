@@ -1,4 +1,3 @@
-// Esto reemplaza a getSessionID
 const database = require('../utils/database');
 const emailUtil = require('../utils/email');
 const bodyDecrypter = require('../utils/bodyDecrypter');
@@ -40,65 +39,8 @@ module.exports = function(app)
             }
 
             const reqDecrypted = body.encrypt;
-/*
-            if(Object.keys(req.body) === 0)
-            {
-                res.status(400).send({error: 'badRequest'});
-                console.log(logID, 'badRequest, no body');
-                return;
-            }
-    
-            const deviceID = req.body.deviceID;
-            const reqEncrypted = req.body.encrypt;
-    
-            if([deviceID, reqEncrypted].includes(undefined))
-            {
-                res.status(400).send({error: 'badRequest'});
-                console.log(logID, 'badRequest, deviceID o encrypt no existen');
-                return;
-            }
-    
-    
-    
-            // Obtener la contraseña de descifrado
-            const decryptPasswordElement = await database.getElement('sessionID', {code: deviceID});
-    
-            if(decryptPasswordElement === null)
-            {
-                res.status(400).send({error: 'invalidPasswordCode'});
-                console.log(logID, 'invalidPasswordCode');
-                return;
-            }
-    
-            if(decryptPasswordElement === 'dbError')
-            {
-                res.status(200).send({error: 'dbError'});
-                console.log(logID, 'dbError, cargando la clave para descifrar los datos');
-                return;
-            }
-    
-            pswrd = decryptPasswordElement.pswrd;
-            if(pswrd === undefined)
-            {
-                res.status(400).send({error: 'pswrdUndefined'});
-                console.log(logID, 'pswrdUndefined');
-                return;
-            }
-    
-    
-    
-            // Descifrar encrypt
-            let reqDecrypted = crypto.decrypt(reqEncrypted, pswrd);
-            console.log(reqDecrypted);
-            if(reqDecrypted === null)
-            {
-                res.status(200).send({error: 'failToObtainData'});
-                console.log(logID, 'failToObtainData: cant decrypt');
-                return;
-            }
-            reqDecrypted = JSON.parse(reqDecrypted);
-            console.log(reqDecrypted);
-*/
+
+
 
             // Obtener el email
             const email = reqDecrypted.email;
@@ -108,12 +50,12 @@ module.exports = function(app)
                 console.log(logID, 'badRequest, email dont exist');
                 return;
             }
-    
-    
-    
+
+
+
             // Buscar email en la base de datos
             const emailInDb = await database.getElement('users', {email});
-    
+
             if(emailInDb === null)
             {
                 res.status(200).send({error: 'userDontExist'});
@@ -127,9 +69,9 @@ module.exports = function(app)
                 console.log(logID, 'dbError: buscando usuario por email');
                 return;
             }
-    
-    
-    
+
+
+
             // Generar una clave
             let code;
             while(true)
@@ -145,9 +87,9 @@ module.exports = function(app)
                 }
                 if(codeInDb === null) break;
             }
-    
-    
-    
+
+
+
             // Crear un objeto para guardarlo en la base de datos
             const emailCode =
             {
@@ -156,14 +98,14 @@ module.exports = function(app)
                 email,
                 date: new Date()
             }
-    
-    
-    
+
+
+
             // Guardar el objeto en la base de datos
             await database.createElement('emailCodes', emailCode);
-    
-    
-    
+
+
+
             // Cargar el email
             let emailFile;
             console.log(logID, 'cargando archivo html');
@@ -178,19 +120,19 @@ module.exports = function(app)
                 return;
             }
             console.log(logID, 'archivo cargado');
-    
-    
-    
+
+
+
             // Añadir el código en el email
             emailFile = emailFile.replace('{CODE_HERE}', code);
-    
-    
-    
+
+
+
             // Enviar el email
             emailUtil.sendEmail(email, 'Notas | Iniciar sesión', emailFile);
-    
-    
-    
+
+
+
             // Responder al usuario
             res.status(200).send({emailSent: true});
             console.log(logID, 'código para iniciar sesión mandado');

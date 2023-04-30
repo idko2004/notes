@@ -20,14 +20,18 @@ module.exports = function(app)
             console.log(logID, 'body',req.body);
     
             //Vemos si tienemos los datos necesarios
-            //code
+            /*
+            {
+                code: sessionID | "requesting"
+            }
+            */
             if(Object.keys(req.body).length === 0)
             {
                 res.status(400).send({error: 'badRequest'});
                 console.log(logID, 'BadRequest: no body');
                 return;
             }
-    
+
             const code = req.body.code;
             if(code === undefined)
             {
@@ -36,8 +40,10 @@ module.exports = function(app)
                 return;
             }
 
+
+
             //Comprobar que el código recibido sea válido
-    
+
             //Requiriendo código
             if(code === 'requesting')
             {
@@ -58,7 +64,8 @@ module.exports = function(app)
                         return;
                     }
                 }
-    
+
+
                 //Generar una contraseña
                 const password = generator.generate(
                 {
@@ -71,24 +78,17 @@ module.exports = function(app)
                 });
 
 
+
                 //Crear el objeto que contienen la contraseña y el código
-                //const dateCreated = new Date();
                 const obj =
                 {
                     code: deviceID,
                     pswrd: password,
                     date: new Date()
-                    /*
-                    date:
-                    {
-                        d: dateCreated.getUTCDate(),
-                        m: dateCreated.getUTCMonth() + 1,
-                        y: dateCreated.getUTCFullYear()
-                    }
-                    */
                 }
-                //TODO: que se puedan borrar estos objetos periódicamente
-    
+
+
+
                 //Guardar el objeto en la base de datos de sessionID
                 const savedCode = await database.createElement('sessionID', obj);
                 if(savedCode === 'dbError')
@@ -97,16 +97,22 @@ module.exports = function(app)
                     console.log(logID, 'dbError, guardando en sessionID');
                     return;
                 }
-    
+
+
+
                 //Responder al cliente con la contraseña
                 res.status(200).send({secret: password, id: deviceID});
                 console.log(logID, 'contraseña', password, 'id', deviceID);
                 console.log(logID, 'Contraseña enviada');
             }
+
+
+
             //Respondiendo si el código sigue siendo válido
             else
             {
                 console.log(logID, 'Preguntando si un código sigue siendo válido');
+
                 //El código debe empezar con _ y luego debe contener números
                 if(!code.startsWith('_'))
                 {
@@ -114,6 +120,8 @@ module.exports = function(app)
                     console.log(logID, 'invalidCode');
                     return;
                 }
+
+
 
                 //En caso de que se esté comprobando, el código debe existir en la base de datos
                 const codeExists = await database.getElement('sessionID', {code});

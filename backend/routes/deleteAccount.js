@@ -112,21 +112,12 @@ module.exports = function(app)
 
 
             //Crear el objeto para guardar en la base de datos
-            const dateCreated = new Date();
             const newElement =
             {
                 code,
                 operation: 'deleteAccount',
                 email,
                 date: new Date()
-                /*
-                date:
-                {
-                    d: dateCreated.getUTCDate(),
-                    m: dateCreated.getUTCMonth() + 1,
-                    y: dateCreated.getUTCFullYear()
-                }
-                */
             }
 
 

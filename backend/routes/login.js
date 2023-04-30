@@ -140,7 +140,7 @@ module.exports = function(app)
 
 
             // Decidir el idioma del título
-            let titleLanguage =
+            let emailTitles =
             {
                 es: "Notas | Iniciar sesión",
                 en: "Notes | Log in"
@@ -149,7 +149,7 @@ module.exports = function(app)
 
 
             // Enviar el email
-            emailUtil.sendEmail(email, titleLanguage[lang], emailFile);
+            emailUtil.sendEmail(email, emailTitles[lang], emailFile);
 
 
 

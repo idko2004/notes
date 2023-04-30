@@ -42,7 +42,8 @@ document.getElementById('deleteAccountButton').addEventListener('click', async f
             deviceID,
             encrypt:
             {
-                key: theSecretThingThatNobodyHaveToKnow
+                key: theSecretThingThatNobodyHaveToKnow,
+                lang: actualLanguage
             }
         }, theOtherSecretThing);
         console.log(response);

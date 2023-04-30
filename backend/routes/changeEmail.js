@@ -28,7 +28,8 @@ module.exports = function(app)
                     encrypt:
                     {
                         key,
-                        newEmail
+                        newEmail,
+                        lang
                     }
                 }
             */
@@ -51,6 +52,14 @@ module.exports = function(app)
             {
                 res.status(400).send({error: 'badRequest'});
                 console.log(logID, 'badRequest: no key or newEmail');
+                return;
+            }
+
+            const lang = reqDecrypted.lang;
+            if(!['es', 'en'].includes(lang))
+            {
+                res.status(200).send({error: 'languageNotSupported'});
+                console.log(logID, 'language not supported');
                 return;
             }
 
@@ -139,7 +148,7 @@ module.exports = function(app)
             let emailHtmlFile;
             try
             {
-                emailHtmlFile = await fs.promises.readFile('emailPresets/changeEmail.html', 'utf-8');
+                emailHtmlFile = await fs.promises.readFile(`emailPresets/changeEmail-${lang}.html`, 'utf-8');
             }
             catch(err)
             {
@@ -164,12 +173,20 @@ module.exports = function(app)
             emailHtml2 = emailHtml2.replace('{NUMBER_HERE}', 2);
 
 
+            // Decidir el título de los correos
+            const emailTitles =
+            {
+                es: "Cambiar correo electrónico | Notas",
+                en: "Change email | Notes"
+            }
+
+
 
             // Enviamos el correo electrónico a ambos emails (el actual y el nuevo)
             await Promise.allSettled(
             [
-                emailUtil.sendEmail(email, 'Cambiar correo electrónico | Notas', emailHtml1),
-                emailUtil.sendEmail(newEmail, 'Cambiar correo electrónico | Notas', emailHtml2)
+                emailUtil.sendEmail(email, emailTitles[lang], emailHtml1),
+                emailUtil.sendEmail(newEmail, emailTitles[lang], emailHtml2)
             ]);
 
 

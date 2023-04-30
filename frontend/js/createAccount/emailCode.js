@@ -67,7 +67,8 @@ async function sendEmail()
             deviceID,
             encrypt:
             {
-                email
+                email,
+                lang: actualLanguage
             }
         }, theOtherSecretThing);
         

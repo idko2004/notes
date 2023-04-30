@@ -19,14 +19,6 @@
         <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@600&display=swap" rel="stylesheet"> 
         <style>
-            .ThingContainer
-            {
-                --green: #53b56a;
-                --green-hover: #479b5b;
-                --gray: #eeeeee;
-                --rubik: 'Rubik', sans-serif;
-            }
-
             .loginScreenBigName
             {
                 font-size: 4rem;
@@ -66,7 +58,7 @@
                 font-family: #53b56a;
                 text-align: center;
                 color: white;
-                font-family: 'Roboto Mono', monospace;
+                font-family: 'Anonymous Pro', monospace;
             }
 
             .ThingFootText
@@ -82,10 +74,23 @@
                 word-wrap: break-word;
             }
 
+            .ThingData
+            {
+                font-family: 'Rubik', sans-serif;
+                font-size: 1rem;
+                text-align: center;
+                color: #000000;
+                background-color: #eeeeee;
+                border-radius: 10px;
+                padding: 0.7rem;
+                margin: 0.5rem;
+            }
+
             a
             {
                 color: #53b56a;
             }
+
         </style>
     </head>
     <body>
@@ -94,15 +99,18 @@
             <b>Notas</b>
         </div>
         <h2 class=" ThingText">
-            El código para iniciar sesión
+            Iniciar sesión
         </h2>
+        <div class=" ThingData">
+            Ingrese este código para iniciar sesión:
+        </div>
         <div class=" ThingCodeBox">
             <span class=" ThingCodeHere">
                 <b>{CODE_HERE}</b>
             </span>
         </div>
         <div class=" ThingFootText">
-            Este código fue enviado desde <a href="http://idko.infinityfreeapp.com/notas">http://idko.infinityfreeapp.com/notas</a> para iniciar sesión. Si usted no solicitó este correo electrónico no es necesario que haga absolutamente nada.
+            Este código fue enviado desde <a href="http://idko.infinityfreeapp.com/notas">http://idko.infinityfreeapp.com/notas</a> para iniciar sesión.
         </div>
         </div>
     </body>

@@ -26,7 +26,8 @@ module.exports = function(app)
                 deviceID,
                 encrypt:
                 {
-                    key
+                    key,
+                    lang
                 }
             }
             */
@@ -44,12 +45,20 @@ module.exports = function(app)
 
 
             //Revisar si tenemos todos los datos
-            //key
+            //key, lang
             const key = reqDecrypted.key;
             if(key === undefined)
             {
                 res.status(400).send({error: 'badRequest'});
                 console.log(logID, 'badRequest: no key');
+                return;
+            }
+
+            const lang = reqDecrypted.lang;
+            if(!['es', 'en'].includes(lang))
+            {
+                res.status(200).send({error: 'languageNotSupported'});
+                console.log(logID, 'language not supported');
                 return;
             }
 
@@ -138,7 +147,7 @@ module.exports = function(app)
             let mailContent;
             try
             {
-                mailContent = await fs.promises.readFile('emailPresets/deleteAccountEmail.html', 'utf-8');
+                mailContent = await fs.promises.readFile(`emailPresets/deleteAccountEmail-${lang}.html`, 'utf-8');
             }
             catch(err)
             {
@@ -158,8 +167,17 @@ module.exports = function(app)
 
 
 
+            // Decidir el idioma del título del correo
+            const emailTitles =
+            {
+                es: "Borrar cuenta | Notas",
+                en: "Delete account | Notes"
+            }
+
+
+
             //Enviar el email
-            emailUtil.sendEmail(email, 'Notas | Borrar cuenta', mailContent);
+            emailUtil.sendEmail(email, emailTitles[lang], mailContent);
 
 
 

@@ -123,7 +123,8 @@ saveChangeDataButton.addEventListener('click', async function()
                             encrypt:
                             {
                                 key: theSecretThingThatNobodyHaveToKnow,
-                                newEmail: emailFieldValue
+                                newEmail: emailFieldValue,
+                                lang: actualLanguage
                             }
                         }, theOtherSecretThing);
                         console.log(response);

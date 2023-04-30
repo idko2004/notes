@@ -72,6 +72,6 @@ app.listen(PORT, function()
 // Después de un minuto de iniciar el server, decidir si borrar o no elementos temporales de la base de datos
 setTimeout(function()
 {
-    require('./utils/cleanTmp').decideToCleanTmpDocs();
+    require('./utils/cleanTmp').testRNG();//decideToCleanTmpDocs();
 }, 60_000);
 

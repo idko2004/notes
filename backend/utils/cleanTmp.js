@@ -4,12 +4,17 @@ const db = require('./database');
 module.exports =
 {
     decideToCleanTmpDocs,
-    cleanAllTmpDocs,
+    cleanAllTmpDocs
 }
 
 function decideToCleanTmpDocs()
 {
-    let clean = true;
+    let clean;
+
+    let random = Math.random();
+    let threshold = 1/4;
+
+    clean = random < threshold;
 
     if(clean) cleanAllTmpDocs();
 }
